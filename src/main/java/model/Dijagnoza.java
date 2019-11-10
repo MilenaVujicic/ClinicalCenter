@@ -1,23 +1,47 @@
+/*
+ * author: Filip Vozarevic
+ */
 package model;
 
+import java.util.HashSet;
+import java.util.Set;
+
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.ManyToMany;
+
+@Entity
 public class Dijagnoza {
 	
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	private Long id;
+	
+	@Column(name = "sifra", nullable = false)
 	private String sifra; 
+	
+	@Column(name = "ime", nullable = false)
 	private String ime;
+	
+	@Column(name = "opis", nullable = true)
 	private String opis;
-	private Korisnik dodatoOdStrane;
+	
+	@ManyToMany(mappedBy = "pregledi")
+	private Set<Pregled> pregledi = new HashSet<Pregled>();
 	
 	public Dijagnoza() {
 		super();
 		// TODO Auto-generated constructor stub
 	}
 
-	public Dijagnoza(String sifra, String ime, String opis, Korisnik dodatoOdStrane) {
+	public Dijagnoza(String sifra, String ime, String opis) {
 		super();
 		this.sifra = sifra;
 		this.ime = ime;
 		this.opis = opis;
-		this.dodatoOdStrane = dodatoOdStrane;
 	}
 
 	public String getSifra() {
@@ -44,18 +68,9 @@ public class Dijagnoza {
 		this.opis = opis;
 	}
 
-	public Korisnik getDodatoOdStrane() {
-		return dodatoOdStrane;
-	}
-
-	public void setDodatoOdStrane(Korisnik dodatoOdStrane) {
-		this.dodatoOdStrane = dodatoOdStrane;
-	}
-
 	@Override
 	public String toString() {
-		return "Dijagnoza [sifra=" + sifra + ", ime=" + ime + ", opis=" + opis + ", dodatoOdStrane=" + dodatoOdStrane
-				+ "]";
+		return "Dijagnoza [sifra=" + sifra + ", ime=" + ime + ", opis=" + opis + " ]";
 	}
 	
 	

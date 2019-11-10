@@ -1,22 +1,55 @@
+/*
+ * author: Filip Vozarevic
+ */
 package model;
 
 import java.util.Date;
+
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
 
 enum UlogaKorisnika {
 	ADMIN_CENTRA, ADMIN_KLINIKE, LEKAR, MEDICINSKA_SESTRA, PACIJENT
 }
 
+@Entity
 public class Korisnik {
 	
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	private Long id;
+	
+	@Column(name = "ime", nullable = false)
 	private String ime;
+	
+	@Column(name = "prezime", nullable = false)
 	private String prezime;
+	
+	@Column(name = "email", nullable = false)
 	private String email;
+	
+	@Column(name = "password", nullable = false)
 	private String password;
+	
+	@Column(name = "grad", nullable = false)
 	private String grad;
+	
+	@Column(name = "drzava", nullable = false)
 	private String drzava;
+	
+	@Column(name = "jmbg", nullable = false)
 	private int jmbg;
+	
+	@Column(name = "adresa", nullable = false)
 	private String adresa;
+	
+	@Column(name = "datumRodjenja", nullable = false)
 	private Date datumRodjenja;
+	
+	@Column(name = "uloga", nullable = false)
 	private UlogaKorisnika uloga;		
 	
 	public Korisnik() {
