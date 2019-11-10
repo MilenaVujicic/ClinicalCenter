@@ -1,63 +1,79 @@
 package model;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.UUID;
+import java.util.Set;
 
-public class Hall  {
+public class Sala  {
 	
-	private UUID id;
-	private Clinic parentClinic;
-	private String name;
-	private String description;
-	private List<UUID> schedule;
+	private Klinika klinika;
+	private String ime;
+	private String opis;
+	private Set<Pregled> pregledi;
+	private Set<Operacija> operacije;
 	
-	public Hall() {
-		this.id = UUID.randomUUID();
-		this.schedule = new ArrayList<UUID>();
-	}
-	
-	public Hall(Clinic parentClinic, String name, String description, List<UUID> schedule) {
+	public Sala() {
 		super();
-		this.id = UUID.randomUUID();
-		this.parentClinic = parentClinic;
-		this.name = name;
-		this.description = description;
-		this.schedule = schedule;
+		// TODO Auto-generated constructor stub
 	}
-	public Clinic getParentClinic() {
-		return parentClinic;
+
+	public Sala(Klinika klinika, String ime, String opis, Set<Pregled> pregledi, Set<Operacija> operacije) {
+		super();
+		this.klinika = klinika;
+		this.ime = ime;
+		this.opis = opis;
+		this.pregledi = pregledi;
+		this.operacije = operacije;
 	}
-	public void setParentClinic(Clinic parentClinic) {
-		this.parentClinic = parentClinic;
+
+
+	public Klinika getKlinika() {
+		return klinika;
 	}
-	public String getName() {
-		return name;
+
+	public void setKlinika(Klinika klinika) {
+		this.klinika = klinika;
 	}
-	public void setName(String name) {
-		this.name = name;
+
+	public String getIme() {
+		return ime;
 	}
-	public String getDescription() {
-		return description;
+
+	public void setIme(String ime) {
+		this.ime = ime;
 	}
-	public void setDescription(String description) {
-		this.description = description;
+
+	public String getOpis() {
+		return opis;
 	}
-	public List<UUID> getSchedule() {
-		return schedule;
+
+	public void setOpis(String opis) {
+		this.opis = opis;
 	}
-	public void setSchedule(List<UUID> schedule) {
-		this.schedule = schedule;
+
+	
+
+	public Set<Pregled> getPregledi() {
+		return pregledi;
 	}
-	public UUID getId() {
-		return id;
+
+	public void setPregledi(Set<Pregled> pregledi) {
+		this.pregledi = pregledi;
 	}
+
+	public Set<Operacija> getOperacije() {
+		return operacije;
+	}
+
+	public void setOperacije(Set<Operacija> operacije) {
+		this.operacije = operacije;
+	}
+
 	@Override
 	public String toString() {
-		return "Hall [id=" + id + ", parentClinic=" + parentClinic + ", name=" + name + ", description=" + description
-				+ ", schedule=" + schedule + "]";
+		return "Sala [klinika=" + klinika + ", ime=" + ime + ", opis=" + opis + ", pregledi=" + pregledi
+				+ ", operacije=" + operacije + "]";
 	}
+	
+	
 	
 	
 }
