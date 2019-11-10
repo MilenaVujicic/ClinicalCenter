@@ -2,12 +2,43 @@ package model;
 
 import java.util.Set;
 
+import javax.persistence.CascadeType;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.OneToMany;
+
+@Entity
 public class Sala  {
 	
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	private Long id;
+	
+	@OneToMany(mappedBy = "sala", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 	private Klinika klinika;
+	
+	@Column(name = "ime")
 	private String ime;
+	
+	@Column(name = "opis")
 	private String opis;
+	
+	@OneToMany
+	@JoinTable(name = "pregledi", joinColumns = @JoinColumn(name = "sala_id", 
+	referencedColumnName = "id"), inverseJoinColumns = @JoinColumn(name = "pregled_id", 
+	referencedColumnName = "id"))
 	private Set<Pregled> pregledi;
+	
+	@OneToMany
+	@JoinTable(name = "operacije", joinColumns = @JoinColumn(name = "sala_id", 
+	referencedColumnName = "id"), inverseJoinColumns = @JoinColumn(name = "operacije_id", 
+	referencedColumnName = "id"))
 	private Set<Operacija> operacije;
 	
 	public Sala() {
