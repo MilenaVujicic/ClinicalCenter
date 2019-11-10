@@ -1,11 +1,28 @@
 package model;
 
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
 
+@Entity
 public class Usluga {
 	
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	private Long id;
+	
+
+	@Column(name = "ime")
 	private String ime;
+
+	@Column(name = "opis")
 	private String opis;
-	private double cena;
+	
+
+	@Column(name = "cena", nullable = false)
+	private double cena = 0;
 	
 	public Usluga() {
 		super();

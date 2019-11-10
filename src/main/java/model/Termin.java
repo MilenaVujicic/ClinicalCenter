@@ -2,9 +2,15 @@ package model;
 
 import java.util.Date;
 
+import javax.persistence.Column;
+import javax.persistence.Entity;
+
+@Entity
 public class Termin {
 
+	@Column(name = "datum")
 	private Date datum;
+	@Column(name = "slobodan")
 	private boolean slobodan;
 	
 	public Termin() {

@@ -1,19 +1,68 @@
 package model;
 
-import java.util.ArrayList;
 import java.util.Set;
 
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.OneToMany;
+
+@Entity
 public class Klinika {
 
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	private Long id;
+	
+	@Column(name = "ime")
 	private String ime;
+	
+	@Column(name = "adresa")
 	private String adresa;
+	
+	@Column(name = "opis")
 	private String opis;
+	
+	@OneToMany
+	@JoinTable(name = "termini", joinColumns = @JoinColumn(name = "klinika_id", 
+	referencedColumnName = "id"), inverseJoinColumns = @JoinColumn(name = "termin_id", 
+	referencedColumnName = "id"))
 	private Set<Termin> slobodniTermini;
+	
+	
+	@OneToMany
+	@JoinTable(name = "doktori", joinColumns = @JoinColumn(name = "klinika_id", 
+	referencedColumnName = "id"), inverseJoinColumns = @JoinColumn(name = "doktor_id", 
+	referencedColumnName = "id"))
 	private Set<Doktor> doktori;
+	
+	
+	@OneToMany
+	@JoinTable(name = "sala", joinColumns = @JoinColumn(name = "klinika_id", 
+	referencedColumnName = "id"), inverseJoinColumns = @JoinColumn(name = "sala_id", 
+	referencedColumnName = "id"))
 	private Set<Sala> sale;
-	private ArrayList<Usluga> usluge;
-	private ArrayList<Integer> ocene;
-	private double prosecnaOcena;
+	
+	
+	@OneToMany
+	@JoinTable(name = "usluga", joinColumns = @JoinColumn(name = "klinika_id", 
+	referencedColumnName = "id"), inverseJoinColumns = @JoinColumn(name = "usluga_id", 
+	referencedColumnName = "id"))
+	private Set<Usluga> usluge;
+	
+	
+	@OneToMany
+	@JoinTable(name = "ocena", joinColumns = @JoinColumn(name = "klinika_id", 
+	referencedColumnName = "id"), inverseJoinColumns = @JoinColumn(name = "ocena_id", 
+	referencedColumnName = "id"))
+	private Set<Integer> ocene;
+	
+	@Column(name = "ProsecnaOcena", nullable = false)
+	private double prosecnaOcena = 0;
 	
 	public Klinika() {
 		super();
@@ -21,7 +70,7 @@ public class Klinika {
 	}
 
 	public Klinika(String ime, String adresa, String opis, Set<Termin> slobodniTermini, Set<Doktor> doktori,
-			Set<Sala> sale, ArrayList<Usluga> usluge, ArrayList<Integer> ocene, double prosecnaOcena) {
+			Set<Sala> sale, Set<Usluga> usluge, Set<Integer> ocene, double prosecnaOcena) {
 		super();
 		this.ime = ime;
 		this.adresa = adresa;
@@ -82,19 +131,19 @@ public class Klinika {
 		this.sale = sale;
 	}
 
-	public ArrayList<Usluga> getUsluge() {
+	public Set<Usluga> getUsluge() {
 		return usluge;
 	}
 
-	public void setCenovnik(ArrayList<Usluga> usluge) {
+	public void setCenovnik(Set<Usluga> usluge) {
 		this.usluge = usluge;
 	}
 
-	public ArrayList<Integer> getOcene() {
+	public Set<Integer> getOcene() {
 		return ocene;
 	}
 
-	public void setOcene(ArrayList<Integer> ocene) {
+	public void setOcene(Set<Integer> ocene) {
 		this.ocene = ocene;
 	}
 
