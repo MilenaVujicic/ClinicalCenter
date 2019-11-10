@@ -1,148 +1,158 @@
+/*
+ * author:Andrea Mendrei
+ */
 package model;
 
 import java.time.LocalDateTime;
-import java.util.UUID;
 
-enum RecipeStatus {
-	UNCERTIFIED, CERTIFIED
+import javax.persistence.CascadeType;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.ManyToOne;
+
+enum StatusRecepta {
+	NEOVEREN, OVEREN
 }
+@Entity
+public class Recept {
 
-public class Recipe {
-
-	private UUID recID;
-	private String name;
-	private String describe;
-	private RecipeStatus status;
-	private LocalDateTime dateOfPrinting;
-	private LocalDateTime dateOfCertifing;
-	private UUID patientID;
-	private UUID doctorID;
-	private UUID nurseID;
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	private Long id;
 	
-	public Recipe() {
+	@Column(name = "naziv")
+	private String naziv;
+	
+	@Column(name = "opis")
+	private String opis;
+	
+	@Column(name = "status")
+	private StatusRecepta status;
+	
+	@Column(name="datumIspisa")
+	private LocalDateTime datumIspisa;
+	
+	@Column(name="datumOvere")
+	private LocalDateTime datumOvere;
+	
+	@ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+	private Pacijent pacijent;
+	
+	@ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+	private Doktor doktor;
+	
+	@ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+	private MedicinskaSestra medicinskaSestra;
+	
+	public Recept() {
 		super();
-		this.recID = UUID.randomUUID();
-		this.name = "";
-		this.describe = "";
-		this.status = RecipeStatus.UNCERTIFIED;
+		// TODO Auto-generated constructor stub
 	}
 
-	public Recipe(UUID patientID, UUID doctorID, UUID nurseID) {
-		super();
-		this.recID = UUID.randomUUID();
-		this.name = "";
-		this.describe = "";
-		this.status = RecipeStatus.UNCERTIFIED;
-		this.patientID = patientID;
-		this.doctorID = doctorID;
-		this.nurseID = nurseID;
-	}
+	
 
-	public Recipe(UUID recID, String name, String describe, RecipeStatus status, LocalDateTime dateOfPrinting,
-			LocalDateTime dateOfCertifing, UUID patientID, UUID doctorID, UUID nurseID) {
+	public Recept(Long id, String naziv, String opis, StatusRecepta status, LocalDateTime datumIspisa,
+			LocalDateTime datumOvere, Pacijent pacijent, Doktor doktor, MedicinskaSestra medicinskaSestra) {
 		super();
-		this.recID = recID;
-		this.name = name;
-		this.describe = describe;
+		this.id = id;
+		this.naziv = naziv;
+		this.opis = opis;
 		this.status = status;
-		this.dateOfPrinting = dateOfPrinting;
-		this.dateOfCertifing = dateOfCertifing;
-		this.patientID = patientID;
-		this.doctorID = doctorID;
-		this.nurseID = nurseID;
+		this.datumIspisa = datumIspisa;
+		this.datumOvere = datumOvere;
+		this.pacijent = pacijent;
+		this.doktor = doktor;
+		this.medicinskaSestra = medicinskaSestra;
 	}
 
-	public Recipe(Recipe r) {
-		this.recID = r.recID;
-		this.name = r.name;
-		this.describe = r.describe;
-		this.status = r.status;
-		this.dateOfPrinting = r.dateOfPrinting;
-		this.dateOfCertifing = r.dateOfCertifing;
-		this.patientID = r.patientID;
-		this.doctorID = r.doctorID;
-		this.nurseID = r.nurseID;
+	
+
+	public Long getId() {
+		return id;
 	}
 
-	public UUID getRecID() {
-		return recID;
+
+
+	public void setId(Long id) {
+		this.id = id;
 	}
 
-	public void setRecID(UUID recID) {
-		this.recID = recID;
+
+
+	public String getNaziv() {
+		return naziv;
 	}
 
-	public String getName() {
-		return name;
+	public void setNaziv(String naziv) {
+		this.naziv = naziv;
 	}
 
-	public void setName(String name) {
-		this.name = name;
+	public String getOpis() {
+		return opis;
 	}
 
-	public String getDescribe() {
-		return describe;
+	public void setOpis(String opis) {
+		this.opis = opis;
 	}
 
-	public void setDescribe(String describe) {
-		this.describe = describe;
-	}
-
-	public RecipeStatus getStatus() {
+	public StatusRecepta getStatus() {
 		return status;
 	}
 
-	public void setStatus(RecipeStatus status) {
+	public void setStatus(StatusRecepta status) {
 		this.status = status;
 	}
 
-	public LocalDateTime getDateOfPrinting() {
-		return dateOfPrinting;
+	public LocalDateTime getDatumIspisa() {
+		return datumIspisa;
 	}
 
-	public void setDateOfPrinting(LocalDateTime dateOfPrinting) {
-		this.dateOfPrinting = dateOfPrinting;
+	public void setDatumIspisa(LocalDateTime datumIspisa) {
+		this.datumIspisa = datumIspisa;
 	}
 
-	public LocalDateTime getDateOfCertifing() {
-		return dateOfCertifing;
+	public LocalDateTime getDatumOvere() {
+		return datumOvere;
 	}
 
-	public void setDateOfCertifing(LocalDateTime dateOfCertifing) {
-		this.dateOfCertifing = dateOfCertifing;
+	public void setDatumOvere(LocalDateTime datumOvere) {
+		this.datumOvere = datumOvere;
 	}
 
-	public UUID getPatientID() {
-		return patientID;
+	public Pacijent getPacijent() {
+		return pacijent;
 	}
 
-	public void setPatientID(UUID patientID) {
-		this.patientID = patientID;
+	public void setPacijent(Pacijent pacijent) {
+		this.pacijent = pacijent;
 	}
 
-	public UUID getDoctorID() {
-		return doctorID;
+	public Doktor getDoktor() {
+		return doktor;
 	}
 
-	public void setDoctorID(UUID doctorID) {
-		this.doctorID = doctorID;
+	public void setDoktor(Doktor doktor) {
+		this.doktor = doktor;
 	}
 
-	public UUID getNurseID() {
-		return nurseID;
+	public MedicinskaSestra getMedicinskaSestra() {
+		return medicinskaSestra;
 	}
 
-	public void setNurseID(UUID nurseID) {
-		this.nurseID = nurseID;
+	public void setMedicinskaSestra(MedicinskaSestra medicinskaSestra) {
+		this.medicinskaSestra = medicinskaSestra;
 	}
 
 	@Override
 	public String toString() {
-		return "Recipe [recID=" + recID + ", name=" + name + ", describe=" + describe + ", status=" + status
-				+ ", dateOfPrinting=" + dateOfPrinting + ", dateOfCertifing=" + dateOfCertifing + ", patientID="
-				+ patientID + ", doctorID=" + doctorID + ", nurseID=" + nurseID + "]";
+		return "Recept [id=" + id + ", naziv=" + naziv + ", opis=" + opis + ", status=" + status + ", datumIspisa="
+				+ datumIspisa + ", datumOvere=" + datumOvere + ", pacijent=" + pacijent + ", doktor=" + doktor
+				+ ", medicinskaSestra=" + medicinskaSestra + "]";
 	}
-	
 	
 	
 }

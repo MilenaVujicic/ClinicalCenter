@@ -1,196 +1,212 @@
+/*
+ * author: Andrea Mendrei
+ */
 package model;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.UUID;
+import java.util.HashSet;
+import java.util.Set;
 
-public class Examination {
+import javax.persistence.CascadeType;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
+import javax.persistence.ManyToOne;
 
-	private UUID examID;
-	private String title;
-	private String describe;
-	private UUID patientID;
-	private LocalDateTime examDateAndTime;
-	private String type;
-	private int duration;
-	private UUID roomID;
-	private ArrayList<UUID> doctors;
-	private double price;
-	private ArrayList<UUID> diagnoses;
-	private ArrayList<UUID> drugs;
-	private UUID adminID;
+enum StatusPregleda {
+	ZAKAZAN, ZAVRSEN
+}
+@Entity
+public class Pregled {
+
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	private Long id;
 	
-	public Examination() {
-		super();
-		this.examID = UUID.randomUUID();
-		this.doctors = new ArrayList<UUID>();
-		this.diagnoses = new ArrayList<UUID>();
-		this.drugs = new ArrayList<UUID>();
-		this.title = "";
-		this.describe = "";
-		this.type = "";
-	}
-
-	public Examination(UUID patientID, UUID roomID, ArrayList<UUID> doctors, UUID adminID) {
-		super();
-		this.examID = UUID.randomUUID();
-		this.patientID = patientID;
-		this.roomID = roomID;
-		this.doctors = doctors;
-		this.adminID = adminID;
-		this.diagnoses = new ArrayList<UUID>();
-		this.drugs = new ArrayList<UUID>();
-		this.title = "";
-		this.describe = "";
-		this.type = "";
-	}
-
-	public Examination(UUID examID, String title, String describe, UUID patientID, LocalDateTime examDateAndTime,
-			String type, int duration, UUID roomID, ArrayList<UUID> doctors, double price, ArrayList<UUID> diagnoses,
-			ArrayList<UUID> drugs, UUID adminID) {
-		super();
-		this.examID = examID;
-		this.title = title;
-		this.describe = describe;
-		this.patientID = patientID;
-		this.examDateAndTime = examDateAndTime;
-		this.type = type;
-		this.duration = duration;
-		this.roomID = roomID;
-		this.doctors = doctors;
-		this.price = price;
-		this.diagnoses = diagnoses;
-		this.drugs = drugs;
-		this.adminID = adminID;
-	}
+	@Column(name = "naziv", nullable = false)
+	private String naziv;
 	
-	public Examination(Examination e) {
-		this.examID = e.examID;
-		this.title = e.title;
-		this.describe = e.describe;
-		this.patientID = e.patientID;
-		this.examDateAndTime = e.examDateAndTime;
-		this.type = e.type;
-		this.duration = e.duration;
-		this.roomID = e.roomID;
-		this.doctors = e.doctors;
-		this.price = e.price;
-		this.diagnoses = e.diagnoses;
-		this.drugs = e.drugs;
-		this.adminID = e.adminID;
+	@Column(name = "anamneza")
+	private String anamneza;
+	
+	@ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+	private Pacijent pacijent;
+	
+	@Column(name = "datum", nullable = false)
+	private LocalDateTime datumIVremePregleda;
+	
+	@Column(name = "tipPregleda")
+	private String tipPregleda;
+	
+	@Column(name = "duzina")
+	private int duzina;
+	
+	@ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+	private Sala sala;
+	
+	@ManyToMany(mappedBy = "pregledi")
+	private Set<Doktor> doktori = new HashSet<Doktor>();
+	
+	@Column(name = "cena")
+	private double cena;
+	
+	@ManyToMany
+	@JoinTable(name = "dijagnoze", joinColumns = @JoinColumn(name = "dijagnoza_id", 
+			referencedColumnName = "id"), inverseJoinColumns = @JoinColumn(name = "pregled_id", 
+			referencedColumnName = "id"))
+	private Set<Dijagnoza> dijagnoze = new HashSet<Dijagnoza>();
+	
+	@ManyToMany
+	@JoinTable(name = "lekovi", joinColumns = @JoinColumn(name = "lek_id", 
+			referencedColumnName = "id"), inverseJoinColumns = @JoinColumn(name = "pregled_id", 
+			referencedColumnName = "id"))
+	private Set<Lek> lekovi = new HashSet<Lek>();
+	
+	@Column(name = "status")
+	private StatusPregleda status;
+	
+	public Pregled() {
+		super();
+		// TODO Auto-generated constructor stub
 	}
 
-	public UUID getExamID() {
-		return examID;
+	public Pregled(Long id, String naziv, String anamneza, Pacijent pacijent, LocalDateTime datumIVremePregleda,
+			String tipPregleda, int duzina, Sala sala, Set<Doktor> doktori, double cena, Set<Dijagnoza> dijagnoze,
+			Set<Lek> lekovi, StatusPregleda status) {
+		super();
+		this.id = id;
+		this.naziv = naziv;
+		this.anamneza = anamneza;
+		this.pacijent = pacijent;
+		this.datumIVremePregleda = datumIVremePregleda;
+		this.tipPregleda = tipPregleda;
+		this.duzina = duzina;
+		this.sala = sala;
+		this.doktori = doktori;
+		this.cena = cena;
+		this.dijagnoze = dijagnoze;
+		this.lekovi = lekovi;
+		this.status = status;
 	}
 
-	public void setExamID(UUID examID) {
-		this.examID = examID;
+	public Long getId() {
+		return id;
 	}
 
-	public String getTitle() {
-		return title;
+	public void setId(Long id) {
+		this.id = id;
 	}
 
-	public void setTitle(String title) {
-		this.title = title;
+	public String getNaziv() {
+		return naziv;
 	}
 
-	public String getDescribe() {
-		return describe;
+	public void setNaziv(String naziv) {
+		this.naziv = naziv;
 	}
 
-	public void setDescribe(String describe) {
-		this.describe = describe;
+	public String getAnamneza() {
+		return anamneza;
 	}
 
-	public UUID getPatientID() {
-		return patientID;
+	public void setAnamneza(String anamneza) {
+		this.anamneza = anamneza;
 	}
 
-	public void setPatientID(UUID patientID) {
-		this.patientID = patientID;
+	public Pacijent getPacijent() {
+		return pacijent;
 	}
 
-	public LocalDateTime getExamDateAndTime() {
-		return examDateAndTime;
+	public void setPacijent(Pacijent pacijent) {
+		this.pacijent = pacijent;
 	}
 
-	public void setExamDateAndTime(LocalDateTime examDateAndTime) {
-		this.examDateAndTime = examDateAndTime;
+	public LocalDateTime getDatumIVremePregleda() {
+		return datumIVremePregleda;
 	}
 
-	public String getType() {
-		return type;
+	public void setDatumIVremePregleda(LocalDateTime datumIVremePregleda) {
+		this.datumIVremePregleda = datumIVremePregleda;
 	}
 
-	public void setType(String type) {
-		this.type = type;
+	public String getTipPregleda() {
+		return tipPregleda;
 	}
 
-	public int getDuration() {
-		return duration;
+	public void setTipPregleda(String tipPregleda) {
+		this.tipPregleda = tipPregleda;
 	}
 
-	public void setDuration(int duration) {
-		this.duration = duration;
+	public int getDuzina() {
+		return duzina;
 	}
 
-	public UUID getRoomID() {
-		return roomID;
+	public void setDuzina(int duzina) {
+		this.duzina = duzina;
 	}
 
-	public void setRoomID(UUID roomID) {
-		this.roomID = roomID;
+	public Sala getSala() {
+		return sala;
 	}
 
-	public ArrayList<UUID> getDoctors() {
-		return doctors;
+	public void setSala(Sala sala) {
+		this.sala = sala;
 	}
 
-	public void setDoctors(ArrayList<UUID> doctors) {
-		this.doctors = doctors;
+	public Set<Doktor> getDoktori() {
+		return doktori;
 	}
 
-	public double getPrice() {
-		return price;
+	public void setDoktori(Set<Doktor> doktori) {
+		this.doktori = doktori;
 	}
 
-	public void setPrice(double price) {
-		this.price = price;
+	public double getCena() {
+		return cena;
 	}
 
-	public ArrayList<UUID> getDiagnoses() {
-		return diagnoses;
+	public void setCena(double cena) {
+		this.cena = cena;
 	}
 
-	public void setDiagnoses(ArrayList<UUID> diagnoses) {
-		this.diagnoses = diagnoses;
+	public Set<Dijagnoza> getDijagnoze() {
+		return dijagnoze;
 	}
 
-	public ArrayList<UUID> getDrugs() {
-		return drugs;
+	public void setDijagnoze(Set<Dijagnoza> dijagnoze) {
+		this.dijagnoze = dijagnoze;
 	}
 
-	public void setDrugs(ArrayList<UUID> drugs) {
-		this.drugs = drugs;
+	public Set<Lek> getLekovi() {
+		return lekovi;
 	}
 
-	public UUID getAdminID() {
-		return adminID;
+	public void setLekovi(Set<Lek> lekovi) {
+		this.lekovi = lekovi;
 	}
 
-	public void setAdminID(UUID adminID) {
-		this.adminID = adminID;
+	public StatusPregleda getStatus() {
+		return status;
+	}
+
+	public void setStatus(StatusPregleda status) {
+		this.status = status;
 	}
 
 	@Override
 	public String toString() {
-		return "Examination [examID=" + examID + ", title=" + title + ", describe=" + describe + ", patientID="
-				+ patientID + ", examDateAndTime=" + examDateAndTime + ", type=" + type + ", duration=" + duration
-				+ ", roomID=" + roomID + ", doctors=" + doctors + ", price=" + price + ", diagnoses=" + diagnoses
-				+ ", drugs=" + drugs + ", adminID=" + adminID + "]";
+		return "Pregled [id=" + id + ", naziv=" + naziv + ", anamneza=" + anamneza + ", pacijent=" + pacijent
+				+ ", datumIVremePregleda=" + datumIVremePregleda + ", tipPregleda=" + tipPregleda + ", duzina=" + duzina
+				+ ", sala=" + sala + ", doktori=" + doktori + ", cena=" + cena + ", dijagnoze=" + dijagnoze
+				+ ", lekovi=" + lekovi + ", status=" + status + "]";
 	}
+	
 	
 	
 	

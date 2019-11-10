@@ -1,136 +1,179 @@
+/*
+ * author: Andrea Mendrei
+ */
 package model;
 
 import java.util.ArrayList;
-import java.util.UUID;
+import java.util.HashSet;
+import java.util.Set;
 
-public class Doctor {
+import javax.persistence.CascadeType;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
+import javax.persistence.OneToMany;
+
+@Entity
+public class Doktor {
 	
-	private UUID userID;
-	private ArrayList<UUID> examinationsSKD;	//zakazani pregledi
-	private ArrayList<UUID> examinationsFIN;	//zavrseni pregledi
-	private ArrayList<UUID> operationsSKD;		//zakazane operacije
-	private ArrayList<UUID> operationsFIN;		//zavrsene operacije
-	private ArrayList<UUID> holidays;
-	private ArrayList<Integer> raitings;
-	private double raitingAVG;
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	private Long id;
 	
-	public Doctor() {
+	@ManyToMany
+	@JoinTable(name = "pregledi", joinColumns = @JoinColumn(name = "doktor_id", 
+			referencedColumnName = "id"), inverseJoinColumns = @JoinColumn(name = "pregled_id", 
+			referencedColumnName = "id"))
+	private Set<Pregled> preglediZakazani = new HashSet<Pregled>(); 
+	
+	@ManyToMany
+	@JoinTable(name = "pregledi", joinColumns = @JoinColumn(name = "doktor_id", 
+			referencedColumnName = "id"), inverseJoinColumns = @JoinColumn(name = "pregled_id", 
+			referencedColumnName = "id"))
+	private Set<Pregled> preglediZavrseni = new HashSet<Pregled>();	
+	
+	@ManyToMany
+	@JoinTable(name = "operacije", joinColumns = @JoinColumn(name = "doktor_id", 
+			referencedColumnName = "id"), inverseJoinColumns = @JoinColumn(name = "operacija_id", 
+			referencedColumnName = "id"))
+	private Set<Operacija> operacijeZakazane = new HashSet<Operacija>();
+	
+	@ManyToMany
+	@JoinTable(name = "operacije", joinColumns = @JoinColumn(name = "doktor_id", 
+			referencedColumnName = "id"), inverseJoinColumns = @JoinColumn(name = "operacija_id", 
+			referencedColumnName = "id"))
+	private Set<Operacija> operacijeZavrsene = new HashSet<Operacija>();
+	
+	@OneToMany(mappedBy = "doktor", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+	private Set<Odsustvo> odsustva = new HashSet<Odsustvo>();
+	
+	@OneToMany(mappedBy = "doktor", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+	private ArrayList<Integer> ocene = new ArrayList<Integer>();
+	
+	@Column(name = "prosecnaOcena", nullable = false)
+	private double prosecnaOcena = 0;
+	
+	@OneToMany(mappedBy = "doktor", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+	private Set<Recept> ispisaniRecepti = new HashSet<Recept>();
+	
+	public Doktor() {
 		super();
-		this.userID = UUID.randomUUID();
-		this.examinationsSKD = new ArrayList<UUID>();
-		this.examinationsFIN = new ArrayList<UUID>();
-		this.operationsSKD = new ArrayList<UUID>();
-		this.operationsFIN = new ArrayList<UUID>();
-		this.holidays = new ArrayList<UUID>();
-		this.raitings = new ArrayList<Integer>();
-		this.raitingAVG = 0;
 	}
 
-	public Doctor(UUID docID) {
+	public Doktor(Long id, Set<Pregled> preglediZakazani, Set<Pregled> preglediZavrseni,
+			Set<Operacija> operacijeZakazane, Set<Operacija> operacijeZavrsene, Set<Odsustvo> odsustva,
+			ArrayList<Integer> ocene, double prosecnaOcena, Set<Recept> ispisaniRecepti) {
 		super();
-		this.userID = docID;
-		this.examinationsSKD = new ArrayList<UUID>();
-		this.examinationsFIN = new ArrayList<UUID>();
-		this.operationsSKD = new ArrayList<UUID>();
-		this.operationsFIN = new ArrayList<UUID>();
-		this.holidays = new ArrayList<UUID>();
-		this.raitings = new ArrayList<Integer>();
-		this.raitingAVG = 0;
+		this.id = id;
+		this.preglediZakazani = preglediZakazani;
+		this.preglediZavrseni = preglediZavrseni;
+		this.operacijeZakazane = operacijeZakazane;
+		this.operacijeZavrsene = operacijeZavrsene;
+		this.odsustva = odsustva;
+		this.ocene = ocene;
+		this.prosecnaOcena = prosecnaOcena;
+		this.ispisaniRecepti = ispisaniRecepti;
+	}
+
+	public Doktor(Doktor d) {
+		this.id = d.id;
+		this.preglediZakazani = d.preglediZakazani;
+		this.preglediZavrseni = d.preglediZavrseni;
+		this.operacijeZakazane = d.operacijeZakazane;
+		this.operacijeZavrsene = d.operacijeZavrsene;
+		this.odsustva = d.odsustva;
+		this.ocene = d.ocene;
+		this.prosecnaOcena = d.prosecnaOcena;
 	}
 	
-	public Doctor(UUID userID, ArrayList<UUID> examinationsSKD, ArrayList<UUID> examinationsFIN,
-			ArrayList<UUID> operationsSKD, ArrayList<UUID> operationsFIN, ArrayList<UUID> holidays,
-			ArrayList<Integer> raitings, double raitingAVG) {
-		super();
-		this.userID = userID;
-		this.examinationsSKD = examinationsSKD;
-		this.examinationsFIN = examinationsFIN;
-		this.operationsSKD = operationsSKD;
-		this.operationsFIN = operationsFIN;
-		this.holidays = holidays;
-		this.raitings = raitings;
-		this.raitingAVG = raitingAVG;
+	public Long getId() {
+		return id;
 	}
 
-	public Doctor(Doctor d) {
-		this.userID = d.userID;
-		this.examinationsSKD = d.examinationsSKD;
-		this.examinationsFIN = d.examinationsFIN;
-		this.operationsSKD = d.operationsSKD;
-		this.operationsFIN = d.operationsFIN;
-		this.holidays = d.holidays;
-		this.raitings = d.raitings;
-		this.raitingAVG = d.raitingAVG;
+	public void setId(Long id) {
+		this.id = id;
 	}
 
-	public UUID getUserID() {
-		return userID;
+
+	public Set<Pregled> getPreglediZakazani() {
+		return preglediZakazani;
 	}
 
-	public void setUserID(UUID userID) {
-		this.userID = userID;
+	public void setPreglediZakazani(Set<Pregled> preglediZakazani) {
+		this.preglediZakazani = preglediZakazani;
 	}
 
-	public ArrayList<UUID> getExaminationsSKD() {
-		return examinationsSKD;
+	public Set<Pregled> getPreglediZavrseni() {
+		return preglediZavrseni;
 	}
 
-	public void setExaminationsSKD(ArrayList<UUID> examinationsSKD) {
-		this.examinationsSKD = examinationsSKD;
+	public void setPreglediZavrseni(Set<Pregled> preglediZavrseni) {
+		this.preglediZavrseni = preglediZavrseni;
 	}
 
-	public ArrayList<UUID> getExaminationsFIN() {
-		return examinationsFIN;
+	public Set<Operacija> getOperacijeZakazane() {
+		return operacijeZakazane;
 	}
 
-	public void setExaminationsFIN(ArrayList<UUID> examinationsFIN) {
-		this.examinationsFIN = examinationsFIN;
+	public void setOperacijeZakazane(Set<Operacija> operacijeZakazane) {
+		this.operacijeZakazane = operacijeZakazane;
 	}
 
-	public ArrayList<UUID> getOperationsSKD() {
-		return operationsSKD;
+	public Set<Operacija> getOperacijeZavrsene() {
+		return operacijeZavrsene;
 	}
 
-	public void setOperationsSKD(ArrayList<UUID> operationsSKD) {
-		this.operationsSKD = operationsSKD;
+	public void setOperacijeZavrsene(Set<Operacija> operacijeZavrsene) {
+		this.operacijeZavrsene = operacijeZavrsene;
 	}
 
-	public ArrayList<UUID> getOperationsFIN() {
-		return operationsFIN;
+	public Set<Odsustvo> getOdsustva() {
+		return odsustva;
 	}
 
-	public void setOperationsFIN(ArrayList<UUID> operationsFIN) {
-		this.operationsFIN = operationsFIN;
+	public void setOdsustva(Set<Odsustvo> odsustva) {
+		this.odsustva = odsustva;
 	}
 
-	public ArrayList<UUID> getHolidays() {
-		return holidays;
+	public ArrayList<Integer> getOcene() {
+		return ocene;
 	}
 
-	public void setHolidays(ArrayList<UUID> holidays) {
-		this.holidays = holidays;
+	public void setOcene(ArrayList<Integer> ocene) {
+		this.ocene = ocene;
 	}
 
-	public ArrayList<Integer> getRaitings() {
-		return raitings;
+	public double getProsecnaOcena() {
+		return prosecnaOcena;
 	}
 
-	public void setRaitings(ArrayList<Integer> raitings) {
-		this.raitings = raitings;
+	public void setProsecnaOcena(double prosecnaOcena) {
+		this.prosecnaOcena = prosecnaOcena;
 	}
 
-	public double getRaitingAVG() {
-		return raitingAVG;
+	public Set<Recept> getIspisaniRecepti() {
+		return ispisaniRecepti;
 	}
 
-	public void setRaitingAVG(double raitingAVG) {
-		this.raitingAVG = raitingAVG;
+	public void setIspisaniRecepti(Set<Recept> ispisaniRecepti) {
+		this.ispisaniRecepti = ispisaniRecepti;
 	}
 
 	@Override
 	public String toString() {
-		return "Doctor [userID=" + userID + ", examinationsSKD=" + examinationsSKD + ", examinationsFIN="
-				+ examinationsFIN + ", operationsSKD=" + operationsSKD + ", operationsFIN=" + operationsFIN
-				+ ", holidays=" + holidays + ", raitings=" + raitings + ", raitingAVG=" + raitingAVG + "]";
+		return "Doktor [id=" + id + ", preglediZakazani=" + preglediZakazani + ", preglediZavrseni=" + preglediZavrseni
+				+ ", operacijeZakazane=" + operacijeZakazane + ", operacijeZavrsene=" + operacijeZavrsene
+				+ ", odsustva=" + odsustva + ", ocene=" + ocene + ", prosecnaOcena=" + prosecnaOcena
+				+ ", ispisaniRecepti=" + ispisaniRecepti + "]";
 	}
+
+	
+
+	
 }

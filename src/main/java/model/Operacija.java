@@ -1,124 +1,117 @@
+/*
+ * author: Andrea Mendrei
+ */
 package model;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.UUID;
+import java.util.Set;
 
-enum OperationStatus {
-	SCHEDULED, FINISHED
+import javax.persistence.CascadeType;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.ManyToMany;
+import javax.persistence.ManyToOne;
+
+enum StatusOperacije {
+	ZAKAZAN, ZAVRSEN
 }
 
-public class Operation {
+@Entity
+public class Operacija {
 
-	private UUID operID;
-	private UUID roomID;
-	private OperationStatus status;
-	private LocalDateTime operDateAndTime;
-	private int duration;
-	private ArrayList<UUID> doctors;
-	private UUID adminID;
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	private Long id;
 	
-	public Operation() {
-		super();
-		this.operID = UUID.randomUUID();
-		this.doctors = new ArrayList<UUID>();
-		this.status = OperationStatus.SCHEDULED;
-		this.duration = 0;
-	}
+	@ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+	private Sala sala;
 	
-	public Operation(UUID roomID, UUID adminID) {
+	@Column(name = "status")
+	private StatusOperacije status;
+	
+	@Column(name = "datumIVremeOperacije")
+	private LocalDateTime datumIVremeOperacije;
+	
+	@Column(name = "trajanje")
+	private int trajanje;
+	
+	@ManyToMany(mappedBy = "operacije")
+	private Set<Doktor> doktori;
+	
+	public Operacija() {
 		super();
-		this.operID = UUID.randomUUID();
-		this.roomID = roomID;
-		this.adminID = adminID;
-		this.doctors = new ArrayList<UUID>();
-		this.status = OperationStatus.SCHEDULED;
-		this.duration = 0;
+		// TODO Auto-generated constructor stub
 	}
 
-	public Operation(UUID operID, UUID roomID, OperationStatus status, LocalDateTime operDateAndTime, int duration,
-			ArrayList<UUID> doctors, UUID adminID) {
+	public Operacija(Long id, Sala sala, StatusOperacije status, LocalDateTime datumIVremeOperacije, int trajanje,
+			Set<Doktor> doktori) {
 		super();
-		this.operID = operID;
-		this.roomID = roomID;
+		this.id = id;
+		this.sala = sala;
 		this.status = status;
-		this.operDateAndTime = operDateAndTime;
-		this.duration = duration;
-		this.doctors = doctors;
-		this.adminID = adminID;
+		this.datumIVremeOperacije = datumIVremeOperacije;
+		this.trajanje = trajanje;
+		this.doktori = doktori;
 	}
 
-	public Operation(Operation o) {
-		this.operID = o.operID;
-		this.roomID = o.roomID;
-		this.status = o.status;
-		this.operDateAndTime = o.operDateAndTime;
-		this.duration = o.duration;
-		this.doctors = o.doctors;
-		this.adminID = o.adminID;
+	public Long getId() {
+		return id;
 	}
 
-	public UUID getOperID() {
-		return operID;
+	public void setId(Long id) {
+		this.id = id;
 	}
-	
-	public void setOperID(UUID operID) {
-		this.operID = operID;
+
+	public Sala getSala() {
+		return sala;
 	}
-	
-	public UUID getRoomID() {
-		return roomID;
+
+	public void setSala(Sala sala) {
+		this.sala = sala;
 	}
-	
-	public void setRoomID(UUID roomID) {
-		this.roomID = roomID;
-	}
-	
-	public OperationStatus getStatus() {
+
+	public StatusOperacije getStatus() {
 		return status;
 	}
-	
-	public void setStatus(OperationStatus status) {
+
+	public void setStatus(StatusOperacije status) {
 		this.status = status;
 	}
-	
-	public LocalDateTime getOperDateAndTime() {
-		return operDateAndTime;
+
+	public LocalDateTime getDatumIVremeOperacije() {
+		return datumIVremeOperacije;
 	}
-	
-	public void setOperDateAndTime(LocalDateTime operDateAndTime) {
-		this.operDateAndTime = operDateAndTime;
+
+	public void setDatumIVremeOperacije(LocalDateTime datumIVremeOperacije) {
+		this.datumIVremeOperacije = datumIVremeOperacije;
 	}
-	
-	public int getDuration() {
-		return duration;
+
+	public int getTrajanje() {
+		return trajanje;
 	}
-	
-	public void setDuration(int duration) {
-		this.duration = duration;
+
+	public void setTrajanje(int trajanje) {
+		this.trajanje = trajanje;
 	}
-	
-	public ArrayList<UUID> getDoctors() {
-		return doctors;
+
+	public Set<Doktor> getDoktori() {
+		return doktori;
 	}
-	
-	public void setDoctors(ArrayList<UUID> doctors) {
-		this.doctors = doctors;
-	}
-	
-	public UUID getAdminID() {
-		return adminID;
-	}
-	
-	public void setAdminID(UUID adminID) {
-		this.adminID = adminID;
+
+	public void setDoktori(Set<Doktor> doktori) {
+		this.doktori = doktori;
 	}
 
 	@Override
 	public String toString() {
-		return "Operation [operID=" + operID + ", roomID=" + roomID + ", status=" + status + ", operDateAndTime="
-				+ operDateAndTime + ", duration=" + duration + ", doctors=" + doctors + ", adminID=" + adminID + "]";
+		return "Operacija [id=" + id + ", sala=" + sala + ", status=" + status + ", datumIVremeOperacije="
+				+ datumIVremeOperacije + ", trajanje=" + trajanje + ", doktori=" + doktori + "]";
 	}
+	
 	
 	
 	
