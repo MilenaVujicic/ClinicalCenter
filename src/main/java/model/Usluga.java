@@ -1,52 +1,54 @@
 package model;
 
-import java.util.UUID;
 
-public class TypeOfService {
+public class Usluga {
 	
-	private UUID id;
-	private String name;
-	private String description;
-	private double fee;
+	private String ime;
+	private String opis;
+	private double cena;
 	
-	
-	public TypeOfService()  {
-		this.id = UUID.randomUUID();
-	}
-	
-	public TypeOfService(String name, String description, double fee) {
+	public Usluga() {
 		super();
-		this.id = UUID.randomUUID();
-		this.name = name;
-		this.description = description;
-		this.fee = fee;
+		// TODO Auto-generated constructor stub
 	}
-	public UUID getId() {
-		return id;
+
+	public Usluga(String ime, String opis, double cena) {
+		super();
+		this.ime = ime;
+		this.opis = opis;
+		this.cena = cena;
 	}
-	
-	public String getName() {
-		return name;
+
+	public String getIme() {
+		return ime;
 	}
-	public void setName(String name) {
-		this.name = name;
+
+	public void setIme(String ime) {
+		this.ime = ime;
 	}
-	public String getDescription() {
-		return description;
+
+	public String getOpis() {
+		return opis;
 	}
-	public void setDescription(String description) {
-		this.description = description;
+
+	public void setOpis(String opis) {
+		this.opis = opis;
 	}
-	public double getFee() {
-		return fee;
+
+	public double getCena() {
+		return cena;
 	}
-	public void setFee(double fee) {
-		this.fee = fee;
+
+	public void setCena(double cena) {
+		this.cena = cena;
 	}
+
 	@Override
 	public String toString() {
-		return "TypeOfService [id=" + id + ", name=" + name + ", description=" + description + ", fee=" + fee + "]";
+		return "Usluga [ime=" + ime + ", opis=" + opis + ", cena=" + cena + "]";
 	}
+	
+	
 	
 	
 }

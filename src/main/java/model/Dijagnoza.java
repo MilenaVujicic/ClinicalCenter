@@ -1,64 +1,64 @@
 package model;
 
-import java.util.UUID;
+public class Dijagnoza {
+	
+	private String sifra; 
+	private String ime;
+	private String opis;
+	private Korisnik dodatoOdStrane;
+	
+	public Dijagnoza() {
+		super();
+		// TODO Auto-generated constructor stub
+	}
 
-public class Diagnosis {
-	private UUID id;
-	private String code; //sifra
-	private String name;
-	private String description;
-	private String givenBy;
-	
-	public Diagnosis() {
-		
+	public Dijagnoza(String sifra, String ime, String opis, Korisnik dodatoOdStrane) {
+		super();
+		this.sifra = sifra;
+		this.ime = ime;
+		this.opis = opis;
+		this.dodatoOdStrane = dodatoOdStrane;
 	}
 
-	public Diagnosis(UUID id, String code, String name, String desc, String givenBy) {
-		this.id = id;
-		this.code = code;
-		this.name = name;
-		this.description = desc;
-		this.givenBy = givenBy;
+	public String getSifra() {
+		return sifra;
+	}
+
+	public void setSifra(String sifra) {
+		this.sifra = sifra;
+	}
+
+	public String getIme() {
+		return ime;
+	}
+
+	public void setIme(String ime) {
+		this.ime = ime;
+	}
+
+	public String getOpis() {
+		return opis;
+	}
+
+	public void setOpis(String opis) {
+		this.opis = opis;
+	}
+
+	public Korisnik getDodatoOdStrane() {
+		return dodatoOdStrane;
+	}
+
+	public void setDodatoOdStrane(Korisnik dodatoOdStrane) {
+		this.dodatoOdStrane = dodatoOdStrane;
+	}
+
+	@Override
+	public String toString() {
+		return "Dijagnoza [sifra=" + sifra + ", ime=" + ime + ", opis=" + opis + ", dodatoOdStrane=" + dodatoOdStrane
+				+ "]";
 	}
 	
-	public Diagnosis(Diagnosis d) {
-		this.id = d.id;
-		this.code = d.code;
-		this.name = d.name;
-		this.description = d.description;
-		this.givenBy = d.givenBy;
-	}
 	
-	public UUID getId() {
-		return id;
-	}
-	public void setId(UUID id) {
-		this.id = id;
-	}
-	public String getCode() {
-		return code;
-	}
-	public void setCode(String code) {
-		this.code = code;
-	}
-	public String getName() {
-		return name;
-	}
-	public void setName(String name) {
-		this.name = name;
-	}
-	public String getDescription() {
-		return description;
-	}
-	public void setDescription(String description) {
-		this.description = description;
-	}
-	public String getGivenBy() {
-		return givenBy;
-	}
-	public void setGivenBy(String givenBy) {
-		this.givenBy = givenBy;
-	}
 	
 	
 }

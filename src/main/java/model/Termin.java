@@ -1,43 +1,42 @@
 package model;
 
 import java.util.Date;
-import java.util.UUID;
 
-public class Appointment {
-	private UUID id;
-	private Date date;
-	private boolean isFree;
+public class Termin {
+
+	private Date datum;
+	private boolean slobodan;
 	
-	public Appointment()  {
-		this.id = UUID.randomUUID();
-	}
-	
-	public Appointment(Date date, boolean isFree) {
+	public Termin() {
 		super();
-		this.id = UUID.randomUUID();
-		this.date = date;
-		this.isFree = isFree;
-	}
-	public UUID getId() {
-		return id;
+		// TODO Auto-generated constructor stub
 	}
 
-	public Date getDate() {
-		return date;
+	public Termin(Date datum, boolean slobodan) {
+		super();
+		this.datum = datum;
+		this.slobodan = slobodan;
 	}
-	public void setDate(Date date) {
-		this.date = date;
+
+	public Date getDatum() {
+		return datum;
 	}
-	public boolean isFree() {
-		return isFree;
+
+	public void setDatum(Date datum) {
+		this.datum = datum;
 	}
-	public void setFree(boolean isFree) {
-		this.isFree = isFree;
+
+	public boolean isSlobodan() {
+		return slobodan;
+	}
+
+	public void setSlobodan(boolean slobodan) {
+		this.slobodan = slobodan;
 	}
 
 	@Override
 	public String toString() {
-		return "Appointment [id=" + id + ", date=" + date + ", isFree=" + isFree + "]";
+		return "Termin [datum=" + datum + ", slobodan=" + slobodan + "]";
 	}
 	
 	

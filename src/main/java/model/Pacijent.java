@@ -1,85 +1,98 @@
 package model;
 
 import java.util.ArrayList;
-import java.util.UUID;
+import java.util.Set;
 
-public class Patient {
-	private String id;
-	private int height;
-	private int weight;
-	private ArrayList<UUID> alergies;
-	private ArrayList<UUID> surgeries;
-	private ArrayList<UUID> prescriptions; //recepti
-	private ArrayList<UUID> appointments;
+public class Pacijent {
+
+	private int visina;
+	private int tezina;
+	private double dioptrija;
+	private Set<String> alergije;
+	private ArrayList<Operacija> operacije;
+	private ArrayList<Recept> recepti; 
+	private ArrayList<Pregled> pregledi;
 	
-	public Patient() {
-		this.id = UUID.randomUUID().toString();
+	public Pacijent() {
+		super();
+		// TODO Auto-generated constructor stub
 	}
-	
-	public Patient(String id, int height, int weight,
-			ArrayList<UUID> alergies, ArrayList<UUID> surgeries,
-			ArrayList<UUID> prescriptions, ArrayList<UUID> appointments) {
-		this.id = id;
-		this.height = height;
-		this.weight = weight;
-		this.alergies = alergies;
-		this.surgeries = surgeries;
-		this.prescriptions = prescriptions;
-		this.appointments = appointments;
+
+	public Pacijent(int visina, int tezina, double dioptrija, Set<String> alergije, ArrayList<Operacija> operacije,
+			ArrayList<Recept> recepti, ArrayList<Pregled> pregledi) {
+		super();
+		this.visina = visina;
+		this.tezina = tezina;
+		this.dioptrija = dioptrija;
+		this.alergije = alergije;
+		this.operacije = operacije;
+		this.recepti = recepti;
+		this.pregledi = pregledi;
 	}
-	
-	public Patient(Patient p) {
-		this.id = p.id;
-		this.height = p.height;
-		this.weight = p.weight;
-		this.alergies = p.alergies;
-		this.surgeries = p.surgeries;
-		this.prescriptions = p.prescriptions;
-		this.appointments = p.appointments;
+
+	public int getVisina() {
+		return visina;
 	}
-	
-	public String getId() {
-		return id;
+
+	public void setVisina(int visina) {
+		this.visina = visina;
 	}
-	public void setId(String id) {
-		this.id = id;
-	}
-	public int getHeight() {
-		return height;
-	}
-	public void setHeight(int height) {
-		this.height = height;
-	}
+
 	public int getTezina() {
-		return weight;
+		return tezina;
 	}
-	public void setWeight(int weight) {
-		this.weight = weight;
+
+	public void setTezina(int tezina) {
+		this.tezina = tezina;
 	}
-	public ArrayList<UUID> getAlergies() {
-		return alergies;
+
+	public double getDioptrija() {
+		return dioptrija;
 	}
-	public void setAlergies(ArrayList<UUID> alergies) {
-		this.alergies = alergies;
+
+	public void setDioptrija(double dioptrija) {
+		this.dioptrija = dioptrija;
 	}
-	public ArrayList<UUID> getSurgeries() {
-		return surgeries;
+
+	public Set<String> getAlergije() {
+		return alergije;
 	}
-	public void setSurgeries(ArrayList<UUID> surgeries) {
-		this.surgeries = surgeries;
+
+	public void setAlergije(Set<String> alergije) {
+		this.alergije = alergije;
 	}
-	public ArrayList<UUID> getPrescriptions() {
-		return prescriptions;
+
+	public ArrayList<Operacija> getOperacije() {
+		return operacije;
 	}
-	public void setPrescriptions(ArrayList<UUID> prescriptions) {
-		this.prescriptions = prescriptions;
+
+	public void setOperacije(ArrayList<Operacija> operacije) {
+		this.operacije = operacije;
 	}
-	public ArrayList<UUID> getAppointments() {
-		return appointments;
+
+	public ArrayList<Recept> getRecepti() {
+		return recepti;
 	}
-	public void setAppointments(ArrayList<UUID> appointments) {
-		this.appointments = appointments;
+
+	public void setRecepti(ArrayList<Recept> recepti) {
+		this.recepti = recepti;
 	}
+
+	public ArrayList<Pregled> getPregledi() {
+		return pregledi;
+	}
+
+	public void setPregledi(ArrayList<Pregled> pregledi) {
+		this.pregledi = pregledi;
+	}
+
+	@Override
+	public String toString() {
+		return "Pacijent [visina=" + visina + ", tezina=" + tezina + ", dioptrija=" + dioptrija + ", alergije="
+				+ alergije + ", operacije=" + operacije + ", recepti=" + recepti + ", pregledi=" + pregledi + "]";
+	}
+	
+	
 	
 	
 }

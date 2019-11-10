@@ -1,40 +1,35 @@
 package model;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.UUID;
+import java.util.Set;
 
-public class Nurse {
-	private UUID id;
-	private ArrayList<UUID> holidays;
+public class MedicinskaSestra {
 	
-	public Nurse() {
+	private Set<Odsustvo> holidays;
+	
+	public MedicinskaSestra() {
 		
 	}
 	
-	public Nurse(UUID id, ArrayList<UUID> holidays) {
-		this.id = id;
+	public MedicinskaSestra(Set<Odsustvo> holidays) {
 		this.holidays = holidays;
 	}
 	
-	public Nurse(Nurse n) {
-		this.id = n.id;
+	public MedicinskaSestra(MedicinskaSestra n) {
 		this.holidays = n.holidays;
 	}
 	
-	public UUID getId() {
-		return id;
-	}
-	
-	public void setId(UUID id) {
-		this.id = id;
-	}
-	
-	public ArrayList<UUID> getHolidays() {
+	public Set<Odsustvo> getHolidays() {
 		return holidays;
 	}
 	
-	public void setHolidays(ArrayList<UUID> holidays) {
+	public void setHolidays(Set<Odsustvo> holidays) {
 		this.holidays = holidays;
 	}
+
+	@Override
+	public String toString() {
+		return "MedicinskaSestra [holidays=" + holidays + "]";
+	}
+	
+	
 }

@@ -1,109 +1,118 @@
 package model;
 
 import java.util.ArrayList;
-import java.util.Date;
-import java.util.Dictionary;
-import java.util.HashMap;
-import java.util.List;
-import java.util.UUID;
+import java.util.Set;
 
-public class Clinic {
+public class Klinika {
 
-	private UUID id;
-	private String name;
-	private String address;
-	private String description;
-	private List<UUID> freeAppoitments;
-	private List<UUID> doctors;
-	private List<UUID> halls;
-	private HashMap<UUID, Double> fees;
-	private double avgMark;
+	private String ime;
+	private String adresa;
+	private String opis;
+	private Set<Termin> slobodniTermini;
+	private Set<Doktor> doktori;
+	private Set<Sala> sale;
+	private ArrayList<Usluga> usluge;
+	private ArrayList<Integer> ocene;
+	private double prosecnaOcena;
 	
-	
-	public Clinic()  {
-		this.id = UUID.randomUUID();
-		this.freeAppoitments = new ArrayList<UUID>();
-		this.halls = new ArrayList<UUID>();
-		this.fees = new HashMap<UUID, Double>();
-		this.doctors = new ArrayList<UUID>();
-	}
-	
-	public Clinic(String name, String address, String description, double avgMark) {
+	public Klinika() {
 		super();
-		this.id = UUID.randomUUID();
-		this.freeAppoitments = new ArrayList<UUID>();
-		this.halls = new ArrayList<UUID>();
-		this.doctors = new ArrayList<UUID>();
-		this.fees = new HashMap<UUID, Double>();
-		this.name = name;
-		this.address = address;
-		this.description = description;
-		this.avgMark = avgMark;
+		// TODO Auto-generated constructor stub
 	}
 
-	public double getAvgMark() {
-		return avgMark;
+	public Klinika(String ime, String adresa, String opis, Set<Termin> slobodniTermini, Set<Doktor> doktori,
+			Set<Sala> sale, ArrayList<Usluga> usluge, ArrayList<Integer> ocene, double prosecnaOcena) {
+		super();
+		this.ime = ime;
+		this.adresa = adresa;
+		this.opis = opis;
+		this.slobodniTermini = slobodniTermini;
+		this.doktori = doktori;
+		this.sale = sale;
+		this.usluge = usluge;
+		this.ocene = ocene;
+		this.prosecnaOcena = prosecnaOcena;
 	}
 
-	public void setAvgMark(double avgMark) {
-		this.avgMark = avgMark;
+	public String getIme() {
+		return ime;
 	}
 
-	public UUID getId() {
-		return id;
+	public void setIme(String ime) {
+		this.ime = ime;
 	}
 
-	public String getName() {
-		return name;
-	}
-	public void setName(String name) {
-		this.name = name;
-	}
-	public String getAddress() {
-		return address;
-	}
-	public void setAddress(String address) {
-		this.address = address;
-	}
-	public String getDescription() {
-		return description;
-	}
-	public void setDescription(String description) {
-		this.description = description;
-	}
-	public List<UUID> getFreeAppoitments() {
-		return freeAppoitments;
-	}
-	public void setFreeAppoitments(List<UUID> freeAppoitments) {
-		this.freeAppoitments = freeAppoitments;
-	}
-	public List<UUID> getHalls() {
-		return halls;
-	}
-	public void setHalls(List<UUID> halls) {
-		this.halls = halls;
-	}
-	public HashMap<UUID, Double> getFees() {
-		return fees;
-	}
-	public void setFees(HashMap<UUID, Double> fees) {
-		this.fees = fees;
+	public String getAdresa() {
+		return adresa;
 	}
 
-	public List<UUID> getDoctors() {
-		return doctors;
+	public void setAdresa(String adresa) {
+		this.adresa = adresa;
 	}
 
-	public void setDoctors(List<UUID> doctors) {
-		this.doctors = doctors;
+	public String getOpis() {
+		return opis;
+	}
+
+	public void setOpis(String opis) {
+		this.opis = opis;
+	}
+
+	public Set<Termin> getSlobodniTermini() {
+		return slobodniTermini;
+	}
+
+	public void setSlobodniTermini(Set<Termin> slobodniTermini) {
+		this.slobodniTermini = slobodniTermini;
+	}
+
+	public Set<Doktor> getDoktori() {
+		return doktori;
+	}
+
+	public void setDoktori(Set<Doktor> doktori) {
+		this.doktori = doktori;
+	}
+
+	public Set<Sala> getSale() {
+		return sale;
+	}
+
+	public void setSale(Set<Sala> sale) {
+		this.sale = sale;
+	}
+
+	public ArrayList<Usluga> getUsluge() {
+		return usluge;
+	}
+
+	public void setCenovnik(ArrayList<Usluga> usluge) {
+		this.usluge = usluge;
+	}
+
+	public ArrayList<Integer> getOcene() {
+		return ocene;
+	}
+
+	public void setOcene(ArrayList<Integer> ocene) {
+		this.ocene = ocene;
+	}
+
+	public double getProsecnaOcena() {
+		return prosecnaOcena;
+	}
+
+	public void setProsecnaOcena(double prosecnaOcena) {
+		this.prosecnaOcena = prosecnaOcena;
 	}
 
 	@Override
 	public String toString() {
-		return "Clinic [id=" + id + ", name=" + name + ", address=" + address + ", description=" + description
-				+ ", freeAppoitments=" + freeAppoitments + ", doctors=" + doctors + ", halls=" + halls + ", fees="
-				+ fees + ", avgMark=" + avgMark + "]";
+		return "Klinika [ime=" + ime + ", adresa=" + adresa + ", opis=" + opis + ", slobodniTermini=" + slobodniTermini
+				+ ", doktori=" + doktori + ", sale=" + sale + ", usluge=" + usluge + ", ocene=" + ocene
+				+ ", prosecnaOcena=" + prosecnaOcena + "]";
 	}
+	
 	
 	
 	

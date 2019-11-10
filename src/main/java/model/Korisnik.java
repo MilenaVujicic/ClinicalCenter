@@ -1,78 +1,58 @@
 package model;
 
-
 import java.util.Date;
-import java.util.UUID;
 
-public class User {
-	private UUID id;
-	private String name;
-	private String surname;
+enum UlogaKorisnika {
+	ADMIN_CENTRA, ADMIN_KLINIKE, LEKAR, MEDICINSKA_SESTRA, PACIJENT
+}
+
+public class Korisnik {
+	
+	private String ime;
+	private String prezime;
 	private String email;
 	private String password;
-	private String city;
-	private String state;
-	private String jmbg;
-	private String address;
-	private Date birthDay;
-	private boolean status;
+	private String grad;
+	private String drzava;
+	private int jmbg;
+	private String adresa;
+	private Date datumRodjenja;
+	private UlogaKorisnika uloga;		
 	
-	public User() {
-		
+	public Korisnik() {
+		super();
+		// TODO Auto-generated constructor stub
 	}
-	
-	public User(UUID id, String name, String surname, String email,
-			String pass,String city, String state, String jmbg,
-			String address, Date birthDay, boolean status) {
-		this.id = id;
-		this.name = name;
-		this.surname = surname;
+
+	public Korisnik(String ime, String prezime, String email, String password, String grad, String drzava, int jmbg,
+			String adresa, Date datumRodjenja, UlogaKorisnika uloga) {
+		super();
+		this.ime = ime;
+		this.prezime = prezime;
 		this.email = email;
-		this.password = pass;
-		this.city = city;
-		this.state = state;
+		this.password = password;
+		this.grad = grad;
+		this.drzava = drzava;
 		this.jmbg = jmbg;
-		this.address = address;
-		this.birthDay = birthDay;
-		this.status = status;
-	}
-	
-	public User(User u) {
-		this.id = u.id;
-		this.name = u.name;
-		this.surname = u.surname;
-		this.email = u.email;
-		this.password = u.password;
-		this.city = u.city;
-		this.state = u.state;
-		this.jmbg = u.jmbg;
-		this.address = u.address;
-		this.birthDay = u.birthDay;
-		this.status = u.status;
-	}
-	
-	public UUID getId() {
-		return id;
-	}
-	
-	public void setId(UUID id) {
-		this.id = id;
-	}
-	
-	public String getName() {
-		return name;
-	}
-	
-	public void setName(String name) {
-		this.name = name;
+		this.adresa = adresa;
+		this.datumRodjenja = datumRodjenja;
+		this.uloga = uloga;
 	}
 
-	public String getSurname() {
-		return surname;
+	public String getIme() {
+		return ime;
 	}
 
-	public void setSurname(String surname) {
-		this.surname = surname;
+	public void setIme(String ime) {
+		this.ime = ime;
+	}
+
+	public String getPrezime() {
+		return prezime;
+	}
+
+	public void setPrezime(String prezime) {
+		this.prezime = prezime;
 	}
 
 	public String getEmail() {
@@ -91,52 +71,61 @@ public class User {
 		this.password = password;
 	}
 
-	public String getCity() {
-		return city;
+	public String getGrad() {
+		return grad;
 	}
 
-	public void setCity(String city) {
-		this.city = city;
+	public void setGrad(String grad) {
+		this.grad = grad;
 	}
 
-	public String getState() {
-		return state;
+	public String getDrzava() {
+		return drzava;
 	}
 
-	public void setState(String state) {
-		this.state = state;
+	public void setDrzava(String drzava) {
+		this.drzava = drzava;
 	}
 
-	public String getJmbg() {
+	public int getJmbg() {
 		return jmbg;
 	}
 
-	public void setJmbg(String jmbg) {
+	public void setJmbg(int jmbg) {
 		this.jmbg = jmbg;
 	}
 
-	public String getAddress() {
-		return address;
+	public String getAdresa() {
+		return adresa;
 	}
 
-	public void setAddress(String address) {
-		this.address = address;
+	public void setAdresa(String adresa) {
+		this.adresa = adresa;
+	}
+
+	public Date getDatumRodjenja() {
+		return datumRodjenja;
+	}
+
+	public void setDatumRodjenja(Date datumRodjenja) {
+		this.datumRodjenja = datumRodjenja;
+	}
+
+	public UlogaKorisnika getUloga() {
+		return uloga;
+	}
+
+	public void setUloga(UlogaKorisnika uloga) {
+		this.uloga = uloga;
+	}
+
+	@Override
+	public String toString() {
+		return "Korisnik [ime=" + ime + ", prezime=" + prezime + ", email=" + email + ", password=" + password
+				+ ", grad=" + grad + ", drzava=" + drzava + ", jmbg=" + jmbg + ", adresa=" + adresa + ", datumRodjenja="
+				+ datumRodjenja + ", uloga=" + uloga + "]";
 	}
 	
-	public Date getBirthDay() {
-		return birthDay;
-	}
-
-	public void setBirthDay(Date birthDay) {
-		this.birthDay = birthDay;
-	}
 	
-	public boolean getStatus() {
-		return status;
-	}
-
-	public void setBirthDay(boolean status) {
-		this.status = status;
-	}
 	
 }

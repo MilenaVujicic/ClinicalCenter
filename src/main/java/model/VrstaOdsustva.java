@@ -1,6 +1,6 @@
 package model;
 
-public enum TypeOfAbsence {
-	VACATION, 
-	DAYOFF
+public enum VrstaOdsustva {
+	ODMOR, 
+	BOLOVANJE
 }
