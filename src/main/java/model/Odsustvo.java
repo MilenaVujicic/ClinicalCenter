@@ -1,61 +1,75 @@
 package model;
 
 import java.util.Date;
-import java.util.UUID;
 
-public class Absence {
+public class Odsustvo {
 	
-	private UUID id;
-	private TypeOfService type;
-	private Date startDate;
-	private Date endDate;
-	private boolean isAccepted;
+	private Korisnik korisnik;
+	private VrstaOdsustva vrstaOdsustva;
+	private Date pocetakOdsustva;
+	private Date zavrsetakOdsustva;
+	private boolean odobren;
 	
-	public Absence()  {
-		this.id = UUID.randomUUID();
-	}
-	
-	public Absence(TypeOfService type, Date startDate, Date endDate, boolean isAccepted) {
+	public Odsustvo()  {
 		super();
-		this.id = UUID.randomUUID();
-		this.type = type;
-		this.startDate = startDate;
-		this.endDate = endDate;
-		this.isAccepted = isAccepted;
-	}
-	public UUID getId() {
-		return id;
 	}
 
-	public TypeOfService getType() {
-		return type;
+	public Odsustvo(Korisnik korisnik, VrstaOdsustva vrstaOdsustva, Date pocetakOdsustva, Date zavrsetakOdsustva,
+			boolean odobren) {
+		super();
+		this.korisnik = korisnik;
+		this.vrstaOdsustva = vrstaOdsustva;
+		this.pocetakOdsustva = pocetakOdsustva;
+		this.zavrsetakOdsustva = zavrsetakOdsustva;
+		this.odobren = odobren;
 	}
-	public void setType(TypeOfService type) {
-		this.type = type;
+
+	public Korisnik getKorisnik() {
+		return korisnik;
 	}
-	public Date getStartDate() {
-		return startDate;
+
+	public void setKorisnik(Korisnik korisnik) {
+		this.korisnik = korisnik;
 	}
-	public void setStartDate(Date startDate) {
-		this.startDate = startDate;
+
+	public VrstaOdsustva getVrstaOdsustva() {
+		return vrstaOdsustva;
 	}
-	public Date getEndDate() {
-		return endDate;
+
+	public void setVrstaOdsustva(VrstaOdsustva vrstaOdsustva) {
+		this.vrstaOdsustva = vrstaOdsustva;
 	}
-	public void setEndDate(Date endDate) {
-		this.endDate = endDate;
+
+	public Date getPocetakOdsustva() {
+		return pocetakOdsustva;
 	}
-	public boolean isAccepted() {
-		return isAccepted;
+
+	public void setPocetakOdsustva(Date pocetakOdsustva) {
+		this.pocetakOdsustva = pocetakOdsustva;
 	}
-	public void setAccepted(boolean isAccepted) {
-		this.isAccepted = isAccepted;
+
+	public Date getZavrsetakOdsustva() {
+		return zavrsetakOdsustva;
 	}
+
+	public void setZavrsetakOdsustva(Date zavrsetakOdsustva) {
+		this.zavrsetakOdsustva = zavrsetakOdsustva;
+	}
+
+	public boolean isOdobren() {
+		return odobren;
+	}
+
+	public void setOdobren(boolean odobren) {
+		this.odobren = odobren;
+	}
+
 	@Override
 	public String toString() {
-		return "Absence [id=" + id + ", type=" + type + ", startDate=" + startDate + ", endDate=" + endDate
-				+ ", isAccepted=" + isAccepted + "]";
+		return "Odsustvo [korisnik=" + korisnik + ", vrstaOdsustva=" + vrstaOdsustva + ", pocetakOdsustva="
+				+ pocetakOdsustva + ", zavrsetakOdsustva=" + zavrsetakOdsustva + ", odobren=" + odobren + "]";
 	}
+
 	
 	
 }
