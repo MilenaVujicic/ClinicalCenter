@@ -1,7 +1,7 @@
 /*
  * author: Filip Vozarevic
  */
-package model;
+package com.example.demo.model;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -11,6 +11,8 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 
 @Entity
@@ -29,9 +31,12 @@ public class Dijagnoza {
 	@Column(name = "opis", nullable = true)
 	private String opis;
 	
-	@ManyToMany(mappedBy = "pregledi")
+	@ManyToMany
+	@JoinTable(name = "pregledi", joinColumns = @JoinColumn(name = "pregled_id", 
+	referencedColumnName = "id"), inverseJoinColumns = @JoinColumn(name = "dijagnoza_id", 
+	referencedColumnName = "id"))
 	private Set<Pregled> pregledi = new HashSet<Pregled>();
-	
+
 	public Dijagnoza() {
 		super();
 		// TODO Auto-generated constructor stub

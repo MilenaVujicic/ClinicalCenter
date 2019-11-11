@@ -1,4 +1,4 @@
-package model;
+package com.example.demo.model;
 
 import java.util.Set;
 
@@ -55,10 +55,11 @@ public class Klinika {
 	private Set<Usluga> usluge;
 	
 	
-	@OneToMany
-	@JoinTable(name = "ocena", joinColumns = @JoinColumn(name = "klinika_id", 
-	referencedColumnName = "id"), inverseJoinColumns = @JoinColumn(name = "ocena_id", 
-	referencedColumnName = "id"))
+	//@OneToMany
+	//@JoinTable(name = "ocena", joinColumns = @JoinColumn(name = "klinika_id", 
+	//referencedColumnName = "id"), inverseJoinColumns = @JoinColumn(name = "ocena_id", 
+	//referencedColumnName = "id"))
+	@Column(name = "Ocene",nullable = true)
 	private Set<Integer> ocene;
 	
 	@Column(name = "ProsecnaOcena", nullable = false)

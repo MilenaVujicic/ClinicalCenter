@@ -1,13 +1,33 @@
-package model;
+package com.example.demo.model;
 
 import java.util.Date;
 
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+
+@Entity
 public class Odsustvo {
 	
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	private Long id;
+	
+	@Column(name = "korisnik", nullable = false)
 	private Korisnik korisnik;
+	
+	@Column(name = "vrsta_odsustva", nullable = false)
 	private VrstaOdsustva vrstaOdsustva;
+	
+	@Column(name = "pocetak_odsustva", nullable = false)
 	private Date pocetakOdsustva;
+	
+	@Column(name = "zavrsetak_odsustva", nullable = false)
 	private Date zavrsetakOdsustva;
+	
+	@Column(name = "odobren", nullable = false)
 	private boolean odobren;
 	
 	public Odsustvo()  {

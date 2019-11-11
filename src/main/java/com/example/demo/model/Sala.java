@@ -1,4 +1,4 @@
-package model;
+package com.example.demo.model;
 
 import java.util.Set;
 
@@ -20,7 +20,6 @@ public class Sala  {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 	
-	@OneToMany(mappedBy = "sala", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 	private Klinika klinika;
 	
 	@Column(name = "ime")

@@ -1,9 +1,10 @@
 /*
  * author: Andrea Mendrei
  */
-package model;
+package com.example.demo.model;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -53,8 +54,9 @@ public class Doktor {
 	@OneToMany(mappedBy = "doktor", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 	private Set<Odsustvo> odsustva = new HashSet<Odsustvo>();
 	
-	@OneToMany(mappedBy = "doktor", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-	private ArrayList<Integer> ocene = new ArrayList<Integer>();
+	//@OneToMany(mappedBy = "doktor", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+	@Column(name="ocene",nullable = false)
+	private Collection<Integer> ocene;
 	
 	@Column(name = "prosecnaOcena", nullable = false)
 	private double prosecnaOcena = 0;
@@ -68,7 +70,7 @@ public class Doktor {
 
 	public Doktor(Long id, Set<Pregled> preglediZakazani, Set<Pregled> preglediZavrseni,
 			Set<Operacija> operacijeZakazane, Set<Operacija> operacijeZavrsene, Set<Odsustvo> odsustva,
-			ArrayList<Integer> ocene, double prosecnaOcena, Set<Recept> ispisaniRecepti) {
+			Collection<Integer> ocene, double prosecnaOcena, Set<Recept> ispisaniRecepti) {
 		super();
 		this.id = id;
 		this.preglediZakazani = preglediZakazani;
@@ -141,7 +143,7 @@ public class Doktor {
 		this.odsustva = odsustva;
 	}
 
-	public ArrayList<Integer> getOcene() {
+	public Collection<Integer> getOcene() {
 		return ocene;
 	}
 

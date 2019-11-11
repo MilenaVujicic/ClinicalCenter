@@ -1,7 +1,7 @@
 /*
  * author: Filip Vozarevic
  */
-package model;
+package com.example.demo.model;
 
 import java.util.Date;
 
@@ -41,15 +41,15 @@ public class Korisnik {
 	private String drzava;
 	
 	@Column(name = "jmbg", nullable = false)
-	private int jmbg;
+	private Long jmbg;
 	
 	@Column(name = "adresa", nullable = false)
 	private String adresa;
 	
-	@Column(name = "datumRodjenja", nullable = false)
+	@Column(name = "datumRodjenja", nullable = true) //za sad
 	private Date datumRodjenja;
 	
-	@Column(name = "uloga", nullable = false)
+	@Column(name = "uloga", nullable = true) //za sad
 	private UlogaKorisnika uloga;		
 	
 	public Korisnik() {
@@ -57,7 +57,7 @@ public class Korisnik {
 		// TODO Auto-generated constructor stub
 	}
 
-	public Korisnik(String ime, String prezime, String email, String password, String grad, String drzava, int jmbg,
+	public Korisnik(String ime, String prezime, String email, String password, String grad, String drzava, Long jmbg,
 			String adresa, Date datumRodjenja, UlogaKorisnika uloga) {
 		super();
 		this.ime = ime;
@@ -120,11 +120,11 @@ public class Korisnik {
 		this.drzava = drzava;
 	}
 
-	public int getJmbg() {
+	public Long getJmbg() {
 		return jmbg;
 	}
 
-	public void setJmbg(int jmbg) {
+	public void setJmbg(Long jmbg) {
 		this.jmbg = jmbg;
 	}
 
