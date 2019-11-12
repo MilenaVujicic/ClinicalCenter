@@ -27,8 +27,8 @@ public class Operacija {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 	
-	@ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-	private Sala sala;
+	@Column(name = "sala", nullable = false)
+	private String sala;
 	
 	@Column(name = "status")
 	private StatusOperacije status;
@@ -39,79 +39,8 @@ public class Operacija {
 	@Column(name = "trajanje")
 	private int trajanje;
 	
-	@ManyToMany(mappedBy = "operacije")
-	private Set<Doktor> doktori;
-	
-	public Operacija() {
-		super();
-		// TODO Auto-generated constructor stub
-	}
-
-	public Operacija(Long id, Sala sala, StatusOperacije status, LocalDateTime datumIVremeOperacije, int trajanje,
-			Set<Doktor> doktori) {
-		super();
-		this.id = id;
-		this.sala = sala;
-		this.status = status;
-		this.datumIVremeOperacije = datumIVremeOperacije;
-		this.trajanje = trajanje;
-		this.doktori = doktori;
-	}
-
-	public Long getId() {
-		return id;
-	}
-
-	public void setId(Long id) {
-		this.id = id;
-	}
-
-	public Sala getSala() {
-		return sala;
-	}
-
-	public void setSala(Sala sala) {
-		this.sala = sala;
-	}
-
-	public StatusOperacije getStatus() {
-		return status;
-	}
-
-	public void setStatus(StatusOperacije status) {
-		this.status = status;
-	}
-
-	public LocalDateTime getDatumIVremeOperacije() {
-		return datumIVremeOperacije;
-	}
-
-	public void setDatumIVremeOperacije(LocalDateTime datumIVremeOperacije) {
-		this.datumIVremeOperacije = datumIVremeOperacije;
-	}
-
-	public int getTrajanje() {
-		return trajanje;
-	}
-
-	public void setTrajanje(int trajanje) {
-		this.trajanje = trajanje;
-	}
-
-	public Set<Doktor> getDoktori() {
-		return doktori;
-	}
-
-	public void setDoktori(Set<Doktor> doktori) {
-		this.doktori = doktori;
-	}
-
-	@Override
-	public String toString() {
-		return "Operacija [id=" + id + ", sala=" + sala + ", status=" + status + ", datumIVremeOperacije="
-				+ datumIVremeOperacije + ", trajanje=" + trajanje + ", doktori=" + doktori + "]";
-	}
-	
+	// @ManyToMany(mappedBy = "operacije")
+	// private Set<Doktor> doktori;
 	
 	
 	
