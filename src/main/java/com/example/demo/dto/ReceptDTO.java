@@ -3,7 +3,6 @@ package com.example.demo.dto;
 import java.time.LocalDateTime;
 
 import com.example.demo.model.Doktor;
-import com.example.demo.model.MedicinskaSestra;
 import com.example.demo.model.Pacijent;
 
 enum StatusRecepta {
@@ -20,7 +19,6 @@ public class ReceptDTO {
 	private LocalDateTime datumOvere;
 	private Pacijent pacijent;
 	private Doktor doktor;
-	private MedicinskaSestra medicinskaSestra;
 	
 	public ReceptDTO() {
 		super();
@@ -28,7 +26,7 @@ public class ReceptDTO {
 	}
 
 	public ReceptDTO(Long id, String naziv, String opis, StatusRecepta status, LocalDateTime datumIspisa,
-			LocalDateTime datumOvere, Pacijent pacijent, Doktor doktor, MedicinskaSestra medicinskaSestra) {
+			LocalDateTime datumOvere, Pacijent pacijent, Doktor doktor) {
 		super();
 		this.id = id;
 		this.naziv = naziv;
@@ -38,7 +36,6 @@ public class ReceptDTO {
 		this.datumOvere = datumOvere;
 		this.pacijent = pacijent;
 		this.doktor = doktor;
-		this.medicinskaSestra = medicinskaSestra;
 	}
 
 	public Long getId() {
@@ -105,19 +102,11 @@ public class ReceptDTO {
 		this.doktor = doktor;
 	}
 
-	public MedicinskaSestra getMedicinskaSestra() {
-		return medicinskaSestra;
-	}
-
-	public void setMedicinskaSestra(MedicinskaSestra medicinskaSestra) {
-		this.medicinskaSestra = medicinskaSestra;
-	}
-
 	@Override
 	public String toString() {
 		return "ReceptDTO [id=" + id + ", naziv=" + naziv + ", opis=" + opis + ", status=" + status + ", datumIspisa="
 				+ datumIspisa + ", datumOvere=" + datumOvere + ", pacijent=" + pacijent + ", doktor=" + doktor
-				+ ", medicinskaSestra=" + medicinskaSestra + "]";
+				+ "]";
 	}
 	
 }

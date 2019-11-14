@@ -2,11 +2,14 @@ package com.example.demo.model;
 
 import java.util.Date;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.ManyToOne;
 
 @Entity
 public class Odsustvo {
@@ -15,7 +18,7 @@ public class Odsustvo {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 	
-	@Column(name = "korisnik", nullable = false)
+	@ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
 	private Korisnik korisnik;
 	
 	@Column(name = "vrsta_odsustva", nullable = false)
@@ -34,14 +37,12 @@ public class Odsustvo {
 		super();
 	}
 
-	public Odsustvo(Korisnik korisnik, VrstaOdsustva vrstaOdsustva, Date pocetakOdsustva, Date zavrsetakOdsustva,
-			boolean odobren) {
-		super();
-		this.korisnik = korisnik;
-		this.vrstaOdsustva = vrstaOdsustva;
-		this.pocetakOdsustva = pocetakOdsustva;
-		this.zavrsetakOdsustva = zavrsetakOdsustva;
-		this.odobren = odobren;
+	public Long getId() {
+		return id;
+	}
+
+	public void setId(Long id) {
+		this.id = id;
 	}
 
 	public Korisnik getKorisnik() {
@@ -51,6 +52,7 @@ public class Odsustvo {
 	public void setKorisnik(Korisnik korisnik) {
 		this.korisnik = korisnik;
 	}
+
 
 	public VrstaOdsustva getVrstaOdsustva() {
 		return vrstaOdsustva;
@@ -86,8 +88,9 @@ public class Odsustvo {
 
 	@Override
 	public String toString() {
-		return "Odsustvo [korisnik=" + korisnik + ", vrstaOdsustva=" + vrstaOdsustva + ", pocetakOdsustva="
-				+ pocetakOdsustva + ", zavrsetakOdsustva=" + zavrsetakOdsustva + ", odobren=" + odobren + "]";
+		return "Odsustvo [id=" + id + ", korisnik=" + korisnik + ", vrstaOdsustva=" + vrstaOdsustva
+				+ ", pocetakOdsustva=" + pocetakOdsustva + ", zavrsetakOdsustva=" + zavrsetakOdsustva + ", odobren="
+				+ odobren + "]";
 	}
 
 	

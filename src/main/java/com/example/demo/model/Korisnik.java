@@ -4,12 +4,17 @@
 package com.example.demo.model;
 
 import java.util.Date;
+import java.util.HashSet;
+import java.util.Set;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
 
 enum UlogaKorisnika {
 	ADMIN_CENTRA, ADMIN_KLINIKE, LEKAR, MEDICINSKA_SESTRA, PACIJENT
@@ -34,23 +39,26 @@ public class Korisnik {
 	@Column(name = "password", nullable = false)
 	private String password;
 	
-	@Column(name = "grad", nullable = false)
+	@Column(name = "grad")
 	private String grad;
 	
-	@Column(name = "drzava", nullable = false)
+	@Column(name = "drzava")
 	private String drzava;
 	
 	@Column(name = "jmbg", nullable = false)
 	private Long jmbg;
 	
-	@Column(name = "adresa", nullable = false)
+	@Column(name = "adresa")
 	private String adresa;
 	
-	@Column(name = "datumRodjenja", nullable = true) //za sad
+	@Column(name = "datumRodjenja", nullable = true) 
 	private Date datumRodjenja;
 	
-	@Column(name = "uloga", nullable = true) //za sad
+	@Column(name = "uloga", nullable = true) 
 	private UlogaKorisnika uloga;		
+	
+	@OneToMany(mappedBy = "korisnik", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+	private Set<Odsustvo> odsustva = new HashSet<Odsustvo>();
 	
 	public Korisnik() {
 		super();
@@ -152,11 +160,27 @@ public class Korisnik {
 		this.uloga = uloga;
 	}
 
+	public Long getId() {
+		return id;
+	}
+
+	public void setId(Long id) {
+		this.id = id;
+	}
+
+	public Set<Odsustvo> getOdsustva() {
+		return odsustva;
+	}
+
+	public void setOdsustva(Set<Odsustvo> odsustva) {
+		this.odsustva = odsustva;
+	}
+
 	@Override
 	public String toString() {
-		return "Korisnik [ime=" + ime + ", prezime=" + prezime + ", email=" + email + ", password=" + password
-				+ ", grad=" + grad + ", drzava=" + drzava + ", jmbg=" + jmbg + ", adresa=" + adresa + ", datumRodjenja="
-				+ datumRodjenja + ", uloga=" + uloga + "]";
+		return "Korisnik [id=" + id + ", ime=" + ime + ", prezime=" + prezime + ", email=" + email + ", password="
+				+ password + ", grad=" + grad + ", drzava=" + drzava + ", jmbg=" + jmbg + ", adresa=" + adresa
+				+ ", datumRodjenja=" + datumRodjenja + ", uloga=" + uloga + ", odsustva=" + odsustva + "]";
 	}
 	
 	

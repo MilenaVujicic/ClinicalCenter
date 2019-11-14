@@ -11,8 +11,6 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 
 @Entity
@@ -28,25 +26,24 @@ public class Dijagnoza {
 	@Column(name = "ime", nullable = false)
 	private String ime;
 	
-	@Column(name = "opis", nullable = true)
+	@Column(name = "opis")
 	private String opis;
 	
-	@ManyToMany
-	@JoinTable(name = "pregledi", joinColumns = @JoinColumn(name = "pregled_id", 
-	referencedColumnName = "id"), inverseJoinColumns = @JoinColumn(name = "dijagnoza_id", 
-	referencedColumnName = "id"))
+	@ManyToMany(mappedBy = "dijagnoze")
 	private Set<Pregled> pregledi = new HashSet<Pregled>();
-
+	
 	public Dijagnoza() {
 		super();
 		// TODO Auto-generated constructor stub
 	}
 
-	public Dijagnoza(String sifra, String ime, String opis) {
+	public Dijagnoza(Long id, String sifra, String ime, String opis, Set<Pregled> pregledi) {
 		super();
+		this.id = id;
 		this.sifra = sifra;
 		this.ime = ime;
 		this.opis = opis;
+		this.pregledi = pregledi;
 	}
 
 	public String getSifra() {
@@ -73,10 +70,28 @@ public class Dijagnoza {
 		this.opis = opis;
 	}
 
+	public Long getId() {
+		return id;
+	}
+
+	public void setId(Long id) {
+		this.id = id;
+	}
+
+	public Set<Pregled> getPregledi() {
+		return pregledi;
+	}
+
+	public void setPregledi(Set<Pregled> pregledi) {
+		this.pregledi = pregledi;
+	}
+
 	@Override
 	public String toString() {
-		return "Dijagnoza [sifra=" + sifra + ", ime=" + ime + ", opis=" + opis + " ]";
+		return "Dijagnoza [id=" + id + ", sifra=" + sifra + ", ime=" + ime + ", opis=" + opis + ", pregledi=" + pregledi
+				+ "]";
 	}
+
 	
 	
 	

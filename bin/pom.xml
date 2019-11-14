@@ -16,12 +16,48 @@
 
 	<properties>
 		<java.version>1.8</java.version>
+		<spring-security.version>5.0.6.RELEASE</spring-security.version>
+	    <spring.version>5.0.6.RELEASE</spring.version>
 	</properties>
+	
+
 
 	<dependencies>
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
-			<artifactId>spring-boot-starter</artifactId>
+			<artifactId>spring-boot-starter-data-jpa</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-data-rest</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-web</artifactId>
+		</dependency>
+		
+		<!-- POSTGRES -->
+		<dependency>
+            <groupId>org.postgresql</groupId>
+            <artifactId>postgresql</artifactId>
+        </dependency>
+        
+        <!-- SPRING SECURITY CORE -->
+        <dependency>
+		    <groupId>org.springframework.security</groupId>
+		    <artifactId>spring-security-core</artifactId>
+		</dependency>
+		
+		<!-- SPRING SECURITY WEB -->
+		<dependency>
+		    <groupId>org.springframework.security</groupId>
+		    <artifactId>spring-security-web</artifactId>
+		</dependency>
+		
+		<!-- THYMELEAF -->
+		<dependency> 
+		    <groupId>org.springframework.boot</groupId> 
+		    <artifactId>spring-boot-starter-thymeleaf</artifactId> 
 		</dependency>
 
 		<dependency>

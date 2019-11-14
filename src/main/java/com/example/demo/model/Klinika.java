@@ -1,16 +1,17 @@
 package com.example.demo.model;
-
+import java.util.HashSet;
+//------------------------------
 import java.util.Set;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.JoinTable;
 import javax.persistence.OneToMany;
-
+//-------------------------------
 @Entity
 public class Klinika {
 
@@ -18,7 +19,7 @@ public class Klinika {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 	
-	@Column(name = "ime")
+	@Column(name = "ime", nullable = false)
 	private String ime;
 	
 	@Column(name = "adresa")
@@ -27,61 +28,32 @@ public class Klinika {
 	@Column(name = "opis")
 	private String opis;
 	
-	@OneToMany
-	@JoinTable(name = "termini", joinColumns = @JoinColumn(name = "klinika_id", 
-	referencedColumnName = "id"), inverseJoinColumns = @JoinColumn(name = "termin_id", 
-	referencedColumnName = "id"))
-	private Set<Termin> slobodniTermini;
+	@OneToMany(mappedBy = "klinika", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+	private Set<Termin> slobodniTermini = new HashSet<Termin>();
 	
+	@OneToMany(mappedBy = "klinika", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+	private Set<Doktor> doktori = new HashSet<Doktor>();
 	
-	@OneToMany
-	@JoinTable(name = "doktori", joinColumns = @JoinColumn(name = "klinika_id", 
-	referencedColumnName = "id"), inverseJoinColumns = @JoinColumn(name = "doktor_id", 
-	referencedColumnName = "id"))
-	private Set<Doktor> doktori;
+	@OneToMany(mappedBy = "klinika", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+	private Set<Sala> sale = new HashSet<Sala>();
 	
+	@OneToMany(mappedBy = "klinika", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+	private Set<Usluga> usluge = new HashSet<Usluga>();
 	
-	@OneToMany
-	@JoinTable(name = "sala", joinColumns = @JoinColumn(name = "klinika_id", 
-	referencedColumnName = "id"), inverseJoinColumns = @JoinColumn(name = "sala_id", 
-	referencedColumnName = "id"))
-	private Set<Sala> sale;
-	
-	
-	@OneToMany
-	@JoinTable(name = "usluga", joinColumns = @JoinColumn(name = "klinika_id", 
-	referencedColumnName = "id"), inverseJoinColumns = @JoinColumn(name = "usluga_id", 
-	referencedColumnName = "id"))
-	private Set<Usluga> usluge;
-	
-	
-	//@OneToMany
-	//@JoinTable(name = "ocena", joinColumns = @JoinColumn(name = "klinika_id", 
-	//referencedColumnName = "id"), inverseJoinColumns = @JoinColumn(name = "ocena_id", 
-	//referencedColumnName = "id"))
-	@Column(name = "Ocene",nullable = true)
-	private Set<Integer> ocene;
+	//!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+	//@Column(name = "Ocene",nullable = true)
+	//private Set<Integer> ocene;
 	
 	@Column(name = "ProsecnaOcena", nullable = false)
-	private double prosecnaOcena = 0;
+	private double prosecnaOcena;
+	
+	@OneToMany(mappedBy = "klinika", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+	private Set<AdministratorKlinike> administratoriKlinike;
 	
 	public Klinika() {
 		super();
 		// TODO Auto-generated constructor stub
-	}
-
-	public Klinika(String ime, String adresa, String opis, Set<Termin> slobodniTermini, Set<Doktor> doktori,
-			Set<Sala> sale, Set<Usluga> usluge, Set<Integer> ocene, double prosecnaOcena) {
-		super();
-		this.ime = ime;
-		this.adresa = adresa;
-		this.opis = opis;
-		this.slobodniTermini = slobodniTermini;
-		this.doktori = doktori;
-		this.sale = sale;
-		this.usluge = usluge;
-		this.ocene = ocene;
-		this.prosecnaOcena = prosecnaOcena;
+		this.prosecnaOcena = 0;
 	}
 
 	public String getIme() {
@@ -140,13 +112,13 @@ public class Klinika {
 		this.usluge = usluge;
 	}
 
-	public Set<Integer> getOcene() {
+	/*public Set<Integer> getOcene() {
 		return ocene;
 	}
 
 	public void setOcene(Set<Integer> ocene) {
 		this.ocene = ocene;
-	}
+	}*/
 
 	public double getProsecnaOcena() {
 		return prosecnaOcena;
@@ -156,11 +128,31 @@ public class Klinika {
 		this.prosecnaOcena = prosecnaOcena;
 	}
 
+	public Long getId() {
+		return id;
+	}
+
+	public void setId(Long id) {
+		this.id = id;
+	}
+
+	public Set<AdministratorKlinike> getAdministratoriKlinike() {
+		return administratoriKlinike;
+	}
+
+	public void setAdministratoriKlinike(Set<AdministratorKlinike> administratoriKlinike) {
+		this.administratoriKlinike = administratoriKlinike;
+	}
+
+	public void setUsluge(Set<Usluga> usluge) {
+		this.usluge = usluge;
+	}
+
 	@Override
 	public String toString() {
-		return "Klinika [ime=" + ime + ", adresa=" + adresa + ", opis=" + opis + ", slobodniTermini=" + slobodniTermini
-				+ ", doktori=" + doktori + ", sale=" + sale + ", usluge=" + usluge + ", ocene=" + ocene
-				+ ", prosecnaOcena=" + prosecnaOcena + "]";
+		return "Klinika [id=" + id + ", ime=" + ime + ", adresa=" + adresa + ", opis=" + opis + ", slobodniTermini="
+				+ slobodniTermini + ", doktori=" + doktori + ", sale=" + sale + ", usluge=" + usluge
+				+ ", prosecnaOcena=" + prosecnaOcena + ", administratoriKlinike=" + administratoriKlinike + "]";
 	}
 	
 	

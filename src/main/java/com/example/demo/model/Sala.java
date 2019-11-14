@@ -1,5 +1,6 @@
 package com.example.demo.model;
 
+import java.util.HashSet;
 import java.util.Set;
 
 import javax.persistence.CascadeType;
@@ -9,8 +10,7 @@ import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.JoinTable;
+import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 
 @Entity
@@ -20,38 +20,24 @@ public class Sala  {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 	
+	@ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
 	private Klinika klinika;
 	
-	@Column(name = "ime")
+	@Column(name = "ime", nullable = false)
 	private String ime;
 	
-	@Column(name = "opis")
+	@Column(name = "opis", nullable = false)
 	private String opis;
 	
-	@OneToMany
-	@JoinTable(name = "pregledi", joinColumns = @JoinColumn(name = "sala_id", 
-	referencedColumnName = "id"), inverseJoinColumns = @JoinColumn(name = "pregled_id", 
-	referencedColumnName = "id"))
-	private Set<Pregled> pregledi;
+	@OneToMany(mappedBy = "sala", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+	private Set<Pregled> pregledi = new HashSet<Pregled>();
 	
-	@OneToMany
-	@JoinTable(name = "operacije", joinColumns = @JoinColumn(name = "sala_id", 
-	referencedColumnName = "id"), inverseJoinColumns = @JoinColumn(name = "operacije_id", 
-	referencedColumnName = "id"))
-	private Set<Operacija> operacije;
+	@OneToMany(mappedBy = "sala", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+	private Set<Operacija> operacije = new HashSet<Operacija>();
 	
 	public Sala() {
 		super();
 		// TODO Auto-generated constructor stub
-	}
-
-	public Sala(Klinika klinika, String ime, String opis, Set<Pregled> pregledi, Set<Operacija> operacije) {
-		super();
-		this.klinika = klinika;
-		this.ime = ime;
-		this.opis = opis;
-		this.pregledi = pregledi;
-		this.operacije = operacije;
 	}
 
 
@@ -80,7 +66,6 @@ public class Sala  {
 	}
 
 	
-
 	public Set<Pregled> getPregledi() {
 		return pregledi;
 	}
@@ -96,13 +81,13 @@ public class Sala  {
 	public void setOperacije(Set<Operacija> operacije) {
 		this.operacije = operacije;
 	}
+	
 
 	@Override
 	public String toString() {
-		return "Sala [klinika=" + klinika + ", ime=" + ime + ", opis=" + opis + ", pregledi=" + pregledi
+		return "Sala [id=" + id + ", klinika=" + klinika + ", ime=" + ime + ", opis=" + opis + ", pregledi=" + pregledi
 				+ ", operacije=" + operacije + "]";
 	}
-	
 	
 	
 	

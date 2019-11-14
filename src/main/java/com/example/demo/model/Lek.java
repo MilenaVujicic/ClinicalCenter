@@ -3,15 +3,11 @@
  */
 package com.example.demo.model;
 
-import java.util.HashSet;
-import java.util.Set;
-
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.ManyToMany;
 
 @Entity
 public class Lek {
@@ -26,11 +22,8 @@ public class Lek {
 	@Column(name = "ime", nullable = false)
 	private String ime;
 	
-	@Column(name = "opis", nullable = true)
+	@Column(name = "opis")
 	private String opis;
-	
-	@ManyToMany(mappedBy = "pregledi")
-	private Set<Pregled> pregledi = new HashSet<Pregled>();
 	
 	public Lek() {
 		super();
@@ -68,9 +61,17 @@ public class Lek {
 		this.opis = opis;
 	}
 
+	public Long getId() {
+		return id;
+	}
+
+	public void setId(Long id) {
+		this.id = id;
+	}
+
 	@Override
 	public String toString() {
-		return "Lek [sifra=" + sifra + ", ime=" + ime + ", opis=" + opis + "]";
+		return "Lek [id=" + id + ", sifra=" + sifra + ", ime=" + ime + ", opis=" + opis + "]";
 	}
 	
 }
