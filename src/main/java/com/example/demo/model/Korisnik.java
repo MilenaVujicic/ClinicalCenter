@@ -36,6 +36,9 @@ public class Korisnik {
 	@Column(name = "email", nullable = false)
 	private String email;
 	
+	@Column(name = "username", nullable = false)
+	private String username;
+	
 	@Column(name = "password", nullable = false)
 	private String password;
 	
@@ -50,6 +53,9 @@ public class Korisnik {
 	
 	@Column(name = "adresa")
 	private String adresa;
+	
+	@Column(name = "telefon")
+	private int telefon;
 	
 	@Column(name = "datumRodjenja", nullable = true) 
 	private Date datumRodjenja;

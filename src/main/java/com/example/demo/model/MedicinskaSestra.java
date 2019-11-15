@@ -1,6 +1,5 @@
 package com.example.demo.model;
 
-
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -11,40 +10,15 @@ import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 
 @Entity
-public class AdministratorKlinike {
+public class MedicinskaSestra {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 	
-	@Column(name="idKorisnik", nullable = false)
-	private Long idKorisnik;
+	@Column(name = "idKorisnika", nullable = false)
+	private Long idKorisnika;
 	
 	@ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
 	private Klinika klinika;
-
-	public AdministratorKlinike() {
-		super();
-	}
-	
-	public Long getId() {
-		return id;
-	}
-
-	public void setId(Long id) {
-		this.id = id;
-	}
-
-	public Long getIdKorisnik() {
-		return idKorisnik;
-	}
-
-	public void setIdKorisnik(Long idKorisnik) {
-		this.idKorisnik = idKorisnik;
-	}
-
-
-	
-	
-	
 }

@@ -40,7 +40,6 @@ public class Klinika {
 	@OneToMany(mappedBy = "klinika", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 	private Set<Usluga> usluge = new HashSet<Usluga>();
 	
-	//!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 	//@Column(name = "Ocene",nullable = true)
 	//private Set<Integer> ocene;
 	
@@ -48,7 +47,13 @@ public class Klinika {
 	private double prosecnaOcena;
 	
 	@OneToMany(mappedBy = "klinika", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-	private Set<AdministratorKlinike> administratoriKlinike;
+	private Set<AdministratorKlinike> administratoriKlinike = new HashSet<AdministratorKlinike>();
+	
+	@OneToMany(mappedBy = "klinika", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+	private Set<Pacijent> pacijenti = new HashSet<Pacijent>();
+	
+	@OneToMany(mappedBy = "klinika", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+	private Set<MedicinskaSestra> mediniskeSestre = new HashSet<MedicinskaSestra>();
 	
 	public Klinika() {
 		super();
