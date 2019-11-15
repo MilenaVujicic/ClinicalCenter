@@ -3,7 +3,6 @@
  */
 package com.example.demo.model;
 //------------------------------------
-import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -26,24 +25,6 @@ public class Pacijent {
 	
 	@Column(name="idKorisnik", nullable = false)
 	private Long idKorisnik;
-	
-	@Column(name = "username", nullable = false)
-	private String username;
-	
-	@Column(name = "password", nullable = false)
-	private String password;
-	
-	@Column(name = "email", nullable = false)
-	private String email;
-	
-	@Column(name = "ime", nullable = false)
-	private String ime;
-	
-	@Column(name = "prezime", nullable = false)
-	private String prezime;
-	
-	@Column(name = "datumRodjenja", nullable = false)
-	private Date datumRodjenja;
 	
 	@Column(name = "visina", nullable = false)
 	private int visina;
@@ -74,8 +55,6 @@ public class Pacijent {
 		// TODO Auto-generated constructor stub
 	}
 	
-	
-
 	public Long getId() {
 		return id;
 	}
@@ -97,79 +76,6 @@ public class Pacijent {
 	public void setIdKorisnik(Long idKorisnik) {
 		this.idKorisnik = idKorisnik;
 	}
-
-
-
-	public String getUsername() {
-		return username;
-	}
-
-
-
-	public void setUsername(String username) {
-		this.username = username;
-	}
-
-
-
-	public String getPassword() {
-		return password;
-	}
-
-
-
-	public void setPassword(String password) {
-		this.password = password;
-	}
-
-
-
-	public String getEmail() {
-		return email;
-	}
-
-
-
-	public void setEmail(String email) {
-		this.email = email;
-	}
-
-
-
-	public String getIme() {
-		return ime;
-	}
-
-
-
-	public void setIme(String ime) {
-		this.ime = ime;
-	}
-
-
-
-	public String getPrezime() {
-		return prezime;
-	}
-
-
-
-	public void setPrezime(String prezime) {
-		this.prezime = prezime;
-	}
-
-
-
-	public Date getDatumRodjenja() {
-		return datumRodjenja;
-	}
-
-
-
-	public void setDatumRodjenja(Date datumRodjenja) {
-		this.datumRodjenja = datumRodjenja;
-	}
-
 
 
 	public int getVisina() {
@@ -196,13 +102,13 @@ public class Pacijent {
 		this.dioptrija = dioptrija;
 	}
 
-	/*public Set<String> getAlergije() {
+	public Set<Alergija> getAlergije() {
 		return alergije;
 	}
 
-	public void setAlergije(Set<String> alergije) {
+	public void setAlergije(Set<Alergija> alergije) {
 		this.alergije = alergije;
-	}*/
+	}
 
 	public Set<Operacija> getOperacije() {
 		return operacije;
@@ -228,15 +134,5 @@ public class Pacijent {
 		this.pregledi = pregledi;
 	}
 
-	@Override
-	public String toString() {
-		return "Pacijent [id=" + id + ", idKorisnik=" + idKorisnik + ", username=" + username + ", password=" + password
-				+ ", email=" + email + ", ime=" + ime + ", prezime=" + prezime + ", datumRodjenja=" + datumRodjenja
-				+ ", visina=" + visina + ", tezina=" + tezina + ", dioptrija=" + dioptrija + ", operacije=" + operacije
-				+ ", recepti=" + recepti + ", pregledi=" + pregledi + "]";
-	}
-	
-	
-	
 	
 }
