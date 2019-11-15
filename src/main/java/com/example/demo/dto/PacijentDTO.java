@@ -3,40 +3,36 @@ package com.example.demo.dto;
 import java.util.HashSet;
 import java.util.Set;
 
-import javax.persistence.CascadeType;
-import javax.persistence.Column;
-import javax.persistence.FetchType;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.JoinTable;
-import javax.persistence.ManyToMany;
-import javax.persistence.OneToMany;
-
+import com.example.demo.model.Alergija;
+import com.example.demo.model.Klinika;
 import com.example.demo.model.Operacija;
+import com.example.demo.model.Pacijent;
 import com.example.demo.model.Pregled;
 import com.example.demo.model.Recept;
 
 public class PacijentDTO {
 	
 	private Long id;
+	private Long idKorisnik;
 	private int visina;
 	private int tezina;
 	private double dioptrija;
-	private Set<String> alergije = new HashSet<String>();
+	private Set<Alergija> alergije = new HashSet<Alergija>();
 	private Set<Operacija> operacije = new HashSet<Operacija>();
 	private Set<Recept> recepti = new HashSet<Recept>(); 
 	private Set<Pregled> pregledi = new HashSet<Pregled>();
+	private Klinika klinika;
 	
 	public PacijentDTO() {
 		super();
 		// TODO Auto-generated constructor stub
 	}
-
-	public PacijentDTO(int visina, int tezina, double dioptrija, Set<String> alergije, Set<Operacija> operacije,
-			Set<Recept> recepti, Set<Pregled> pregledi) {
+	
+	public PacijentDTO(Long id, Long idKorisnik, int visina, int tezina, double dioptrija, Set<Alergija> alergije,
+			Set<Operacija> operacije, Set<Recept> recepti, Set<Pregled> pregledi, Klinika klinika) {
 		super();
+		this.id = id;
+		this.idKorisnik = idKorisnik;
 		this.visina = visina;
 		this.tezina = tezina;
 		this.dioptrija = dioptrija;
@@ -44,6 +40,12 @@ public class PacijentDTO {
 		this.operacije = operacije;
 		this.recepti = recepti;
 		this.pregledi = pregledi;
+		this.klinika = klinika;
+	}
+
+	public PacijentDTO(Pacijent p) {
+		this(p.getId(), p.getIdKorisnik(), p.getVisina(), p.getTezina(), p.getDioptrija(), p.getAlergije(),
+				p.getOperacije(), p.getRecepti(),p.getPregledi(), p.getKlinika());
 	}
 
 	public int getVisina() {
@@ -70,11 +72,11 @@ public class PacijentDTO {
 		this.dioptrija = dioptrija;
 	}
 
-	public Set<String> getAlergije() {
+	public Set<Alergija> getAlergije() {
 		return alergije;
 	}
 
-	public void setAlergije(Set<String> alergije) {
+	public void setAlergije(Set<Alergija> alergije) {
 		this.alergije = alergije;
 	}
 
@@ -100,6 +102,30 @@ public class PacijentDTO {
 
 	public void setPregledi(Set<Pregled> pregledi) {
 		this.pregledi = pregledi;
+	}
+
+	public Long getId() {
+		return id;
+	}
+
+	public void setId(Long id) {
+		this.id = id;
+	}
+
+	public Long getIdKorisnik() {
+		return idKorisnik;
+	}
+
+	public void setIdKorisnik(Long idKorisnik) {
+		this.idKorisnik = idKorisnik;
+	}
+
+	public Klinika getKlinika() {
+		return klinika;
+	}
+
+	public void setKlinika(Klinika klinika) {
+		this.klinika = klinika;
 	}
 
 	@Override
