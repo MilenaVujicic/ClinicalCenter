@@ -18,4 +18,8 @@ public class PacijentService {
 		return pacijentRepository.findAll();
 	}
 	
+	public Pacijent findByIdKorisnik(Long idKorisnik) {
+		return pacijentRepository.findByIdKorisnik(idKorisnik);
+	}
+	
 }
