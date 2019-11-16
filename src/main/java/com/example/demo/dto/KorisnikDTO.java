@@ -5,13 +5,12 @@ import java.util.Date;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.Size;
 
+import com.example.demo.model.Korisnik;
+import com.example.demo.model.UlogaKorisnika;
 import com.example.demo.validation.PasswordMatches;
 import com.example.demo.validation.ValidEmail;
 import com.sun.istack.NotNull;
 
-enum UlogaKorisnika {
-	ADMIN_CENTRA, ADMIN_KLINIKE, LEKAR, MEDICINSKA_SESTRA, PACIJENT
-}
 
 @PasswordMatches
 public class KorisnikDTO {
@@ -63,12 +62,15 @@ public class KorisnikDTO {
 	
 	@NotNull
     @NotEmpty
-	private UlogaKorisnika uloga;		
+	private UlogaKorisnika uloga;	
+	
+	
 	
 	public KorisnikDTO() {
-		
+		super();
+		// TODO Auto-generated constructor stub
 	}
-	
+
 	public KorisnikDTO(String ime, String prezime, String email, String password, String matchingPassword, String grad, String drzava, Long jmbg,
 			String adresa, Date datumRodjenja, UlogaKorisnika uloga) {
 		super();
@@ -83,6 +85,29 @@ public class KorisnikDTO {
 		this.adresa = adresa;
 		this.datumRodjenja = datumRodjenja;
 		this.uloga = uloga;
+	}
+	
+	public KorisnikDTO(Long id, String ime, String prezime, String email, String password, String matchingPassword, String grad, String drzava, Long jmbg,
+			String adresa, Date datumRodjenja, UlogaKorisnika ulogaKorisnika) {
+		super();
+		this.id = id;
+		this.ime = ime;
+		this.prezime = prezime;
+		this.email = email;
+		this.password = password;
+		this.matchingPassword = matchingPassword;
+		this.grad = grad;
+		this.drzava = drzava;
+		this.jmbg = jmbg;
+		this.adresa = adresa;
+		this.datumRodjenja = datumRodjenja;
+		this.uloga = ulogaKorisnika;
+	}
+	
+
+	public KorisnikDTO(Korisnik k) {
+		this(k.getId(), k.getIme(), k.getPrezime(),k.getEmail(), k.getPassword(), k.getPassword(), k.getGrad(),k.getDrzava(), k.getJmbg(),
+				k.getAdresa(), k.getDatumRodjenja(), k.getUloga());
 	}
 
 	public Long getId() {

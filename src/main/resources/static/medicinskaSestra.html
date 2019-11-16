@@ -7,8 +7,9 @@
     <title>Nurse</title>
     <link href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.0/css/bootstrap.min.css" rel="stylesheet">
     
-    <script src="http://code.jquery.com/jquery-1.11.1.min.js"></script>
+    <script src="./js/lib/jquery-3.3.1.min.js" type="text/javascript"></script>
     <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.0/js/bootstrap.min.js"></script>
+    <script src="./js/medicinskaSestra.js" type="text/javascript"></script>
 
 	<!-- Website CSS style -->
 	<link href="css/bootstrap.min.css" rel="stylesheet">
@@ -20,15 +21,65 @@
 	<link href='https://fonts.googleapis.com/css?family=Passion+One' rel='stylesheet' type='text/css'>
 	<link href='https://fonts.googleapis.com/css?family=Oxygen' rel='stylesheet' type='text/css'>
 	<script>
+		function detaljanPrikazPacijenta(pacijent) {
+			return function() {
+				$.ajax({
+		            url:"/medicinska_sestra/pacijent/" + pacijent.id,
+		            type:"GET",
+		           	success: function(pacijenti){
+		           		$('#patientName').val(pacijent.ime)
+		           		$('#patientSurname').val(pacijent.prezime)
+		           		$('#patientBirth').val(pacijent.datumRodjenja)
+		           		$('#patientHeight').val(pacijenti.visina)
+		           		$('#patientWidth').val(pacijenti.tezina)
+		           		$('#patientAllergies').val(pacijenti.alergije);
+		           		$('#patientDioptre').val(pacijenti.dioptrija);
+		           		$('#patient').attr('hidden', false);
+		           		$('#patientsTable').attr('hidden', true);
+	 	           	},
+		           	error: function() {
+		           		alert('Desila se greska');
+		           	}
+	         	});
+			}
+		}
+		
+		function prikaziPacijenta(pacijent) {
+			let tr = $('<tr></tr>');
+			let tdIme = $('<td>'+pacijent.ime+'</td>');
+			let tdPrezime = $('<td>'+pacijent.prezime+'</td>');
+			let tdDatumRodjenja = $('<td>'+pacijent.datumRodjenja+'</td>');
+			let tdMore = $('<td><a href="#'+pacijent.ime+'_'+pacijent.prezime+'">More</a></td>');
+			tdMore.click(detaljanPrikazPacijenta(pacijent));
+			tr.append(tdIme).append(tdPrezime).append(tdDatumRodjenja).append(tdMore);
+			$('#patientsTable tbody').append(tr);
+		}	
+	
 		function home() {
 			$('#patientsTable').attr('hidden', true);
+			$('#patient').attr('hidden', true);
 		}
 		
 		function allPatients() {
+			$.ajax({
+	            url:"/medicinska_sestra/sviPacijenti",
+	            type:"GET",
+	           	success: function(pacijenti){
+	           		for (i = 0; i < pacijenti.length; i++) {
+	           			prikaziPacijenta(pacijenti[i]);
+	           		}
+ 	           	},
+	           	error: function() {
+	           		alert('Desila se greska');
+	           	}
+         	});
+			
 			$('#patientsTable').attr('hidden', false);
+			$('#patient').attr('hidden', true);
 		}
 		function personalData() {
 			$('#patientsTable').attr('hidden', true);
+			$('#patient').attr('hidden', true);
 		}
 	</script>
 </head>
@@ -52,7 +103,6 @@
 	<table class="table" id="patientsTable" hidden="true">
 	  <thead>
 	    <tr>
-	      <th scope="col">#</th>
 	      <th scope="col">Name</th>
 	      <th scope="col">Surname</th>
 	      <th scope="col">Date of Birth</th>
@@ -62,6 +112,37 @@
 	  <tbody>
 	    
 	  </tbody>
+	</table>
+	
+	<table class="table" id="patient" hidden="true">
+		<tr>
+			<td>Name:</td>
+			<td><input id="patientName" readonly="readonly"></td>
+		</tr>
+		<tr>
+			<td>Surname:</td>
+			<td><input id="patientSurname" readonly="readonly"></td>
+		</tr>
+		<tr>
+			<td>Date of Birth:</td>
+			<td><input id="patientBirth" readonly="readonly"></td>
+		</tr>
+		<tr>
+			<td>Height:</td>
+			<td><input id="patientHeight" readonly="readonly"></td>
+		</tr>
+		<tr>
+			<td>Width:</td>
+			<td><input id="patientWidth" readonly="readonly"></td>
+		</tr>
+		<tr>
+			<td>Allergies:</td>
+			<td><input id="patientAllergies" readonly="readonly"></td>
+		</tr>
+		<tr>
+			<td>Dioptre:</td>
+			<td><input id="patientDioptre" readonly="readonly"></td>
+		</tr>
 	</table>
 
 </body>

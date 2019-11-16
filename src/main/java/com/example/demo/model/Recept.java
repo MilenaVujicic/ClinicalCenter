@@ -46,7 +46,7 @@ public class Recept {
 	private String lek;
 	
 	@ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-	private Pacijent pacijent ;
+	private Pacijent pacijent;
 
 	public Recept() {
 		super();

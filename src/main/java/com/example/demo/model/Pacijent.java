@@ -134,5 +134,14 @@ public class Pacijent {
 		this.pregledi = pregledi;
 	}
 
+	public Klinika getKlinika() {
+		return klinika;
+	}
+
+	public void setKlinika(Klinika klinika) {
+		this.klinika = klinika;
+	}
+
+	
 	
 }
