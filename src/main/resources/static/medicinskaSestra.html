@@ -65,6 +65,7 @@
 	            url:"/medicinska_sestra/sviPacijenti",
 	            type:"GET",
 	           	success: function(pacijenti){
+	           		$('#patientsTable tbody').html('');
 	           		for (i = 0; i < pacijenti.length; i++) {
 	           			prikaziPacijenta(pacijenti[i]);
 	           		}
