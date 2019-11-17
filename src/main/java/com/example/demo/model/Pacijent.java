@@ -23,7 +23,7 @@ public class Pacijent {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 	
-	@Column(name="idKorisnik", nullable = false)
+	@Column(name="idKorisnik", nullable = false, unique = true)
 	private Long idKorisnik;
 	
 	@Column(name = "visina", nullable = false)

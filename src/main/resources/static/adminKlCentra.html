@@ -20,17 +20,58 @@
 	<link href='https://fonts.googleapis.com/css?family=Passion+One' rel='stylesheet' type='text/css'>
 	<link href='https://fonts.googleapis.com/css?family=Oxygen' rel='stylesheet' type='text/css'>
   	<script>
+  		function newAdministrator() {
+  			let ime = $('#name').val();
+  			let prezime = $('#surname').val();
+  			let email = $('#email').val();
+  			let adresa = $('#address').val();
+  			let grad = $('#city').val();
+  			let drzava = $('#state').val();
+  			let jmbg = $('#jmbg').val();
+  			
+  			$.ajax({
+	            url:"/admin_klinickog_centra/novi_admin",
+	            type:"POST",
+	            data: JSON.stringify({ime, prezime, email, adresa, grad, drzava, jmbg}),
+	            contentType:'application/json',
+	           	success: function(odgovor){
+	           		let ime = $('#name').val('');
+	      			let prezime = $('#surname').val('');
+	      			let email = $('#email').val('');
+	      			let adresa = $('#address').val('');
+	      			let grad = $('#city').val('');
+	      			let drzava = $('#state').val('');
+	      			let jmbg = $('#jmbg').val('');
+	           		$('#newAdmin').attr('hidden', true);
+	           		$('#adminErrorAlert').attr('hidden', true);
+	           		$('#newClinic').attr('hidden', true);
+	    	  		$('#adminSuccessAlert').attr('hidden', false);
+ 	           	},
+	           	error: function() {
+	           		$('#adminErrorAlert').attr('hidden', false);
+	           		$('#newAdmin').attr('hidden', true);
+	    	  		$('#newClinic').attr('hidden', true);
+	    	  		$('#adminSuccessAlert').attr('hidden', true);
+	           	}
+         	});
+  		}
 	  	function newAdmin() {
 	  		$('#newAdmin').attr('hidden', false);
 	  		$('#newClinic').attr('hidden', true);
+	  		$('#adminSuccessAlert').attr('hidden', true);
+	  		$('#adminErrorAlert').attr('hidden', true);
 	    }
 	  	function newClinic() {
 	  		$('#newClinic').attr('hidden', false);
 	  		$('#newAdmin').attr('hidden', true);
+	  		$('#adminSuccessAlert').attr('hidden', true);
+	  		$('#adminErrorAlert').attr('hidden', true);
 	  	}
 	  	function home() {
 	  		$('#newClinic').attr('hidden', true);
 	  		$('#newAdmin').attr('hidden', true);
+	  		$('#adminSuccessAlert').attr('hidden', true);
+	  		$('#adminErrorAlert').attr('hidden', true);
 	  	}
   	</script>
   	
@@ -122,38 +163,19 @@
 				</div>
 			</div>
 			
-			<div class="form-group">
-				<label for="username" class="cols-sm-2 control-label">Phone</label>
-				<div class="cols-sm-10">
-					<div class="input-group">
-						<span class="input-group-addon"><i class="fa fa-phone" aria-hidden="true"></i></span>
-						<input type="text" class="form-control" name="phone" id="phone"  placeholder="Enter Phone Number"/>
-					</div>
-				</div>
-			</div>
 			
 			<div class="form-group">
 				<label for="username" class="cols-sm-2 control-label">Unique Identification Number</label>
 				<div class="cols-sm-10">
 					<div class="input-group">
 						<span class="input-group-addon"><i class="fa fa-id-card-o" aria-hidden="true"></i></span>
-						<input type="text" class="form-control" name="id" id="id"  placeholder="Enter Unique Identification Number"/>
-					</div>
-				</div>
-			</div>
-	
-			<div class="form-group">
-				<label for="password" class="cols-sm-2 control-label">Password</label>
-				<div class="cols-sm-10">
-					<div class="input-group">
-						<span class="input-group-addon"><i class="fa fa-lock fa-lg" aria-hidden="true"></i></span>
-						<input type="password" class="form-control" name="password" id="password"  placeholder="Enter Password"/>
+						<input type="number" class="form-control" name="id" id="jmbg"  placeholder="Enter Unique Identification Number"/>
 					</div>
 				</div>
 			</div>
 	
 			<div class="form-group ">
-				<a target="_blank" type="button" id="newAdminButton" class="btn btn-primary btn-lg btn-block login-button">Register new adminitrator</a>
+				<a target="_blank" type="button" id="newAdminButton" class="btn btn-primary btn-lg btn-block login-button" onclick="newAdministrator()">Register new adminitrator</a>
 			</div>
 		</form>
 		
@@ -191,6 +213,18 @@
 				<a target="_blank" type="button" id="newClinicButton" class="btn btn-primary btn-lg btn-block login-button">Register new clinic</a>
 			</div>
 			
+		</form>
+		
+		<form id="adminSuccessAlert" hidden="true">
+			<div class="alert alert-info" role="alert">
+			  New administrator of the clinical center is successfully added.
+			</div>
+		</form>
+		
+		<form id="adminErrorAlert" hidden="true">
+			<div class="alert alert-danger" role="alert">
+			  Something went wrong!!!
+			</div>
 		</form>
 	</div>
 

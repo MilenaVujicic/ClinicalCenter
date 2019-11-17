@@ -68,7 +68,7 @@ public class KorisnikDTO {
 	
 	public KorisnikDTO() {
 		super();
-		// TODO Auto-generated constructor stub
+		
 	}
 
 	public KorisnikDTO(String ime, String prezime, String email, String password, String matchingPassword, String grad, String drzava, Long jmbg,
@@ -157,5 +157,7 @@ public class KorisnikDTO {
 	public UlogaKorisnika getUloga() {
 		return uloga;
 	}
+	
+	
 	
 }

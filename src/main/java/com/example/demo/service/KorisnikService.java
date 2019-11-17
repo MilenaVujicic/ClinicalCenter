@@ -18,4 +18,8 @@ public class KorisnikService {
 	public List<Korisnik> findByUloga(UlogaKorisnika uloga) {
 		return korisnikRepository.findByUloga(uloga);
 	}
+	
+	public Korisnik save(Korisnik korisnik) {
+		return korisnikRepository.save(korisnik);
+	}
 }
