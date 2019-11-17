@@ -15,7 +15,7 @@ public class KorisnikService {
 	@Autowired
 	KorisnikRepository korisnikRepository;
 	
-	public List<Korisnik> findByUloga(UlogaKorisnika uloga) {
-		return korisnikRepository.findByUloga(uloga);
+	public List<Korisnik> findByUloga(String string) {
+		return korisnikRepository.findByUloge(string);
 	}
 }

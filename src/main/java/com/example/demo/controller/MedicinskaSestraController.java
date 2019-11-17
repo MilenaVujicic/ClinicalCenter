@@ -33,7 +33,7 @@ public class MedicinskaSestraController {
 	
 	@RequestMapping(value = "/sviPacijenti", method=RequestMethod.GET)
 	public ResponseEntity<List<KorisnikDTO>> getAllPatients() {
-		List<Korisnik> patients = korisnikService.findByUloga(UlogaKorisnika.PACIJENT);
+		List<Korisnik> patients = korisnikService.findByUloga("PACIJENT");
 		List<KorisnikDTO> pacijentDTO = new ArrayList<>();
 		
 		for (Korisnik p : patients) {

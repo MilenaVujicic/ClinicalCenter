@@ -18,10 +18,12 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
 
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
+
 
 
 @Entity
@@ -65,9 +67,7 @@ public class Korisnik implements UserDetails {
 	
 	@Column(name = "datumRodjenja", nullable = true) 
 	private Date datumRodjenja;
-	
-	@Column(name = "uloga", nullable = true) 
-	private UlogaKorisnika uloga;		
+		
 	
 	@OneToMany(mappedBy = "korisnik", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 	private Set<Odsustvo> odsustva = new HashSet<Odsustvo>();
@@ -75,7 +75,8 @@ public class Korisnik implements UserDetails {
 	@Column(name = "enabled")
     private boolean enabled;
 	
-	 @JoinTable(name = "uloga_korisnika",
+	@ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+	@JoinTable(name = "uloge",
 	            joinColumns = @JoinColumn(name = "user_id", referencedColumnName = "id"),
 	            inverseJoinColumns = @JoinColumn(name = "uloga_id", referencedColumnName = "id"))
     private List<UlogaKorisnika> uloge;
@@ -86,7 +87,7 @@ public class Korisnik implements UserDetails {
 	}
 
 	public Korisnik(String ime, String prezime, String email, String password, String grad, String drzava, Long jmbg,
-			String adresa, Date datumRodjenja, UlogaKorisnika uloga) {
+			String adresa, Date datumRodjenja) {
 		super();
 		this.ime = ime;
 		this.prezime = prezime;
@@ -97,7 +98,6 @@ public class Korisnik implements UserDetails {
 		this.jmbg = jmbg;
 		this.adresa = adresa;
 		this.datumRodjenja = datumRodjenja;
-		this.uloga = uloga;
 		this.enabled = false;
 	}
 
@@ -173,14 +173,6 @@ public class Korisnik implements UserDetails {
 		this.datumRodjenja = datumRodjenja;
 	}
 
-	public UlogaKorisnika getUloga() {
-		return uloga;
-	}
-
-	public void setUloga(UlogaKorisnika uloga) {
-		this.uloga = uloga;
-	}
-
 	public Long getId() {
 		return id;
 	}
@@ -196,12 +188,31 @@ public class Korisnik implements UserDetails {
 	public void setOdsustva(Set<Odsustvo> odsustva) {
 		this.odsustva = odsustva;
 	}
+	
+	public void setUloge(List<UlogaKorisnika> uloge) {
+        this.uloge = uloge;
+    }
+	
+	public List<UlogaKorisnika> getUloge() {
+		return uloge;
+	}
+	
+	public String getUlogeString() {
+		String rez = "";
+		for(UlogaKorisnika u:uloge)
+		{
+			rez += u.name;
+			rez += " ";
+		}
+		return rez;
+	}
+
 
 	@Override
 	public String toString() {
 		return "Korisnik [id=" + id + ", ime=" + ime + ", prezime=" + prezime + ", email=" + email + ", password="
 				+ password + ", grad=" + grad + ", drzava=" + drzava + ", jmbg=" + jmbg + ", adresa=" + adresa
-				+ ", datumRodjenja=" + datumRodjenja + ", uloga=" + uloga + ", odsustva=" + odsustva + "]";
+				+ ", datumRodjenja=" + datumRodjenja + ", uloge=" + getUlogeString()  + ", odsustva=" + odsustva + "]";
 	}
 
 	@Override

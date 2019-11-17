@@ -39,6 +39,7 @@ public class RegistrationController {
 	    return "registration";
 	}
 	
+	@RequestMapping(value = "/user/registration", method = RequestMethod.POST)
 	public ModelAndView registerUserAccount(@ModelAttribute("user") @Valid final KorisnikDTO userDto, 
 			final HttpServletRequest request, final Errors errors) {
 		LOGGER.debug("Registering user account with information: {}", userDto);

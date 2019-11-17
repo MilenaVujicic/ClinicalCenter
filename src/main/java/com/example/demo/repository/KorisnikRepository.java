@@ -11,6 +11,6 @@ public interface KorisnikRepository extends JpaRepository<Korisnik, Long> {
 	
 	Korisnik findByEmail(String email);
 	
-	List<Korisnik> findByUloga(UlogaKorisnika uloga);
+	List<Korisnik> findByUloge(String string);
 	
 }

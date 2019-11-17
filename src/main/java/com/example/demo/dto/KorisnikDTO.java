@@ -60,10 +60,6 @@ public class KorisnikDTO {
     @NotEmpty
 	private Date datumRodjenja;
 	
-	@NotNull
-    @NotEmpty
-	private UlogaKorisnika uloga;	
-	
 	
 	
 	public KorisnikDTO() {
@@ -72,7 +68,7 @@ public class KorisnikDTO {
 	}
 
 	public KorisnikDTO(String ime, String prezime, String email, String password, String matchingPassword, String grad, String drzava, Long jmbg,
-			String adresa, Date datumRodjenja, UlogaKorisnika uloga) {
+			String adresa) {
 		super();
 		this.ime = ime;
 		this.prezime = prezime;
@@ -83,12 +79,10 @@ public class KorisnikDTO {
 		this.drzava = drzava;
 		this.jmbg = jmbg;
 		this.adresa = adresa;
-		this.datumRodjenja = datumRodjenja;
-		this.uloga = uloga;
 	}
 	
 	public KorisnikDTO(Long id, String ime, String prezime, String email, String password, String matchingPassword, String grad, String drzava, Long jmbg,
-			String adresa, Date datumRodjenja, UlogaKorisnika ulogaKorisnika) {
+			String adresa) {
 		super();
 		this.id = id;
 		this.ime = ime;
@@ -100,14 +94,12 @@ public class KorisnikDTO {
 		this.drzava = drzava;
 		this.jmbg = jmbg;
 		this.adresa = adresa;
-		this.datumRodjenja = datumRodjenja;
-		this.uloga = ulogaKorisnika;
 	}
 	
 
 	public KorisnikDTO(Korisnik k) {
 		this(k.getId(), k.getIme(), k.getPrezime(),k.getEmail(), k.getPassword(), k.getPassword(), k.getGrad(),k.getDrzava(), k.getJmbg(),
-				k.getAdresa(), k.getDatumRodjenja(), k.getUloga());
+				k.getAdresa());
 	}
 
 	public Long getId() {
@@ -148,14 +140,6 @@ public class KorisnikDTO {
 	
 	public String getAdresa() {
 		return adresa;
-	}
-	
-	public Date getDatumRodjenja() {
-		return datumRodjenja;
-	}
-	
-	public UlogaKorisnika getUloga() {
-		return uloga;
 	}
 	
 }

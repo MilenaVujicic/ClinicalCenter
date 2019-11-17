@@ -26,7 +26,7 @@
 		<div class="container">
 			<div class="row main">
 				<div class="main-login main-center">
-					<form class="" method="post" action="#">
+					<form action="/" method="POST" enctype="utf8">
 						
 						<div class="form-group">
 							<label for="name" class="cols-sm-2 control-label">Your Name</label>
@@ -129,7 +129,7 @@
 						</div>
 
 						<div class="form-group ">
-							<a target="_blank" type="button" id="button" class="btn btn-primary btn-lg btn-block login-button">Register</a>
+							<button type="submit" id="submit" class="btn btn-primary btn-lg btn-block login-button">Register</button>
 						</div>
 						
 					</form>
@@ -144,7 +144,34 @@
 	</body>
 </html>
 <script type="text/javascript">
-
+$(document).ready(function () {
+	$('register').submit(function(event) {
+		register(event);
+	});
+	
+	$(":password").keyup(function(){
+		if($("#password").val() != $("#matchPassword").val()){
+	        $("#globalError").show().html(/*[[#{PasswordMatches.user}]]*/);
+	    }else{
+	    	$("#globalError").html("").hide();
+	    }
+	});
+	
+function register(event){
+	event.preventDefault();
+    $(".alert").html("").hide();
+    $(".error-list").html("");
+    if($("#password").val() != $("#matchPassword").val()){
+    	$("#globalError").show().html(/*[[#{PasswordMatches.user}]]*/);
+    	return;
+    }
+    var formData= $('register').serialize();
+    $.post(serverContext + "user/registration",formData ,function(data){
+        if(data.message == "success"){
+            window.location.href = serverContext + "successRegister.html";
+        }
+        
+    })
 </script>
 </body>
 </html>
