@@ -3,8 +3,10 @@
  */
 package com.example.demo.model;
 
+import java.util.Collection;
 import java.util.Date;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 import javax.persistence.CascadeType;
@@ -14,11 +16,19 @@ import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
 import javax.persistence.OneToMany;
 
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
+
+
 @Entity
-public class Korisnik {
+public class Korisnik implements UserDetails {
 	
+	private static final long serialVersionUID = 8158909379450641326L;
+
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
@@ -62,6 +72,14 @@ public class Korisnik {
 	@OneToMany(mappedBy = "korisnik", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 	private Set<Odsustvo> odsustva = new HashSet<Odsustvo>();
 	
+	@Column(name = "enabled")
+    private boolean enabled;
+	
+	 @JoinTable(name = "uloga_korisnika",
+	            joinColumns = @JoinColumn(name = "user_id", referencedColumnName = "id"),
+	            inverseJoinColumns = @JoinColumn(name = "uloga_id", referencedColumnName = "id"))
+    private List<UlogaKorisnika> uloge;
+	
 	public Korisnik() {
 		super();
 		// TODO Auto-generated constructor stub
@@ -80,6 +98,7 @@ public class Korisnik {
 		this.adresa = adresa;
 		this.datumRodjenja = datumRodjenja;
 		this.uloga = uloga;
+		this.enabled = false;
 	}
 
 	public String getIme() {
@@ -183,6 +202,42 @@ public class Korisnik {
 		return "Korisnik [id=" + id + ", ime=" + ime + ", prezime=" + prezime + ", email=" + email + ", password="
 				+ password + ", grad=" + grad + ", drzava=" + drzava + ", jmbg=" + jmbg + ", adresa=" + adresa
 				+ ", datumRodjenja=" + datumRodjenja + ", uloga=" + uloga + ", odsustva=" + odsustva + "]";
+	}
+
+	@Override
+	public Collection<? extends GrantedAuthority> getAuthorities() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public String getUsername() {
+		// TODO Auto-generated method stub
+		return email;
+	}
+
+	@Override
+	public boolean isAccountNonExpired() {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public boolean isAccountNonLocked() {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public boolean isCredentialsNonExpired() {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public boolean isEnabled() {
+		// TODO Auto-generated method stub
+		return enabled;
 	}
 	
 	
