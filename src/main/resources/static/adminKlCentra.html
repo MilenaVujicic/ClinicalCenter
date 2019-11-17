@@ -20,6 +20,10 @@
 	<link href='https://fonts.googleapis.com/css?family=Passion+One' rel='stylesheet' type='text/css'>
 	<link href='https://fonts.googleapis.com/css?family=Oxygen' rel='stylesheet' type='text/css'>
   	<script>
+  		function newClinicAdministrator() {
+  			alert('dhygfu');
+  		}
+  		
   		function newAdministrator() {
   			let ime = $('#name').val();
   			let prezime = $('#surname').val();
@@ -55,24 +59,82 @@
 	           	}
          	});
   		}
+  		
+  		function newClinicAdmin(klinika) {
+  			return function() {
+  				$('#newClinicAdmin').attr('hidden', false);
+  				$('#clinicTable').attr('hidden', true);
+            	$('#newAdmin').attr('hidden', true);
+    	  		$('#newClinic').attr('hidden', true);
+    	  		$('#adminSuccessAlert').attr('hidden', true);
+    	  		$('#adminErrorAlert').attr('hidden', true);
+  			}
+  		}
+  		
+  		function prikaziKliniku(klinika) {
+  			let tr = $('<tr></tr>');
+  			let tdName = $('<td>'+klinika.ime+'</td>');
+  			let tdAddress = $('<td>'+klinika.adresa+'</td>');
+  			let tdDescribe = $('<td>'+klinika.opis+'</td>');
+  			let tdAdmins = $('<td>'+klinika.administratoriKlinike.length+'</td>');
+  			let tdAddAdmin = $('<td><a href="#'+klinika.ime+'_newAdministrator">Add administrator</a></td>');
+  			tdAddAdmin.click(newClinicAdmin(klinika));
+  			tr.append(tdName).append(tdAddress).append(tdDescribe).append(tdAdmins).append(tdAddAdmin);
+  			$('#clinicTable tbody').append(tr);
+  		}
+  		
+  		function newClinicAndAdmin() {
+	  		let ime = $('#clinicName').val();
+	  		let adresa = $('#clinicAddress').val();
+	  		let opis = $('#clinicDescribe').val();
+	  		
+	  		$.ajax({
+	            url:"/admin_klinickog_centra/nova_klinika",
+	            type:"POST",
+	            data: JSON.stringify({ime, adresa, opis}),
+	            contentType:'application/json',
+	            success: function(klinike) {
+	            	$('#clinicTable tbody').html('');
+	            	for(let klinika of klinike) {
+	            		prikaziKliniku(klinika);
+	            	}
+	            	$('#clinicTable').attr('hidden', false);
+	            	$('#newAdmin').attr('hidden', true);
+	    	  		$('#newClinic').attr('hidden', true);
+	    	  		$('#adminSuccessAlert').attr('hidden', true);
+	    	  		$('#adminErrorAlert').attr('hidden', true);
+	    	  		$('#newClinicAdmin').attr('hidden', true);
+	            },
+	            error: function() {
+	            	alert('Desila se greska');
+	            }
+            });
+	  	}
 	  	function newAdmin() {
 	  		$('#newAdmin').attr('hidden', false);
 	  		$('#newClinic').attr('hidden', true);
 	  		$('#adminSuccessAlert').attr('hidden', true);
 	  		$('#adminErrorAlert').attr('hidden', true);
+	  		$('#clinicTable').attr('hidden', true);
+	  		$('#newClinicAdmin').attr('hidden', true);
 	    }
 	  	function newClinic() {
 	  		$('#newClinic').attr('hidden', false);
 	  		$('#newAdmin').attr('hidden', true);
 	  		$('#adminSuccessAlert').attr('hidden', true);
 	  		$('#adminErrorAlert').attr('hidden', true);
+	  		$('#clinicTable').attr('hidden', true);
+	  		$('#newClinicAdmin').attr('hidden', true);
 	  	}
 	  	function home() {
 	  		$('#newClinic').attr('hidden', true);
 	  		$('#newAdmin').attr('hidden', true);
 	  		$('#adminSuccessAlert').attr('hidden', true);
 	  		$('#adminErrorAlert').attr('hidden', true);
+	  		$('#clinicTable').attr('hidden', true);
+	  		$('#newClinicAdmin').attr('hidden', true);
 	  	}
+	  	
   	</script>
   	
 </head>
@@ -210,10 +272,102 @@
 			</div>
 			
 			<div class="form-group ">
-				<a target="_blank" type="button" id="newClinicButton" class="btn btn-primary btn-lg btn-block login-button">Register new clinic</a>
+				<a target="_blank" type="button" id="newClinicButton" class="btn btn-primary btn-lg btn-block login-button" onclick="newClinicAndAdmin()">Register new clinic</a>
 			</div>
 			
 		</form>
+		
+		<table class="table" id="clinicTable" hidden="true">
+		  <thead>
+		    <tr>
+		      <th scope="col">Name</th>
+		      <th scope="col">Address</th>
+		      <th scope="col">Describe</th>
+		      <th scope="col">Num of Administrators</th>
+		    </tr>
+		  </thead>
+		  <tbody>
+		    
+		  </tbody>
+		</table>
+		
+		<form class="" method="post" action="#" id="newClinicAdmin" hidden="true">
+			<div class="form-group">
+				<label for="name" class="cols-sm-2 control-label">Name</label>
+				<div class="cols-sm-10">
+					<div class="input-group">
+						<span class="input-group-addon"><i class="fa fa-user fa" aria-hidden="true"></i></span>
+						<input type="text" class="form-control" name="name" id="nameClicnicAdmin"  placeholder="Enter Name"/>
+					</div>
+				</div>
+			</div>
+			
+			<div class="form-group">
+				<label for="name" class="cols-sm-2 control-label">Surname</label>
+				<div class="cols-sm-10">
+					<div class="input-group">
+						<span class="input-group-addon"><i class="fa fa-user fa" aria-hidden="true"></i></span>
+						<input type="text" class="form-control" name="surname" id="surnameClicnicAdmin"  placeholder="Enter Surname"/>
+					</div>
+				</div>
+			</div>
+	
+			<div class="form-group">
+				<label for="email" class="cols-sm-2 control-label">Email</label>
+				<div class="cols-sm-10">
+					<div class="input-group">
+						<span class="input-group-addon"><i class="fa fa-envelope fa" aria-hidden="true"></i></span>
+						<input type="text" class="form-control" name="email" id="emailClicnicAdmin"  placeholder="Enter Email"/>
+					</div>
+				</div>
+			</div>
+	
+			<div class="form-group">
+				<label for="username" class="cols-sm-2 control-label">Address</label>
+				<div class="cols-sm-10">
+					<div class="input-group">
+						<span class="input-group-addon"><i class="fa fa-map-marker" aria-hidden="true"></i></span>
+						<input type="text" class="form-control" name="address" id="addressClicnicAdmin"  placeholder="Enter Address"/>
+					</div>
+				</div>
+			</div>
+			
+			<div class="form-group">
+				<label for="username" class="cols-sm-2 control-label">City</label>
+				<div class="cols-sm-10">
+					<div class="input-group">
+						<span class="input-group-addon"><i class="fa fa-building" aria-hidden="true"></i></span>
+						<input type="text" class="form-control" name="city" id="cityClicnicAdmin"  placeholder="Enter City"/>
+					</div>
+				</div>
+			</div>
+			
+			<div class="form-group">
+				<label for="username" class="cols-sm-2 control-label">State</label>
+				<div class="cols-sm-10">
+					<div class="input-group">
+						<span class="input-group-addon"><i class="fa fa-flag" aria-hidden="true"></i></span>
+						<input type="text" class="form-control" name="state" id="stateClicnicAdmin"  placeholder="Enter State"/>
+					</div>
+				</div>
+			</div>
+			
+			
+			<div class="form-group">
+				<label for="username" class="cols-sm-2 control-label">Unique Identification Number</label>
+				<div class="cols-sm-10">
+					<div class="input-group">
+						<span class="input-group-addon"><i class="fa fa-id-card-o" aria-hidden="true"></i></span>
+						<input type="number" class="form-control" name="id" id="jmbgClicnicAdmin"  placeholder="Enter Unique Identification Number"/>
+					</div>
+				</div>
+			</div>
+	
+			<div class="form-group ">
+				<a target="_blank" type="button" id="newClinicAdminButton" class="btn btn-primary btn-lg btn-block login-button" onclick="newClinicAdministrator()">Register new clinic adminitrator</a>
+			</div>
+		</form>
+		
 		
 		<form id="adminSuccessAlert" hidden="true">
 			<div class="alert alert-info" role="alert">

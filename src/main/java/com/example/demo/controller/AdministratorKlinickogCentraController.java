@@ -15,11 +15,14 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.example.demo.dto.AdministratorKlinickogCentraDTO;
+import com.example.demo.dto.KlinikaDTO;
 import com.example.demo.dto.KorisnikDTO;
 import com.example.demo.model.AdministratorKlinickogCentra;
+import com.example.demo.model.Klinika;
 import com.example.demo.model.Korisnik;
 import com.example.demo.model.UlogaKorisnika;
 import com.example.demo.service.AdministratorKlinickogCentraService;
+import com.example.demo.service.KlinikaService;
 import com.example.demo.service.KorisnikService;
 
 @RestController
@@ -31,6 +34,9 @@ public class AdministratorKlinickogCentraController {
 	
 	@Autowired
 	AdministratorKlinickogCentraService administratorKlinickogCentraService;
+	
+	@Autowired
+	KlinikaService klinikaService;
 
 	@RequestMapping(value = "/novi_admin", method=RequestMethod.POST)
 	public ResponseEntity<Map<AdministratorKlinickogCentraDTO, KorisnikDTO>> dodajAdmina(@RequestBody KorisnikDTO korisnikDTO) {
@@ -68,5 +74,22 @@ public class AdministratorKlinickogCentraController {
 		Map<AdministratorKlinickogCentraDTO, KorisnikDTO> map = new HashMap<AdministratorKlinickogCentraDTO, KorisnikDTO>();
 		map.put(new AdministratorKlinickogCentraDTO(a), new KorisnikDTO(k));
 		return new ResponseEntity<>(map, HttpStatus.CREATED);
+	}
+	
+	@RequestMapping(value = "/nova_klinika", method=RequestMethod.POST)
+	public ResponseEntity<List<Klinika>> newClinic(@RequestBody KlinikaDTO klinikaDTO) {
+		Klinika klinika = new Klinika();
+		klinika.setIme(klinikaDTO.getIme());
+		klinika.setOpis(klinikaDTO.getOpis());
+		klinika.setAdresa(klinikaDTO.getAdresa());
+		klinika.setProsecnaOcena(0);
+		
+		if(klinika.getIme() == "" || klinika.getIme() == null)
+			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+		
+		Klinika k = klinikaService.save(klinika);
+		
+		List<Klinika> klinike = klinikaService.findAll();
+		return new ResponseEntity<>(klinike, HttpStatus.CREATED);
 	}
 }
