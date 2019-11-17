@@ -161,6 +161,24 @@ public class Korisnik {
 	public void setUloga(UlogaKorisnika uloga) {
 		this.uloga = uloga;
 	}
+	
+	
+
+	public String getUsername() {
+		return username;
+	}
+
+	public void setUsername(String username) {
+		this.username = username;
+	}
+
+	public int getTelefon() {
+		return telefon;
+	}
+
+	public void setTelefon(int telefon) {
+		this.telefon = telefon;
+	}
 
 	public Long getId() {
 		return id;
