@@ -21,7 +21,56 @@
 	<link href='https://fonts.googleapis.com/css?family=Oxygen' rel='stylesheet' type='text/css'>
   	<script>
   		function newClinicAdministrator() {
-  			alert('dhygfu');
+  			let ime = $('#nameClicnicAdmin').val();
+  			let prezime = $('#surnameClicnicAdmin').val();
+  			let email = $('#emailClicnicAdmin').val();
+  			let adresa = $('#addressClicnicAdmin').val();
+  			let grad = $('#cityClicnicAdmin').val();
+  			let drzava = $('#stateClicnicAdmin').val();
+  			let jmbg = $('#jmbgClicnicAdmin').val();
+  			let id = $('#idClinic').val() 
+  			let url = "/admin_klinickog_centra/novi_admin_klinike/";
+  			url += id;
+
+  			$.ajax({
+	            url:url,
+	            type:"POST",
+	            data: JSON.stringify({ime, prezime, email, adresa, grad, drzava, jmbg}),
+	            contentType:'application/json',
+	            success: function(odgovor) {
+	            	$('#nameClicnicAdmin').val('');
+	      			$('#surnameClicnicAdmin').val('');
+	      			$('#emailClicnicAdmin').val('');
+	      			$('#addressClicnicAdmin').val('');
+	      			$('#cityClicnicAdmin').val('');
+	      			$('#stateClicnicAdmin').val('');
+	      			$('#jmbgClicnicAdmin').val('');
+	      			$('#idClinic').val('') 
+	      			
+	            	$('#newAdmin').attr('hidden', true);
+	           		$('#adminErrorAlert').attr('hidden', true);
+	    	  		$('#adminSuccessAlert').attr('hidden', false);
+	    	  		$('#newClinicAdmin').attr('hidden', true);
+	    	  		$('#newClinic').attr('hidden', true);
+	  				$('#clinicTable').attr('hidden', true);
+	            },
+	            error: function() {
+	            	$('#nameClicnicAdmin').val('');
+	      			$('#surnameClicnicAdmin').val('');
+	      			$('#emailClicnicAdmin').val('');
+	      			$('#addressClicnicAdmin').val('');
+	      			$('#cityClicnicAdmin').val('');
+	      			$('#stateClicnicAdmin').val('');
+	      			$('#jmbgClicnicAdmin').val('');
+	      			$('#idClinic').val('') 
+	            	$('#adminErrorAlert').attr('hidden', false);
+	      			$('#newAdmin').attr('hidden', true);
+	    	  		$('#adminSuccessAlert').attr('hidden', true);
+	    	  		$('#newClinicAdmin').attr('hidden', true);
+	    	  		$('#newClinic').attr('hidden', true);
+	  				$('#clinicTable').attr('hidden', true);
+	            }
+            });
   		}
   		
   		function newAdministrator() {
@@ -39,23 +88,34 @@
 	            data: JSON.stringify({ime, prezime, email, adresa, grad, drzava, jmbg}),
 	            contentType:'application/json',
 	           	success: function(odgovor){
-	           		let ime = $('#name').val('');
-	      			let prezime = $('#surname').val('');
-	      			let email = $('#email').val('');
-	      			let adresa = $('#address').val('');
-	      			let grad = $('#city').val('');
-	      			let drzava = $('#state').val('');
-	      			let jmbg = $('#jmbg').val('');
+	           		$('#name').val('');
+	      			$('#surname').val('');
+	      			$('#email').val('');
+	      			$('#address').val('');
+	      			$('#city').val('');
+	      			$('#state').val('');
+	      			$('#jmbg').val('');
 	           		$('#newAdmin').attr('hidden', true);
 	           		$('#adminErrorAlert').attr('hidden', true);
 	           		$('#newClinic').attr('hidden', true);
 	    	  		$('#adminSuccessAlert').attr('hidden', false);
+	    	  		$('#newClinicAdmin').attr('hidden', true);
+	    	  		$('#clinicTable').attr('hidden', true);
  	           	},
 	           	error: function() {
+	           		$('#name').val('');
+	      			$('#surname').val('');
+	      			$('#email').val('');
+	      			$('#address').val('');
+	      			$('#city').val('');
+	      			$('#state').val('');
+	      			$('#jmbg').val('');
 	           		$('#adminErrorAlert').attr('hidden', false);
 	           		$('#newAdmin').attr('hidden', true);
 	    	  		$('#newClinic').attr('hidden', true);
 	    	  		$('#adminSuccessAlert').attr('hidden', true);
+	    	  		$('#newClinicAdmin').attr('hidden', true);
+	    	  		$('#clinicTable').attr('hidden', true);
 	           	}
          	});
   		}
@@ -68,6 +128,7 @@
     	  		$('#newClinic').attr('hidden', true);
     	  		$('#adminSuccessAlert').attr('hidden', true);
     	  		$('#adminErrorAlert').attr('hidden', true);
+    	  		$('#idClinic').val(klinika.id);
   			}
   		}
   		
@@ -98,6 +159,9 @@
 	            	for(let klinika of klinike) {
 	            		prikaziKliniku(klinika);
 	            	}
+	            	$('#clinicName').val('');
+	    	  		$('#clinicAddress').val('');
+	    	  		$('#clinicDescribe').val('');
 	            	$('#clinicTable').attr('hidden', false);
 	            	$('#newAdmin').attr('hidden', true);
 	    	  		$('#newClinic').attr('hidden', true);
@@ -106,6 +170,9 @@
 	    	  		$('#newClinicAdmin').attr('hidden', true);
 	            },
 	            error: function() {
+	            	$('#clinicName').val('');
+	    	  		$('#clinicAddress').val('');
+	    	  		$('#clinicDescribe').val('');
 	            	alert('Desila se greska');
 	            }
             });
@@ -135,6 +202,34 @@
 	  		$('#newClinicAdmin').attr('hidden', true);
 	  	}
 	  	
+	  	function allClinics() {
+	  		$('#newClinic').attr('hidden', true);
+	  		$('#newAdmin').attr('hidden', true);
+	  		$('#adminSuccessAlert').attr('hidden', true);
+	  		$('#adminErrorAlert').attr('hidden', true);
+	  		$('#clinicTable').attr('hidden', true);
+	  		$('#newClinicAdmin').attr('hidden', true);
+	  		$.ajax({
+	            url:"/admin_klinickog_centra/sve_klinike",
+	            type:"GET",
+	           	success: function(klinike){
+	           		$('#clinicTable tbody').html('');
+	            	for(let klinika of klinike) {
+	            		prikaziKliniku(klinika);
+	            	}
+	            	$('#clinicTable').attr('hidden', false);
+ 	           	},
+	           	error: function() {
+	           		$('#adminErrorAlert').attr('hidden', false);
+	           		$('#newAdmin').attr('hidden', true);
+	    	  		$('#newClinic').attr('hidden', true);
+	    	  		$('#adminSuccessAlert').attr('hidden', true);
+	    	  		$('#newClinicAdmin').attr('hidden', true);
+	    	  		$('#clinicTable').attr('hidden', true);
+	           	}
+         	});
+	  	}
+	  	
   	</script>
   	
 </head>
@@ -155,6 +250,7 @@
 	        </ul>
 	      </li>
 	      <li><a href="#">Registration requests</a></li>
+	      <li><a onclick="return allClinics();">All clinics</a></li>
 	      <li><a href="#">Personal data</a></li>
 	    </ul>
 	    <ul class="nav navbar-nav navbar-right">
@@ -362,6 +458,16 @@
 					</div>
 				</div>
 			</div>
+			
+			<div class="form-group" hidden="true">
+				<label for="username" class="cols-sm-2 control-label">Id</label>
+				<div class="cols-sm-10">
+					<div class="input-group">
+						<span class="input-group-addon"><i class="fa fa-flag" aria-hidden="true"></i></span>
+						<input type="text" class="form-control" name="state" id="idClinic"  placeholder="Enter State"/>
+					</div>
+				</div>
+			</div>
 	
 			<div class="form-group ">
 				<a target="_blank" type="button" id="newClinicAdminButton" class="btn btn-primary btn-lg btn-block login-button" onclick="newClinicAdministrator()">Register new clinic adminitrator</a>
@@ -371,7 +477,7 @@
 		
 		<form id="adminSuccessAlert" hidden="true">
 			<div class="alert alert-info" role="alert">
-			  New administrator of the clinical center is successfully added.
+			  The new administrator is successfully added.
 			</div>
 		</form>
 		

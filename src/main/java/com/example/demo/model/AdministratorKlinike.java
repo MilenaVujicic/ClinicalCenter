@@ -20,7 +20,7 @@ public class AdministratorKlinike {
 	@Column(name="idKorisnik", nullable = false)
 	private Long idKorisnik;
 	
-	@ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+	@ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
 	private Klinika klinika;
 
 	public AdministratorKlinike() {
@@ -41,6 +41,19 @@ public class AdministratorKlinike {
 
 	public void setIdKorisnik(Long idKorisnik) {
 		this.idKorisnik = idKorisnik;
+	}
+
+	public Klinika getKlinika() {
+		return klinika;
+	}
+
+	public void setKlinika(Klinika klinika) {
+		this.klinika = klinika;
+	}
+
+	@Override
+	public String toString() {
+		return "AdministratorKlinike [id=" + id + ", idKorisnik=" + idKorisnik + "]";
 	}
 
 
