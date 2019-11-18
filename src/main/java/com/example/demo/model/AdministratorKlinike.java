@@ -10,6 +10,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 
+
 @Entity
 public class AdministratorKlinike {
 
@@ -41,6 +42,19 @@ public class AdministratorKlinike {
 
 	public void setIdKorisnik(Long idKorisnik) {
 		this.idKorisnik = idKorisnik;
+	}
+
+	public Klinika getKlinika() {
+		return klinika;
+	}
+
+	public void setKlinika(Klinika klinika) {
+		this.klinika = klinika;
+	}
+
+	@Override
+	public String toString() {
+		return "AdministratorKlinike [id=" + id + ", idKorisnik=" + idKorisnik + "]";
 	}
 
 
