@@ -7,21 +7,21 @@ public class AdministratorKlinikeDTO {
 
 	private Long id;
 	private Long idKorisnika;
-	// private Klinika klinika;
+	private Klinika klinika;
 	
 	public AdministratorKlinikeDTO() {
 		super();
 		// TODO Auto-generated constructor stub
 	}
-	public AdministratorKlinikeDTO(Long id, Long idKorisnika) {
+	public AdministratorKlinikeDTO(Long id, Long idKorisnika, Klinika klinika) {
 		super();
 		this.id = id;
 		this.idKorisnika = idKorisnika;
-		// this.klinika = klinika;
+		this.klinika = klinika;
 	}
 	
 	public AdministratorKlinikeDTO(AdministratorKlinike a) {
-		this(a.getId(), a.getIdKorisnik());
+		this(a.getId(), a.getIdKorisnik(), a.getKlinika());
 	}
 	public Long getId() {
 		return id;
@@ -35,7 +35,7 @@ public class AdministratorKlinikeDTO {
 	public void setIdKorisnika(Long idKorisnika) {
 		this.idKorisnika = idKorisnika;
 	}
-	/*
+	
 	public Klinika getKlinika() {
 		return klinika;
 	}
@@ -47,6 +47,4 @@ public class AdministratorKlinikeDTO {
 		return "AdministratorKlinikeDTO [id=" + id + ", idKorisnika=" + idKorisnika + ", klinika=" + klinika + "]";
 	}
 	
-	
-	*/
 }

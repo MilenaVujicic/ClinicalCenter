@@ -1,5 +1,7 @@
 package com.example.demo.service;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -14,5 +16,9 @@ public class AdministratorKlinickogCentraService {
 	
 	public AdministratorKlinickogCentra save(AdministratorKlinickogCentra administratorKlinickogCentra) {
 		return administratorKlinickogCentraRepository.save(administratorKlinickogCentra);
+	}
+	
+	public List<AdministratorKlinickogCentra> findAll() {
+		return administratorKlinickogCentraRepository.findAll();
 	}
 }

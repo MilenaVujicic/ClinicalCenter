@@ -27,7 +27,7 @@
   			let adresa = $('#addressClicnicAdmin').val();
   			let grad = $('#cityClicnicAdmin').val();
   			let drzava = $('#stateClicnicAdmin').val();
-  			let jmbg = $('#jmbgClicnicAdmin').val();
+  			let telefon = $('#jmbgClicnicAdmin').val();
   			let id = $('#idClinic').val() 
   			let url = "/admin_klinickog_centra/novi_admin_klinike/";
   			url += id;
@@ -35,7 +35,7 @@
   			$.ajax({
 	            url:url,
 	            type:"POST",
-	            data: JSON.stringify({ime, prezime, email, adresa, grad, drzava, jmbg}),
+	            data: JSON.stringify({ime, prezime, email, adresa, grad, drzava, telefon}),
 	            contentType:'application/json',
 	            success: function(odgovor) {
 	            	$('#nameClicnicAdmin').val('');
@@ -45,7 +45,8 @@
 	      			$('#cityClicnicAdmin').val('');
 	      			$('#stateClicnicAdmin').val('');
 	      			$('#jmbgClicnicAdmin').val('');
-	      			$('#idClinic').val('') 
+	      			$('#idClinic').val(''); 
+	      			document.getElementById("title").innerHTML = "";
 	      			
 	            	$('#newAdmin').attr('hidden', true);
 	           		$('#adminErrorAlert').attr('hidden', true);
@@ -53,6 +54,7 @@
 	    	  		$('#newClinicAdmin').attr('hidden', true);
 	    	  		$('#newClinic').attr('hidden', true);
 	  				$('#clinicTable').attr('hidden', true);
+	  				$('#clinicAdminTable').attr('hidden', true);
 	            },
 	            error: function() {
 	            	$('#nameClicnicAdmin').val('');
@@ -62,13 +64,15 @@
 	      			$('#cityClicnicAdmin').val('');
 	      			$('#stateClicnicAdmin').val('');
 	      			$('#jmbgClicnicAdmin').val('');
-	      			$('#idClinic').val('') 
+	      			$('#idClinic').val('');
+	      			document.getElementById("title").innerHTML = "";
 	            	$('#adminErrorAlert').attr('hidden', false);
 	      			$('#newAdmin').attr('hidden', true);
 	    	  		$('#adminSuccessAlert').attr('hidden', true);
 	    	  		$('#newClinicAdmin').attr('hidden', true);
 	    	  		$('#newClinic').attr('hidden', true);
 	  				$('#clinicTable').attr('hidden', true);
+	  				$('#clinicAdminTable').attr('hidden', true);
 	            }
             });
   		}
@@ -95,6 +99,7 @@
 	      			$('#city').val('');
 	      			$('#state').val('');
 	      			$('#jmbg').val('');
+	      			document.getElementById("title").innerHTML = "";
 	           		$('#newAdmin').attr('hidden', true);
 	           		$('#adminErrorAlert').attr('hidden', true);
 	           		$('#newClinic').attr('hidden', true);
@@ -110,6 +115,7 @@
 	      			$('#city').val('');
 	      			$('#state').val('');
 	      			$('#jmbg').val('');
+	      			document.getElementById("title").innerHTML = "";
 	           		$('#adminErrorAlert').attr('hidden', false);
 	           		$('#newAdmin').attr('hidden', true);
 	    	  		$('#newClinic').attr('hidden', true);
@@ -120,6 +126,48 @@
          	});
   		}
   		
+  		function prikaziAdmina(admin) {
+  			let tr = $('<tr></tr>');
+  			let tdName = $('<td>'+admin.ime+'</td>');
+  			let tdPrezime = $('<td>'+admin.prezime+'</td>');
+  			let tdEmail = $('<td>'+admin.email+'</td>');
+  			tr.append(tdName).append(tdPrezime).append(tdEmail);
+  			$('#clinicAdminTable tbody').append(tr);
+  		}
+  		
+  		function allAdmin(klinika) {
+  			return function() {
+  				$.ajax({
+		            url:"/admin_klinickog_centra/svi_admini_klinike/" + klinika.id,
+		            type:"GET",
+		           	success: function(admini){
+		           		$('#clinicAdminTable tbody').html('');
+		           		document.getElementById("title").innerHTML = "All administrator of: " + klinika.ime;
+		           		for(let admin of admini) {
+		           			prikaziAdmina(admin);
+		           		}
+		           		$('#clinicAdminTable').attr('hidden', false);
+		           		$('#newClinicAdmin').attr('hidden', true);
+		  				$('#clinicTable').attr('hidden', true);
+		            	$('#newAdmin').attr('hidden', true);
+		    	  		$('#newClinic').attr('hidden', true);
+		    	  		$('#adminSuccessAlert').attr('hidden', true);
+		    	  		$('#adminErrorAlert').attr('hidden', true);	 	           	
+		    	  	},
+		           	error: function() {
+		           		$('#clinicAdminTable').attr('hidden', true);
+		           		$('#newClinicAdmin').attr('hidden', true);
+		  				$('#clinicTable').attr('hidden', true);
+		            	$('#newAdmin').attr('hidden', true);
+		    	  		$('#newClinic').attr('hidden', true);
+		    	  		$('#adminSuccessAlert').attr('hidden', true);
+		    	  		$('#adminErrorAlert').attr('hidden', false);
+		    	  		document.getElementById("title").innerHTML = "";
+		           	}
+	         	});
+  			}
+  		}
+  		
   		function newClinicAdmin(klinika) {
   			return function() {
   				$('#newClinicAdmin').attr('hidden', false);
@@ -128,7 +176,9 @@
     	  		$('#newClinic').attr('hidden', true);
     	  		$('#adminSuccessAlert').attr('hidden', true);
     	  		$('#adminErrorAlert').attr('hidden', true);
+    	  		$('#clinicAdminTable').attr('hidden', true);
     	  		$('#idClinic').val(klinika.id);
+    	  		document.getElementById("title").innerHTML = "New administrator of: " + klinika.ime;
   			}
   		}
   		
@@ -137,10 +187,11 @@
   			let tdName = $('<td>'+klinika.ime+'</td>');
   			let tdAddress = $('<td>'+klinika.adresa+'</td>');
   			let tdDescribe = $('<td>'+klinika.opis+'</td>');
-  			let tdAdmins = $('<td>'+klinika.administratoriKlinike.length+'</td>');
   			let tdAddAdmin = $('<td><a href="#'+klinika.ime+'_newAdministrator">Add administrator</a></td>');
   			tdAddAdmin.click(newClinicAdmin(klinika));
-  			tr.append(tdName).append(tdAddress).append(tdDescribe).append(tdAdmins).append(tdAddAdmin);
+  			let tdAllAdmins = $('<td><a href="#"'+klinika.ime+'_allAdmins>All administrators</a></td>');
+  			tdAllAdmins.click(allAdmin(klinika));
+  			tr.append(tdName).append(tdAddress).append(tdDescribe).append(tdAddAdmin).append(tdAllAdmins);
   			$('#clinicTable tbody').append(tr);
   		}
   		
@@ -155,25 +206,20 @@
 	            data: JSON.stringify({ime, adresa, opis}),
 	            contentType:'application/json',
 	            success: function(klinike) {
-	            	$('#clinicTable tbody').html('');
-	            	for(let klinika of klinike) {
-	            		prikaziKliniku(klinika);
-	            	}
-	            	$('#clinicName').val('');
-	    	  		$('#clinicAddress').val('');
-	    	  		$('#clinicDescribe').val('');
-	            	$('#clinicTable').attr('hidden', false);
-	            	$('#newAdmin').attr('hidden', true);
-	    	  		$('#newClinic').attr('hidden', true);
-	    	  		$('#adminSuccessAlert').attr('hidden', true);
-	    	  		$('#adminErrorAlert').attr('hidden', true);
-	    	  		$('#newClinicAdmin').attr('hidden', true);
+	            	allClinics();
 	            },
 	            error: function() {
 	            	$('#clinicName').val('');
 	    	  		$('#clinicAddress').val('');
 	    	  		$('#clinicDescribe').val('');
-	            	alert('Desila se greska');
+	    	  		$('#adminErrorAlert').attr('hidden', false);
+	           		$('#newAdmin').attr('hidden', true);
+	           		$('#clinicAdminTable').attr('hidden', true);
+	    	  		$('#newClinic').attr('hidden', true);
+	    	  		$('#adminSuccessAlert').attr('hidden', true);
+	    	  		$('#newClinicAdmin').attr('hidden', true);
+	    	  		$('#clinicTable').attr('hidden', true);
+	    	  		document.getElementById("title").innerHTML = "";
 	            }
             });
 	  	}
@@ -184,6 +230,8 @@
 	  		$('#adminErrorAlert').attr('hidden', true);
 	  		$('#clinicTable').attr('hidden', true);
 	  		$('#newClinicAdmin').attr('hidden', true);
+	  		$('#clinicAdminTable').attr('hidden', true);
+	  		document.getElementById("title").innerHTML = "New clinic administrator";
 	    }
 	  	function newClinic() {
 	  		$('#newClinic').attr('hidden', false);
@@ -192,6 +240,8 @@
 	  		$('#adminErrorAlert').attr('hidden', true);
 	  		$('#clinicTable').attr('hidden', true);
 	  		$('#newClinicAdmin').attr('hidden', true);
+	  		$('#clinicAdminTable').attr('hidden', true);
+	  		document.getElementById("title").innerHTML = "New clinic";
 	  	}
 	  	function home() {
 	  		$('#newClinic').attr('hidden', true);
@@ -199,13 +249,16 @@
 	  		$('#adminSuccessAlert').attr('hidden', true);
 	  		$('#adminErrorAlert').attr('hidden', true);
 	  		$('#clinicTable').attr('hidden', true);
+	  		$('#clinicAdminTable').attr('hidden', true);
 	  		$('#newClinicAdmin').attr('hidden', true);
+	  		document.getElementById("title").innerHTML = "";
 	  	}
 	  	
 	  	function allClinics() {
 	  		$('#newClinic').attr('hidden', true);
 	  		$('#newAdmin').attr('hidden', true);
 	  		$('#adminSuccessAlert').attr('hidden', true);
+	  		$('#clinicAdminTable').attr('hidden', true);
 	  		$('#adminErrorAlert').attr('hidden', true);
 	  		$('#clinicTable').attr('hidden', true);
 	  		$('#newClinicAdmin').attr('hidden', true);
@@ -214,6 +267,7 @@
 	            type:"GET",
 	           	success: function(klinike){
 	           		$('#clinicTable tbody').html('');
+	           		document.getElementById("title").innerHTML = "All clinics";
 	            	for(let klinika of klinike) {
 	            		prikaziKliniku(klinika);
 	            	}
@@ -222,14 +276,46 @@
 	           	error: function() {
 	           		$('#adminErrorAlert').attr('hidden', false);
 	           		$('#newAdmin').attr('hidden', true);
+	           		$('#clinicAdminTable').attr('hidden', true);
 	    	  		$('#newClinic').attr('hidden', true);
 	    	  		$('#adminSuccessAlert').attr('hidden', true);
 	    	  		$('#newClinicAdmin').attr('hidden', true);
 	    	  		$('#clinicTable').attr('hidden', true);
+	    	  		document.getElementById("title").innerHTML = "";
 	           	}
          	});
 	  	}
 	  	
+	  	function allCenterAdmins() {
+	  		$.ajax({
+	            url:"/admin_klinickog_centra/svi_admini_centra",
+	            type:"GET",
+	           	success: function(admini){
+	           		$('#clinicAdminTable tbody').html('');
+	           		document.getElementById("title").innerHTML = "All administrators of the clinical centre";
+	           		for(let admin of admini) {
+	           			prikaziAdmina(admin);
+	           		}
+	           		$('#clinicAdminTable').attr('hidden', false);
+	           		$('#adminErrorAlert').attr('hidden', true);
+	           		$('#newAdmin').attr('hidden', true);
+	    	  		$('#newClinic').attr('hidden', true);
+	    	  		$('#adminSuccessAlert').attr('hidden', true);
+	    	  		$('#newClinicAdmin').attr('hidden', true);
+	    	  		$('#clinicTable').attr('hidden', true);
+ 	           	},
+	           	error: function() {
+	           		$('#adminErrorAlert').attr('hidden', false);
+	           		$('#newAdmin').attr('hidden', true);
+	           		$('#clinicAdminTable').attr('hidden', true);
+	    	  		$('#newClinic').attr('hidden', true);
+	    	  		$('#adminSuccessAlert').attr('hidden', true);
+	    	  		$('#newClinicAdmin').attr('hidden', true);
+	    	  		$('#clinicTable').attr('hidden', true);
+	    	  		document.getElementById("title").innerHTML = "";
+	           	}
+         	});
+	  	}
   	</script>
   	
 </head>
@@ -251,6 +337,7 @@
 	      </li>
 	      <li><a href="#">Registration requests</a></li>
 	      <li><a onclick="return allClinics();">All clinics</a></li>
+	      <li><a onclick="return allCenterAdmins();">All clinic centre administrators</a></li>
 	      <li><a href="#">Personal data</a></li>
 	    </ul>
 	    <ul class="nav navbar-nav navbar-right">
@@ -260,6 +347,7 @@
 	</nav>
   
 	<div class="container">
+		<h1 id="title"></h1>
 		<form class="" method="post" action="#" id="newAdmin" hidden="true">
 			<div class="form-group">
 				<label for="name" class="cols-sm-2 control-label">Name</label>
@@ -379,7 +467,21 @@
 		      <th scope="col">Name</th>
 		      <th scope="col">Address</th>
 		      <th scope="col">Describe</th>
-		      <th scope="col">Num of Administrators</th>
+		      <th scope="col">Add administrators</th>
+		      <th scope="col">All administrators</th>
+		    </tr>
+		  </thead>
+		  <tbody>
+		    
+		  </tbody>
+		</table>
+		
+		<table class="table" id="clinicAdminTable" hidden="true">
+		  <thead>
+		    <tr>
+		      <th scope="col">Name</th>
+		      <th scope="col">Surname</th>
+		      <th scope="col">Email</th>
 		    </tr>
 		  </thead>
 		  <tbody>
@@ -450,11 +552,11 @@
 			
 			
 			<div class="form-group">
-				<label for="username" class="cols-sm-2 control-label">Unique Identification Number</label>
+				<label for="username" class="cols-sm-2 control-label">Phone number</label>
 				<div class="cols-sm-10">
 					<div class="input-group">
-						<span class="input-group-addon"><i class="fa fa-id-card-o" aria-hidden="true"></i></span>
-						<input type="number" class="form-control" name="id" id="jmbgClicnicAdmin"  placeholder="Enter Unique Identification Number"/>
+						<span class="input-group-addon"><i class="fa fa-phone" aria-hidden="true"></i></span>
+						<input type="number" class="form-control" name="id" id="jmbgClicnicAdmin"  placeholder="Enter Phone number"/>
 					</div>
 				</div>
 			</div>

@@ -1,7 +1,6 @@
 package com.example.demo.controller;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -9,18 +8,15 @@ import java.util.Map;
 import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.util.Pair;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.example.demo.dto.AdministratorKlinickogCentraDTO;
-import com.example.demo.dto.AdministratorKlinikeDTO;
 import com.example.demo.dto.KlinikaDTO;
 import com.example.demo.dto.KorisnikDTO;
 import com.example.demo.model.AdministratorKlinickogCentra;
@@ -58,7 +54,7 @@ public class AdministratorKlinickogCentraController {
 		korisnik.setAdresa(korisnikDTO.getAdresa());
 		korisnik.setGrad(korisnikDTO.getGrad());
 		korisnik.setDrzava(korisnikDTO.getDrzava());
-		korisnik.setTelefon(635478456);
+		korisnik.setTelefon(3625415);
 		korisnik.setJmbg(korisnikDTO.getJmbg());
 		korisnik.setPassword(UUID.randomUUID().toString());
 		korisnik.setDatumRodjenja(new Date());
@@ -87,21 +83,35 @@ public class AdministratorKlinickogCentraController {
 		return new ResponseEntity<>(map, HttpStatus.CREATED);
 	}
 	
+	@RequestMapping(value = "/svi_admini_centra", method = RequestMethod.GET)
+	public ResponseEntity<List<Korisnik>> sviAdministratoriKlinickogCentra() {
+		List<AdministratorKlinickogCentra> admini = administratorKlinickogCentraService.findAll();
+		List<Korisnik> korisnici = korisnikService.findByUloga(UlogaKorisnika.ADMIN_CENTRA);
+		List<Korisnik> administratori = new ArrayList<Korisnik>();
+		for(AdministratorKlinickogCentra a : admini) {
+			for(Korisnik k : korisnici) {
+				if (k.getId().equals(a.getIdKorisnik())) {
+					administratori.add(k);
+				}
+			}
+		}
+		
+		return new ResponseEntity<List<Korisnik>>(administratori, HttpStatus.OK);
+	}
+	
 	@RequestMapping(value = "/nova_klinika", method=RequestMethod.POST)
-	public ResponseEntity<List<Klinika>> newClinic(@RequestBody KlinikaDTO klinikaDTO) {
+	public ResponseEntity<KlinikaDTO> newClinic(@RequestBody KlinikaDTO klinikaDTO) {
 		Klinika klinika = new Klinika();
 		klinika.setIme(klinikaDTO.getIme());
 		klinika.setOpis(klinikaDTO.getOpis());
 		klinika.setAdresa(klinikaDTO.getAdresa());
 		klinika.setProsecnaOcena(0);
-		
+
 		if(klinika.getIme() == "" || klinika.getIme() == null)
 			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 		
 		Klinika k = klinikaService.save(klinika);
-		
-		List<Klinika> klinike = klinikaService.findAll();
-		return new ResponseEntity<>(klinike, HttpStatus.CREATED);
+		return new ResponseEntity<>(new KlinikaDTO(k), HttpStatus.CREATED);
 	}
 	
 	@RequestMapping(value = "/novi_admin_klinike/{id}", method = RequestMethod.POST)
@@ -113,7 +123,8 @@ public class AdministratorKlinickogCentraController {
 		korisnik.setAdresa(korisnikDTO.getAdresa());
 		korisnik.setGrad(korisnikDTO.getGrad());
 		korisnik.setDrzava(korisnikDTO.getDrzava());
-		korisnik.setJmbg(korisnikDTO.getJmbg());
+		korisnik.setTelefon(korisnikDTO.getTelefon());
+		korisnik.setJmbg((long) 3625415);
 		List<Korisnik> admini = korisnikService.findByUloga(UlogaKorisnika.ADMIN_KLINIKE);
 		if (korisnik.getIme() == "" || korisnik.getIme() == null){
 			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
@@ -128,7 +139,7 @@ public class AdministratorKlinickogCentraController {
 		korisnik.setPassword(UUID.randomUUID().toString());
 		korisnik.setDatumRodjenja(new Date());
 		korisnik.setUloga(UlogaKorisnika.ADMIN_KLINIKE);
-
+		System.out.println(korisnik);
 		Korisnik k = korisnikService.save(korisnik);
 		
 		AdministratorKlinike administratorKlinike = new AdministratorKlinike();
@@ -144,7 +155,26 @@ public class AdministratorKlinickogCentraController {
 	
 	@RequestMapping(value = "/sve_klinike", method=RequestMethod.GET)
 	public ResponseEntity<List<Klinika>> allClinic() {
+		System.out.println("################");
 		List<Klinika> klinike = klinikaService.findAll();
 		return new ResponseEntity<List<Klinika>>(klinike, HttpStatus.OK);
+	}
+	
+	@RequestMapping(value = "/svi_admini_klinike/{id}", method = RequestMethod.GET)
+	public ResponseEntity<List<Korisnik>> svi_admini(@PathVariable("id") Long identifikacija) {
+		List<AdministratorKlinike> admini = administratorKlinikeService.findAll();
+		List<Korisnik> korisnici = korisnikService.findByUloga(UlogaKorisnika.ADMIN_KLINIKE);
+		List<Korisnik> administratori = new ArrayList<Korisnik>();
+		for(AdministratorKlinike a : admini) {
+			if(a.getKlinika().getId().equals(identifikacija)) {
+				for(Korisnik k : korisnici) {
+					if (k.getId().equals(a.getIdKorisnik())) {
+						administratori.add(k);
+					}
+				}
+			}
+		}
+
+		return new ResponseEntity<List<Korisnik>>(administratori, HttpStatus.OK);
 	}
 }

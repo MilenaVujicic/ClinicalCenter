@@ -10,6 +10,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 
+
 @Entity
 public class AdministratorKlinike {
 
@@ -20,7 +21,7 @@ public class AdministratorKlinike {
 	@Column(name="idKorisnik", nullable = false)
 	private Long idKorisnik;
 	
-	@ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+	@ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
 	private Klinika klinika;
 
 	public AdministratorKlinike() {
