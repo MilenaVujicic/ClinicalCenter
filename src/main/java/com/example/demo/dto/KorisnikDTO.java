@@ -12,7 +12,7 @@ import com.example.demo.validation.ValidEmail;
 import com.sun.istack.NotNull;
 
 
-@PasswordMatches
+
 public class KorisnikDTO {
 
 	@NotNull
@@ -26,8 +26,7 @@ public class KorisnikDTO {
 	@NotNull
     @NotEmpty
 	private String prezime;
-	
-	@ValidEmail
+
 	@NotNull
     @NotEmpty
 	private String email;
@@ -58,7 +57,9 @@ public class KorisnikDTO {
 	
 	@NotNull
     @NotEmpty
-	private Date datumRodjenja;
+	private String telefon;
+	
+
 	
 	
 	
@@ -67,8 +68,8 @@ public class KorisnikDTO {
 		// TODO Auto-generated constructor stub
 	}
 
-	public KorisnikDTO(String ime, String prezime, String email, String password, String matchingPassword, String grad, String drzava, Long jmbg,
-			String adresa) {
+	public KorisnikDTO(String ime, String prezime, String email, String grad, String drzava, Long jmbg,
+			String adresa, String telefon, String password, String matchingPassword) {
 		super();
 		this.ime = ime;
 		this.prezime = prezime;
@@ -79,6 +80,7 @@ public class KorisnikDTO {
 		this.drzava = drzava;
 		this.jmbg = jmbg;
 		this.adresa = adresa;
+		this.telefon = telefon;
 	}
 	
 	public KorisnikDTO(Long id, String ime, String prezime, String email, String password, String matchingPassword, String grad, String drzava, Long jmbg,

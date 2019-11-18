@@ -44,7 +44,7 @@ public class UserService implements IUserService{
 
 	@Transactional
 	@Override
-	public Korisnik registerNewUserAccount(KorisnikDTO accountDto) throws UserAlreadyExistException {
+	public Korisnik save(KorisnikDTO accountDto) throws UserAlreadyExistException {
 		if (emailExists(accountDto.getEmail())) {
             throw new UserAlreadyExistException("There is an account with that email adress: " + accountDto.getEmail());
         }
@@ -52,7 +52,8 @@ public class UserService implements IUserService{
 		user.setIme(accountDto.getIme());
 		user.setPrezime(accountDto.getPrezime());
 		user.setEmail(accountDto.getEmail());
-		user.setPassword(passwordEncoder.encode(accountDto.getPassword()));
+		System.out.println(accountDto.getIme() + " " + accountDto.getPrezime() + " " + accountDto.getEmail());
+		user.setPassword(passwordEncoder.encode(accountDto.getPassword())); //null
 		user.setAdresa(accountDto.getAdresa());
 		user.setGrad(accountDto.getGrad());
 		user.setDrzava(accountDto.getDrzava());
@@ -72,5 +73,11 @@ public class UserService implements IUserService{
         }
         return false;
     }
+
+	@Override
+	public Korisnik findByUsername(String username) {
+		// TODO Auto-generated method stub
+		return null;
+	}
 
 }

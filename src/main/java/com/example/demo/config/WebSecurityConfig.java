@@ -19,6 +19,7 @@ import org.springframework.security.web.authentication.www.BasicAuthenticationFi
 
 import com.example.demo.service.CustomUserDetailsService;
 
+
 @Configuration
 @EnableGlobalMethodSecurity(prePostEnabled = true)
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
@@ -35,33 +36,59 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 		return new CustomUserDetailsService();
 	}
 	
+	@Bean
+	@Override
+	public AuthenticationManager authenticationManagerBean() throws Exception {
+		return super.authenticationManagerBean();
+	}
+	
 	@Autowired
 	private CustomUserDetailsService userDetailsService;
 	
 	
-	  @Autowired public void configureGlobal(AuthenticationManagerBuilder auth)
-	  throws Exception { auth.inMemoryAuthentication().withUser("user")
-	  .password("password").roles("USER"); }
+	/*
+	 * @Autowired public void configureGlobal(AuthenticationManagerBuilder auth)
+	 * throws Exception { auth.inMemoryAuthentication()
+	 * .withUser("user1").password(passwordEncoder().encode("123")).roles("USER"); }
+	 */
 	 
 	// configuration makes sure any request to the application
 	// is authenticated with form based login or HTTP basic authentication.
 	
 	  @Override protected void configure(AuthenticationManagerBuilder auth) throws
 	  Exception { 
-		  auth.userDetailsService(userDetailsService);
-	  
+		  auth
+		  .userDetailsService(userDetailsService);
 	  }
 	  
-	  @Override
-	  protected void configure(HttpSecurity http) throws Exception {
-	      http
-	      	.formLogin()
-	        .loginPage("/login.html")
-	        .loginProcessingUrl("/perform_login")
-	        .defaultSuccessUrl("/index.html",true)
-	        .failureUrl("/login.html?error=true");
-	      
-	      	
-	  }
+	// Definisemo prava pristupa odredjenim URL-ovima
+		@Override
+		protected void configure(HttpSecurity http) throws Exception {
+			http
+					// komunikacija izmedju klijenta i servera je stateless
+					.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS).and()
+
+					// za neautorizovane zahteve posalji 401 gresku
+					//.exceptionHandling().authenticationEntryPoint(restAuthenticationEntryPoint).and()
+
+					// svim korisnicima dopusti da pristupe putanjama /auth/**, /h2-console/** i /api/foo
+					.authorizeRequests().antMatchers("/auth/**").permitAll().antMatchers("/signup/**").permitAll().antMatchers("/**").permitAll().antMatchers("/h2-console/**").permitAll().antMatchers("/api/foo").permitAll()
+					
+					// svaki zahtev mora biti autorizovan
+					.anyRequest().authenticated().and()
+					
+					.formLogin().loginPage("/login.html");
+
+			http.csrf().disable();
+		}
+	  
+	/*
+	 * @Override protected void configure(HttpSecurity http) throws Exception { http
+	 * .formLogin() .loginPage("/login.html") .loginProcessingUrl("/perform_login")
+	 * .defaultSuccessUrl("/index.html",true) .failureUrl("/login.html?error=true");
+	 * 
+	 * 
+	 * }
+	 */
 	 
 }

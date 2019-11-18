@@ -65,8 +65,9 @@ public class Korisnik implements UserDetails {
 	@Column(name = "telefon")
 	private int telefon;
 	
-	@Column(name = "datumRodjenja", nullable = true) 
-	private Date datumRodjenja;
+	/*
+	 * @Column(name = "datumRodjenja", nullable = true) private Date datumRodjenja;
+	 */
 		
 	
 	@OneToMany(mappedBy = "korisnik", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
@@ -87,7 +88,7 @@ public class Korisnik implements UserDetails {
 	}
 
 	public Korisnik(String ime, String prezime, String email, String password, String grad, String drzava, Long jmbg,
-			String adresa, Date datumRodjenja) {
+			String adresa) {
 		super();
 		this.ime = ime;
 		this.prezime = prezime;
@@ -97,7 +98,6 @@ public class Korisnik implements UserDetails {
 		this.drzava = drzava;
 		this.jmbg = jmbg;
 		this.adresa = adresa;
-		this.datumRodjenja = datumRodjenja;
 		this.enabled = false;
 	}
 
@@ -165,14 +165,6 @@ public class Korisnik implements UserDetails {
 		this.adresa = adresa;
 	}
 
-	public Date getDatumRodjenja() {
-		return datumRodjenja;
-	}
-
-	public void setDatumRodjenja(Date datumRodjenja) {
-		this.datumRodjenja = datumRodjenja;
-	}
-
 	public Long getId() {
 		return id;
 	}
@@ -212,7 +204,7 @@ public class Korisnik implements UserDetails {
 	public String toString() {
 		return "Korisnik [id=" + id + ", ime=" + ime + ", prezime=" + prezime + ", email=" + email + ", password="
 				+ password + ", grad=" + grad + ", drzava=" + drzava + ", jmbg=" + jmbg + ", adresa=" + adresa
-				+ ", datumRodjenja=" + datumRodjenja + ", uloge=" + getUlogeString()  + ", odsustva=" + odsustva + "]";
+				+ ", uloge=" + getUlogeString()  + ", odsustva=" + odsustva + "]";
 	}
 
 	@Override

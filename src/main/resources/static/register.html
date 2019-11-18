@@ -21,12 +21,39 @@
 		<link href='https://fonts.googleapis.com/css?family=Oxygen' rel='stylesheet' type='text/css'>
 
 		<title>Register</title>
+		
+	<script type="text/javascript">
+	$(document).ready(function () {
+		
+		$('form').submit(function(event) {
+			let ime = $('#name').val();
+			let prezime = $('#surname').val();
+			let email = $('#email').val();
+			let adresa = $('#adress').val();
+			let grad = $('#city').val();
+			let drzava = $('#state').val();
+			let telefon = $('#phone').val();
+			let jmbg = $('#id').val();		
+			let password = $('#password').val();
+			let confirm = $('#confirm').val();
+			
+			$.post(
+				url: 'auth/signup'
+				data: JSON.stringify({ime, prezime, email, adresa, grad, drzava, telefon, jmbg, password, confirm}),
+				contentType: 'application/json',
+				success: function() {
+					window.location = './successRegister.html';
+				}
+		});
+	});
+
+	</script>
 	</head>
 	<body>
 		<div class="container">
 			<div class="row main">
 				<div class="main-login main-center">
-					<form action="/" method="POST" enctype="utf8">
+					<form id="form" action="auth/signup" method="POST" enctype="utf8">
 						
 						<div class="form-group">
 							<label for="name" class="cols-sm-2 control-label">Your Name</label>
@@ -143,35 +170,5 @@
     <script src="js/bootstrap.min.js"></script>
 	</body>
 </html>
-<script type="text/javascript">
-$(document).ready(function () {
-	$('register').submit(function(event) {
-		register(event);
-	});
-	
-	$(":password").keyup(function(){
-		if($("#password").val() != $("#matchPassword").val()){
-	        $("#globalError").show().html(/*[[#{PasswordMatches.user}]]*/);
-	    }else{
-	    	$("#globalError").html("").hide();
-	    }
-	});
-	
-function register(event){
-	event.preventDefault();
-    $(".alert").html("").hide();
-    $(".error-list").html("");
-    if($("#password").val() != $("#matchPassword").val()){
-    	$("#globalError").show().html(/*[[#{PasswordMatches.user}]]*/);
-    	return;
-    }
-    var formData= $('register').serialize();
-    $.post(serverContext + "user/registration",formData ,function(data){
-        if(data.message == "success"){
-            window.location.href = serverContext + "successRegister.html";
-        }
-        
-    })
-</script>
-</body>
-</html>
+
+
