@@ -16,10 +16,6 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
 
-enum UlogaKorisnika {
-	ADMIN_CENTRA, ADMIN_KLINIKE, LEKAR, MEDICINSKA_SESTRA, PACIJENT
-}
-
 @Entity
 public class Korisnik {
 	
@@ -36,6 +32,9 @@ public class Korisnik {
 	@Column(name = "email", nullable = false)
 	private String email;
 	
+	@Column(name = "username", nullable = false)
+	private String username;
+	
 	@Column(name = "password", nullable = false)
 	private String password;
 	
@@ -50,6 +49,9 @@ public class Korisnik {
 	
 	@Column(name = "adresa")
 	private String adresa;
+	
+	@Column(name = "telefon")
+	private int telefon;
 	
 	@Column(name = "datumRodjenja", nullable = true) 
 	private Date datumRodjenja;
@@ -159,6 +161,24 @@ public class Korisnik {
 	public void setUloga(UlogaKorisnika uloga) {
 		this.uloga = uloga;
 	}
+	
+	
+
+	public String getUsername() {
+		return username;
+	}
+
+	public void setUsername(String username) {
+		this.username = username;
+	}
+
+	public int getTelefon() {
+		return telefon;
+	}
+
+	public void setTelefon(int telefon) {
+		this.telefon = telefon;
+	}
 
 	public Long getId() {
 		return id;
@@ -178,9 +198,10 @@ public class Korisnik {
 
 	@Override
 	public String toString() {
-		return "Korisnik [id=" + id + ", ime=" + ime + ", prezime=" + prezime + ", email=" + email + ", password="
-				+ password + ", grad=" + grad + ", drzava=" + drzava + ", jmbg=" + jmbg + ", adresa=" + adresa
-				+ ", datumRodjenja=" + datumRodjenja + ", uloga=" + uloga + ", odsustva=" + odsustva + "]";
+		return "Korisnik [id=" + id + ", ime=" + ime + ", prezime=" + prezime + ", email=" + email + ", username="
+				+ username + ", password=" + password + ", grad=" + grad + ", drzava=" + drzava + ", jmbg=" + jmbg
+				+ ", adresa=" + adresa + ", telefon=" + telefon + ", datumRodjenja=" + datumRodjenja + ", uloga="
+				+ uloga + ", odsustva=" + odsustva + "]";
 	}
 	
 	

@@ -3,7 +3,6 @@
  */
 package com.example.demo.model;
 //------------------------------------
-import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -14,6 +13,7 @@ import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 
 @Entity
@@ -23,26 +23,8 @@ public class Pacijent {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 	
-	@Column(name="idKorisnik", nullable = false)
+	@Column(name="idKorisnik", nullable = false, unique = true)
 	private Long idKorisnik;
-	
-	@Column(name = "username", nullable = false)
-	private String username;
-	
-	@Column(name = "password", nullable = false)
-	private String password;
-	
-	@Column(name = "email", nullable = false)
-	private String email;
-	
-	@Column(name = "ime", nullable = false)
-	private String ime;
-	
-	@Column(name = "prezime", nullable = false)
-	private String prezime;
-	
-	@Column(name = "datumRodjenja", nullable = false)
-	private Date datumRodjenja;
 	
 	@Column(name = "visina", nullable = false)
 	private int visina;
@@ -53,9 +35,8 @@ public class Pacijent {
 	@Column(name = "dioptrija", nullable = false)
 	private double dioptrija;
 	
-	//!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-	//@OneToMany(mappedBy = "pacijent", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-	//private Set<String> alergije = new HashSet<String>();
+	@OneToMany(mappedBy = "pacijent", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+	private Set<Alergija> alergije = new HashSet<Alergija>();
 	
 	@OneToMany(mappedBy = "pacijent", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 	private Set<Operacija> operacije = new HashSet<Operacija>();
@@ -66,13 +47,14 @@ public class Pacijent {
 	@OneToMany(mappedBy = "pacijent", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 	private Set<Pregled> pregledi = new HashSet<Pregled>();
 	
+	@ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+	private Klinika klinika;
+	
 	public Pacijent() {
 		super();
 		// TODO Auto-generated constructor stub
 	}
 	
-	
-
 	public Long getId() {
 		return id;
 	}
@@ -94,79 +76,6 @@ public class Pacijent {
 	public void setIdKorisnik(Long idKorisnik) {
 		this.idKorisnik = idKorisnik;
 	}
-
-
-
-	public String getUsername() {
-		return username;
-	}
-
-
-
-	public void setUsername(String username) {
-		this.username = username;
-	}
-
-
-
-	public String getPassword() {
-		return password;
-	}
-
-
-
-	public void setPassword(String password) {
-		this.password = password;
-	}
-
-
-
-	public String getEmail() {
-		return email;
-	}
-
-
-
-	public void setEmail(String email) {
-		this.email = email;
-	}
-
-
-
-	public String getIme() {
-		return ime;
-	}
-
-
-
-	public void setIme(String ime) {
-		this.ime = ime;
-	}
-
-
-
-	public String getPrezime() {
-		return prezime;
-	}
-
-
-
-	public void setPrezime(String prezime) {
-		this.prezime = prezime;
-	}
-
-
-
-	public Date getDatumRodjenja() {
-		return datumRodjenja;
-	}
-
-
-
-	public void setDatumRodjenja(Date datumRodjenja) {
-		this.datumRodjenja = datumRodjenja;
-	}
-
 
 
 	public int getVisina() {
@@ -193,13 +102,13 @@ public class Pacijent {
 		this.dioptrija = dioptrija;
 	}
 
-	/*public Set<String> getAlergije() {
+	public Set<Alergija> getAlergije() {
 		return alergije;
 	}
 
-	public void setAlergije(Set<String> alergije) {
+	public void setAlergije(Set<Alergija> alergije) {
 		this.alergije = alergije;
-	}*/
+	}
 
 	public Set<Operacija> getOperacije() {
 		return operacije;
@@ -225,15 +134,14 @@ public class Pacijent {
 		this.pregledi = pregledi;
 	}
 
-	@Override
-	public String toString() {
-		return "Pacijent [id=" + id + ", idKorisnik=" + idKorisnik + ", username=" + username + ", password=" + password
-				+ ", email=" + email + ", ime=" + ime + ", prezime=" + prezime + ", datumRodjenja=" + datumRodjenja
-				+ ", visina=" + visina + ", tezina=" + tezina + ", dioptrija=" + dioptrija + ", operacije=" + operacije
-				+ ", recepti=" + recepti + ", pregledi=" + pregledi + "]";
+	public Klinika getKlinika() {
+		return klinika;
 	}
-	
-	
+
+	public void setKlinika(Klinika klinika) {
+		this.klinika = klinika;
+	}
+
 	
 	
 }

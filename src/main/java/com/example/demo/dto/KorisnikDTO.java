@@ -3,15 +3,13 @@ package com.example.demo.dto;
 import java.util.Date;
 
 import javax.validation.constraints.NotEmpty;
-import javax.validation.constraints.Size;
 
+import com.example.demo.model.Korisnik;
+import com.example.demo.model.UlogaKorisnika;
 import com.example.demo.validation.PasswordMatches;
 import com.example.demo.validation.ValidEmail;
 import com.sun.istack.NotNull;
 
-enum UlogaKorisnika {
-	ADMIN_CENTRA, ADMIN_KLINIKE, LEKAR, MEDICINSKA_SESTRA, PACIJENT
-}
 
 @PasswordMatches
 public class KorisnikDTO {
@@ -63,12 +61,19 @@ public class KorisnikDTO {
 	
 	@NotNull
     @NotEmpty
-	private UlogaKorisnika uloga;		
+	private UlogaKorisnika uloga;	
+	
+	@NotNull
+    @NotEmpty
+	private int telefon;
+	
+	
 	
 	public KorisnikDTO() {
+		super();
 		
 	}
-	
+
 	public KorisnikDTO(String ime, String prezime, String email, String password, String matchingPassword, String grad, String drzava, Long jmbg,
 			String adresa, Date datumRodjenja, UlogaKorisnika uloga) {
 		super();
@@ -83,6 +88,29 @@ public class KorisnikDTO {
 		this.adresa = adresa;
 		this.datumRodjenja = datumRodjenja;
 		this.uloga = uloga;
+	}
+	
+	public KorisnikDTO(Long id, String ime, String prezime, String email, String password, String matchingPassword, String grad, String drzava, Long jmbg,
+			String adresa, Date datumRodjenja, UlogaKorisnika ulogaKorisnika, int telefon) {
+		super();
+		this.id = id;
+		this.ime = ime;
+		this.prezime = prezime;
+		this.email = email;
+		this.password = password;
+		this.matchingPassword = matchingPassword;
+		this.grad = grad;
+		this.drzava = drzava;
+		this.jmbg = jmbg;
+		this.adresa = adresa;
+		this.datumRodjenja = datumRodjenja;
+		this.uloga = ulogaKorisnika;
+		this.telefon = telefon;
+	}
+
+	public KorisnikDTO(Korisnik k) {
+		this(k.getId(), k.getIme(), k.getPrezime(),k.getEmail(), k.getPassword(), k.getPassword(), k.getGrad(),k.getDrzava(), k.getJmbg(),
+				k.getAdresa(), k.getDatumRodjenja(), k.getUloga(), k.getTelefon());
 	}
 
 	public Long getId() {
@@ -132,5 +160,15 @@ public class KorisnikDTO {
 	public UlogaKorisnika getUloga() {
 		return uloga;
 	}
+
+	public int getTelefon() {
+		return telefon;
+	}
+
+	public void setTelefon(int telefon) {
+		this.telefon = telefon;
+	}
+	
+	
 	
 }
