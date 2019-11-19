@@ -33,9 +33,6 @@ public class KlinikaService {
 		return klinikaRepository.findAll();
 	}
 	
-	public Klinika save(Klinika klinika) {
-		return klinikaRepository.save(klinika);
-	}
 	
 	public Klinika findOne(Long id) {
 		return klinikaRepository.findById(id).orElseGet(null);
