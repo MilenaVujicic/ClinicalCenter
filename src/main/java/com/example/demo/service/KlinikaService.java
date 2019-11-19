@@ -15,4 +15,9 @@ public class KlinikaService {
 		return klinikaRepository.findByIme(ime);
 	}
 	
+	public Klinika save(Klinika k) {
+		
+		return klinikaRepository.save(k);
+	}
+	
 }

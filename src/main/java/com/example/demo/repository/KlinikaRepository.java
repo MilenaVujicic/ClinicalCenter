@@ -7,5 +7,5 @@ import com.example.demo.model.Klinika;
 public interface KlinikaRepository extends JpaRepository<Klinika, Long> {
 
 	Klinika findByIme(String ime);
-
+	Klinika saveAndFlush(Klinika k);
 }

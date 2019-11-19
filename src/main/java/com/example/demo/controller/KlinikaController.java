@@ -13,7 +13,12 @@ import org.springframework.web.bind.annotation.RestController;
 import com.example.demo.model.Klinika;
 import com.example.demo.service.KlinikaService;
 
+import net.minidev.json.JSONArray;
 import net.minidev.json.JSONObject;
+import net.minidev.json.parser.JSONParser;
+import net.minidev.json.parser.ParseException;
+
+
 
 @RestController
 @RequestMapping(value = "klinika")
@@ -24,19 +29,43 @@ public class KlinikaController {
 	
 	@RequestMapping(value = "editClinic", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE, produces="application/json")
 	@ResponseStatus(value = HttpStatus.OK)
-	public void uredjivanjeKlinike(@RequestBody String param){
+	public void uredjivanjeKlinike(@RequestBody String param) throws ParseException{
 		System.out.println(param);
-		
+		param = param.substring(1);
+		param = param.substring(0, param.length()-1);
+		String naziv = "";
+		String adresa = "";
+		String opis = "";
 		String[] parts = param.split(",");
-		parts = parts[0].split(":");
-		String ime = parts[1];
-		ime = ime.replace("\"", "");
+		int i = 0;
+		for(String p : parts){
+			System.out.println(p);
+			String[] tokens = p.split(":");
+			if (i == 0) {
+				naziv = tokens[1];
+				naziv = naziv.replace("\"", "");
+			}else if(i == 1) {
+				adresa = tokens[1];
+				adresa = adresa.replace("\"", "");
+			}else if(i == 2) {
+				opis = tokens[1];
+				opis = opis.replace("\"", "");
+			}
+			i++;
+		}
 		
-		System.out.println(ime);
-		
-		Klinika k = klinikaService.findByName(ime);
+	
+
+		System.out.println(naziv + " " + adresa + " " + opis);
+		 
+		Klinika k = klinikaService.findByName(naziv);
 		if(k != null) {
 			System.out.println(k);
+
+			k.setAdresa(adresa);
+			System.out.println(k.getAdresa());
+			k.setOpis(opis);
+			k = klinikaService.save(k);
 		}else {
 			System.out.println("ERR");
 		}
