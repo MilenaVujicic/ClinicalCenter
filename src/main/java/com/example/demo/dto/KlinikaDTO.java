@@ -3,6 +3,7 @@ package com.example.demo.dto;
 import java.util.Set;
 
 import com.example.demo.model.Doktor;
+import com.example.demo.model.Klinika;
 import com.example.demo.model.Sala;
 import com.example.demo.model.Termin;
 import com.example.demo.model.Usluga;
@@ -37,6 +38,19 @@ public class KlinikaDTO {
 		this.usluge = usluge;
 		this.ocene = ocene;
 		this.prosecnaOcena = prosecnaOcena;
+	}
+
+	public KlinikaDTO(Klinika k) {
+		super();
+		this.ime = k.getIme();
+		this.adresa = k.getAdresa();
+		this.opis = k.getOpis();
+		this.slobodniTermini = k.getSlobodniTermini();
+		this.doktori = k.getDoktori();
+		this.sale = k.getSale();
+		this.usluge = k.getUsluge();
+		//this.ocene = k.getOcene();
+		this.prosecnaOcena = k.getProsecnaOcena();
 	}
 
 	public String getIme() {
