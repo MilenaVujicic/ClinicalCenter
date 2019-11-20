@@ -6,7 +6,7 @@ import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.Size;
 
 import com.example.demo.model.Korisnik;
-import com.example.demo.model.UlogaKorisnika;
+import com.example.demo.model.Uloga;
 import com.example.demo.validation.PasswordMatches;
 import com.example.demo.validation.ValidEmail;
 import com.sun.istack.NotNull;
@@ -68,8 +68,8 @@ public class KorisnikDTO {
 		// TODO Auto-generated constructor stub
 	}
 
-	public KorisnikDTO(String ime, String prezime, String email, String grad, String drzava, Long jmbg,
-			String adresa, String telefon, String password, String matchingPassword) {
+	public KorisnikDTO(String ime, String prezime, String email, String adresa, String grad, String drzava,
+			String telefon, Long jmbg, String password, String matchingPassword) {
 		super();
 		this.ime = ime;
 		this.prezime = prezime;

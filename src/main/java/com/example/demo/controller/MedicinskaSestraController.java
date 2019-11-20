@@ -16,7 +16,7 @@ import com.example.demo.dto.KorisnikDTO;
 import com.example.demo.dto.PacijentDTO;
 import com.example.demo.model.Korisnik;
 import com.example.demo.model.Pacijent;
-import com.example.demo.model.UlogaKorisnika;
+import com.example.demo.model.Uloga;
 import com.example.demo.repository.PacijentRepository;
 import com.example.demo.service.KorisnikService;
 import com.example.demo.service.PacijentService;
@@ -33,7 +33,7 @@ public class MedicinskaSestraController {
 	
 	@RequestMapping(value = "/sviPacijenti", method=RequestMethod.GET)
 	public ResponseEntity<List<KorisnikDTO>> getAllPatients() {
-		List<Korisnik> patients = korisnikService.findByUloga("PACIJENT");
+		List<Korisnik> patients = korisnikService.findByUloge("PACIJENT");
 		List<KorisnikDTO> pacijentDTO = new ArrayList<>();
 		
 		for (Korisnik p : patients) {

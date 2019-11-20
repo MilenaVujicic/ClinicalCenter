@@ -3,8 +3,8 @@ package com.example.demo.service;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.example.demo.model.UlogaKorisnika;
-import com.example.demo.repository.UlogaKorisnikaRepository;
+import com.example.demo.model.Uloga;
+import com.example.demo.repository.UlogaRepository;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -13,20 +13,20 @@ import org.springframework.stereotype.Service;
 public class UlogaKorisnikaService implements IUlogaKorisnikaService {
 
 	 @Autowired
-	 private UlogaKorisnikaRepository ulogaKorisnikaRepository;
+	 private UlogaRepository ulogaKorisnikaRepository;
 	 
 	@Override
-	public List<UlogaKorisnika> findById(Long id) {
-		UlogaKorisnika uloga = this.ulogaKorisnikaRepository.getOne(id);
-	    List<UlogaKorisnika> uloge = new ArrayList<>();
+	public List<Uloga> findById(Long id) {
+		Uloga uloga = this.ulogaKorisnikaRepository.getOne(id);
+	    List<Uloga> uloge = new ArrayList<>();
 	    uloge.add(uloga);
 	    return uloge;
 	}
 
 	@Override
-	public List<UlogaKorisnika> findByname(String name) {
-		UlogaKorisnika uloga = this.ulogaKorisnikaRepository.findByName(name);
-	    List<UlogaKorisnika> uloge = new ArrayList<>();
+	public List<Uloga> findByname(String name) {
+		Uloga uloga = this.ulogaKorisnikaRepository.findByName(name);
+	    List<Uloga> uloge = new ArrayList<>();
 	    uloge.add(uloga);
 	    return uloge;
 	}

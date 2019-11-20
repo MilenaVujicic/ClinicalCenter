@@ -12,7 +12,7 @@ import org.springframework.stereotype.Service;
 import com.example.demo.dto.KorisnikDTO;
 import com.example.demo.error.UserAlreadyExistException;
 import com.example.demo.model.Korisnik;
-import com.example.demo.model.UlogaKorisnika;
+import com.example.demo.model.Uloga;
 import com.example.demo.repository.KorisnikRepository;
 
 
@@ -27,11 +27,7 @@ public class UserService implements IUserService{
 	
 	@Autowired
     private PasswordEncoder passwordEncoder;
-	
-	public List<Korisnik> findByUloga(String string) {
-		return korisnikRepository.findByUloge(string);
-	}
-	
+		
 	public Korisnik findById(Long id) throws AccessDeniedException {
 		Korisnik u = korisnikRepository.findById(id).orElseGet(null);
 		return u;
@@ -59,8 +55,8 @@ public class UserService implements IUserService{
 		user.setDrzava(accountDto.getDrzava());
 		user.setJmbg(accountDto.getJmbg());
 		
-		//List<UlogaKorisnika> uloge = ulogaKorisnikaService.findByname("PACIJENT");
-		//user.setUloge(uloge);
+		List<Uloga> uloge = ulogaKorisnikaService.findByname("PACIJENT");
+		user.setUloge(uloge);
 		
 		//fali jos datumRodjenja, ali datumRodjenja ni ne treba pri registraciji da se unosi, treba da se ukloni
         return korisnikRepository.save(user);
@@ -78,6 +74,12 @@ public class UserService implements IUserService{
 	public Korisnik findByUsername(String username) {
 		// TODO Auto-generated method stub
 		return null;
+	}
+
+	@Override
+	public List<Korisnik> findByUloge(String uloga) {
+		List<Korisnik> korisnici = korisnikRepository.findByUloge(uloga);
+		return korisnici;
 	}
 
 }

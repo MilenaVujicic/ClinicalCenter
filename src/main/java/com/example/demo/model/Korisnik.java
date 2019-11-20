@@ -32,6 +32,7 @@ public class Korisnik implements UserDetails {
 	private static final long serialVersionUID = 8158909379450641326L;
 
 	@Id
+	@Column(name="id")
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 	
@@ -43,9 +44,6 @@ public class Korisnik implements UserDetails {
 	
 	@Column(name = "email", nullable = false)
 	private String email;
-	
-	@Column(name = "username", nullable = false)
-	private String username;
 	
 	@Column(name = "password", nullable = false)
 	private String password;
@@ -77,10 +75,10 @@ public class Korisnik implements UserDetails {
     private boolean enabled;
 	
 	@ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-	@JoinTable(name = "uloge",
+	@JoinTable(name = "uloga_korisnik",
 	            joinColumns = @JoinColumn(name = "user_id", referencedColumnName = "id"),
 	            inverseJoinColumns = @JoinColumn(name = "uloga_id", referencedColumnName = "id"))
-    private List<UlogaKorisnika> uloge;
+    private List<Uloga> uloge;
 	
 	public Korisnik() {
 		super();
@@ -181,17 +179,17 @@ public class Korisnik implements UserDetails {
 		this.odsustva = odsustva;
 	}
 	
-	public void setUloge(List<UlogaKorisnika> uloge) {
+	public void setUloge(List<Uloga> uloge) {
         this.uloge = uloge;
     }
 	
-	public List<UlogaKorisnika> getUloge() {
+	public List<Uloga> getUloge() {
 		return uloge;
 	}
 	
 	public String getUlogeString() {
 		String rez = "";
-		for(UlogaKorisnika u:uloge)
+		for(Uloga u:uloge)
 		{
 			rez += u.name;
 			rez += " ";

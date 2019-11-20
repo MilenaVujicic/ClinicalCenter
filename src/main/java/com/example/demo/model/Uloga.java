@@ -12,7 +12,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 
 //promenjeno da bude klasa zbog spring security
 @Entity
-public class UlogaKorisnika implements GrantedAuthority {
+public class Uloga implements GrantedAuthority {
 
 
 	private static final long serialVersionUID = -7020077012341303719L;

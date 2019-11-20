@@ -51,13 +51,50 @@ public class AuthenticationController {
 	
 	
 	@RequestMapping(method = POST, value = "/signup")
-	public ResponseEntity<Korisnik> addUser(KorisnikDTO userRequest, UriComponentsBuilder ucBuilder) {
+	public ResponseEntity<Korisnik> addUser(@RequestBody String stringRequest, UriComponentsBuilder ucBuilder) {
 
-		Korisnik existUser = this.userService.findByUsername(userRequest.getEmail());
+		System.out.println(stringRequest);
+		stringRequest.replace('+', ' ');
+		String splitPoEQ[] = stringRequest.split("&");
+		
+		
+		String name[] = splitPoEQ[0].split("=");
+		String nameFinal = name[1];//.replace('+', ' ');
+		
+		String surname[] = splitPoEQ[1].split("=");
+		String surnameFinal = surname[1];
+		
+		String email[] = splitPoEQ[2].split("=");
+		String emailFinal = email[1].replace("%40", "@");
+		
+		String address[] = splitPoEQ[3].split("=");
+		String addressFinal = address[1];
+		
+		String city[] = splitPoEQ[4].split("=");
+		String cityFinal = city[1];//.replace('+', ' ');
+		
+		String state[] = splitPoEQ[5].split("=");
+		String stateFinal = state[1];
+		
+		String phone[] = splitPoEQ[6].split("=");
+		String phoneFinal = phone[1];
+		
+		String jmbg[] = splitPoEQ[7].split("=");
+		String jmbgFinal = jmbg[1];
+		
+		String pass[] = splitPoEQ[8].split("=");
+		String passFinal = pass[1];
+		
+		String confirm[] = splitPoEQ[9].split("=");
+		String confirmFinal = confirm[1];
+		//System.out.println(nameFinal + " " + surnameFinal + " " + emailFInal);
+		Korisnik existUser = this.userService.findByUsername(emailFinal); //samo prosledi email
 		if (existUser != null) {
 			throw new UserAlreadyExistException();
 		}
-
+		Long jmbgFinalFinal = Long.parseLong(jmbgFinal);
+		KorisnikDTO userRequest = new KorisnikDTO(nameFinal,surnameFinal,emailFinal,
+				addressFinal,cityFinal,stateFinal,phoneFinal,jmbgFinalFinal,passFinal,confirmFinal);
 		Korisnik user = this.userService.save(userRequest);
 		HttpHeaders headers = new HttpHeaders();
 		headers.setLocation(ucBuilder.path("/api/user/{userId}").buildAndExpand(user.getId()).toUri());
