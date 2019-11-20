@@ -58,7 +58,6 @@ public class UserService implements IUserService{
 		List<Uloga> uloge = ulogaKorisnikaService.findByname("PACIJENT");
 		user.setUloge(uloge);
 		
-		//fali jos datumRodjenja, ali datumRodjenja ni ne treba pri registraciji da se unosi, treba da se ukloni
         return korisnikRepository.save(user);
 	}
 	

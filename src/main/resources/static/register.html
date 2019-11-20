@@ -36,13 +36,13 @@
 			let jmbg = $('#id').val();		
 			let password = $('#password').val();
 			let confirm = $('#confirm').val();
-			
+
 			$.post(
 				url: 'auth/signup'
 				data: JSON.stringify({ime, prezime, email, adresa, grad, drzava, telefon, jmbg, password, confirm}),
 				contentType: 'application/json',
 				success: function() {
-					window.location = 'successRegister.html';
+					window.location.href = 'successRegister.html';
 				}
 		});
 	});
