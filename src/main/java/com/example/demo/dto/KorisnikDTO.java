@@ -3,7 +3,6 @@ package com.example.demo.dto;
 import java.util.Date;
 
 import javax.validation.constraints.NotEmpty;
-import javax.validation.constraints.Size;
 
 import com.example.demo.model.Korisnik;
 import com.example.demo.model.UlogaKorisnika;
@@ -64,11 +63,15 @@ public class KorisnikDTO {
     @NotEmpty
 	private UlogaKorisnika uloga;	
 	
+	@NotNull
+    @NotEmpty
+	private int telefon;
+	
 	
 	
 	public KorisnikDTO() {
 		super();
-		// TODO Auto-generated constructor stub
+		
 	}
 
 	public KorisnikDTO(String ime, String prezime, String email, String password, String matchingPassword, String grad, String drzava, Long jmbg,
@@ -88,7 +91,7 @@ public class KorisnikDTO {
 	}
 	
 	public KorisnikDTO(Long id, String ime, String prezime, String email, String password, String matchingPassword, String grad, String drzava, Long jmbg,
-			String adresa, Date datumRodjenja, UlogaKorisnika ulogaKorisnika) {
+			String adresa, Date datumRodjenja, UlogaKorisnika ulogaKorisnika, int telefon) {
 		super();
 		this.id = id;
 		this.ime = ime;
@@ -102,12 +105,12 @@ public class KorisnikDTO {
 		this.adresa = adresa;
 		this.datumRodjenja = datumRodjenja;
 		this.uloga = ulogaKorisnika;
+		this.telefon = telefon;
 	}
-	
 
 	public KorisnikDTO(Korisnik k) {
 		this(k.getId(), k.getIme(), k.getPrezime(),k.getEmail(), k.getPassword(), k.getPassword(), k.getGrad(),k.getDrzava(), k.getJmbg(),
-				k.getAdresa(), k.getDatumRodjenja(), k.getUloga());
+				k.getAdresa(), k.getDatumRodjenja(), k.getUloga(), k.getTelefon());
 	}
 
 	public Long getId() {
@@ -157,5 +160,15 @@ public class KorisnikDTO {
 	public UlogaKorisnika getUloga() {
 		return uloga;
 	}
+
+	public int getTelefon() {
+		return telefon;
+	}
+
+	public void setTelefon(int telefon) {
+		this.telefon = telefon;
+	}
+	
+	
 	
 }

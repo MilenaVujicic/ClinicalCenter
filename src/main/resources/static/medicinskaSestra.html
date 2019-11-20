@@ -36,9 +36,11 @@
 		           		$('#patientDioptre').val(pacijenti.dioptrija);
 		           		$('#patient').attr('hidden', false);
 		           		$('#patientsTable').attr('hidden', true);
+		           		document.getElementById("title").innerHTML = "Data of " + pacijent.ime + pacijent.prezime;
 	 	           	},
 		           	error: function() {
 		           		alert('Desila se greska');
+		           		document.getElementById("title").innerHTML = "";
 		           	}
 	         	});
 			}
@@ -58,6 +60,7 @@
 		function home() {
 			$('#patientsTable').attr('hidden', true);
 			$('#patient').attr('hidden', true);
+			document.getElementById("title").innerHTML = "";
 		}
 		
 		function allPatients() {
@@ -66,6 +69,7 @@
 	            type:"GET",
 	           	success: function(pacijenti){
 	           		$('#patientsTable tbody').html('');
+	           		document.getElementById("title").innerHTML = "All patients";
 	           		for (i = 0; i < pacijenti.length; i++) {
 	           			prikaziPacijenta(pacijenti[i]);
 	           		}
@@ -81,6 +85,7 @@
 		function personalData() {
 			$('#patientsTable').attr('hidden', true);
 			$('#patient').attr('hidden', true);
+			document.getElementById("title").innerHTML = "";
 		}
 	</script>
 </head>
@@ -100,6 +105,8 @@
 	    </ul>
 	  </div>
 	</nav>
+	
+	<h1 id="title"></h1>
 	
 	<table class="table" id="patientsTable" hidden="true">
 	  <thead>

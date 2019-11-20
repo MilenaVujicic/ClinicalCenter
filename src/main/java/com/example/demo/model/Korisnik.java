@@ -161,6 +161,24 @@ public class Korisnik {
 	public void setUloga(UlogaKorisnika uloga) {
 		this.uloga = uloga;
 	}
+	
+	
+
+	public String getUsername() {
+		return username;
+	}
+
+	public void setUsername(String username) {
+		this.username = username;
+	}
+
+	public int getTelefon() {
+		return telefon;
+	}
+
+	public void setTelefon(int telefon) {
+		this.telefon = telefon;
+	}
 
 	public Long getId() {
 		return id;
@@ -180,9 +198,10 @@ public class Korisnik {
 
 	@Override
 	public String toString() {
-		return "Korisnik [id=" + id + ", ime=" + ime + ", prezime=" + prezime + ", email=" + email + ", password="
-				+ password + ", grad=" + grad + ", drzava=" + drzava + ", jmbg=" + jmbg + ", adresa=" + adresa
-				+ ", datumRodjenja=" + datumRodjenja + ", uloga=" + uloga + ", odsustva=" + odsustva + "]";
+		return "Korisnik [id=" + id + ", ime=" + ime + ", prezime=" + prezime + ", email=" + email + ", username="
+				+ username + ", password=" + password + ", grad=" + grad + ", drzava=" + drzava + ", jmbg=" + jmbg
+				+ ", adresa=" + adresa + ", telefon=" + telefon + ", datumRodjenja=" + datumRodjenja + ", uloga="
+				+ uloga + ", odsustva=" + odsustva + "]";
 	}
 	
 	

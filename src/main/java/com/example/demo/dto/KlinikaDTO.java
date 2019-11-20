@@ -2,6 +2,7 @@ package com.example.demo.dto;
 
 import java.util.Set;
 
+import com.example.demo.model.AdministratorKlinike;
 import com.example.demo.model.Doktor;
 import com.example.demo.model.Klinika;
 import com.example.demo.model.Sala;
@@ -15,10 +16,10 @@ public class KlinikaDTO {
 	private String adresa;
 	private String opis;
 	private Set<Termin> slobodniTermini;
+	private Set<AdministratorKlinike> administratori;
 	private Set<Doktor> doktori;
 	private Set<Sala> sale;
 	private Set<Usluga> usluge;
-	private Set<Integer> ocene;
 	private double prosecnaOcena = 0;
 	
 	public KlinikaDTO() {
@@ -26,8 +27,24 @@ public class KlinikaDTO {
 		// TODO Auto-generated constructor stub
 	}
 
+	public KlinikaDTO(Long id, String ime, String adresa, String opis, Set<Termin> slobodniTermini, Set<AdministratorKlinike> administratori, Set<Doktor> doktori,
+			Set<Sala> sale, Set<Usluga> usluge, double prosecnaOcena) {
+		super();
+		this.id = id;
+		this.ime = ime;
+		this.adresa = adresa;
+		this.opis = opis;
+		this.slobodniTermini = slobodniTermini;
+		this.administratori = administratori;
+		this.doktori = doktori;
+		this.sale = sale;
+		this.usluge = usluge;
+		this.prosecnaOcena = prosecnaOcena;
+	}
+
+
 	public KlinikaDTO(String ime, String adresa, String opis, Set<Termin> slobodniTermini, Set<Doktor> doktori,
-			Set<Sala> sale, Set<Usluga> usluge, Set<Integer> ocene, double prosecnaOcena) {
+			Set<Sala> sale, Set<Usluga> usluge, double prosecnaOcena) {
 		super();
 		this.ime = ime;
 		this.adresa = adresa;
@@ -36,21 +53,11 @@ public class KlinikaDTO {
 		this.doktori = doktori;
 		this.sale = sale;
 		this.usluge = usluge;
-		this.ocene = ocene;
 		this.prosecnaOcena = prosecnaOcena;
 	}
 
 	public KlinikaDTO(Klinika k) {
-		super();
-		this.ime = k.getIme();
-		this.adresa = k.getAdresa();
-		this.opis = k.getOpis();
-		this.slobodniTermini = k.getSlobodniTermini();
-		this.doktori = k.getDoktori();
-		this.sale = k.getSale();
-		this.usluge = k.getUsluge();
-		//this.ocene = k.getOcene();
-		this.prosecnaOcena = k.getProsecnaOcena();
+		this(k.getId(), k.getIme(), k.getAdresa(), k.getOpis(), k.getSlobodniTermini(), k.getAdministratoriKlinike(), k.getDoktori(), k.getSale(), k.getUsluge(), k.getProsecnaOcena());
 	}
 
 	public String getIme() {
@@ -109,27 +116,12 @@ public class KlinikaDTO {
 		this.usluge = usluge;
 	}
 
-	public Set<Integer> getOcene() {
-		return ocene;
-	}
-
-	public void setOcene(Set<Integer> ocene) {
-		this.ocene = ocene;
-	}
-
 	public double getProsecnaOcena() {
 		return prosecnaOcena;
 	}
 
 	public void setProsecnaOcena(double prosecnaOcena) {
 		this.prosecnaOcena = prosecnaOcena;
-	}
-
-	@Override
-	public String toString() {
-		return "Klinika [ime=" + ime + ", adresa=" + adresa + ", opis=" + opis + ", slobodniTermini=" + slobodniTermini
-				+ ", doktori=" + doktori + ", sale=" + sale + ", usluge=" + usluge + ", ocene=" + ocene
-				+ ", prosecnaOcena=" + prosecnaOcena + "]";
 	}
 
 	public Long getId() {
@@ -139,4 +131,13 @@ public class KlinikaDTO {
 	public void setId(Long id) {
 		this.id = id;
 	}
+
+	@Override
+	public String toString() {
+		return "KlinikaDTO [id=" + id + ", ime=" + ime + ", adresa=" + adresa + ", opis=" + opis + ", slobodniTermini="
+				+ slobodniTermini + ", doktori=" + doktori + ", sale=" + sale + ", usluge=" + usluge
+				+ ", prosecnaOcena=" + prosecnaOcena + "]";
+	}
+	
+	
 }

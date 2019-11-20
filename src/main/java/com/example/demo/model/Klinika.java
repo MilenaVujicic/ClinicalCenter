@@ -1,6 +1,6 @@
 package com.example.demo.model;
 import java.util.HashSet;
-//------------------------------
+
 import java.util.Set;
 
 import javax.persistence.CascadeType;
@@ -11,7 +11,9 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
-//-------------------------------
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 @Entity
 public class Klinika {
 
@@ -46,6 +48,7 @@ public class Klinika {
 	@Column(name = "ProsecnaOcena", nullable = false)
 	private double prosecnaOcena;
 	
+	@JsonIgnore
 	@OneToMany(mappedBy = "klinika", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 	private Set<AdministratorKlinike> administratoriKlinike = new HashSet<AdministratorKlinike>();
 	
