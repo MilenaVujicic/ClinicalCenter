@@ -22,4 +22,17 @@ public class KorisnikService {
 	public Korisnik save(Korisnik korisnik) {
 		return korisnikRepository.save(korisnik);
 	}
+	
+	public void delete(Korisnik korisnik) {
+		korisnikRepository.delete(korisnik);
+	}
+	
+	public List<Korisnik> findByAktivan(Boolean aktivan) {
+		return korisnikRepository.findByAktivan(aktivan);
+	}
+	
+	public List<Korisnik> findAll() {
+		return korisnikRepository.findAll();
+	}
+
 }

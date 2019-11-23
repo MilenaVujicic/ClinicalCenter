@@ -32,7 +32,7 @@ public class Korisnik {
 	@Column(name = "email", nullable = false)
 	private String email;
 	
-	@Column(name = "username", nullable = false)
+	@Column(name = "username", nullable = false, unique = true)
 	private String username;
 	
 	@Column(name = "password", nullable = false)
@@ -61,6 +61,9 @@ public class Korisnik {
 	
 	@OneToMany(mappedBy = "korisnik", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 	private Set<Odsustvo> odsustva = new HashSet<Odsustvo>();
+	
+	@Column(name = "aktivan", nullable = false)
+	private boolean aktivan = false;
 	
 	public Korisnik() {
 		super();
@@ -162,7 +165,13 @@ public class Korisnik {
 		this.uloga = uloga;
 	}
 	
-	
+	public boolean isAktivan() {
+		return aktivan;
+	}
+
+	public void setAktivan(boolean aktivan) {
+		this.aktivan = aktivan;
+	}
 
 	public String getUsername() {
 		return username;
@@ -201,7 +210,7 @@ public class Korisnik {
 		return "Korisnik [id=" + id + ", ime=" + ime + ", prezime=" + prezime + ", email=" + email + ", username="
 				+ username + ", password=" + password + ", grad=" + grad + ", drzava=" + drzava + ", jmbg=" + jmbg
 				+ ", adresa=" + adresa + ", telefon=" + telefon + ", datumRodjenja=" + datumRodjenja + ", uloga="
-				+ uloga + ", odsustva=" + odsustva + "]";
+				+ uloga + ", odsustva=" + odsustva + ", aktivan=" + aktivan + "]";
 	}
 	
 	

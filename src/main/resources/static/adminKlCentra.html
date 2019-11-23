@@ -55,6 +55,7 @@
 	    	  		$('#newClinic').attr('hidden', true);
 	  				$('#clinicTable').attr('hidden', true);
 	  				$('#clinicAdminTable').attr('hidden', true);
+	  				$('#requestsTable').attr('hidden', true);
 	            },
 	            error: function() {
 	            	$('#nameClicnicAdmin').val('');
@@ -73,6 +74,7 @@
 	    	  		$('#newClinic').attr('hidden', true);
 	  				$('#clinicTable').attr('hidden', true);
 	  				$('#clinicAdminTable').attr('hidden', true);
+	  				$('#requestsTable').attr('hidden', true);
 	            }
             });
   		}
@@ -106,6 +108,7 @@
 	    	  		$('#adminSuccessAlert').attr('hidden', false);
 	    	  		$('#newClinicAdmin').attr('hidden', true);
 	    	  		$('#clinicTable').attr('hidden', true);
+	    	  		$('#requestsTable').attr('hidden', true);
  	           	},
 	           	error: function() {
 	           		$('#name').val('');
@@ -122,6 +125,7 @@
 	    	  		$('#adminSuccessAlert').attr('hidden', true);
 	    	  		$('#newClinicAdmin').attr('hidden', true);
 	    	  		$('#clinicTable').attr('hidden', true);
+	    	  		$('#requestsTable').attr('hidden', true);
 	           	}
          	});
   		}
@@ -152,7 +156,8 @@
 		            	$('#newAdmin').attr('hidden', true);
 		    	  		$('#newClinic').attr('hidden', true);
 		    	  		$('#adminSuccessAlert').attr('hidden', true);
-		    	  		$('#adminErrorAlert').attr('hidden', true);	 	           	
+		    	  		$('#adminErrorAlert').attr('hidden', true);	 	
+		    	  		$('#requestsTable').attr('hidden', true);
 		    	  	},
 		           	error: function() {
 		           		$('#clinicAdminTable').attr('hidden', true);
@@ -162,6 +167,7 @@
 		    	  		$('#newClinic').attr('hidden', true);
 		    	  		$('#adminSuccessAlert').attr('hidden', true);
 		    	  		$('#adminErrorAlert').attr('hidden', false);
+		    	  		$('#requestsTable').attr('hidden', true);
 		    	  		document.getElementById("title").innerHTML = "";
 		           	}
 	         	});
@@ -177,6 +183,7 @@
     	  		$('#adminSuccessAlert').attr('hidden', true);
     	  		$('#adminErrorAlert').attr('hidden', true);
     	  		$('#clinicAdminTable').attr('hidden', true);
+    	  		$('#requestsTable').attr('hidden', true);
     	  		$('#idClinic').val(klinika.id);
     	  		document.getElementById("title").innerHTML = "New administrator of: " + klinika.ime;
   			}
@@ -219,6 +226,7 @@
 	    	  		$('#adminSuccessAlert').attr('hidden', true);
 	    	  		$('#newClinicAdmin').attr('hidden', true);
 	    	  		$('#clinicTable').attr('hidden', true);
+	    	  		$('#requestsTable').attr('hidden', true);
 	    	  		document.getElementById("title").innerHTML = "";
 	            }
             });
@@ -231,6 +239,7 @@
 	  		$('#clinicTable').attr('hidden', true);
 	  		$('#newClinicAdmin').attr('hidden', true);
 	  		$('#clinicAdminTable').attr('hidden', true);
+	  		$('#requestsTable').attr('hidden', true);
 	  		document.getElementById("title").innerHTML = "New clinic administrator";
 	    }
 	  	function newClinic() {
@@ -241,6 +250,7 @@
 	  		$('#clinicTable').attr('hidden', true);
 	  		$('#newClinicAdmin').attr('hidden', true);
 	  		$('#clinicAdminTable').attr('hidden', true);
+	  		$('#requestsTable').attr('hidden', true);
 	  		document.getElementById("title").innerHTML = "New clinic";
 	  	}
 	  	function home() {
@@ -262,6 +272,7 @@
 	  		$('#adminErrorAlert').attr('hidden', true);
 	  		$('#clinicTable').attr('hidden', true);
 	  		$('#newClinicAdmin').attr('hidden', true);
+	  		$('#requestsTable').attr('hidden', true);
 	  		$.ajax({
 	            url:"/admin_klinickog_centra/sve_klinike",
 	            type:"GET",
@@ -281,6 +292,7 @@
 	    	  		$('#adminSuccessAlert').attr('hidden', true);
 	    	  		$('#newClinicAdmin').attr('hidden', true);
 	    	  		$('#clinicTable').attr('hidden', true);
+	    	  		$('#requestsTable').attr('hidden', true);
 	    	  		document.getElementById("title").innerHTML = "";
 	           	}
          	});
@@ -303,6 +315,7 @@
 	    	  		$('#adminSuccessAlert').attr('hidden', true);
 	    	  		$('#newClinicAdmin').attr('hidden', true);
 	    	  		$('#clinicTable').attr('hidden', true);
+	    	  		$('#requestsTable').attr('hidden', true);
  	           	},
 	           	error: function() {
 	           		$('#adminErrorAlert').attr('hidden', false);
@@ -312,9 +325,77 @@
 	    	  		$('#adminSuccessAlert').attr('hidden', true);
 	    	  		$('#newClinicAdmin').attr('hidden', true);
 	    	  		$('#clinicTable').attr('hidden', true);
+	    	  		$('#requestsTable').attr('hidden', true);
 	    	  		document.getElementById("title").innerHTML = "";
 	           	}
          	});
+	  	}
+	  	
+	  	function odbij(id) {
+	  		return function() {
+	  			$.ajax({
+		            url:"/admin_klinickog_centra/odbij/" + id,
+		            type:"GET",
+		            success: function() {
+		            	requests();
+		            },
+		            error: function() {
+		            	alert('Desila se greska');
+		            }
+	         	});
+	  		}
+	  	}
+	  	
+	  	function prihvati(id) {
+	  		return function() {
+	  			$.ajax({
+		            url:"/admin_klinickog_centra/prihvati/" + id,
+		            type:"GET",
+		            success: function() {
+		            	requests();
+		            },
+		            error: function() {
+		            	alert('Desila se greska');
+		            }
+	         	});
+	  		}
+	  	}
+	  	
+	  	function prikaziKorisnika(korisnik) {
+	  		let tr = $('<tr></tr>');
+	  		let tdIme = $('<td>'+korisnik.ime+'</td>');
+	  		let tdPrezime = $('<td>'+korisnik.prezime+'</td>');
+	  		let tdEmail = $('<td>'+korisnik.email+'</td>');
+	  		let tdPrihvati = $('<td><a>Accept</a></td>');
+	  		tdPrihvati.click(prihvati(korisnik.id));
+	  		let tdOdbij = $('<td><a>Deny</a></td>');
+	  		tdOdbij.click(odbij(korisnik.id));
+	  		tr.append(tdIme).append(tdPrezime).append(tdEmail).append(tdPrihvati).append(tdOdbij);
+	  		$('#requestsTable tbody').append(tr);
+	  	}
+	  	
+	  	function requests() {
+	  		$.ajax({
+	            url:"/admin_klinickog_centra/sviZahtevi",
+	            type:"GET",
+	  			success: function(korisnici) {
+	  				$('#requestsTable tbody').html('');
+	  				for(let korisnik of korisnici) {
+	  					prikaziKorisnika(korisnik);
+	  				}
+	  				$('#requestsTable').attr('hidden', false);
+	  				$('#adminErrorAlert').attr('hidden', true);
+	           		$('#newAdmin').attr('hidden', true);
+	           		$('#clinicAdminTable').attr('hidden', true);
+	    	  		$('#newClinic').attr('hidden', true);
+	    	  		$('#adminSuccessAlert').attr('hidden', true);
+	    	  		$('#newClinicAdmin').attr('hidden', true);
+	    	  		$('#clinicTable').attr('hidden', true);
+	  			},
+	  			error: function() {
+	  				alert('Desila se greska');
+	  			}
+  			});
 	  	}
   	</script>
   	
@@ -335,7 +416,7 @@
 	          <li><a href="#">New drug</a></li>
 	        </ul>
 	      </li>
-	      <li><a href="#">Registration requests</a></li>
+	      <li><a onclick="return requests();">Registration request</a></li>
 	      <li><a onclick="return allClinics();">All clinics</a></li>
 	      <li><a onclick="return allCenterAdmins();">All clinic centre administrators</a></li>
 	      <li><a href="#">Personal data</a></li>
@@ -575,8 +656,7 @@
 				<a target="_blank" type="button" id="newClinicAdminButton" class="btn btn-primary btn-lg btn-block login-button" onclick="newClinicAdministrator()">Register new clinic adminitrator</a>
 			</div>
 		</form>
-		
-		
+			
 		<form id="adminSuccessAlert" hidden="true">
 			<div class="alert alert-info" role="alert">
 			  The new administrator is successfully added.
@@ -588,6 +668,21 @@
 			  Something went wrong!!!
 			</div>
 		</form>
+		
+		<table class="table" id="requestsTable" hidden="true">
+		<thead>
+		    <tr>
+		      <th scope="col">Name</th>
+		      <th scope="col">Surname</th>
+		      <th scope="col">Email</th>
+		      <th scope="col">Accept</th>
+		      <th scope="col">Deny</th>
+		    </tr>
+		  </thead>
+		  <tbody>
+		    
+		  </tbody>
+		</table>
 	</div>
 
 </body>
