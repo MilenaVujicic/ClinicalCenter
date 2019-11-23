@@ -59,6 +59,7 @@ public class AdministratorKlinickogCentraController {
 		korisnik.setPassword(UUID.randomUUID().toString());
 		korisnik.setDatumRodjenja(new Date());
 		korisnik.setUloga(UlogaKorisnika.ADMIN_CENTRA);
+		korisnik.setAktivan(false);
 		if (korisnik.getIme() == "" || korisnik.getIme() == null){
 			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 		}
@@ -90,7 +91,7 @@ public class AdministratorKlinickogCentraController {
 		List<Korisnik> administratori = new ArrayList<Korisnik>();
 		for(AdministratorKlinickogCentra a : admini) {
 			for(Korisnik k : korisnici) {
-				if (k.getId().equals(a.getIdKorisnik())) {
+				if (k.getId().equals(a.getIdKorisnik()) && k.isAktivan()) {
 					administratori.add(k);
 				}
 			}
@@ -125,6 +126,7 @@ public class AdministratorKlinickogCentraController {
 		korisnik.setDrzava(korisnikDTO.getDrzava());
 		korisnik.setTelefon(korisnikDTO.getTelefon());
 		korisnik.setJmbg((long) 3625415);
+		korisnik.setAktivan(false);
 		List<Korisnik> admini = korisnikService.findByUloga(UlogaKorisnika.ADMIN_KLINIKE);
 		if (korisnik.getIme() == "" || korisnik.getIme() == null){
 			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
@@ -155,7 +157,6 @@ public class AdministratorKlinickogCentraController {
 	
 	@RequestMapping(value = "/sve_klinike", method=RequestMethod.GET)
 	public ResponseEntity<List<Klinika>> allClinic() {
-		System.out.println("################");
 		List<Klinika> klinike = klinikaService.findAll();
 		return new ResponseEntity<List<Klinika>>(klinike, HttpStatus.OK);
 	}
@@ -168,7 +169,7 @@ public class AdministratorKlinickogCentraController {
 		for(AdministratorKlinike a : admini) {
 			if(a.getKlinika().getId().equals(identifikacija)) {
 				for(Korisnik k : korisnici) {
-					if (k.getId().equals(a.getIdKorisnik())) {
+					if (k.getId().equals(a.getIdKorisnik()) && k.isAktivan()) {
 						administratori.add(k);
 					}
 				}
@@ -176,5 +177,38 @@ public class AdministratorKlinickogCentraController {
 		}
 
 		return new ResponseEntity<List<Korisnik>>(administratori, HttpStatus.OK);
+	}
+	
+	@RequestMapping(value = "/sviZahtevi", method = RequestMethod.GET)
+	public ResponseEntity<List<Korisnik>> svi_zahtevi() {
+		List<Korisnik> korisnici = korisnikService.findByAktivan(false);
+		return new ResponseEntity<List<Korisnik>>(korisnici, HttpStatus.OK);
+	}
+	
+	@RequestMapping(value = "/prihvati/{id}", method = RequestMethod.GET)
+	public ResponseEntity<KorisnikDTO> prihvati(@PathVariable("id") Long identifikacija) {
+		List<Korisnik> korisnici = korisnikService.findAll();
+		Korisnik korisnik = new Korisnik();
+		for(Korisnik k : korisnici) {
+			if(k.getId().equals(identifikacija)) {
+				korisnik = k;
+			}
+		}
+		korisnik.setAktivan(true);
+		Korisnik kor = korisnikService.save(korisnik);
+		return new ResponseEntity<KorisnikDTO>(new KorisnikDTO(kor), HttpStatus.OK);
+	}
+	
+	@RequestMapping(value = "/odbij/{id}", method = RequestMethod.GET)
+	public ResponseEntity<String> odbij(@PathVariable("id") Long identifikacija) {
+		List<Korisnik> korisnici = korisnikService.findAll();
+		Korisnik korisnik = new Korisnik();
+		for(Korisnik k : korisnici) {
+			if(k.getId().equals(identifikacija)) {
+				korisnik = k;
+			}
+		}
+		korisnikService.delete(korisnik);
+		return new ResponseEntity<String>("", HttpStatus.OK);
 	}
 }
