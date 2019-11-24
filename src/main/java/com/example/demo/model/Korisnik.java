@@ -65,6 +65,9 @@ public class Korisnik {
 	@Column(name = "aktivan", nullable = false)
 	private boolean aktivan = false;
 	
+	@Column(name = "aktiviran", nullable = false)
+	private boolean aktiviran = false;
+	
 	public Korisnik() {
 		super();
 		// TODO Auto-generated constructor stub
@@ -83,6 +86,28 @@ public class Korisnik {
 		this.adresa = adresa;
 		this.datumRodjenja = datumRodjenja;
 		this.uloga = uloga;
+	}
+
+	public Korisnik(Long id, String ime, String prezime, String email, String username, String password, String grad,
+			String drzava, Long jmbg, String adresa, int telefon, Date datumRodjenja, UlogaKorisnika uloga,
+			Set<Odsustvo> odsustva, boolean aktivan, boolean aktiviran) {
+		super();
+		this.id = id;
+		this.ime = ime;
+		this.prezime = prezime;
+		this.email = email;
+		this.username = username;
+		this.password = password;
+		this.grad = grad;
+		this.drzava = drzava;
+		this.jmbg = jmbg;
+		this.adresa = adresa;
+		this.telefon = telefon;
+		this.datumRodjenja = datumRodjenja;
+		this.uloga = uloga;
+		this.odsustva = odsustva;
+		this.aktivan = aktivan;
+		this.aktiviran = aktiviran;
 	}
 
 	public String getIme() {
@@ -205,12 +230,20 @@ public class Korisnik {
 		this.odsustva = odsustva;
 	}
 
+	public boolean isAktiviran() {
+		return aktiviran;
+	}
+
+	public void setAktiviran(boolean aktiviran) {
+		this.aktiviran = aktiviran;
+	}
+
 	@Override
 	public String toString() {
 		return "Korisnik [id=" + id + ", ime=" + ime + ", prezime=" + prezime + ", email=" + email + ", username="
 				+ username + ", password=" + password + ", grad=" + grad + ", drzava=" + drzava + ", jmbg=" + jmbg
 				+ ", adresa=" + adresa + ", telefon=" + telefon + ", datumRodjenja=" + datumRodjenja + ", uloga="
-				+ uloga + ", odsustva=" + odsustva + ", aktivan=" + aktivan + "]";
+				+ uloga + ", odsustva=" + odsustva + ", aktivan=" + aktivan + ", aktiviran=" + aktiviran + "]";
 	}
 	
 	
