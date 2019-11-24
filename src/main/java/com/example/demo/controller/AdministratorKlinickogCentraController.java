@@ -10,6 +10,7 @@ import java.util.UUID;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.mail.MailException;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -26,6 +27,7 @@ import com.example.demo.model.Korisnik;
 import com.example.demo.model.UlogaKorisnika;
 import com.example.demo.service.AdministratorKlinickogCentraService;
 import com.example.demo.service.AdministratorKlinikeService;
+import com.example.demo.service.EmailService;
 import com.example.demo.service.KlinikaService;
 import com.example.demo.service.KorisnikService;
 
@@ -44,6 +46,9 @@ public class AdministratorKlinickogCentraController {
 	
 	@Autowired
 	AdministratorKlinikeService administratorKlinikeService;
+	
+	@Autowired
+	EmailService emailService;
 
 	@RequestMapping(value = "/novi_admin", method=RequestMethod.POST)
 	public ResponseEntity<Map<AdministratorKlinickogCentraDTO, KorisnikDTO>> dodajAdmina(@RequestBody KorisnikDTO korisnikDTO) {
@@ -60,6 +65,7 @@ public class AdministratorKlinickogCentraController {
 		korisnik.setDatumRodjenja(new Date());
 		korisnik.setUloga(UlogaKorisnika.ADMIN_CENTRA);
 		korisnik.setAktivan(false);
+		korisnik.setAktiviran(false);
 		if (korisnik.getIme() == "" || korisnik.getIme() == null){
 			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 		}
@@ -91,7 +97,7 @@ public class AdministratorKlinickogCentraController {
 		List<Korisnik> administratori = new ArrayList<Korisnik>();
 		for(AdministratorKlinickogCentra a : admini) {
 			for(Korisnik k : korisnici) {
-				if (k.getId().equals(a.getIdKorisnik()) && k.isAktivan()) {
+				if (k.getId().equals(a.getIdKorisnik()) && k.isAktiviran()) {
 					administratori.add(k);
 				}
 			}
@@ -127,6 +133,7 @@ public class AdministratorKlinickogCentraController {
 		korisnik.setTelefon(korisnikDTO.getTelefon());
 		korisnik.setJmbg((long) 3625415);
 		korisnik.setAktivan(false);
+		korisnik.setAktiviran(false);
 		List<Korisnik> admini = korisnikService.findByUloga(UlogaKorisnika.ADMIN_KLINIKE);
 		if (korisnik.getIme() == "" || korisnik.getIme() == null){
 			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
@@ -169,7 +176,7 @@ public class AdministratorKlinickogCentraController {
 		for(AdministratorKlinike a : admini) {
 			if(a.getKlinika().getId().equals(identifikacija)) {
 				for(Korisnik k : korisnici) {
-					if (k.getId().equals(a.getIdKorisnik()) && k.isAktivan()) {
+					if (k.getId().equals(a.getIdKorisnik()) && k.isAktiviran()) {
 						administratori.add(k);
 					}
 				}
@@ -196,11 +203,23 @@ public class AdministratorKlinickogCentraController {
 		}
 		korisnik.setAktivan(true);
 		Korisnik kor = korisnikService.save(korisnik);
+		try {
+			emailService.sendNotificaitionAllow(kor);
+		} catch (MailException e) {
+			// TODO Auto-generated catch block
+			System.out.println("##################### Desila se greska1" + e.getMessage());
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			System.out.println("##################### Desila se greska2");
+		}
 		return new ResponseEntity<KorisnikDTO>(new KorisnikDTO(kor), HttpStatus.OK);
 	}
 	
-	@RequestMapping(value = "/odbij/{id}", method = RequestMethod.GET)
-	public ResponseEntity<String> odbij(@PathVariable("id") Long identifikacija) {
+	@RequestMapping(value = "/odbij/{text}", method = RequestMethod.GET)
+	public ResponseEntity<String> odbij(@PathVariable("text") String text) {
+		String[] splitter = text.split("~");
+		Long identifikacija = Long.parseLong(splitter[0]);
+		String razlog = splitter[1];
 		List<Korisnik> korisnici = korisnikService.findAll();
 		Korisnik korisnik = new Korisnik();
 		for(Korisnik k : korisnici) {
@@ -209,6 +228,15 @@ public class AdministratorKlinickogCentraController {
 			}
 		}
 		korisnikService.delete(korisnik);
+		try {
+			emailService.sendNotificationDeny(korisnik, razlog);
+		} catch (MailException e) {
+			// TODO Auto-generated catch block
+			System.out.println("##################### Desila se greska1" + e.getMessage());
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			System.out.println("##################### Desila se greska2");
+		}
 		return new ResponseEntity<String>("", HttpStatus.OK);
 	}
 }

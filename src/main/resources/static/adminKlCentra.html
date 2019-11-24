@@ -331,12 +331,25 @@
          	});
 	  	}
 	  	
+	  	function odbijanje(id) {
+	  		return function() {
+		  		$('#denyText').attr('hidden', false);
+		  		$('#denyButton').attr('hidden', false);
+		  		$('#denyButton').click(odbij(id));
+	  		}
+	  	}
+	  	
 	  	function odbij(id) {
 	  		return function() {
+	  			let text = $('#denyText').val();
+	  			let url = "/admin_klinickog_centra/odbij/" + id + "~" + text;
 	  			$.ajax({
-		            url:"/admin_klinickog_centra/odbij/" + id,
+		            url: url,
 		            type:"GET",
 		            success: function() {
+		            	$('#denyText').attr('hidden', true);
+				  		$('#denyButton').attr('hidden', true);
+				  		$('#denyText').val('');
 		            	requests();
 		            },
 		            error: function() {
@@ -369,7 +382,7 @@
 	  		let tdPrihvati = $('<td><a>Accept</a></td>');
 	  		tdPrihvati.click(prihvati(korisnik.id));
 	  		let tdOdbij = $('<td><a>Deny</a></td>');
-	  		tdOdbij.click(odbij(korisnik.id));
+	  		tdOdbij.click(odbijanje(korisnik.id));
 	  		tr.append(tdIme).append(tdPrezime).append(tdEmail).append(tdPrihvati).append(tdOdbij);
 	  		$('#requestsTable tbody').append(tr);
 	  	}
@@ -669,6 +682,7 @@
 			</div>
 		</form>
 		
+		<form id="requestForm">
 		<table class="table" id="requestsTable" hidden="true">
 		<thead>
 		    <tr>
@@ -683,6 +697,9 @@
 		    
 		  </tbody>
 		</table>
+		<textarea id="denyText" hidden="true"></textarea>
+		<a id="denyButton" hidden="true">Send</a>
+		</form>
 	</div>
 
 </body>

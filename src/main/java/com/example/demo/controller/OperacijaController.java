@@ -6,7 +6,6 @@ import org.springframework.web.bind.annotation.RestController;
 import com.example.demo.service.OperacijaService;
 
 
-
 @RestController
 public class OperacijaController {
 
