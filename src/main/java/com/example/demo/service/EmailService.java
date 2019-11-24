@@ -8,6 +8,7 @@ import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Service;
 
 import com.example.demo.model.Korisnik;
+import com.example.demo.model.UlogaKorisnika;
 
 import org.springframework.mail.MailException;
 import org.springframework.mail.SimpleMailMessage;
@@ -60,9 +61,19 @@ public class EmailService {
 		mail.setTo("isaps174@gmail.com");
 		mail.setFrom(env.getProperty("spring.mail.username"));
 		mail.setSubject("Aktiviran nalog");
-		mail.setText("Poštovani/-a " + korisnik.getIme() + " " + korisnik.getPrezime() + ",\n\nvaš nalog je "
-				+ "aktiviran." 
-				+ "\n\nZa dalje korišćenje naše aplikacije idite na:\nhttp://localhost:8080/");
+		if (korisnik.getUloga().equals(UlogaKorisnika.PACIJENT)) {
+			mail.setText("Poštovani/-a " + korisnik.getIme() + " " + korisnik.getPrezime() + ",\n\nvaš nalog je "
+					+ "aktiviran." 
+					+ "\n\nZa dalje korišćenje naše aplikacije idite na:\nhttp://localhost:8080/");
+		}
+		else {
+			mail.setText("Poštovani/-a " + korisnik.getIme() + " " + korisnik.getPrezime() + ",\n\nvaš nalog je "
+					+ "aktiviran." 
+					+ "\nVaš username: " + korisnik.getUsername()
+					+ "\nVaš prvobitan password: " + korisnik.getPassword()
+					+ "\nVaš email: " + korisnik.getEmail()
+					+ "\n\nZa dalje korišćenje naše aplikacije idite na:\nhttp://localhost:8080/");
+		}
 		mail.setSentDate(new Date());
 		System.out.println(mail);
 		javaMailSender.send(mail);
