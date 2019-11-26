@@ -3,6 +3,7 @@
  */
 package com.example.demo.model;
 
+import java.sql.Timestamp;
 import java.util.Collection;
 import java.util.Date;
 import java.util.HashSet;
@@ -21,6 +22,7 @@ import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
 
+import org.joda.time.DateTime;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
@@ -61,7 +63,10 @@ public class Korisnik implements UserDetails {
 	private String adresa;
 	
 	@Column(name = "telefon")
-	private int telefon;
+	private String telefon;
+	
+	@Column(name = "last_password_reset_date")
+    private Timestamp lastPasswordResetDate;
 	
 	/*
 	 * @Column(name = "datumRodjenja", nullable = true) private Date datumRodjenja;
@@ -73,6 +78,12 @@ public class Korisnik implements UserDetails {
 	
 	@Column(name = "enabled")
     private boolean enabled;
+	
+	@Column(name = "locked")
+    private boolean locked;
+	
+	@Column(name = "expired")
+    private boolean expired;
 	
 	@ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
 	@JoinTable(name = "uloga_korisnik",
@@ -86,7 +97,7 @@ public class Korisnik implements UserDetails {
 	}
 
 	public Korisnik(String ime, String prezime, String email, String password, String grad, String drzava, Long jmbg,
-			String adresa) {
+			String adresa,String telefon) {
 		super();
 		this.ime = ime;
 		this.prezime = prezime;
@@ -96,7 +107,10 @@ public class Korisnik implements UserDetails {
 		this.drzava = drzava;
 		this.jmbg = jmbg;
 		this.adresa = adresa;
-		this.enabled = false;
+		this.telefon = telefon;
+		this.enabled = true;
+		this.locked = false;
+		this.expired = false;
 	}
 
 	public String getIme() {
@@ -123,13 +137,15 @@ public class Korisnik implements UserDetails {
 		this.email = email;
 	}
 
-	public String getPassword() {
-		return password;
-	}
+	 public String getPassword() {
+	        return password;
+	 }
 
-	public void setPassword(String password) {
-		this.password = password;
-	}
+    public void setPassword(String password) {
+        Timestamp now = new Timestamp(DateTime.now().getMillis());
+        this.setLastPasswordResetDate( now );
+        this.password = password;
+    }
 
 	public String getGrad() {
 		return grad;
@@ -138,6 +154,15 @@ public class Korisnik implements UserDetails {
 	public void setGrad(String grad) {
 		this.grad = grad;
 	}
+	
+	public String getTelefon() {
+		return telefon;
+	}
+
+	public void setTelefon(String telefon) {
+		this.telefon = telefon;
+	}
+	
 
 	public String getDrzava() {
 		return drzava;
@@ -208,7 +233,7 @@ public class Korisnik implements UserDetails {
 	@Override
 	public Collection<? extends GrantedAuthority> getAuthorities() {
 		// TODO Auto-generated method stub
-		return null;
+		return this.uloge;
 	}
 
 	@Override
@@ -220,19 +245,19 @@ public class Korisnik implements UserDetails {
 	@Override
 	public boolean isAccountNonExpired() {
 		// TODO Auto-generated method stub
-		return false;
+		return true;
 	}
 
 	@Override
 	public boolean isAccountNonLocked() {
 		// TODO Auto-generated method stub
-		return false;
+		return true;
 	}
 
 	@Override
 	public boolean isCredentialsNonExpired() {
 		// TODO Auto-generated method stub
-		return false;
+		return true;
 	}
 
 	@Override
@@ -241,6 +266,24 @@ public class Korisnik implements UserDetails {
 		return enabled;
 	}
 	
+	public void setEnabled(boolean enabled) {
+		this.enabled = enabled;
+	}
+	
+	public void setLocked(boolean locked) {
+		this.locked = locked;
+	}
+	
+	public void setExpired(boolean expired) {
+		this.expired = expired;
+	}
+	public Timestamp getLastPasswordResetDate() {
+        return lastPasswordResetDate;
+    }
+
+    public void setLastPasswordResetDate(Timestamp lastPasswordResetDate) {
+        this.lastPasswordResetDate = lastPasswordResetDate;
+    }
 	
 	
 }

@@ -75,8 +75,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 					.authorizeRequests().antMatchers("/auth/**").permitAll().antMatchers("/signup/**").permitAll().antMatchers("/**").permitAll().antMatchers("/h2-console/**").permitAll().antMatchers("/api/foo").permitAll()
 					
 					// svaki zahtev mora biti autorizovan
-					.anyRequest().authenticated().and()
-					
+					//.anyRequest().authenticated().and()
+					.and()
 					.formLogin().loginPage("/login.html");
 
 			http.csrf().disable();

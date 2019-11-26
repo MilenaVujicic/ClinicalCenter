@@ -90,6 +90,19 @@
 				</exclusion>
 			</exclusions>
 		</dependency>
+		
+		<!-- JSONWEBTOKEN (Za TokenUtils klasu) -->
+		<dependency>
+			<groupId>io.jsonwebtoken</groupId>
+			<artifactId>jjwt</artifactId>
+			<version>0.6.0</version>
+		</dependency>
+		
+		<!-- JODA TIME (Za DateTime) -->
+		<dependency>
+			<groupId>joda-time</groupId>
+			<artifactId>joda-time</artifactId>
+		</dependency>
 	</dependencies>
 
 	<build>

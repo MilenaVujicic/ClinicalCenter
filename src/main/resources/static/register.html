@@ -40,13 +40,26 @@
 			$.post(
 				url: 'auth/signup'
 				data: JSON.stringify({ime, prezime, email, adresa, grad, drzava, telefon, jmbg, password, confirm}),
-				contentType: 'application/json',
+				contentType: 'application/json; charset=utf-8',
+				dataType: 'json',
 				success: function() {
 					window.location.href = 'successRegister.html';
-				}
+				},
+				/* statusCode: {
+					401: function() {
+						alert('Pogresni uneti podaci');
+					}
+					200: function(){
+						window.location.href = 'successRegister.html';                                                                                                                                               
+					}
+					201: function(){
+						window.location.href = 'successRegister.html';                                                                                                                                               
+					}
+
+				} */
+			});
 		});
 	});
-
 	</script>
 	</head>
 	<body>

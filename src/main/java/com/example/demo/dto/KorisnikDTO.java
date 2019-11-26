@@ -144,4 +144,16 @@ public class KorisnikDTO {
 		return adresa;
 	}
 	
+	public void setGrad(String grad) {
+		this.grad = grad;
+	}
+	
+	public String getTelefon() {
+		return telefon;
+	}
+	
+	public void setTelefon(String telefon) {
+		this.telefon = telefon;
+	}
+	
 }

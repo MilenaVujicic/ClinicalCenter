@@ -54,7 +54,8 @@ public class UserService implements IUserService{
 		user.setGrad(accountDto.getGrad());
 		user.setDrzava(accountDto.getDrzava());
 		user.setJmbg(accountDto.getJmbg());
-		
+		user.setTelefon(accountDto.getTelefon());
+		user.setEnabled(true);
 		List<Uloga> uloge = ulogaKorisnikaService.findByname("PACIJENT");
 		user.setUloge(uloge);
 		

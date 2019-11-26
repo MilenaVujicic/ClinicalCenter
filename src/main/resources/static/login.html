@@ -28,18 +28,22 @@
 				let email = $('#email').val();
 				let password = $('#password').val();
 				
-				$.post({
+				$.ajax({
+					type: 'POST',
 					url:'auth/login',
 					data: JSON.stringify({email, password}),
-					contentType: 'application/json',
-					success: function() {
-						window.location = '/index.html';
+					contentType: 'application/json; charset=utf-8',
+					dataType: 'json',
+					success: function(result) {
+						alert('Success!');
 					},
-					statusCode: {
-						401: function() {
-							alert('Pogresni uneti podaci');
-						}
+					error: function() {
+						alert('Error!');
+					},
+					complete: function(result) {
+						alert('Complete!');
 					}
+					
 				});
 			});
 		});
@@ -51,7 +55,7 @@
 		<div class="container">
 			<div class="row main">
 				<div class="main-login main-center">
-					<form class="" method="post" action="auth/login">
+					<form class="auth/login" method="post" action="auth/login">
 
 						<div class="form-group">
 							<label for="email" class="cols-sm-2 control-label">Your Email</label>
@@ -74,7 +78,7 @@
 						</div>
 
 						<div class="form-group ">
-							<a target="_blank" type="button" id="button" class="btn btn-primary btn-lg btn-block login-button">Login</a>
+							<button type="submit" id="submit" class="btn btn-primary btn-lg btn-block login-button">Login</button>
 						</div>
 						
 					</form>
