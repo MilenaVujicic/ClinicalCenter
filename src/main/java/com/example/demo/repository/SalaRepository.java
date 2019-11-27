@@ -1,5 +1,26 @@
 package com.example.demo.repository;
 
-public interface SalaRepository {
+import java.util.List;
+import java.util.Optional;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.repository.JpaRepository;
+
+import com.example.demo.model.Sala;
+
+public interface SalaRepository extends JpaRepository<Sala, Long> {
+
+	Page<Sala> findAll(Pageable page);
+	
+	List<Sala> findAllByKlinika(Long id);
+	
+	Optional<Sala> findById(Long id);
+	
+	Sala findByIme(String ime);
+	
+	Sala findByOpis(String opis);
+	
+	
+	
 }

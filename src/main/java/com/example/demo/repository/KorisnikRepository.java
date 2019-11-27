@@ -1,6 +1,7 @@
 package com.example.demo.repository;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -18,5 +19,12 @@ public interface KorisnikRepository extends JpaRepository<Korisnik, Long> {
 	List<Korisnik> findByAktivan(Boolean aktivan);
 	
 	Page<Korisnik> findAll(Pageable pageable);
+	
+	List<Korisnik> findByIme(String ime);
+	
+	List<Korisnik> findByPrezime(String prezime);
+	
+	Optional<Korisnik> findById(Long Id);
+	
 	
 }

@@ -1,75 +1,72 @@
 <!DOCTYPE html>
 <html>
 <head>
-	<meta name="viewport" content="width=device-width, initial-scale=1">
-	<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+	<meta charset="UTF-8">
     <!-- This file has been downloaded from Bootsnipp.com. Enjoy! -->
     <title>Patient</title>
     <link href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.0/css/bootstrap.min.css" rel="stylesheet">
     
     <script src="./js/lib/jquery-3.3.1.min.js" type="text/javascript"></script>
     <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.0/js/bootstrap.min.js"></script>
-    <script src="./js/medicinskaSestra.js" type="text/javascript"></script>
+    <script src="./js/pacijent.js" type="text/javascript"></script>
 
 	<!-- Website CSS style -->
 	<link href="css/bootstrap.min.css" rel="stylesheet">
-	<link rel="stylesheet" href="medicinskaSestra.css">
+	<link rel="stylesheet" href="pacijent.css">
 	
 	<!-- Website Font style -->
     <script src="https://kit.fontawesome.com/a065fea601.js" crossorigin="anonymous"></script>
 	<!-- Google Fonts -->
 	<link href='https://fonts.googleapis.com/css?family=Passion+One' rel='stylesheet' type='text/css'>
 	<link href='https://fonts.googleapis.com/css?family=Oxygen' rel='stylesheet' type='text/css'>
-	<script>		
-		function prikaziKliniku(klinika) {
-			let tr = $('<tr></tr>');
-			let tdIme = $('<td>'+klinika.ime+'</td>');
-			let tdAdresa = $('<td>'+klinika.adresa+'</td>');
-			let tdOpis = $('<td>'+klinika.opis+'</td>');
-			let tdOcena = $('<td>'+klinika.prosecnaOcena+'</td>');
-			tr.append(tdIme).append(tdAdresa).append(tdOpis).append(tdOcena);
-			$('#clinicsTable tbody').append(tr);
-		}	
+	<script type="text/javascript">
+
+
+	function home(){
+		$('#patientsTable').attr('hidden', true);
+		$('#patient').attr('hidden', true);
+		$('#sSearch').attr('hidden', false);
+		document.getElementById("title").innerHTML = "";
 	
-		function home() {
-			$('#clinicsTable').attr('hidden', true);
-			$('#clinic').attr('hidden', true);
-		}
 		
-		function allClinics() {
-			$.ajax({
-	            url:"/pacijent/sveKlinike",
-	            type:"GET",
-	           	success: function(clinics){
-	           		$('#clinicsTable tbody').html('');
-	           		for (i = 0; i < clinics.length; i++) {
-	           			prikaziKliniku(clinics[i]);
-	           		}
- 	           	},
-	           	error: function() {
-	           		alert('Desila se greska');
-	           	}
-         	});
-			
-			$('#clinicsTable').attr('hidden', false);
-			$('#clinic').attr('hidden', true);
-		}
-		function personalData() {
-			$('#clinicsTable').attr('hidden', true);
-			$('#clinic').attr('hidden', true);
-		}
+	}
+	
+	
+	function searchUser(){
+		let type = $('#sSearch').val();
+		let value = $('#tfSearch').val();
+		alert(type);
+		alert(value);
+		alert(JSON.stringify({type, value}));
+		$.ajax({
+			type: "GET",
+			contentType: "application/json",
+			url: "pacijent/izmeni",
+			data: JSON.stringify({type, value}), 
+			cache: false,
+			timeout: 600000,
+			success: function(found){
+				
+				alert("Succes");
+			},
+			error: function(e){
+				console.log(e)
+				alert("error");
+			}
+		})
+	}
+
+
 	</script>
-</head>
 <body>
-	<nav class="navbar navbar-inverse">
+<nav class="navbar navbar-inverse">
 	  <div class="container-fluid">
 	    <div class="navbar-header">
-	      <a class="navbar-brand">Clinical center</a>
+	      <a class="navbar-brand">Clinical centre</a>
 	    </div>
-	    <ul class="nav navbar-nav">
-	      <li><a onclick="return home();">Home</a></li>
-	      <li><a onclick="return allClinics()">All clinics</a></li>
-	      <li><a onclick="return personalData()">Personal data</a></li>
+	    <ul class="nav navbar-nav" id = "clickList">
+	      <li><a id = "aHome" onclick = "home()" href = "#">New Seach</a></li>
 	    </ul>
 	    <ul class="nav navbar-nav navbar-right">
 	      <li><a href="#"><span class="glyphicon glyphicon-log-out"></span> Logout</a></li>
@@ -77,13 +74,24 @@
 	  </div>
 	</nav>
 	
-	<table class="table" id="clinicsTable" hidden="true">
+	<h1 id="title"></h1>
+	
+	<label id = "lSearch">Select search criteria</label>
+	<select id = "sSearch" align = "center">
+	<option id = "sIme" value = "Ime">Name</option>
+	<option id = "sPrezime" value = "Prezime">Surname</option>
+	<option id = "sBroj" value = "JedinstveniBroj">ID number</option>
+	</select>
+	<input type = "text" id = "tfSearch">
+	<input type = "submit" value = "Pretraga" id = "bPretraga" onclick = "searchUser()">
+	
+	<table class="table" id="patientsTable" hidden="true">
 	  <thead>
 	    <tr>
 	      <th scope="col">Name</th>
-	      <th scope="col">Address</th>
-	      <th scope="col">Description</th>
-	      <th scope="col">Rating</th>
+	      <th scope="col">Surname</th>
+	      <th scope="col">Date of Birth</th>
+	      <th scope="col">More</th>
 	    </tr>
 	  </thead>
 	  <tbody>
@@ -91,22 +99,34 @@
 	  </tbody>
 	</table>
 	
-	<table class="table" id="clinic" hidden="true">
+	<table class="table" id="patient" hidden="true">
 		<tr>
 			<td>Name:</td>
-			<td><input id="clinicName" readonly="readonly"></td>
+			<td><input id="patientName" readonly="readonly"></td>
 		</tr>
 		<tr>
-			<td>Address:</td>
-			<td><input id="clinicAddress" readonly="readonly"></td>
+			<td>Surname:</td>
+			<td><input id="patientSurname" readonly="readonly"></td>
 		</tr>
 		<tr>
-			<td>Description:</td>
-			<td><input id="clinicDescription" readonly="readonly"></td>
+			<td>Date of Birth:</td>
+			<td><input id="patientBirth" readonly="readonly"></td>
 		</tr>
 		<tr>
-			<td>Rating:</td>
-			<td><input id="clinicRating" readonly="readonly"></td>
+			<td>Height:</td>
+			<td><input id="patientHeight" readonly="readonly"></td>
+		</tr>
+		<tr>
+			<td>Width:</td>
+			<td><input id="patientWidth" readonly="readonly"></td>
+		</tr>
+		<tr>
+			<td>Allergies:</td>
+			<td><input id="patientAllergies" readonly="readonly"></td>
+		</tr>
+		<tr>
+			<td>Dioptre:</td>
+			<td><input id="patientDioptre" readonly="readonly"></td>
 		</tr>
 	</table>
 
