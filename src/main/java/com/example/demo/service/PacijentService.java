@@ -5,7 +5,6 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.example.demo.model.Klinika;
 import com.example.demo.model.Pacijent;
 import com.example.demo.repository.PacijentRepository;
 
@@ -19,21 +18,8 @@ public class PacijentService {
 		return pacijentRepository.findAll();
 	}
 	
-	public List<Pacijent> findAllByKlinika(Klinika klinika){
-		return pacijentRepository.findAllByKlinika(klinika);
-	}
-	
 	public Pacijent findByIdKorisnik(Long idKorisnik) {
 		return pacijentRepository.findByIdKorisnik(idKorisnik);
-	}
-	
-	
-	public Pacijent findByVisina(int visina) {
-		return pacijentRepository.findByVisina(visina);
-	}
-	
-	public Pacijent findByDioptrija(double dioptrija) {
-		return pacijentRepository.findByDioptrija(dioptrija);
 	}
 	
 }
