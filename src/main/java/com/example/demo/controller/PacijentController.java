@@ -123,4 +123,60 @@ public class PacijentController {
 			
 		return retVal;	
 	}
+	
+	public List<Object> filterByCriteria(String type, List<Korisnik> korisnici) {
+		List<Object> found = new ArrayList<Object>();
+		
+		switch(type) {
+		case "Ime":
+			found.add(1);
+			for(Korisnik k : korisnici) {
+				found.add(k.getIme());
+			}
+			break;
+		case "Prezime":
+			found.add(2);
+			for(Korisnik k : korisnici) {
+				found.add(k.getPrezime());
+			}
+			break;
+		case "JedinstveniBroj":
+			found.add(1);
+			for(Korisnik k: korisnici) {
+				found.add(k.getId());
+			}
+			break;
+		case "Ime_Prezime":
+			found.add(2);
+			for(Korisnik k : korisnici) {
+				found.add(k.getIme());
+				found.add(k.getPrezime());
+			}
+			break;
+		case "Ime_JedinstveniBroj":
+			found.add(2);
+			for(Korisnik k : korisnici) {
+				found.add(k.getIme());
+				found.add(k.getId());
+			}
+			break;
+		case "Prezime_JedinstveniBroj":
+			found.add(2);
+			for(Korisnik k: korisnici) {
+				found.add(k.getPrezime());
+				found.add(k.getId());
+			}
+			break;
+		case "Ime_Prezime_JedinstveniBroj":
+			found.add(3);
+			for(Korisnik k : korisnici) {
+				found.add(k.getIme());
+				found.add(k.getPrezime());
+				found.add(k.getId());
+			}
+			break;
+		}
+		
+		return found;
+	}
 }
