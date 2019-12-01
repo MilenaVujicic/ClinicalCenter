@@ -13,6 +13,8 @@ import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 @Entity
 public class Sala  {
 	
@@ -29,9 +31,11 @@ public class Sala  {
 	@Column(name = "opis", nullable = false)
 	private String opis;
 	
+	@JsonIgnore
 	@OneToMany(mappedBy = "sala", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 	private Set<Pregled> pregledi = new HashSet<Pregled>();
 	
+	@JsonIgnore
 	@OneToMany(mappedBy = "sala", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 	private Set<Operacija> operacije = new HashSet<Operacija>();
 	
@@ -82,6 +86,17 @@ public class Sala  {
 		this.operacije = operacije;
 	}
 	
+	
+
+	public Long getId() {
+		return id;
+	}
+
+
+	public void setId(Long id) {
+		this.id = id;
+	}
+
 
 	@Override
 	public String toString() {

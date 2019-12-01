@@ -68,7 +68,8 @@ public class PacijentController {
 	}
 	
 	@RequestMapping(value = "/izmeni", method = RequestMethod.GET, consumes = MediaType.APPLICATION_JSON_VALUE, produces="application/json")
-	public List<Pacijent> searchPatients(@RequestBody String param){
+	public ResponseEntity<List<Pacijent>> searchPatients(@RequestBody String param){
+		//DTO objekat. 
 		List<Pacijent> retVal = new ArrayList<Pacijent>();
 		System.out.println("HERE");
 		param = param.substring(1);
@@ -89,7 +90,7 @@ public class PacijentController {
 			}
 			i++;
 		}
-		return retVal ;
+		return new ResponseEntity<>(retVal, HttpStatus.OK) ;
 	}
 
 	public List<Korisnik> searchByCriteria(String type, String value) {

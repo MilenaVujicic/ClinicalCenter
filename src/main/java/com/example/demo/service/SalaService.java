@@ -17,7 +17,7 @@ public class SalaService {
 	@Autowired
 	SalaRepository salaRepository;
 	
-	public List<Sala> findAll(Pageable page){
+	public List<Sala> findAll(){
 		return salaRepository.findAll();
 	}
 	

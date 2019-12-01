@@ -1,6 +1,5 @@
 package com.example.demo.model;
 import java.util.HashSet;
-
 import java.util.Set;
 
 import javax.persistence.CascadeType;
@@ -30,15 +29,19 @@ public class Klinika {
 	@Column(name = "opis")
 	private String opis;
 	
+	@JsonIgnore
 	@OneToMany(mappedBy = "klinika", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 	private Set<Termin> slobodniTermini = new HashSet<Termin>();
 	
+	@JsonIgnore
 	@OneToMany(mappedBy = "klinika", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 	private Set<Doktor> doktori = new HashSet<Doktor>();
 	
+	@JsonIgnore
 	@OneToMany(mappedBy = "klinika", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 	private Set<Sala> sale = new HashSet<Sala>();
 	
+	@JsonIgnore
 	@OneToMany(mappedBy = "klinika", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 	private Set<Usluga> usluge = new HashSet<Usluga>();
 	
@@ -52,9 +55,11 @@ public class Klinika {
 	@OneToMany(mappedBy = "klinika", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 	private Set<AdministratorKlinike> administratoriKlinike = new HashSet<AdministratorKlinike>();
 	
+	@JsonIgnore
 	@OneToMany(mappedBy = "klinika", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 	private Set<Pacijent> pacijenti = new HashSet<Pacijent>();
 	
+	@JsonIgnore
 	@OneToMany(mappedBy = "klinika", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 	private Set<MedicinskaSestra> mediniskeSestre = new HashSet<MedicinskaSestra>();
 	

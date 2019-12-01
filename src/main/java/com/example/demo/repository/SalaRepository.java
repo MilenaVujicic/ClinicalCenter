@@ -11,7 +11,7 @@ import com.example.demo.model.Sala;
 
 public interface SalaRepository extends JpaRepository<Sala, Long> {
 
-	Page<Sala> findAll(Pageable page);
+	List<Sala> findAll();
 	
 	List<Sala> findAllByKlinika(Long id);
 	
