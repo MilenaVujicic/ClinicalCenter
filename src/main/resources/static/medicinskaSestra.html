@@ -36,6 +36,7 @@
 		           		$('#patientDioptre').val(pacijenti.dioptrija);
 		           		$('#patient').attr('hidden', false);
 		           		$('#patientsTable').attr('hidden', true);
+		           		$('#patientID').val(pacijenti.id);
 		           		document.getElementById("title").innerHTML = "Data of " + pacijent.ime + pacijent.prezime;
 	 	           	},
 		           	error: function() {
@@ -60,7 +61,56 @@
 		function home() {
 			$('#patientsTable').attr('hidden', true);
 			$('#patient').attr('hidden', true);
+			$('#recipesForm').attr('hidden', true);
+			$('#patientID').val('');
 			document.getElementById("title").innerHTML = "";
+		}
+		
+		function prikaziRecept(recept) {
+			let tr = $('<tr></tr>');
+			let tdName = $('<td>'+recept.naziv+'</td>');
+			let tdOpis = $('<td>'+recept.opis+'</td>');
+			let tdDatum = $('<td>'+recept.datumIspisa+'</td>');
+			let tdKod = $('<td>'+recept.sifraLek+'</td>');
+			let tdLek = $('<td>'+recept.lek+'</td>');
+			tr.append(tdName).append(tdOpis).append(tdDatum).append(tdKod).append(tdLek);
+			$('#recipesTable tbody').append(tr);
+		}
+		
+		function verifyAll() {
+			let id = $('#patientID').val();
+			$.ajax({
+	            url:"/medicinska_sestra/overi/" + id,
+	            type:"GET",
+	           	success: function(odgovor){
+	           		alert(odgovor);
+	           	 	home();
+ 	           	},
+	           	error: function() {
+	           		alert('Desila se greska');
+	           	}
+         	});
+		}
+		
+		function unverifiedReciped() {
+			let id = $('#patientID').val();
+			$.ajax({
+	            url:"/medicinska_sestra/recepti/" + id,
+	            type:"GET",
+	           	success: function(recepti){
+	           		document.getElementById("title").innerHTML = "Unverified recipes";
+	           		$('#recipesTable tbody').html('');
+	           		$('#recipesForm').attr('hidden', false);
+	           		for (i = 0; i < recepti.length; i++) {
+	           			prikaziRecept(recepti[i]);
+	           		}
+	           		$('#patientsTable').attr('hidden', true);
+	    			$('#patient').attr('hidden', true);
+ 	           	},
+	           	error: function() {
+	           		alert('Desila se greska');
+	           	}
+         	});
 		}
 		
 		function allPatients() {
@@ -68,11 +118,13 @@
 	            url:"/medicinska_sestra/sviPacijenti",
 	            type:"GET",
 	           	success: function(pacijenti){
-	           		$('#patientsTable tbody').html('');
 	           		document.getElementById("title").innerHTML = "All patients";
+	           		$('#patientsTable tbody').html('');
 	           		for (i = 0; i < pacijenti.length; i++) {
 	           			prikaziPacijenta(pacijenti[i]);
 	           		}
+	         
+	           		
  	           	},
 	           	error: function() {
 	           		alert('Desila se greska');
@@ -81,10 +133,12 @@
 			
 			$('#patientsTable').attr('hidden', false);
 			$('#patient').attr('hidden', true);
+			$('#recipesForm').attr('hidden', true);
 		}
 		function personalData() {
 			$('#patientsTable').attr('hidden', true);
 			$('#patient').attr('hidden', true);
+			$('#recipesForm').attr('hidden', true);
 			document.getElementById("title").innerHTML = "";
 		}
 	</script>
@@ -151,7 +205,32 @@
 			<td>Dioptre:</td>
 			<td><input id="patientDioptre" readonly="readonly"></td>
 		</tr>
+		<tr>
+			<td colspan="2"><a onclick="unverifiedReciped();">Unverified recipes</a></td>
+		</tr>
+		<tr>
+			<td colspan="2" hidden="true"><input type="text" id="patientID"></td>
+		</tr>
 	</table>
+	
+	<form id="recipesForm" hidden="true">
+		<table id="recipesTable" class="table">
+			<thead>
+				<tr>
+					<th>Name:</th>
+					<th>Describe:</th>
+					<th>Date:</th>
+					<th>Code of the drug:</th>
+					<th>Name of the drug:</th>
+				</tr>
+			</thead>
+			<tbody>
+			</tbody>
+		</table>
+		<div class="form-group ">
+				<a target="_blank" type="button" id="verifyRecipesButton" class="btn btn-primary btn-lg btn-block login-button" onclick="verifyAll();">Verify all recipes</a>
+		</div>
+	</form>
 
 </body>
 </html>

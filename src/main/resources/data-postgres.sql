@@ -11,3 +11,9 @@ insert into pacijent (id_korisnik, visina, tezina, dioptrija, klinika_id) values
 insert into administrator_klinike(id_korisnik, klinika_id) values (4, 1);
 
 insert into administrator_klinickog_centra(id_korisnik) values (3);
+
+insert into lek(sifra, ime, opis) values ('dikDUO', 'DiklofenakDUO', 'Lek protiv bolova');
+insert into lek(sifra, ime, opis) values ('levo1256', 'Levopront sirup', 'Sirup protiv kaslja');
+
+insert into recept (naziv, opis, status, datum_ispisa, sifra_lek, lek_ime, pacijent_id) values ('Recept diklofenakDUO', '2x1 na dan', 0, '2019-12-01', 'dikDUO', 'DiklofenakDUO', 1);
+insert into recept (naziv, opis, status, datum_ispisa, sifra_lek, lek_ime, pacijent_id) values ('Recept levopront', '3x1 na dan', 0, '2019-12-01', 'levo1256', 'Levopront sirup', 1);
