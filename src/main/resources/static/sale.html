@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Prikaz sala</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<meta charset="utf-8">
+    <!-- This file has been downloaded from Bootsnipp.com. Enjoy! -->
+    <title>Patient</title>
+    <link href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.0/css/bootstrap.min.css" rel="stylesheet">
+    
+    <script src="./js/lib/jquery-3.3.1.min.js" type="text/javascript"></script>
+    <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.0/js/bootstrap.min.js"></script>
+    <script src="./js/medicinskaSestra.js" type="text/javascript"></script>
+
+	<!-- Website CSS style -->
+	<link href="css/bootstrap.min.css" rel="stylesheet">
+	<link rel="stylesheet" href="sale.css">
+	
+	<!-- Website Font style -->
+    <script src="https://kit.fontawesome.com/a065fea601.js" crossorigin="anonymous"></script>
+	<!-- Google Fonts -->
+	<link href='https://fonts.googleapis.com/css?family=Passion+One' rel='stylesheet' type='text/css'>
+	<link href='https://fonts.googleapis.com/css?family=Oxygen' rel='stylesheet' type='text/css'>
+	
+	<script>
+	$(document).ready(()=>{
+		$.ajax({
+            url:"/pacijent/sveKlinike",
+            type:"GET",
+           	success: function(clinics){
+           		for (i = 0; i < clinics.length; i++) {
+           			optionKlinika(clinics[i]);
+           		} 
+           	
+	           	},
+           	error: function() {
+           		alert('Desila se greska');
+           	}
+     	});
+		
+		
+	})
+	
+	
+	
+	function optionKlinika(klinika){
+		let oName = $('<option id = \"' + klinika.ime + '\">' + klinika.ime + "</option>");
+		$("#sKlinika").append(oName);
+	}
+	
+	function sveSale(){
+		$.ajax({
+			url:"/sala/sveSale",
+            type:"GET",
+           	success: function(sale){
+           		for (i = 0; i < sale.length; i++) {
+           			prikazSala(sale[i]);
+           		}
+           		
+           		$('#tSale').attr('hidden', false);
+	           	},
+           	error: function() {
+           		alert('Desila se greska');
+           	}
+		});
+	}
+	
+	function prikazSala(sala){
+		let tr = $('<tr></tr>');
+		let tdImeSale = $('<td>' + sala.ime + '</td>');
+		let tdOpisSale = $('<td>' + sala.opis + '</td>');
+		tr.append(tdImeSale).append(tdOpisSale);
+		$('#tSale tbody').append(tr);
+		
+	}	
+	</script>
+</head>
+<body>
+<nav class="navbar navbar-inverse">
+	  <div class="container-fluid">
+	    <div class="navbar-header">
+	      <a class="navbar-brand">Clinical centre</a>
+	    </div>
+	  
+	    <ul class="nav navbar-nav navbar-right">
+	      <li><a href="#"><span class="glyphicon glyphicon-log-out"></span> Logout</a></li>
+	    </ul>
+	  </div>
+	</nav>
+	
+<label>Izbor klinike:</label>
+<select id = "sKlinika"></select>
+<button type = "button" id = "bPrikaz" onclick = "sveSale()">Prikaz sala</button>
+
+<table class="table" id="tSale" hidden="true">
+		<tr>
+			<td>Ime:</td>
+		</tr>
+		<tr>
+			<td>Opis:</td>
+		</tr>
+		
+</table>
+
+</body>
+</html>
