@@ -21,4 +21,8 @@ public class DijagnozaService {
 	public Dijagnoza save(Dijagnoza dijagnoza) {
 		return dijagnozaRepository.save(dijagnoza);
 	}
+	
+	public Dijagnoza findOne(Long id) {
+		return dijagnozaRepository.findById(id).orElse(null);
+	}
 }

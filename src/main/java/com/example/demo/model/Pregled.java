@@ -3,7 +3,7 @@
  */
 package com.example.demo.model;
 
-import java.time.LocalDateTime;
+import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -19,9 +19,8 @@ import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 
-enum StatusPregleda {
-	ZAKAZAN, ZAVRSEN, OTKAZAN
-}
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 @Entity
 public class Pregled {
 
@@ -36,7 +35,7 @@ public class Pregled {
 	private String anamneza;
 	
 	@Column(name = "DdatumIVremePregleda", nullable = false)
-	private LocalDateTime datumIVremePregleda;
+	private Date datumIVremePregleda;
 	
 	@Column(name = "tipPregleda")
 	private String tipPregleda;
@@ -89,11 +88,11 @@ public class Pregled {
 		this.anamneza = anamneza;
 	}
 
-	public LocalDateTime getDatumIVremePregleda() {
+	public Date getDatumIVremePregleda() {
 		return datumIVremePregleda;
 	}
 
-	public void setDatumIVremePregleda(LocalDateTime datumIVremePregleda) {
+	public void setDatumIVremePregleda(Date datumIVremePregleda) {
 		this.datumIVremePregleda = datumIVremePregleda;
 	}
 

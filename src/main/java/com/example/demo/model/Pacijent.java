@@ -47,6 +47,7 @@ public class Pacijent {
 	@OneToMany(mappedBy = "pacijent", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 	private Set<Recept> recepti = new HashSet<Recept>(); 
 	
+	@JsonIgnore
 	@OneToMany(mappedBy = "pacijent", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 	private Set<Pregled> pregledi = new HashSet<Pregled>();
 	

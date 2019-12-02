@@ -17,6 +17,8 @@ import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 @Entity
 public class Doktor {
 	
@@ -39,6 +41,7 @@ public class Doktor {
 	@ManyToMany(mappedBy = "doktori")
 	private Set<Operacija> operacije = new HashSet<Operacija>();
 	
+	@JsonIgnore
 	@OneToMany(mappedBy = "doktor", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 	private Set<Pregled> pregledi = new HashSet<Pregled>();
 
