@@ -16,6 +16,8 @@ import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 @Entity
 public class Pacijent {
 
@@ -35,18 +37,23 @@ public class Pacijent {
 	@Column(name = "dioptrija", nullable = false)
 	private double dioptrija;
 	
+	@JsonIgnore
 	@OneToMany(mappedBy = "pacijent", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 	private Set<Alergija> alergije = new HashSet<Alergija>();
 	
+	@JsonIgnore
 	@OneToMany(mappedBy = "pacijent", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 	private Set<Operacija> operacije = new HashSet<Operacija>();
 	
+	@JsonIgnore
 	@OneToMany(mappedBy = "pacijent", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 	private Set<Recept> recepti = new HashSet<Recept>(); 
 	
+	@JsonIgnore
 	@OneToMany(mappedBy = "pacijent", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 	private Set<Pregled> pregledi = new HashSet<Pregled>();
 	
+	@JsonIgnore
 	@ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
 	private Klinika klinika;
 	

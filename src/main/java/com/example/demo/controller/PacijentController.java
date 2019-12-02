@@ -6,17 +6,15 @@ import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.example.demo.dto.KlinikaDTO;
 import com.example.demo.dto.KorisnikDTO;
+import com.example.demo.dto.PacijentDTO;
 import com.example.demo.model.Klinika;
 import com.example.demo.model.Korisnik;
 import com.example.demo.model.Pacijent;
@@ -67,29 +65,28 @@ public class PacijentController {
 		return pacijent;
 	}
 	
-	@RequestMapping(value = "/izmeni", method = RequestMethod.GET, consumes = MediaType.APPLICATION_JSON_VALUE, produces="application/json")
-	public List<Pacijent> searchPatients(@RequestBody String param){
-		List<Pacijent> retVal = new ArrayList<Pacijent>();
-		System.out.println("HERE");
-		param = param.substring(1);
-		param = param.substring(0, param.length()-1);
-		String type = "";
-		String value = "";
-		int i = 0;
-		String[] parts = param.split(",");
-		for(String p : parts){
-			System.out.println(p);
-			String[] tokens = p.split(":");
-			if (i == 0) {
-				type = tokens[1];
-				type = type.replace("\"", "");
-			}else if(i == 1) {
-				value = tokens[1];
-				value = value.replace("\"", "");
+	@RequestMapping(value = "/searchName/{val}", method=RequestMethod.GET)
+	public ResponseEntity<List<KorisnikDTO>> searchPatientsName(@PathVariable String val){
+		List<KorisnikDTO> retVal = new ArrayList<KorisnikDTO>();
+		System.out.println(val);
+		String[] parts = val.split(":");
+		String type = parts[1];
+		String value = parts[0];
+		value = value.toLowerCase();
+		List<Korisnik> korisnici = korisnikService.findAll();
+		
+		if(type.equals("Ime")) {
+			for(Korisnik k : korisnici) {
+				if(k.getIme().toLowerCase().contains(value) || k.getIme().toLowerCase().equals(value)) {
+					System.out.println(k.getIme());
+					retVal.add(new KorisnikDTO(k));
+				}
 			}
-			i++;
 		}
-		return retVal ;
+		
+
+		
+		return new ResponseEntity<>(retVal, HttpStatus.OK);
 	}
 
 	public List<Korisnik> searchByCriteria(String type, String value) {
