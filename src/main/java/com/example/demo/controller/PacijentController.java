@@ -35,6 +35,8 @@ public class PacijentController {
 	@Autowired
 	KorisnikService korisnikService;
 	
+	private List<Korisnik> foundUsers = new ArrayList<Korisnik>();
+	
 	@RequestMapping(value = "/sveKlinike", method=RequestMethod.GET)
 	public ResponseEntity<List<KlinikaDTO>> getAllClinics() {
 		List<Klinika> clinics = klinikaService.findAll();
@@ -148,6 +150,11 @@ public class PacijentController {
 					retVal.add(k.get());
 				}
 			}
+		}
+		
+		foundUsers.clear();
+		for(Korisnik k : retVal) {
+			foundUsers.add(k);
 		}
 			
 		return retVal;	

@@ -24,6 +24,8 @@
 
 	$(document).ready(()=>{
 		document.getElementById ("bPretraga").addEventListener ("click", searchUser, false);
+		document.getElementById ("bFilter").addEventListener ("click", filterUser, false);
+
 	})
 
 	function home(){
@@ -52,12 +54,24 @@
 					$('#lFilter').attr('hidden', false);
 					$('#fSearch').attr('hidden', false);
 					$('#bFilter').attr('hidden', false);
+					$('#cIme').attr('hidden', false);
+					$('#cPrezime').attr('hidden', false);
+					$('#cBr').attr('hidden', false);
+					$('#lIme').attr('hidden', false);
+					$('#lPrezime').attr('hidden', false);
+					$('#lBr').attr('hidden', false);
 				}else{
 					alert("Pretraga nije pronasla pacijenta sa zadatim parametrima");
 					$('#patientsTable').attr('hidden', true);
 					$('#lFilter').attr('hidden', true);
 					$('#fSearch').attr('hidden', true);
 					$('#bFilter').attr('hidden', true);
+					$('#cIme').attr('hidden', true);
+					$('#cPrezime').attr('hidden', true);
+					$('#cBr').attr('hidden', true);
+					$('#lIme').attr('hidden', true);
+					$('#lPrezime').attr('hidden', true);
+					$('#lBr').attr('hidden', true);
 				}
 				for (i = 0; i < korisnici.length; i++){
 					
@@ -77,18 +91,19 @@
 		})
 	}
 	
-	function searchPacijentF(type, value){
-		
-	}
 	
 	function searchUser(){
 		let type = $('#sSearch').val();
 		let value = $('#tfSearch').val();
-		searchKorisnikF(type, value);
-		searchPacijentF(type, value);
-		
+		searchKorisnikF(type, value);		
 	}
 
+	function filterUser(){
+		let cIme = ('#cIme').val();
+		let cPrezime = ('#cPrezime').val();
+		let cBr  = ('#cBr').val();
+		alert(cIme + ' ' + cPrezime + ' ' + cBr);
+	}
 
 	</script>
 <body>
@@ -131,12 +146,10 @@
 	  </tbody>
 	</table>
 	
-	<label id = "lFilter" hidden = "true">Select Filter Criteria</label>
-	<select id = "fSearch" align = "center" hidden = "true">
-	<option id = "fIme" value = "Ime">Name</option>
-	<option id = "fPrezime" value = "Prezime">Surname</option>
-	<option id = "fBroj" value = "JedinstveniBroj">ID number</option>
-	</select>
+	<label id = "lFilter" hidden = "true">Select Filter Criteria</label><br>
+	<input type = "checkbox" id = "cIme" value = "Ime" hidden = "true"><label id = "lIme" hidden = "true">Name</label><br>
+	<input type = "checkbox" id = "cPrezime" value = Prezime hidden = "true"><label id = "lPrezime" hidden = "true">Surname</label><br>
+	<input type = "checkbox" id = "cBr" value = "JedinstveniBroj" hidden = "true"><label id = "lBr" hidden = "true">ID</label><br>
 	<button id = "bFilter" hidden = "true">Filter</button>
 </body>
 </html>
