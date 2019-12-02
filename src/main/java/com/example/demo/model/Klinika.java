@@ -30,15 +30,19 @@ public class Klinika {
 	@Column(name = "opis")
 	private String opis;
 	
+	@JsonIgnore
 	@OneToMany(mappedBy = "klinika", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 	private Set<Termin> slobodniTermini = new HashSet<Termin>();
 	
+	@JsonIgnore
 	@OneToMany(mappedBy = "klinika", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 	private Set<Doktor> doktori = new HashSet<Doktor>();
 	
+	@JsonIgnore
 	@OneToMany(mappedBy = "klinika", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 	private Set<Sala> sale = new HashSet<Sala>();
 	
+	@JsonIgnore
 	@OneToMany(mappedBy = "klinika", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 	private Set<Usluga> usluge = new HashSet<Usluga>();
 	
@@ -52,9 +56,11 @@ public class Klinika {
 	@OneToMany(mappedBy = "klinika", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 	private Set<AdministratorKlinike> administratoriKlinike = new HashSet<AdministratorKlinike>();
 	
+	@JsonIgnore
 	@OneToMany(mappedBy = "klinika", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 	private Set<Pacijent> pacijenti = new HashSet<Pacijent>();
 	
+	@JsonIgnore
 	@OneToMany(mappedBy = "klinika", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 	private Set<MedicinskaSestra> mediniskeSestre = new HashSet<MedicinskaSestra>();
 	
@@ -63,6 +69,18 @@ public class Klinika {
 		// TODO Auto-generated constructor stub
 		this.prosecnaOcena = 0;
 	}
+	
+	
+
+	public Klinika(String ime, String adresa, String opis) {
+		super();
+		this.ime = ime;
+		this.adresa = adresa;
+		this.opis = opis;
+		this.prosecnaOcena = 0;
+	}
+
+
 
 	public String getIme() {
 		return ime;

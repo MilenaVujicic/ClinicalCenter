@@ -49,13 +49,135 @@
 	      <th scope="col">#</th>
 	      <th scope="col">First Name</th>
 	      <th scope="col">Last Name</th>
+	      <th scope="col">JMBG</th>
 	      <th scope="col">Start examination</th>
+	      <th scope="col" hidden="true">ID</th>
 	    </tr>
 	  </thead>
 	  <tbody>
 	    
 	  </tbody>
 	</table>
+	
+	<form id="examinationForm" hidden="true">
+	  <div class="form-row">
+	      <div class="form-group col-md-6">
+	        <label for="patientName">Name</label>
+	        <input type="text" class="form-control" id="patientName" readonly="readonly">
+	      </div>
+	      <div class="form-group col-md-6">
+	        <label for="patientSurname">Surname</label>
+	        <input type="text" class="form-control" id="patientSurname" readonly="readonly"> 
+	      </div>
+	  </div>
+	  <div class="form-row">
+		  <div class="form-group col-md-12">
+		    <label for="patientJMBG">JMBG</label>
+		    <input type="number" class="form-control" id="patientJMBG" readonly="readonly">
+		  </div>
+	  </div>
+	  <div class="form-row">
+		  <div class="form-group col-md-12">
+		    <label for="examinationName">Examination name</label>
+		    <input type="text" class="form-control" id="examinationName">
+		  </div>
+	  </div>
+	  <div class="form-row">
+	  	<div class="form-group col-md-12">
+		  <div class="form-group shadow-textarea">
+			  <label for="exampleFormControlTextarea6">Anamnesis</label>
+			  <textarea class="form-control z-depth-1" id="examinationAnamnesis" rows="8" placeholder="Write anamnesis here..."></textarea>
+		  </div>
+		 </div>
+	  </div>
+	  <div class="form-row" id="diagnosis">
+	  	
+	  </div>
+	  <div class="form-row">
+	  	<div class="form-group col-md-4">
+	  		<button type="button" class="btn btn-dark" onclick="dodajRecept();">Add recipe</button>
+  		</div>
+  		<div class="form-group col-md-4">
+	  		<button type="button" class="btn btn-dark" onclick="dodajPregled();">Add new examination</button>
+  		</div>
+  		<div class="form-group col-md-4">
+	  		<button type="button" class="btn btn-dark" onclick="dodajOperaciju();">Add new operation</button>
+  		</div>
+	  </div>
+	  <div class="form-row">
+		  <div class="form-group col-md-12">
+		    <label for="examinationType">Examination type</label>
+		    <input type="text" class="form-control" id="examinationType">
+		  </div>
+	  </div>
+	  <div class="form-row">
+		  <div class="form-group col-md-12">
+		    <label for="examinationPrice">Price</label>
+		    <input type="number" class="form-control" id="examinationPrice">
+		  </div>
+	  </div>
+	  <div class="form-row">
+	  	<div class="form-group col-md-12">
+	  		<a type="submit" class="btn btn-primary" onclick="return saveExamination();">Save examination</a>
+  		</div>
+	  </div>
+	  <div class="form-group col-md-12" hidden="true">
+	        <label for="patientID">ID</label>
+	        <input type="text" class="form-control" id="patientID" readonly="readonly"> 
+      </div>
+	</form>
+	
+	<form id="recipeForm" hidden="true">
+		<div class="form-row">
+	      <div class="form-group col-md-4">
+	        <label for="recipePatientName">Name</label>
+	        <input type="text" class="form-control" id="recipePatientName" readonly="readonly">
+	      </div>
+	      <div class="form-group col-md-4">
+	        <label for="recipePatientSurname">Surname</label>
+	        <input type="text" class="form-control" id="recipePatientSurname" readonly="readonly"> 
+	      </div>
+	  	</div>
+	  	<div class="form-row">
+		  <div class="form-group col-md-8">
+		    <label for="recipePatientJMBG">JMBG</label>
+		    <input type="text" class="form-control" id="recipePatientJMBG" readonly="readonly">
+		  </div>
+	  	</div>
+	  	<div class="form-row">
+		  <div class="form-group col-md-8">
+		    <label for="recipeName">Recipe name</label>
+		    <input type="text" class="form-control" id="recipeName">
+		  </div>
+	  	</div>
+	  	<div class="form-row">
+	  	  <div class="form-group col-md-8">
+		    <div class="form-group shadow-textarea">
+			  <label for="recipeDescribe">Describe</label>
+			  <textarea class="form-control z-depth-1" id="recipeDescribe" rows="3" placeholder="Write something here..."></textarea>
+		    </div>
+		  </div>
+	  	</div>
+	  	<div class="form-row">
+	  		<div class="form-group col-md-12">
+		  		<select class="browser-default custom-select" id="drugs">
+		  			
+		  		</select>
+	  		</div>
+	  	</div>
+	  	<div class="form-row">
+		  <div class="form-group col-md-1">
+		  	<a class="btn btn-primary" onclick="return saveRecipe();">Save recipe</a>
+	  	  </div>
+	  	  <div class="form-group col-md-1">
+		  	<a type="button" class="btn btn-danger" onclick="return cancelRecipe();">Cancel</a>
+	  	  </div>
+	    </div>
+	    <div class="form-group col-md-12" hidden="true">
+	        <label for="recipePatientID">ID</label>
+	        <input type="text" class="form-control" id="recipePatientID" readonly="readonly"> 
+      	</div>
+	</form>
 	
 </body>
 </html>
