@@ -35,17 +35,39 @@
 		
 	}
 	
-	
-	function searchUser(){
-		let type = $('#sSearch').val();
-		let value = $('#tfSearch').val();
+	function searchKorisnikF(type, value){
+
+		if (value.length === 0){
+			alert("Niste uneli kriterijum pretrage!");
+			return;
+		}
+		
 		$.ajax({
-			url: "/pacijent/searchName/" + value + ":" + type,
+			url: "/pacijent/searchK/" + value + ":" + type,
 			type: "GET",
 			success: function(korisnici){
-				alert(korisnici.length)
+				$("#patientsTable tr").remove();
+				if(korisnici.length > 0){
+					$('#patientsTable').attr('hidden', false);
+					$('#lFilter').attr('hidden', false);
+					$('#fSearch').attr('hidden', false);
+					$('#bFilter').attr('hidden', false);
+				}else{
+					alert("Pretraga nije pronasla pacijenta sa zadatim parametrima");
+					$('#patientsTable').attr('hidden', true);
+					$('#lFilter').attr('hidden', true);
+					$('#fSearch').attr('hidden', true);
+					$('#bFilter').attr('hidden', true);
+				}
 				for (i = 0; i < korisnici.length; i++){
-					alert(korisnici[i].ime);
+					
+					let tr = $('<tr></tr>');
+					let tdIme = $('<td>' + korisnici[i].ime + '</td>');
+					let tdPrezime = $('<td>' + korisnici[i].prezime + '</td>');
+					let tdID = $('<td>' + korisnici[i].id + '</td>');
+					let tdLin = $('<td><a href = \"karton.html\">Karton pacijenta</a></td>');
+					tr.append(tdIme).append(tdPrezime).append(tdID).append(tdLin);
+					$('#patientsTable tbody').append(tr);
 				}
 			},
 			error: function(e){
@@ -53,6 +75,18 @@
 				alert("error");
 			}
 		})
+	}
+	
+	function searchPacijentF(type, value){
+		
+	}
+	
+	function searchUser(){
+		let type = $('#sSearch').val();
+		let value = $('#tfSearch').val();
+		searchKorisnikF(type, value);
+		searchPacijentF(type, value);
+		
 	}
 
 
@@ -88,7 +122,7 @@
 	    <tr>
 	      <th scope="col">Name</th>
 	      <th scope="col">Surname</th>
-	      <th scope="col">Date of Birth</th>
+	      <th scope="col">ID</th>
 	      <th scope="col">More</th>
 	    </tr>
 	  </thead>
@@ -97,36 +131,12 @@
 	  </tbody>
 	</table>
 	
-	<table class="table" id="patient" hidden="true">
-		<tr>
-			<td>Name:</td>
-			<td><input id="patientName" readonly="readonly"></td>
-		</tr>
-		<tr>
-			<td>Surname:</td>
-			<td><input id="patientSurname" readonly="readonly"></td>
-		</tr>
-		<tr>
-			<td>Date of Birth:</td>
-			<td><input id="patientBirth" readonly="readonly"></td>
-		</tr>
-		<tr>
-			<td>Height:</td>
-			<td><input id="patientHeight" readonly="readonly"></td>
-		</tr>
-		<tr>
-			<td>Width:</td>
-			<td><input id="patientWidth" readonly="readonly"></td>
-		</tr>
-		<tr>
-			<td>Allergies:</td>
-			<td><input id="patientAllergies" readonly="readonly"></td>
-		</tr>
-		<tr>
-			<td>Dioptre:</td>
-			<td><input id="patientDioptre" readonly="readonly"></td>
-		</tr>
-	</table>
-
+	<label id = "lFilter" hidden = "true">Select Filter Criteria</label>
+	<select id = "fSearch" align = "center" hidden = "true">
+	<option id = "fIme" value = "Ime">Name</option>
+	<option id = "fPrezime" value = "Prezime">Surname</option>
+	<option id = "fBroj" value = "JedinstveniBroj">ID number</option>
+	</select>
+	<button id = "bFilter" hidden = "true">Filter</button>
 </body>
 </html>

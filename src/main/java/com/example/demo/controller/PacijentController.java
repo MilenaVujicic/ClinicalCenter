@@ -14,7 +14,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.example.demo.dto.KlinikaDTO;
 import com.example.demo.dto.KorisnikDTO;
-import com.example.demo.dto.PacijentDTO;
 import com.example.demo.model.Klinika;
 import com.example.demo.model.Korisnik;
 import com.example.demo.model.Pacijent;
@@ -65,7 +64,7 @@ public class PacijentController {
 		return pacijent;
 	}
 	
-	@RequestMapping(value = "/searchName/{val}", method=RequestMethod.GET)
+	@RequestMapping(value = "/searchK/{val}", method=RequestMethod.GET)
 	public ResponseEntity<List<KorisnikDTO>> searchPatientsName(@PathVariable String val){
 		List<KorisnikDTO> retVal = new ArrayList<KorisnikDTO>();
 		System.out.println(val);
@@ -74,14 +73,47 @@ public class PacijentController {
 		String value = parts[0];
 		value = value.toLowerCase();
 		List<Korisnik> korisnici = korisnikService.findAll();
-		
+		List<Pacijent> pacijenti = pacijentService.findAll();
 		if(type.equals("Ime")) {
 			for(Korisnik k : korisnici) {
+				System.out.println(k.getIme() + " " +  k.getId());
 				if(k.getIme().toLowerCase().contains(value) || k.getIme().toLowerCase().equals(value)) {
 					System.out.println(k.getIme());
-					retVal.add(new KorisnikDTO(k));
+					for(Pacijent p : pacijenti) {
+						if(p.getId() == k.getId()) {
+							retVal.add(new KorisnikDTO(k));
+						}
+					}
+					
 				}
 			}
+		}else if(type.equals("Prezime")) {
+			for(Korisnik k: korisnici) {
+				if(k.getPrezime().toLowerCase().contains(value) || k.getPrezime().toLowerCase().equals(value)) {
+					for(Pacijent p : pacijenti) {
+						if(p.getId() == k.getId()) {
+							retVal.add(new KorisnikDTO(k));
+						}
+					}
+				}
+		
+			}
+		}else if(type.equals("JedinstveniBroj")) {
+			try {
+				Long lval = Long.parseLong(value);
+				for(Korisnik k : korisnici) {
+					if(k.getId() == lval) {
+						for(Pacijent p : pacijenti) {
+							if(p.getId() == k.getId()) {
+								retVal.add(new KorisnikDTO(k));
+							}
+						}
+					}
+				}
+			}catch(Exception e) {
+				return new ResponseEntity<>(null, HttpStatus.METHOD_NOT_ALLOWED);
+			}
+			
 		}
 		
 
