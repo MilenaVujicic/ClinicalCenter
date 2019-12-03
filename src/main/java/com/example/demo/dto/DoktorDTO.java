@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Set;
 
+import com.example.demo.model.Doktor;
 import com.example.demo.model.Odsustvo;
 import com.example.demo.model.Operacija;
 import com.example.demo.model.Pregled;
@@ -20,6 +21,10 @@ public class DoktorDTO {
 	private ArrayList<Integer> ocene = new ArrayList<Integer>();
 	private double prosecnaOcena = 0;
 	private Set<Recept> ispisaniRecepti = new HashSet<Recept>();
+	private String specijalizacija;
+	private Long idKorisnik;
+	private String ime;
+	private String prezime;
 	
 	public DoktorDTO() {
 		super();
@@ -28,7 +33,7 @@ public class DoktorDTO {
 	
 	public DoktorDTO(Long id, Set<Pregled> preglediZakazani, Set<Pregled> preglediZavrseni,
 			Set<Operacija> operacijeZakazane, Set<Operacija> operacijeZavrsene, Set<Odsustvo> odsustva,
-			ArrayList<Integer> ocene, double prosecnaOcena, Set<Recept> ispisaniRecepti) {
+			ArrayList<Integer> ocene, double prosecnaOcena, Set<Recept> ispisaniRecepti,String specijalizacija) {
 		super();
 		this.id = id;
 		this.preglediZakazani = preglediZakazani;
@@ -39,6 +44,14 @@ public class DoktorDTO {
 		this.ocene = ocene;
 		this.prosecnaOcena = prosecnaOcena;
 		this.ispisaniRecepti = ispisaniRecepti;
+		this.specijalizacija = specijalizacija;
+	}
+
+	public DoktorDTO(Doktor d) {
+		this.id = d.getId();
+		this.specijalizacija = d.getSpecijalizacija();
+		this.prosecnaOcena = d.getProsenaOcena();
+		this.idKorisnik = d.getIdKorisnik();
 	}
 
 	public Long getId() {
@@ -119,6 +132,38 @@ public class DoktorDTO {
 				+ preglediZavrseni + ", operacijeZakazane=" + operacijeZakazane + ", operacijeZavrsene="
 				+ operacijeZavrsene + ", odsustva=" + odsustva + ", ocene=" + ocene + ", prosecnaOcena=" + prosecnaOcena
 				+ ", ispisaniRecepti=" + ispisaniRecepti + "]";
+	}
+
+	public String getSpecijalizacija() {
+		return specijalizacija;
+	}
+
+	public void setSpecijalizacija(String specijalizacija) {
+		this.specijalizacija = specijalizacija;
+	}
+
+	public String getIme() {
+		return ime;
+	}
+
+	public void setIme(String ime) {
+		this.ime = ime;
+	}
+
+	public String getPrezime() {
+		return prezime;
+	}
+
+	public void setPrezime(String prezime) {
+		this.prezime = prezime;
+	}
+
+	public Long getIdKorisnik() {
+		return idKorisnik;
+	}
+
+	public void setIdKorisnik(Long idKorisnik) {
+		this.idKorisnik = idKorisnik;
 	}
 	
 	
