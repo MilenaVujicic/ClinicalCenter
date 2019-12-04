@@ -6,6 +6,7 @@ import com.example.demo.model.Klinika;
 import com.example.demo.model.Operacija;
 import com.example.demo.model.Pregled;
 import com.example.demo.model.Sala;
+import com.example.demo.model.Termin;
 
 public class SalaDTO {
 
@@ -16,10 +17,11 @@ public class SalaDTO {
 	private Set<Pregled> pregledi;
 	private Set<Operacija> operacije;
 	
+	private Set<Termin> termini;
 	
 	
 	
-	public SalaDTO(Long id, Klinika klinika, String ime, String opis, Set<Pregled> pregledi, Set<Operacija> operacije) {
+	public SalaDTO(Long id, Klinika klinika, String ime, String opis, Set<Pregled> pregledi, Set<Operacija> operacije, Set<Termin> termini) {
 		super();
 		this.id = id;
 		this.klinika = klinika;
@@ -30,7 +32,7 @@ public class SalaDTO {
 	}
 	
 	public SalaDTO(Sala s) {
-		this(s.getId(), s.getKlinika(), s.getIme(), s.getOpis(), s.getPregledi(), s.getOperacije());
+		this(s.getId(), s.getKlinika(), s.getIme(), s.getOpis(), s.getPregledi(), s.getOperacije(), s.getSlobodniTermini());
 		
 	}
 	public Long getId() {
@@ -68,6 +70,14 @@ public class SalaDTO {
 	}
 	public void setOperacije(Set<Operacija> operacije) {
 		this.operacije = operacije;
+	}
+
+	public Set<Termin> getTermini() {
+		return termini;
+	}
+
+	public void setTermini(Set<Termin> termini) {
+		this.termini = termini;
 	}
 	
 	

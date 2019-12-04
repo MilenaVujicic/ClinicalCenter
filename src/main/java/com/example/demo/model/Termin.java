@@ -25,7 +25,7 @@ public class Termin {
 	private boolean slobodan;
 	
 	@ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-	private Klinika klinika;
+	private Sala sala;
 	
 	public Termin() {
 		super();
@@ -40,12 +40,12 @@ public class Termin {
 	
 	
 
-	public Termin(Long id, Date datum, boolean slobodan, Klinika klinika) {
+	public Termin(Long id, Date datum, boolean slobodan, Sala sala) {
 		super();
 		this.id = id;
 		this.datum = datum;
 		this.slobodan = slobodan;
-		this.klinika = klinika;
+		this.sala = sala;
 	}
 
 	public Date getDatum() {
@@ -72,17 +72,17 @@ public class Termin {
 		this.id = id;
 	}
 
-	public Klinika getKlinika() {
-		return klinika;
+	public Sala getSala() {
+		return sala;
 	}
 
-	public void setKlinika(Klinika klinika) {
-		this.klinika = klinika;
+	public void setSala(Sala sala) {
+		this.sala = sala;
 	}
 
 	@Override
 	public String toString() {
-		return "Termin [id=" + id + ", datum=" + datum + ", slobodan=" + slobodan + ", klinika=" + klinika + "]";
+		return "Termin [id=" + id + ", datum=" + datum + ", slobodan=" + slobodan + ", klinika=" + sala + "]";
 	}
 	
 	

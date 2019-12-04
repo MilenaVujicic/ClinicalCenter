@@ -39,6 +39,10 @@ public class Sala  {
 	@OneToMany(mappedBy = "sala", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 	private Set<Operacija> operacije = new HashSet<Operacija>();
 	
+	@JsonIgnore
+	@OneToMany(mappedBy = "sala", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+	private Set<Termin> slobodniTermini = new HashSet<Termin>();
+	
 	public Sala() {
 		super();
 		// TODO Auto-generated constructor stub
@@ -98,11 +102,23 @@ public class Sala  {
 	}
 
 
+	public Set<Termin> getSlobodniTermini() {
+		return slobodniTermini;
+	}
+
+
+	public void setSlobodniTermini(Set<Termin> slobodniTermini) {
+		this.slobodniTermini = slobodniTermini;
+	}
+
+
 	@Override
 	public String toString() {
 		return "Sala [id=" + id + ", klinika=" + klinika + ", ime=" + ime + ", opis=" + opis + ", pregledi=" + pregledi
-				+ ", operacije=" + operacije + "]";
+				+ ", operacije=" + operacije + ", slobodniTermini=" + slobodniTermini + "]";
 	}
+
+
 	
 	
 	

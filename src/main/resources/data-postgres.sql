@@ -13,10 +13,16 @@ insert into administrator_klinike(id_korisnik, klinika_id) values (4, 1);
 
 insert into administrator_klinickog_centra(id_korisnik) values (3);
 
-insert into sala(ime, opis, klinika_id) values('Sala 1', 'Sala za opercaije', 1);
+insert into sala(ime, opis, klinika_id) values('Sala Op', 'Sala za opercaije', 1);
 insert into sala(ime, opis, klinika_id) values('Sala 2', 'Sala za preglede', 1);
 insert into sala(ime, opis, klinika_id) values('Sala 1', 'Sala 1 u novoj klinici', 2);
 
-insert into termin(datum, slobodan, klinika_id) values ('1-12-19 15:00:00', true, 1);
-insert into termin(datum, slobodan, klinika_id) values ('1-12-19 16:00:00', false, 1);
-insert into termin(datum, slobodan, klinika_id) values ('2-12-19 09:00:00', true, 2);
+insert into termin(datum, slobodan, sala_id) values ('1-22-19 9:00:00', true, 1);
+insert into termin(datum, slobodan, sala_id) values ('1-12-19 10:00:00', false, 1);
+insert into termin(datum, slobodan, sala_id) values ('1-12-19 11:30:00', true, 1);
+insert into termin(datum, slobodan, sala_id) values ('1-12-19 15:00:00', false, 2);
+insert into termin(datum, slobodan, sala_id) values ('1-12-19 16:00:00', false, 2);
+insert into termin(datum, slobodan, sala_id) values ('1-12-19 17:00:00', true, 2);
+insert into termin(datum, slobodan, sala_id) values ('1-12-19 15:00:00', true, 3);
+insert into termin(datum, slobodan, sala_id) values ('1-12-19 16:00:00', true, 3);
+insert into termin(datum, slobodan, sala_id) values ('1-12-19 17:00:00', true, 3);

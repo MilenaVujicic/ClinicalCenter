@@ -25,6 +25,9 @@
 	
 	<script>
 	$(document).ready(()=>{
+		document.getElementById ("bPrikaz").addEventListener ("click", prikazSala, false);
+		document.getElementById ("bSearch").addEventListener ("click", pretragaSala, false);
+		
 		$.ajax({
             url:"/pacijent/sveKlinike",
             type:"GET",
@@ -50,30 +53,115 @@
 	}
 	
 	function sveSale(){
+
+ 		let klinika = $("#sKlinika").val();
+ 		var s = null;
+ 		
 		$.ajax({
-			url:"/sala/sveSale",
+			url:"/sala/sveSale/" + klinika, 
             type:"GET",
+            async: false,
            	success: function(sale){
-           		for (i = 0; i < sale.length; i++) {
-           			prikazSala(sale[i]);
-           		}
-           		
-           		$('#tSale').attr('hidden', false);
+           		s = sale;
+           
 	           	},
            	error: function() {
            		alert('Desila se greska');
            	}
 		});
+ 		
+ 	
+ 		
+ 		return s
+ 
 	}
 	
-	function prikazSala(sala){
-		let tr = $('<tr></tr>');
-		let tdImeSale = $('<td>' + sala.ime + '</td>');
-		let tdOpisSale = $('<td>' + sala.opis + '</td>');
-		tr.append(tdImeSale).append(tdOpisSale);
-		$('#tSale tbody').append(tr);
+	function sviTermini(sala){
+		let t; 
 		
+		$.ajax({
+			url: "/sala/termini/" + sala.id,
+			type:"GET",
+		    async: false,
+			success: function(termini){
+				t = termini;
+			}, 
+			error: function(){
+				alert("Desila se greska");
+			}
+		})
+		
+		return t;
+	}
+	
+	function prikazSala(){
+		$('#tPSale').attr('hidden', true);
+		$('#lSearch1').attr('hidden', true);
+ 		$('#lSearch2').attr('hidden', true);
+ 		$('#tfSName').attr('hidden', true);
+ 		$('#tfSDate').attr('hidden', true);
+ 		$('#bSearch').attr('hidden', true);
+ 		brisanjeTabele();
+ 		let sale = sveSale();
+ 		let strTermini = '';
+ 		for(i = 0; i < sale.length; i++){
+ 			
+ 	
+ 		
+ 			let tr = $('<tr></tr>');
+ 		 	let tdImeSale = $('<td>'+ sale[i].ime + '</td>');
+ 		 	let tdOpisSale = $('<td>' + sale[i].opis + '</td>');
+ 			let tdTermini = $('<td><a href = \"/salaPage.html\">' + "Pregled stranice sale" + '</a></td>');
+ 			tr.append(tdImeSale).append(tdOpisSale).append(tdTermini);
+ 		 	$('#tSale tbody').append(tr);
+	
+   	
+		
+	}
+ 		$('#tSale').attr('hidden', false);
+ 		$('#lSearch1').attr('hidden', false);
+ 		$('#lSearch2').attr('hidden', false);
+ 		$('#tfSName').attr('hidden', false);
+ 		$('#tfSDate').attr('hidden', false);
+ 		$('#bSearch').attr('hidden', false);
 	}	
+	
+	function brisanjeTabele(){
+		$('#tSale tbody').empty();
+			
+	}
+	
+	function pretragaSala(){
+		let name = $('#tfSName').val();
+		let date = $('#tfSDate').val();
+		let klinika =  $("#sKlinika").val();
+		$('#tPSale tbody').empty();
+		$.ajax({
+			url: "/sala/search/" + name + ":" + date + ":" + klinika,
+			type:"GET",
+		    success: function(sale){		
+		    	$('#tPSale').attr('hidden', false);
+		    	let tr = $('<tr></tr>');
+		    	for(i = 0; i < sale.length; i++){
+		    		let tr = $('<tr></tr>');
+		    		let tdImeSale = $('<td>'+ sale[i].ime + '</td>');
+		 		 	let tdOpisSale = $('<td>' + sale[i].opis + '</td>');
+		 		 	let tdTermini = $('<td><a href = \"salaPage.html\">' + "Pregled stranice sale" + '</a></td>');
+		 		 	tr.append(tdImeSale).append(tdOpisSale).append(tdTermini);
+		 		 	$('#tPSale tbody').append(tr);
+		    	}
+	 		 	
+		 		
+		    },
+		    error: function(){
+		    	alert("Dogodila se greska");
+		    }
+			
+		})
+	}
+	
+
+	
 	</script>
 </head>
 <body>
@@ -91,17 +179,35 @@
 	
 <label>Izbor klinike:</label>
 <select id = "sKlinika"></select>
-<button type = "button" id = "bPrikaz" onclick = "sveSale()">Prikaz sala</button>
+<input type = "submit" id = "bPrikaz" value = "Prikazi">
 
 <table class="table" id="tSale" hidden="true">
-		<tr>
-			<td>Ime:</td>
-		</tr>
-		<tr>
-			<td>Opis:</td>
-		</tr>
+<thead><th><b>Naziv sale:</b></th>
+<th><b>Opis sale</b></th>
+<th><b>Slobodni termini</b></th></thead>
+
+<tbody>
 		
+</tbody>
 </table>
 
+
+<label id = "lSearch1" hidden = "true">Uneti id ili naziv prostorije: </label>
+<input type = "text" id = "tfSName" hidden = "true">
+<br>
+<label id = "lSearch2" hidden = "true">Uneti datum: </label>
+<input type = "text" id = "tfSDate" hidden = "true">
+<br>
+<input type = "submit" value = "Pretraga" id = "bSearch" hidden = "true">
+
+<table class="table" id="tPSale" hidden="true">
+<thead><th><b>Naziv sale:</b></th>
+<th><b>Opis sale</b></th>
+<th><b>Slobodni termini</b></th></thead>
+
+<tbody>
+		
+</tbody>
+</table>
 </body>
 </html>

@@ -31,10 +31,6 @@ public class Klinika {
 	
 	@JsonIgnore
 	@OneToMany(mappedBy = "klinika", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-	private Set<Termin> slobodniTermini = new HashSet<Termin>();
-	
-	@JsonIgnore
-	@OneToMany(mappedBy = "klinika", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 	private Set<Doktor> doktori = new HashSet<Doktor>();
 	
 	@JsonIgnore
@@ -93,13 +89,6 @@ public class Klinika {
 		this.opis = opis;
 	}
 
-	public Set<Termin> getSlobodniTermini() {
-		return slobodniTermini;
-	}
-
-	public void setSlobodniTermini(Set<Termin> slobodniTermini) {
-		this.slobodniTermini = slobodniTermini;
-	}
 
 	public Set<Doktor> getDoktori() {
 		return doktori;
@@ -163,8 +152,7 @@ public class Klinika {
 
 	@Override
 	public String toString() {
-		return "Klinika [id=" + id + ", ime=" + ime + ", adresa=" + adresa + ", opis=" + opis + ", slobodniTermini="
-				+ slobodniTermini + ", doktori=" + doktori + ", sale=" + sale + ", usluge=" + usluge
+		return "Klinika [id=" + id + ", ime=" + ime + ", adresa=" + adresa + ", opis=" + opis + ", doktori=" + doktori + ", sale=" + sale + ", usluge=" + usluge
 				+ ", prosecnaOcena=" + prosecnaOcena + ", administratoriKlinike=" + administratoriKlinike + "]";
 	}
 	
