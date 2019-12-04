@@ -51,9 +51,5 @@ public class KorisnikService {
 	
 	
 
-	public Korisnik findById(Long id) {
-		return korisnikRepository.findById(id).orElseGet(null);
-	}
-
 
 }

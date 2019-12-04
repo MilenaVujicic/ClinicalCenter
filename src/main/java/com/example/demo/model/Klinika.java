@@ -29,11 +29,8 @@ public class Klinika {
 	@Column(name = "opis")
 	private String opis;
 	
-	@JsonIgnore
 
-	@OneToMany(mappedBy = "klinika", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-	private Set<Termin> slobodniTermini = new HashSet<Termin>();
-	
+
 	@JsonIgnore
 	@OneToMany(mappedBy = "klinika", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 	private Set<Doktor> doktori = new HashSet<Doktor>();

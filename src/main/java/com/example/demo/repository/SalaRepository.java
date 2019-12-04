@@ -8,9 +8,6 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 import com.example.demo.model.Sala;
 
-public interface SalaRepository extends JpaRepository<Sala, Long>{
-
-
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;

@@ -171,7 +171,8 @@ public class PacijentController {
 		List<DoktorDTO> doktoriDTO = new ArrayList<>();
 		
 		for(Doktor d : doctors) {
-			Korisnik k = korisnikService.findById(d.getIdKorisnik());
+			Optional<Korisnik> kr = korisnikService.findById(d.getIdKorisnik());
+			Korisnik k = kr.get();
 			if(k.getIme().contains(ime) && k.getPrezime().contains(prezime) && d.getSpecijalizacija().contains(specijalizacija)
 					&& Double.toString(d.getProsenaOcena()).contains(prosecnaOcena))
 			{

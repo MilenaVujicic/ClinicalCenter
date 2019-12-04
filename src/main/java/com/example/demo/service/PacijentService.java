@@ -37,7 +37,7 @@ public class PacijentService {
 		return pacijentRepository.findByDioptrija(dioptrija);
 	}
 	
-}
+
 
 	public Pacijent findOne(Long id) {
 		return pacijentRepository.findById(id).orElseGet(null);

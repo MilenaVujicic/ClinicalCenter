@@ -5,16 +5,9 @@ import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
-import org.springframework.stereotype.Service;
-
-
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.example.demo.model.Klinika;
-
 import com.example.demo.model.Sala;
 import com.example.demo.repository.SalaRepository;
 
@@ -45,7 +38,6 @@ public class SalaService {
 		return salaRepository.findByOpis(opis);
 	}
 	
-}
 
 	public Sala findOne(Long id) {
 		Sala sala = new Sala();
