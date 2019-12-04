@@ -65,7 +65,7 @@ public class MedicinskaSestraController {
 		return new ResponseEntity<List<Recept>>(neovereni, HttpStatus.OK);
 	}
 	
-	@RequestMapping(value = "/overi/{id}", method = RequestMethod.GET)
+	@RequestMapping(value = "/overi/{id}", method = RequestMethod.POST)
 	public ResponseEntity<String> overa(@PathVariable("id") Long identifikacija) {
 		List<Recept> recepti = receptService.findAll();
 		for (Recept r : recepti) {

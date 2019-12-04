@@ -16,4 +16,5 @@ public interface PacijentRepository extends JpaRepository<Pacijent, Long> {
 	List<Pacijent> findAllByKlinika(Klinika klinika);
 	
 	Pacijent findByIdKorisnik(Long idKorisnik);
+	
 }

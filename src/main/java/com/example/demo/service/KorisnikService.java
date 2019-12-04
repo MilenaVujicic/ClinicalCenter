@@ -1,6 +1,7 @@
 package com.example.demo.service;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -33,6 +34,10 @@ public class KorisnikService {
 	
 	public List<Korisnik> findAll() {
 		return korisnikRepository.findAll();
+	}
+	
+	public Korisnik findById(Long id) {
+		return korisnikRepository.findById(id).orElseGet(null);
 	}
 
 }
