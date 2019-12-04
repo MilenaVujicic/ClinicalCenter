@@ -27,7 +27,7 @@
 	$(document).ready(()=>{
 		document.getElementById ("bPrikaz").addEventListener ("click", prikazSala, false);
 		document.getElementById ("bSearch").addEventListener ("click", pretragaSala, false);
-		
+		document.getElementById ("bFilter").addEventListener ("click", filtriranjeSala, false);
 		$.ajax({
             url:"/pacijent/sveKlinike",
             type:"GET",
@@ -136,6 +136,13 @@
 		let date = $('#tfSDate').val();
 		let klinika =  $("#sKlinika").val();
 		$('#tPSale tbody').empty();
+		
+		$('#lFilter').attr('hidden', false);
+ 		$('#cIme').attr('hidden', false);
+ 		$('#cOpis').attr('hidden', false);
+ 		$('#bFilter').attr('hidden', false);
+ 		$('#lIme').attr('hidden', false);
+ 		$('#lOpis').attr('hidden', false);
 		$.ajax({
 			url: "/sala/search/" + name + ":" + date + ":" + klinika,
 			type:"GET",
@@ -144,8 +151,8 @@
 		    	let tr = $('<tr></tr>');
 		    	for(i = 0; i < sale.length; i++){
 		    		let tr = $('<tr></tr>');
-		    		let tdImeSale = $('<td>'+ sale[i].ime + '</td>');
-		 		 	let tdOpisSale = $('<td>' + sale[i].opis + '</td>');
+		    		let tdImeSale = $('<td id = \"tdIme\">'+ sale[i].ime + '</td>');
+		 		 	let tdOpisSale = $('<td id = \"tdOpis\">' + sale[i].opis + '</td>');
 		 		 	let tdTermini = $('<td><a href = \"salaPage.html\">' + "Pregled stranice sale" + '</a></td>');
 		 		 	tr.append(tdImeSale).append(tdOpisSale).append(tdTermini);
 		 		 	$('#tPSale tbody').append(tr);
@@ -158,6 +165,31 @@
 		    }
 			
 		})
+	}
+	
+	function filtriranjeSala(){
+		let cIme = '';
+		let cOpis = '';
+		if($('#cIme').is(':checked')){
+			cIme = $('#cIme').val();
+		}
+		
+		if($('#cOpis').is(':checked')){
+			cOpis = $('#cOpis').val();
+		}
+		
+		var criteria = cIme + '_' + cOpis;
+		
+		if(criteria === "Ime_"){
+			$("[id=tdIme]").attr('hidden', false);
+			$("[id=tdOpis]").attr('hidden', true);
+		}else if(criteria === "_Opis"){
+			$("[id=tdIme]").attr('hidden', true);
+			$("[id=tdOpis]").attr('hidden', false);
+		}else{
+			$("[id=tdIme]").attr('hidden', false);
+			$("[id=tdOpis]").attr('hidden', false);
+		}
 	}
 	
 
@@ -201,13 +233,18 @@
 <input type = "submit" value = "Pretraga" id = "bSearch" hidden = "true">
 
 <table class="table" id="tPSale" hidden="true">
-<thead><th><b>Naziv sale:</b></th>
-<th><b>Opis sale</b></th>
+<thead><th id = "tdIme"><b>Naziv sale:</b></th>
+<th id = "tdOpis"><b>Opis sale</b></th>
 <th><b>Slobodni termini</b></th></thead>
 
 <tbody>
 		
 </tbody>
 </table>
+<br>
+<label id = "lFilter" hidden = "true">Izabrati kriterijum filtriranja</label><br>
+	<input type = "checkbox" id = "cIme" value = "Ime" hidden = "true"><label id = "lIme" hidden = "true">Naziv</label><br>
+	<input type = "checkbox" id = "cOpis" value = Opis hidden = "true"><label id = "lOpis" hidden = "true">Opis</label><br>
+	<input type = "submit" value = "filter" id = "bFilter" hidden = "true">
 </body>
 </html>
