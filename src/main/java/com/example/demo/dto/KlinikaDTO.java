@@ -15,7 +15,6 @@ public class KlinikaDTO {
 	private String ime;	
 	private String adresa;
 	private String opis;
-	private Set<Termin> slobodniTermini;
 	private Set<AdministratorKlinike> administratori;
 	private Set<Doktor> doktori;
 	private Set<Sala> sale;
@@ -27,14 +26,13 @@ public class KlinikaDTO {
 		// TODO Auto-generated constructor stub
 	}
 
-	public KlinikaDTO(Long id, String ime, String adresa, String opis, Set<Termin> slobodniTermini, Set<AdministratorKlinike> administratori, Set<Doktor> doktori,
+	public KlinikaDTO(Long id, String ime, String adresa, String opis, Set<AdministratorKlinike> administratori, Set<Doktor> doktori,
 			Set<Sala> sale, Set<Usluga> usluge, double prosecnaOcena) {
 		super();
 		this.id = id;
 		this.ime = ime;
 		this.adresa = adresa;
 		this.opis = opis;
-		this.slobodniTermini = slobodniTermini;
 		this.administratori = administratori;
 		this.doktori = doktori;
 		this.sale = sale;
@@ -43,13 +41,12 @@ public class KlinikaDTO {
 	}
 
 
-	public KlinikaDTO(String ime, String adresa, String opis, Set<Termin> slobodniTermini, Set<Doktor> doktori,
+	public KlinikaDTO(String ime, String adresa, String opis, Set<Doktor> doktori,
 			Set<Sala> sale, Set<Usluga> usluge, double prosecnaOcena) {
 		super();
 		this.ime = ime;
 		this.adresa = adresa;
 		this.opis = opis;
-		this.slobodniTermini = slobodniTermini;
 		this.doktori = doktori;
 		this.sale = sale;
 		this.usluge = usluge;
@@ -57,7 +54,7 @@ public class KlinikaDTO {
 	}
 
 	public KlinikaDTO(Klinika k) {
-		this(k.getId(), k.getIme(), k.getAdresa(), k.getOpis(), k.getSlobodniTermini(), k.getAdministratoriKlinike(), k.getDoktori(), k.getSale(), k.getUsluge(), k.getProsecnaOcena());
+		this(k.getId(), k.getIme(), k.getAdresa(), k.getOpis(), k.getAdministratoriKlinike(), k.getDoktori(), k.getSale(), k.getUsluge(), k.getProsecnaOcena());
 	}
 
 	public String getIme() {
@@ -82,14 +79,6 @@ public class KlinikaDTO {
 
 	public void setOpis(String opis) {
 		this.opis = opis;
-	}
-
-	public Set<Termin> getSlobodniTermini() {
-		return slobodniTermini;
-	}
-
-	public void setSlobodniTermini(Set<Termin> slobodniTermini) {
-		this.slobodniTermini = slobodniTermini;
 	}
 
 	public Set<Doktor> getDoktori() {
@@ -134,8 +123,7 @@ public class KlinikaDTO {
 
 	@Override
 	public String toString() {
-		return "KlinikaDTO [id=" + id + ", ime=" + ime + ", adresa=" + adresa + ", opis=" + opis + ", slobodniTermini="
-				+ slobodniTermini + ", doktori=" + doktori + ", sale=" + sale + ", usluge=" + usluge
+		return "KlinikaDTO [id=" + id + ", ime=" + ime + ", adresa=" + adresa + ", opis=" + opis + ", doktori=" + doktori + ", sale=" + sale + ", usluge=" + usluge
 				+ ", prosecnaOcena=" + prosecnaOcena + "]";
 	}
 	
