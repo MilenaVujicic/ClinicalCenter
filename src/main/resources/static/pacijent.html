@@ -73,15 +73,20 @@
 					$('#lPrezime').attr('hidden', true);
 					$('#lBr').attr('hidden', true);
 				}
+				let tdHead = $('<th id = "tdIme"><b>Ime</b></th><th id = "tdPrezime"><b>Prezime</b></th><th id = "tdID"><b>Jedinstveni Broj</b></th><th id = "tdLink"><b>Karton</b></th>');
+				$('#patientsTable thead').append(tdHead);
 				for (i = 0; i < korisnici.length; i++){
 					
 					let tr = $('<tr></tr>');
-					let tdIme = $('<td>' + korisnici[i].ime + '</td>');
-					let tdPrezime = $('<td>' + korisnici[i].prezime + '</td>');
-					let tdID = $('<td>' + korisnici[i].id + '</td>');
+					
+					let tdIme = $('<td id = \"tdIme\">' + korisnici[i].ime + '</td>');
+					let tdPrezime = $('<td id = \"tdPrezime\">' + korisnici[i].prezime + '</td>');
+					let tdID = $('<td id = \"tdID\">' + korisnici[i].id + '</td>');
 					let tdLin = $('<td><a href = \"karton.html\">Karton pacijenta</a></td>');
 					tr.append(tdIme).append(tdPrezime).append(tdID).append(tdLin);
+					
 					$('#patientsTable tbody').append(tr);
+					
 				}
 			},
 			error: function(e){
@@ -99,10 +104,55 @@
 	}
 
 	function filterUser(){
-		let cIme = ('#cIme').val();
-		let cPrezime = ('#cPrezime').val();
-		let cBr  = ('#cBr').val();
-		alert(cIme + ' ' + cPrezime + ' ' + cBr);
+		let cIme = '';
+		let cPrezime = '';
+		let cBr = '';
+		if($('#cIme').is(':checked')){
+			cIme = $('#cIme').val();
+		}
+			
+		if($('#cPrezime').is(':checked')){
+			cPrezime = $('#cPrezime').val();
+		}
+			
+		if($('#cBr').is(':checked')){	
+			cBr  = $('#cBr').val();
+		}
+		
+		var criteria = cIme + '_' + cPrezime + '_' + cBr;
+
+		if(criteria === "Ime__"){
+			$("[id=tdIme]").attr('hidden', false);
+			$("[id=tdPrezime]").attr('hidden', true);
+			$("[id=tdID]").attr('hidden', true);
+		}else if(criteria === "_Prezime_"){
+			$("[id=tdIme]").attr('hidden', true);
+			$("[id=tdPrezime]").attr('hidden', false);
+			$("[id=tdID]").attr('hidden', true);
+		}else if(criteria === "__JedinstveniBroj"){
+			$("[id=tdIme]").attr('hidden', true);
+			$("[id=tdPrezime]").attr('hidden', true);
+			$("[id=tdID]").attr('hidden', false);
+		}else if(criteria ==="Ime_Prezime_"){
+			$("[id=tdIme]").attr('hidden', false);
+			$("[id=tdPrezime]").attr('hidden', false);
+			$("[id=tdID]").attr('hidden', true);
+		}else if(criteria === "Ime__JedinstveniBroj"){
+			$("[id=tdIme]").attr('hidden', false);
+			$("[id=tdPrezime]").attr('hidden', true);
+			$("[id=tdID]").attr('hidden', false);
+		}else if(criteria ==="_Prezime_JedinstveniBroj"){
+			$("[id=tdIme]").attr('hidden', true);
+			$("[id=tdPrezime]").attr('hidden', false);
+			$("[id=tdID]").attr('hidden', false);
+		}else if(criteria === "Ime_Prezime_JedinstveniBroj"){
+			$("[id=tdIme]").attr('hidden', false);
+			$("[id=tdPrezime]").attr('hidden', false);
+			$("[id=tdID]").attr('hidden', false);
+		}else{
+			alert("Odabrati kriterijum filtriranja")
+		}
+		
 	}
 
 	</script>
@@ -142,6 +192,7 @@
 	    </tr>
 	  </thead>
 	  <tbody>
+
 	    
 	  </tbody>
 	</table>
@@ -150,6 +201,6 @@
 	<input type = "checkbox" id = "cIme" value = "Ime" hidden = "true"><label id = "lIme" hidden = "true">Name</label><br>
 	<input type = "checkbox" id = "cPrezime" value = Prezime hidden = "true"><label id = "lPrezime" hidden = "true">Surname</label><br>
 	<input type = "checkbox" id = "cBr" value = "JedinstveniBroj" hidden = "true"><label id = "lBr" hidden = "true">ID</label><br>
-	<button id = "bFilter" hidden = "true">Filter</button>
+	<input type = "submit" value = "filter" id = "bFilter" hidden = "true">
 </body>
 </html>
