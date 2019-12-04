@@ -18,7 +18,7 @@ public interface KorisnikRepository extends JpaRepository<Korisnik, Long> {
 	
 	List<Korisnik> findByAktivan(Boolean aktivan);
 	
-	Page<Korisnik> findAll(Pageable pageable);
+	Page<Korisnik> findAll(Pageable pageable);	
 	
 	List<Korisnik> findByIme(String ime);
 	

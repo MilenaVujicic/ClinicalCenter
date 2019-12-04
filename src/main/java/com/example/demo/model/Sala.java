@@ -13,6 +13,8 @@ import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 @Entity
 public class Sala  {
 	
@@ -26,14 +28,20 @@ public class Sala  {
 	@Column(name = "ime", nullable = false)
 	private String ime;
 	
-	@Column(name = "opis", nullable = false)
+	@Column(name = "opis")
 	private String opis;
 	
+	@JsonIgnore
 	@OneToMany(mappedBy = "sala", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 	private Set<Pregled> pregledi = new HashSet<Pregled>();
 	
+	@JsonIgnore
 	@OneToMany(mappedBy = "sala", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 	private Set<Operacija> operacije = new HashSet<Operacija>();
+	
+	@JsonIgnore
+	@OneToMany(mappedBy = "sala", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+	private Set<Termin> slobodniTermini = new HashSet<Termin>();
 	
 	public Sala() {
 		super();
@@ -82,12 +90,35 @@ public class Sala  {
 		this.operacije = operacije;
 	}
 	
+	
+
+	public Long getId() {
+		return id;
+	}
+
+
+	public void setId(Long id) {
+		this.id = id;
+	}
+
+
+	public Set<Termin> getSlobodniTermini() {
+		return slobodniTermini;
+	}
+
+
+	public void setSlobodniTermini(Set<Termin> slobodniTermini) {
+		this.slobodniTermini = slobodniTermini;
+	}
+
 
 	@Override
 	public String toString() {
 		return "Sala [id=" + id + ", klinika=" + klinika + ", ime=" + ime + ", opis=" + opis + ", pregledi=" + pregledi
-				+ ", operacije=" + operacije + "]";
+				+ ", operacije=" + operacije + ", slobodniTermini=" + slobodniTermini + "]";
 	}
+
+
 	
 	
 	

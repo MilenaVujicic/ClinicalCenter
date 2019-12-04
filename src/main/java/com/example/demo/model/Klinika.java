@@ -1,6 +1,5 @@
 package com.example.demo.model;
 import java.util.HashSet;
-
 import java.util.Set;
 
 import javax.persistence.CascadeType;
@@ -30,15 +29,17 @@ public class Klinika {
 	@Column(name = "opis")
 	private String opis;
 	
-	@OneToMany(mappedBy = "klinika", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-	private Set<Termin> slobodniTermini = new HashSet<Termin>();
-	
+
+
+	@JsonIgnore
 	@OneToMany(mappedBy = "klinika", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 	private Set<Doktor> doktori = new HashSet<Doktor>();
 	
+	@JsonIgnore
 	@OneToMany(mappedBy = "klinika", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 	private Set<Sala> sale = new HashSet<Sala>();
 	
+	@JsonIgnore
 	@OneToMany(mappedBy = "klinika", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 	private Set<Usluga> usluge = new HashSet<Usluga>();
 	
@@ -52,9 +53,11 @@ public class Klinika {
 	@OneToMany(mappedBy = "klinika", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 	private Set<AdministratorKlinike> administratoriKlinike = new HashSet<AdministratorKlinike>();
 	
+	@JsonIgnore
 	@OneToMany(mappedBy = "klinika", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 	private Set<Pacijent> pacijenti = new HashSet<Pacijent>();
 	
+	@JsonIgnore
 	@OneToMany(mappedBy = "klinika", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 	private Set<MedicinskaSestra> mediniskeSestre = new HashSet<MedicinskaSestra>();
 	
@@ -63,6 +66,18 @@ public class Klinika {
 		// TODO Auto-generated constructor stub
 		this.prosecnaOcena = 0;
 	}
+	
+	
+
+	public Klinika(String ime, String adresa, String opis) {
+		super();
+		this.ime = ime;
+		this.adresa = adresa;
+		this.opis = opis;
+		this.prosecnaOcena = 0;
+	}
+
+
 
 	public String getIme() {
 		return ime;
@@ -88,13 +103,6 @@ public class Klinika {
 		this.opis = opis;
 	}
 
-	public Set<Termin> getSlobodniTermini() {
-		return slobodniTermini;
-	}
-
-	public void setSlobodniTermini(Set<Termin> slobodniTermini) {
-		this.slobodniTermini = slobodniTermini;
-	}
 
 	public Set<Doktor> getDoktori() {
 		return doktori;
@@ -158,8 +166,7 @@ public class Klinika {
 
 	@Override
 	public String toString() {
-		return "Klinika [id=" + id + ", ime=" + ime + ", adresa=" + adresa + ", opis=" + opis + ", slobodniTermini="
-				+ slobodniTermini + ", doktori=" + doktori + ", sale=" + sale + ", usluge=" + usluge
+		return "Klinika [id=" + id + ", ime=" + ime + ", adresa=" + adresa + ", opis=" + opis + ", doktori=" + doktori + ", sale=" + sale + ", usluge=" + usluge
 				+ ", prosecnaOcena=" + prosecnaOcena + ", administratoriKlinike=" + administratoriKlinike + "]";
 	}
 	

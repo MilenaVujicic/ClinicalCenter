@@ -3,7 +3,7 @@
  */
 package com.example.demo.dto;
 
-import java.time.LocalDateTime;
+import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -11,11 +11,10 @@ import com.example.demo.model.Dijagnoza;
 import com.example.demo.model.Doktor;
 import com.example.demo.model.Lek;
 import com.example.demo.model.Pacijent;
+import com.example.demo.model.Pregled;
 import com.example.demo.model.Sala;
+import com.example.demo.model.StatusPregleda;
 
-enum StatusPregleda {
-	ZAKAZAN, ZAVRSEN
-}
 
 public class PregledDTO {
 
@@ -23,11 +22,11 @@ public class PregledDTO {
 	private String naziv;
 	private String anamneza;
 	private Pacijent pacijent;
-	private LocalDateTime datumIVremePregleda;
+	private Date datumIVremePregleda;
 	private String tipPregleda;
 	private int duzina;
 	private Sala sala;
-	private Set<Doktor> doktori = new HashSet<Doktor>();
+	private Doktor doktori;
 	private double cena;
 	private Set<Dijagnoza> dijagnoze = new HashSet<Dijagnoza>();
 	private Set<Lek> lekovi = new HashSet<Lek>();
@@ -38,8 +37,8 @@ public class PregledDTO {
 		// TODO Auto-generated constructor stub
 	}
 
-	public PregledDTO(Long id, String naziv, String anamneza, Pacijent pacijent, LocalDateTime datumIVremePregleda,
-			String tipPregleda, int duzina, Sala sala, Set<Doktor> doktori, double cena, Set<Dijagnoza> dijagnoze,
+	public PregledDTO(Long id, String naziv, String anamneza, Pacijent pacijent, Date datumIVremePregleda,
+			String tipPregleda, int duzina, Sala sala, Doktor doktori, double cena, Set<Dijagnoza> dijagnoze,
 			Set<Lek> lekovi, StatusPregleda status) {
 		super();
 		this.id = id;
@@ -55,6 +54,20 @@ public class PregledDTO {
 		this.dijagnoze = dijagnoze;
 		this.lekovi = lekovi;
 		this.status = status;
+	}
+	
+	public PregledDTO(Pregled p) {
+		this.id = p.getId();
+		this.naziv = p.getNaziv();
+		this.anamneza = p.getAnamneza();
+		this.pacijent = p.getPacijent();
+		this.datumIVremePregleda = p.getDatumIVremePregleda();
+		this.tipPregleda = p.getTipPregleda();
+		this.sala = p.getSala();
+		this.doktori = p.getDoktor();
+		this.cena = p.getCena();
+		this.dijagnoze = p.getDijagnoze();
+		this.status = p.getStatus();
 	}
 
 	public Long getId() {
@@ -89,11 +102,11 @@ public class PregledDTO {
 		this.pacijent = pacijent;
 	}
 
-	public LocalDateTime getDatumIVremePregleda() {
+	public Date getDatumIVremePregleda() {
 		return datumIVremePregleda;
 	}
 
-	public void setDatumIVremePregleda(LocalDateTime datumIVremePregleda) {
+	public void setDatumIVremePregleda(Date datumIVremePregleda) {
 		this.datumIVremePregleda = datumIVremePregleda;
 	}
 
@@ -121,11 +134,11 @@ public class PregledDTO {
 		this.sala = sala;
 	}
 
-	public Set<Doktor> getDoktori() {
+	public Doktor getDoktori() {
 		return doktori;
 	}
 
-	public void setDoktori(Set<Doktor> doktori) {
+	public void setDoktori(Doktor doktori) {
 		this.doktori = doktori;
 	}
 

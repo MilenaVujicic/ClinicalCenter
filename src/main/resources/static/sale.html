@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Prikaz sala</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<meta charset="utf-8">
+    <!-- This file has been downloaded from Bootsnipp.com. Enjoy! -->
+    <title>Patient</title>
+    <link href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.0/css/bootstrap.min.css" rel="stylesheet">
+    
+    <script src="./js/lib/jquery-3.3.1.min.js" type="text/javascript"></script>
+    <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.0/js/bootstrap.min.js"></script>
+    <script src="./js/medicinskaSestra.js" type="text/javascript"></script>
+
+	<!-- Website CSS style -->
+	<link href="css/bootstrap.min.css" rel="stylesheet">
+	<link rel="stylesheet" href="sale.css">
+	
+	<!-- Website Font style -->
+    <script src="https://kit.fontawesome.com/a065fea601.js" crossorigin="anonymous"></script>
+	<!-- Google Fonts -->
+	<link href='https://fonts.googleapis.com/css?family=Passion+One' rel='stylesheet' type='text/css'>
+	<link href='https://fonts.googleapis.com/css?family=Oxygen' rel='stylesheet' type='text/css'>
+	
+	<script>
+	$(document).ready(()=>{
+		document.getElementById ("bPrikaz").addEventListener ("click", prikazSala, false);
+		document.getElementById ("bSearch").addEventListener ("click", pretragaSala, false);
+		document.getElementById ("bFilter").addEventListener ("click", filtriranjeSala, false);
+		$.ajax({
+            url:"/pacijent/sveKlinike",
+            type:"GET",
+           	success: function(clinics){
+           		for (i = 0; i < clinics.length; i++) {
+           			optionKlinika(clinics[i]);
+           		} 
+           	
+	           	},
+           	error: function() {
+           		alert('Desila se greska');
+           	}
+     	});
+		
+		
+	})
+	
+	
+	
+	function optionKlinika(klinika){
+		let oName = $('<option id = \"' + klinika.ime + '\">' + klinika.ime + "</option>");
+		$("#sKlinika").append(oName);
+	}
+	
+	function sveSale(){
+
+ 		let klinika = $("#sKlinika").val();
+ 		var s = null;
+ 		
+		$.ajax({
+			url:"/sala/sveSale/" + klinika, 
+            type:"GET",
+            async: false,
+           	success: function(sale){
+           		s = sale;
+           
+	           	},
+           	error: function() {
+           		alert('Desila se greska');
+           	}
+		});
+ 		
+ 	
+ 		
+ 		return s
+ 
+	}
+	
+	function sviTermini(sala){
+		let t; 
+		
+		$.ajax({
+			url: "/sala/termini/" + sala.id,
+			type:"GET",
+		    async: false,
+			success: function(termini){
+				t = termini;
+			}, 
+			error: function(){
+				alert("Desila se greska");
+			}
+		})
+		
+		return t;
+	}
+	
+	function prikazSala(){
+		$('#tPSale').attr('hidden', true);
+		$('#lSearch1').attr('hidden', true);
+ 		$('#lSearch2').attr('hidden', true);
+ 		$('#tfSName').attr('hidden', true);
+ 		$('#tfSDate').attr('hidden', true);
+ 		$('#bSearch').attr('hidden', true);
+ 		brisanjeTabele();
+ 		let sale = sveSale();
+ 		let strTermini = '';
+ 		for(i = 0; i < sale.length; i++){
+ 			
+ 	
+ 		
+ 			let tr = $('<tr></tr>');
+ 		 	let tdImeSale = $('<td>'+ sale[i].ime + '</td>');
+ 		 	let tdOpisSale = $('<td>' + sale[i].opis + '</td>');
+ 			let tdTermini = $('<td><a href = \"/salaPage.html\">' + "Pregled stranice sale" + '</a></td>');
+ 			tr.append(tdImeSale).append(tdOpisSale).append(tdTermini);
+ 		 	$('#tSale tbody').append(tr);
+	
+   	
+		
+	}
+ 		$('#tSale').attr('hidden', false);
+ 		$('#lSearch1').attr('hidden', false);
+ 		$('#lSearch2').attr('hidden', false);
+ 		$('#tfSName').attr('hidden', false);
+ 		$('#tfSDate').attr('hidden', false);
+ 		$('#bSearch').attr('hidden', false);
+	}	
+	
+	function brisanjeTabele(){
+		$('#tSale tbody').empty();
+			
+	}
+	
+	function pretragaSala(){
+		let name = $('#tfSName').val();
+		let date = $('#tfSDate').val();
+		let klinika =  $("#sKlinika").val();
+		$('#tPSale tbody').empty();
+		
+		$('#lFilter').attr('hidden', false);
+ 		$('#cIme').attr('hidden', false);
+ 		$('#cOpis').attr('hidden', false);
+ 		$('#bFilter').attr('hidden', false);
+ 		$('#lIme').attr('hidden', false);
+ 		$('#lOpis').attr('hidden', false);
+		$.ajax({
+			url: "/sala/search/" + name + ":" + date + ":" + klinika,
+			type:"GET",
+		    success: function(sale){		
+		    	$('#tPSale').attr('hidden', false);
+		    	let tr = $('<tr></tr>');
+		    	for(i = 0; i < sale.length; i++){
+		    		let tr = $('<tr></tr>');
+		    		let tdImeSale = $('<td id = \"tdIme\">'+ sale[i].ime + '</td>');
+		 		 	let tdOpisSale = $('<td id = \"tdOpis\">' + sale[i].opis + '</td>');
+		 		 	let tdTermini = $('<td><a href = \"salaPage.html\">' + "Pregled stranice sale" + '</a></td>');
+		 		 	tr.append(tdImeSale).append(tdOpisSale).append(tdTermini);
+		 		 	$('#tPSale tbody').append(tr);
+		    	}
+	 		 	
+		 		
+		    },
+		    error: function(){
+		    	alert("Dogodila se greska");
+		    }
+			
+		})
+	}
+	
+	function filtriranjeSala(){
+		let cIme = '';
+		let cOpis = '';
+		if($('#cIme').is(':checked')){
+			cIme = $('#cIme').val();
+		}
+		
+		if($('#cOpis').is(':checked')){
+			cOpis = $('#cOpis').val();
+		}
+		
+		var criteria = cIme + '_' + cOpis;
+		
+		if(criteria === "Ime_"){
+			$("[id=tdIme]").attr('hidden', false);
+			$("[id=tdOpis]").attr('hidden', true);
+		}else if(criteria === "_Opis"){
+			$("[id=tdIme]").attr('hidden', true);
+			$("[id=tdOpis]").attr('hidden', false);
+		}else{
+			$("[id=tdIme]").attr('hidden', false);
+			$("[id=tdOpis]").attr('hidden', false);
+		}
+	}
+	
+
+	
+	</script>
+</head>
+<body>
+<nav class="navbar navbar-inverse">
+	  <div class="container-fluid">
+	    <div class="navbar-header">
+	      <a class="navbar-brand">Clinical centre</a>
+	    </div>
+	  
+	    <ul class="nav navbar-nav navbar-right">
+	      <li><a href="#"><span class="glyphicon glyphicon-log-out"></span> Logout</a></li>
+	    </ul>
+	  </div>
+	</nav>
+	
+<label>Izbor klinike:</label>
+<select id = "sKlinika"></select>
+<input type = "submit" id = "bPrikaz" value = "Prikazi">
+
+<table class="table" id="tSale" hidden="true">
+<thead><th><b>Naziv sale:</b></th>
+<th><b>Opis sale</b></th>
+<th><b>Slobodni termini</b></th></thead>
+
+<tbody>
+		
+</tbody>
+</table>
+
+
+<label id = "lSearch1" hidden = "true">Uneti id ili naziv prostorije: </label>
+<input type = "text" id = "tfSName" hidden = "true">
+<br>
+<label id = "lSearch2" hidden = "true">Uneti datum: </label>
+<input type = "text" id = "tfSDate" hidden = "true">
+<br>
+<input type = "submit" value = "Pretraga" id = "bSearch" hidden = "true">
+
+<table class="table" id="tPSale" hidden="true">
+<thead><th id = "tdIme"><b>Naziv sale:</b></th>
+<th id = "tdOpis"><b>Opis sale</b></th>
+<th><b>Slobodni termini</b></th></thead>
+
+<tbody>
+		
+</tbody>
+</table>
+<br>
+<label id = "lFilter" hidden = "true">Izabrati kriterijum filtriranja</label><br>
+	<input type = "checkbox" id = "cIme" value = "Ime" hidden = "true"><label id = "lIme" hidden = "true">Naziv</label><br>
+	<input type = "checkbox" id = "cOpis" value = Opis hidden = "true"><label id = "lOpis" hidden = "true">Opis</label><br>
+	<input type = "submit" value = "filter" id = "bFilter" hidden = "true">
+</body>
+</html>

@@ -36,6 +36,7 @@ public class KorisnikService {
 		return korisnikRepository.findAll();
 	}
 	
+
 	public List<Korisnik> findByIme(String ime){
 		return korisnikRepository.findByIme(ime);
 	}
@@ -49,5 +50,6 @@ public class KorisnikService {
 	}
 	
 	
+
 
 }

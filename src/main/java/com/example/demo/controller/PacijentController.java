@@ -10,10 +10,15 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
 
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseStatus;
+
+import org.springframework.web.bind.annotation.RestController;
+import com.example.demo.dto.DoktorDTO;
 import com.example.demo.dto.KlinikaDTO;
 import com.example.demo.dto.KorisnikDTO;
+import com.example.demo.model.Doktor;
 import com.example.demo.model.Klinika;
 import com.example.demo.model.Korisnik;
 import com.example.demo.model.Pacijent;
@@ -21,6 +26,8 @@ import com.example.demo.model.UlogaKorisnika;
 import com.example.demo.service.KlinikaService;
 import com.example.demo.service.KorisnikService;
 import com.example.demo.service.PacijentService;
+import com.example.demo.service.DoktorService;
+
 
 @RestController
 @RequestMapping(value = "pacijent")
@@ -30,13 +37,19 @@ public class PacijentController {
 	KlinikaService klinikaService;
 	
 	@Autowired
+
 	PacijentService pacijentService;
+
+	DoktorService doktorService;
+
 	
 	@Autowired
 	KorisnikService korisnikService;
 	
+
 	private List<Korisnik> foundUsers = new ArrayList<Korisnik>();
 	
+
 	@RequestMapping(value = "/sveKlinike", method=RequestMethod.GET)
 	public ResponseEntity<List<KlinikaDTO>> getAllClinics() {
 		List<Klinika> clinics = klinikaService.findAll();
@@ -48,6 +61,7 @@ public class PacijentController {
 		return new ResponseEntity<>(klinikaDTO, HttpStatus.OK);
 	}
 	
+
 	@RequestMapping(value = "/listaPacijenata", method = RequestMethod.GET)
 	public ResponseEntity<List<KorisnikDTO>> getAllPatients() {
 		List<Korisnik> patients = korisnikService.findByUloga(UlogaKorisnika.PACIJENT);
@@ -66,6 +80,7 @@ public class PacijentController {
 		return pacijent;
 	}
 	
+
 	@RequestMapping(value = "/searchK/{val}", method=RequestMethod.GET)
 	public ResponseEntity<List<KorisnikDTO>> searchPatientsName(@PathVariable String val){
 		List<KorisnikDTO> retVal = new ArrayList<KorisnikDTO>();
@@ -99,7 +114,28 @@ public class PacijentController {
 					}
 				}
 		
-			}
+
+	@RequestMapping(value = "/izmeni", method = RequestMethod.GET, consumes = MediaType.APPLICATION_JSON_VALUE, produces="application/json")
+	public ResponseEntity<List<Pacijent>> searchPatients(@RequestBody String param){
+		//DTO objekat. 
+		List<Pacijent> retVal = new ArrayList<Pacijent>();
+		System.out.println("HERE");
+		param = param.substring(1);
+		param = param.substring(0, param.length()-1);
+		String type = "";
+		String value = "";
+		int i = 0;
+		String[] parts = param.split(",");
+		for(String p : parts){
+			System.out.println(p);
+			String[] tokens = p.split(":");
+			if (i == 0) {
+				type = tokens[1];
+				type = type.replace("\"", "");
+			}else if(i == 1) {
+				value = tokens[1];
+				value = value.replace("\"", "");
+
 		}else if(type.equals("JedinstveniBroj")) {
 			try {
 				Long lval = Long.parseLong(value);
@@ -117,102 +153,79 @@ public class PacijentController {
 			}
 			
 		}
-		
 
 		
 		return new ResponseEntity<>(retVal, HttpStatus.OK);
+
+
 	}
 
-	public List<Korisnik> searchByCriteria(String type, String value) {
-		List<Korisnik> retVal = new ArrayList<Korisnik>();
 	
-		List<Pacijent> pacijenti = pacijentService.findAll();
-		List<Korisnik> korisnici = korisnikService.findAll();
+	
+	@RequestMapping(value = "/sviLekari", method=RequestMethod.GET)
+	public ResponseEntity<List<DoktorDTO>> getAllDoctors() {
+		List<Doktor> doctors = doktorService.findAll();
+		List<Korisnik> users = korisnikService.findByUloga(UlogaKorisnika.LEKAR);
+		List<DoktorDTO> doktoriDTO = new ArrayList<>();
 		
-		if(type.equals("Ime")) {
-			for(Korisnik k : korisnici) {
-				if(k.getIme().toLowerCase().equals(value.toLowerCase())) {
-					retVal.add(k);
-				}
-			}
-		}else if(type.equals("Prezime")) {
-			for(Korisnik k: korisnici) {
-				if(k.getPrezime().toLowerCase().equals(value.toLowerCase())) {
-					retVal.add(k);
-				}
-			}
-		}else if(type.equals("JedinstveniBroj")) {
-			Long id = Long.parseLong(value);
-			for(Pacijent p: pacijenti) {
-				
-				if(p.getId().equals(id)) {
-					Optional<Korisnik> k = korisnikService.findById(id);
-					retVal.add(k.get());
+		for(Doktor d : doctors) {
+			doktoriDTO.add(new DoktorDTO(d));
+		}
+		
+		for(Korisnik k : users) {
+			for(DoktorDTO d: doktoriDTO) {
+				if (k.getId() == d.getIdKorisnik()) {
+					d.setId(k.getId());
+					d.setIme(k.getIme());
+					d.setPrezime(k.getPrezime());
 				}
 			}
 		}
-		
-		foundUsers.clear();
-		for(Korisnik k : retVal) {
-			foundUsers.add(k);
-		}
-			
-		return retVal;	
+		return new ResponseEntity<>(doktoriDTO, HttpStatus.OK);	
 	}
 	
-	public List<Object> filterByCriteria(String type, List<Korisnik> korisnici) {
-		List<Object> found = new ArrayList<Object>();
+	@RequestMapping(value = "/search", method = RequestMethod.GET)
+	@ResponseStatus(value = HttpStatus.OK)
+	public ResponseEntity<List<DoktorDTO>> getDoctorsSearch(@RequestParam(value="ime") String ime,
+															@RequestParam(value="prezime") String prezime,
+															@RequestParam(value="specijalizacija") String specijalizacija,
+															@RequestParam(value="prosecnaOcena") String prosecnaOcena) {
 		
-		switch(type) {
-		case "Ime":
-			found.add(1);
-			for(Korisnik k : korisnici) {
-				found.add(k.getIme());
+		System.out.println(ime+" " + prezime +  " " + specijalizacija + " " + prosecnaOcena);
+		List<Doktor> doctors = doktorService.findAll();
+		List<Korisnik> users = korisnikService.findByUloga(UlogaKorisnika.LEKAR);
+		List<DoktorDTO> doktoriDTO = new ArrayList<>();
+		
+		for(Doktor d : doctors) {
+			Optional<Korisnik> kr = korisnikService.findById(d.getIdKorisnik());
+			Korisnik k = kr.get();
+			if(k.getIme().contains(ime) && k.getPrezime().contains(prezime) && d.getSpecijalizacija().contains(specijalizacija)
+					&& Double.toString(d.getProsenaOcena()).contains(prosecnaOcena))
+			{
+				doktoriDTO.add(new DoktorDTO(d));
 			}
-			break;
-		case "Prezime":
-			found.add(2);
-			for(Korisnik k : korisnici) {
-				found.add(k.getPrezime());
+				
+		}
+
+		for(Korisnik k : users) {
+			for(DoktorDTO d: doktoriDTO) {
+				if (k.getId() == d.getIdKorisnik()) {
+					d.setId(k.getId());
+					d.setIme(k.getIme());
+					d.setPrezime(k.getPrezime());
+					System.out.println(d.getIme()+" " + d.getPrezime() +  " " + d.getSpecijalizacija() + " " + d.getProsecnaOcena());
+				}
 			}
-			break;
-		case "JedinstveniBroj":
-			found.add(1);
-			for(Korisnik k: korisnici) {
-				found.add(k.getId());
-			}
-			break;
-		case "Ime_Prezime":
-			found.add(2);
-			for(Korisnik k : korisnici) {
-				found.add(k.getIme());
-				found.add(k.getPrezime());
-			}
-			break;
-		case "Ime_JedinstveniBroj":
-			found.add(2);
-			for(Korisnik k : korisnici) {
-				found.add(k.getIme());
-				found.add(k.getId());
-			}
-			break;
-		case "Prezime_JedinstveniBroj":
-			found.add(2);
-			for(Korisnik k: korisnici) {
-				found.add(k.getPrezime());
-				found.add(k.getId());
-			}
-			break;
-		case "Ime_Prezime_JedinstveniBroj":
-			found.add(3);
-			for(Korisnik k : korisnici) {
-				found.add(k.getIme());
-				found.add(k.getPrezime());
-				found.add(k.getId());
-			}
-			break;
 		}
 		
-		return found;
+		return new ResponseEntity<>(doktoriDTO, HttpStatus.OK);	
+		
+	}
+	
+	@RequestMapping(value = "/lekar/{id}", method=RequestMethod.GET)
+	public Doktor getDoctor(@PathVariable Long id) {
+		Doktor doktor = doktorService.findByIdKorisnik(id);
+		System.out.println(doktor.getSpecijalizacija());
+		return doktor;
 	}
 }
