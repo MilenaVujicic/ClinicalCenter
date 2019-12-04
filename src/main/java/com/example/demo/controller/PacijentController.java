@@ -6,14 +6,14 @@ import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
+
 import org.springframework.web.bind.annotation.RestController;
 import com.example.demo.dto.DoktorDTO;
 import com.example.demo.dto.KlinikaDTO;
@@ -47,6 +47,9 @@ public class PacijentController {
 	KorisnikService korisnikService;
 	
 
+	private List<Korisnik> foundUsers = new ArrayList<Korisnik>();
+	
+
 	@RequestMapping(value = "/sveKlinike", method=RequestMethod.GET)
 	public ResponseEntity<List<KlinikaDTO>> getAllClinics() {
 		List<Klinika> clinics = klinikaService.findAll();
@@ -77,6 +80,41 @@ public class PacijentController {
 		return pacijent;
 	}
 	
+
+	@RequestMapping(value = "/searchK/{val}", method=RequestMethod.GET)
+	public ResponseEntity<List<KorisnikDTO>> searchPatientsName(@PathVariable String val){
+		List<KorisnikDTO> retVal = new ArrayList<KorisnikDTO>();
+		System.out.println(val);
+		String[] parts = val.split(":");
+		String type = parts[1];
+		String value = parts[0];
+		value = value.toLowerCase();
+		List<Korisnik> korisnici = korisnikService.findAll();
+		List<Pacijent> pacijenti = pacijentService.findAll();
+		if(type.equals("Ime")) {
+			for(Korisnik k : korisnici) {
+				System.out.println(k.getIme() + " " +  k.getId());
+				if(k.getIme().toLowerCase().contains(value) || k.getIme().toLowerCase().equals(value)) {
+					System.out.println(k.getIme());
+					for(Pacijent p : pacijenti) {
+						if(p.getId() == k.getId()) {
+							retVal.add(new KorisnikDTO(k));
+						}
+					}
+					
+				}
+			}
+		}else if(type.equals("Prezime")) {
+			for(Korisnik k: korisnici) {
+				if(k.getPrezime().toLowerCase().contains(value) || k.getPrezime().toLowerCase().equals(value)) {
+					for(Pacijent p : pacijenti) {
+						if(p.getId() == k.getId()) {
+							retVal.add(new KorisnikDTO(k));
+						}
+					}
+				}
+		
+
 	@RequestMapping(value = "/izmeni", method = RequestMethod.GET, consumes = MediaType.APPLICATION_JSON_VALUE, produces="application/json")
 	public ResponseEntity<List<Pacijent>> searchPatients(@RequestBody String param){
 		//DTO objekat. 
@@ -97,43 +135,31 @@ public class PacijentController {
 			}else if(i == 1) {
 				value = tokens[1];
 				value = value.replace("\"", "");
+
+		}else if(type.equals("JedinstveniBroj")) {
+			try {
+				Long lval = Long.parseLong(value);
+				for(Korisnik k : korisnici) {
+					if(k.getId() == lval) {
+						for(Pacijent p : pacijenti) {
+							if(p.getId() == k.getId()) {
+								retVal.add(new KorisnikDTO(k));
+							}
+						}
+					}
+				}
+			}catch(Exception e) {
+				return new ResponseEntity<>(null, HttpStatus.METHOD_NOT_ALLOWED);
 			}
-			i++;
+			
 		}
-		return new ResponseEntity<>(retVal, HttpStatus.OK) ;
+
+		
+		return new ResponseEntity<>(retVal, HttpStatus.OK);
+
+
 	}
 
-	public List<Korisnik> searchByCriteria(String type, String value) {
-		List<Korisnik> retVal = new ArrayList<Korisnik>();
-	
-		List<Pacijent> pacijenti = pacijentService.findAll();
-		List<Korisnik> korisnici = korisnikService.findAll();
-		
-		if(type.equals("Ime")) {
-			for(Korisnik k : korisnici) {
-				if(k.getIme().toLowerCase().equals(value.toLowerCase())) {
-					retVal.add(k);
-				}
-			}
-		}else if(type.equals("Prezime")) {
-			for(Korisnik k: korisnici) {
-				if(k.getPrezime().toLowerCase().equals(value.toLowerCase())) {
-					retVal.add(k);
-				}
-			}
-		}else if(type.equals("JedinstveniBroj")) {
-			Long id = Long.parseLong(value);
-			for(Pacijent p: pacijenti) {
-				
-				if(p.getId().equals(id)) {
-					Optional<Korisnik> k = korisnikService.findById(id);
-					retVal.add(k.get());
-				}
-			}
-		}
-			
-		return retVal;	
-	}
 	
 	
 	@RequestMapping(value = "/sviLekari", method=RequestMethod.GET)
