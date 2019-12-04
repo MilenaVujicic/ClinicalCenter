@@ -53,12 +53,13 @@
            		for (i = 0; i < doctors.length; i++) {
            			prikaziDoktora(doctors[i]);
            		}
+           		$('#doctorsTable').attr('hidden', false);
 			},
 			error: function() {
            		alert('Desila se greska');
            	}
 		});
-		$('#doctorsTable').attr('hidden', false);
+		
 	}
 		
 		/*$(document).ready(function () {
@@ -139,7 +140,7 @@
 	  </tbody>
 	</table>
 	
-	<form method="get" id='form' >
+	<form id='form' >
 	  <fieldset>
 	    <legend>Search:</legend>
 	    <table>
@@ -161,7 +162,7 @@
 	    	</tr>
 	    </table>
 	    
-	    <input type="submit" value="Search" onclick="search()">
+	    <input type="button" value="Search" onclick="search()">
 	  </fieldset>
 	</form>
 
