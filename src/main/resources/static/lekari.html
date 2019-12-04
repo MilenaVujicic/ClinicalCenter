@@ -22,33 +22,44 @@
 	<link href='https://fonts.googleapis.com/css?family=Oxygen' rel='stylesheet' type='text/css'>
 	<script>
 	
+	
+	function prikaziDoktora(doktor) {
+		let tr = $('<tr></tr>');
+		let tdIme = $('<td>'+doktor.ime+'</td>');
+		let tdPrezime = $('<td>'+doktor.prezime+'</td>');
+		let tdSpec = $('<td>'+doktor.specijalizacija+'</td>');
+		let tdProsOc = $('<td>'+doktor.prosecnaOcena+'</td>');
+		tr.append(tdIme).append(tdPrezime).append(tdSpec).append(tdProsOc);
+		$('#doctorsTable tbody').append(tr);
+	}
 		
-		function search() {
-			let ime = $('#ime').val();
-			let prezime = $('#prezime').val();
-			let specijalizacija = $('#specijalizacija').val();
-			let prosecnaOcena = $('#prosecnaOcena').val();
-			
-			$.ajax({
-				type: 'GET',
-				url:'pacijent/search',
-				data: {
-					ime:ime,
-					prezime:prezime,
-					specijalizacija:specijalizacija,
-					prosecnaOcena:prosecnaOcena
-				},
-				success: function(doctors) {
-					$('#doctorsTable tbody').html('');
-	           		for (i = 0; i < doctors.length; i++) {
-	           			prikaziDoktora(doctors[i]);
-	           		}
-				},
-				error: function() {
-	           		alert('Desila se greska');
-	           	}
-			});
-		}
+	function search() {
+		let ime = $('#ime').val();
+		let prezime = $('#prezime').val();
+		let specijalizacija = $('#specijalizacija').val();
+		let prosecnaOcena = $('#prosecnaOcena').val();
+		
+		$.ajax({
+			type: 'GET',
+			url:'pacijent/search',
+			data: {
+				ime:ime,
+				prezime:prezime,
+				specijalizacija:specijalizacija,
+				prosecnaOcena:prosecnaOcena
+			},
+			success: function(doctors) {
+				$('#doctorsTable tbody').html('');
+           		for (i = 0; i < doctors.length; i++) {
+           			prikaziDoktora(doctors[i]);
+           		}
+			},
+			error: function() {
+           		alert('Desila se greska');
+           	}
+		});
+		$('#doctorsTable').attr('hidden', false);
+	}
 		
 		/*$(document).ready(function () {
 			$('form').submit(function(event) {
@@ -77,15 +88,7 @@
 			$('#doctorsTable').attr('hidden', true);
 		}
 		
-		function prikaziDoktora(doktor) {
-			let tr = $('<tr></tr>');
-			let tdIme = $('<td>'+doktor.ime+'</td>');
-			let tdPrezime = $('<td>'+doktor.prezime+'</td>');
-			let tdSpec = $('<td>'+doktor.specijalizacija+'</td>');
-			let tdProsOc = $('<td>'+doktor.prosecnaOcena+'</td>');
-			tr.append(tdIme).append(tdPrezime).append(tdSpec).append(tdProsOc);
-			$('#doctorsTable tbody').append(tr);
-		}
+		
 		
 		function allDoctors() {
 			$.ajax({

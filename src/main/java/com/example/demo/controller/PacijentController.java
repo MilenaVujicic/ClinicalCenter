@@ -80,13 +80,20 @@ public class PacijentController {
 															@RequestParam(value="prezime") String prezime,
 															@RequestParam(value="specijalizacija") String specijalizacija,
 															@RequestParam(value="prosecnaOcena") String prosecnaOcena) {
+		
 		System.out.println(ime+" " + prezime +  " " + specijalizacija + " " + prosecnaOcena);
 		List<Doktor> doctors = doktorService.findAll();
 		List<Korisnik> users = korisnikService.findByUloga(UlogaKorisnika.LEKAR);
 		List<DoktorDTO> doktoriDTO = new ArrayList<>();
 		
 		for(Doktor d : doctors) {
-			doktoriDTO.add(new DoktorDTO(d));
+			Korisnik k = korisnikService.findById(d.getIdKorisnik());
+			if(k.getIme().contains(ime) && k.getPrezime().contains(prezime) && d.getSpecijalizacija().contains(specijalizacija)
+					&& Double.toString(d.getProsenaOcena()).contains(prosecnaOcena))
+			{
+				doktoriDTO.add(new DoktorDTO(d));
+			}
+				
 		}
 
 		for(Korisnik k : users) {
@@ -95,9 +102,11 @@ public class PacijentController {
 					d.setId(k.getId());
 					d.setIme(k.getIme());
 					d.setPrezime(k.getPrezime());
+					System.out.println(d.getIme()+" " + d.getPrezime() +  " " + d.getSpecijalizacija() + " " + d.getProsecnaOcena());
 				}
 			}
 		}
+		
 		return new ResponseEntity<>(doktoriDTO, HttpStatus.OK);	
 		
 	}
