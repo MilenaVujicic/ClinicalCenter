@@ -18,18 +18,24 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.example.demo.dto.AdministratorKlinickogCentraDTO;
+import com.example.demo.dto.DijagnozaDTO;
 import com.example.demo.dto.KlinikaDTO;
 import com.example.demo.dto.KorisnikDTO;
+import com.example.demo.dto.LekDTO;
 import com.example.demo.model.AdministratorKlinickogCentra;
 import com.example.demo.model.AdministratorKlinike;
+import com.example.demo.model.Dijagnoza;
 import com.example.demo.model.Klinika;
 import com.example.demo.model.Korisnik;
+import com.example.demo.model.Lek;
 import com.example.demo.model.UlogaKorisnika;
 import com.example.demo.service.AdministratorKlinickogCentraService;
 import com.example.demo.service.AdministratorKlinikeService;
+import com.example.demo.service.DijagnozaService;
 import com.example.demo.service.EmailService;
 import com.example.demo.service.KlinikaService;
 import com.example.demo.service.KorisnikService;
+import com.example.demo.service.LekService;
 
 @RestController
 @RequestMapping(value = "admin_klinickog_centra")
@@ -46,6 +52,12 @@ public class AdministratorKlinickogCentraController {
 	
 	@Autowired
 	AdministratorKlinikeService administratorKlinikeService;
+	
+	@Autowired
+	LekService lekService;
+	
+	@Autowired
+	DijagnozaService dijagnozaService;
 	
 	@Autowired
 	EmailService emailService;
@@ -217,6 +229,7 @@ public class AdministratorKlinickogCentraController {
 	
 	@RequestMapping(value = "/odbij/{text}", method = RequestMethod.GET)
 	public ResponseEntity<String> odbij(@PathVariable("text") String text) {
+		System.out.println("##############" + text);
 		String[] splitter = text.split("~");
 		Long identifikacija = Long.parseLong(splitter[0]);
 		String razlog = splitter[1];
@@ -238,5 +251,61 @@ public class AdministratorKlinickogCentraController {
 			System.out.println("##################### Desila se greska2");
 		}
 		return new ResponseEntity<String>("", HttpStatus.OK);
+	}
+	
+	@RequestMapping(value="/nova_dijanoza", method = RequestMethod.POST)
+	public ResponseEntity<String> dijagnoza(@RequestBody DijagnozaDTO dijanozaDTO) {
+		Dijagnoza dijagnoza = new Dijagnoza();
+		dijagnoza.setSifra(dijanozaDTO.getSifra());
+		dijagnoza.setIme(dijanozaDTO.getIme());
+		dijagnoza.setOpis(dijanozaDTO.getOpis());
+		List<Dijagnoza> dijagnoze = dijagnozaService.findAll();
+		
+		Boolean nasla = false;
+		String odgovor = "";
+		for (Dijagnoza d : dijagnoze) {
+			if (d.getIme().equals(dijagnoza.getIme()) || d.getSifra().equals(dijagnoza.getSifra())) {
+				nasla = true;
+				break;
+			}
+		}
+		
+		if (!nasla) {
+			Dijagnoza d = dijagnozaService.save(dijagnoza);
+			odgovor = "Nova dijagnoza je uspesno dodata.";
+		} else {
+			odgovor = "Dijagnoza mora da bude jedinstvena";
+		}
+		
+		return new ResponseEntity<String>(odgovor, HttpStatus.OK);
+	}
+	
+	@RequestMapping(value="/novi_lek", method = RequestMethod.POST)
+	public ResponseEntity<String> lek(@RequestBody LekDTO lekDTO) {
+		Lek lek = new Lek();
+		lek.setSifra(lekDTO.getSifra());
+		lek.setIme(lekDTO.getIme());
+		lek.setOpis(lekDTO.getOpis());
+		
+		List<Lek> lekovi = lekService.findAll();
+		
+		Boolean nasla = false;
+		String odgovor = "";
+		for (Lek l : lekovi) {
+			if (l.getIme().equals(lek.getIme()) || l.getSifra().equals(lek.getSifra())) {
+				nasla = true;
+				break;
+			}
+		}
+		
+		if (!nasla) {
+			Lek l = lekService.save(lek);
+			odgovor = "Novi lek je uspesno dodat.";
+		} else {
+			odgovor = "Lek mora da bude jedinstven";
+		}
+		
+		
+		return new ResponseEntity<String>(odgovor, HttpStatus.OK);
 	}
 }

@@ -13,6 +13,8 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToMany;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 @Entity
 public class Dijagnoza {
 	
@@ -29,6 +31,7 @@ public class Dijagnoza {
 	@Column(name = "opis")
 	private String opis;
 	
+	@JsonIgnore
 	@ManyToMany(mappedBy = "dijagnoze")
 	private Set<Pregled> pregledi = new HashSet<Pregled>();
 	

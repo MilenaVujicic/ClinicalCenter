@@ -28,7 +28,7 @@ public class Sala  {
 	@Column(name = "ime", nullable = false)
 	private String ime;
 	
-	@Column(name = "opis", nullable = false)
+	@Column(name = "opis")
 	private String opis;
 	
 	@JsonIgnore

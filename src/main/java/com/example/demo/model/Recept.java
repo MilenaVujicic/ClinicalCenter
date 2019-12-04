@@ -4,6 +4,7 @@
 package com.example.demo.model;
 
 import java.time.LocalDateTime;
+import java.util.Date;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -14,9 +15,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 
-enum StatusRecepta {
-	NEOVEREN, OVEREN
-}
+
 @Entity
 public class Recept {
 
@@ -34,10 +33,10 @@ public class Recept {
 	private StatusRecepta status;
 	
 	@Column(name="datumIspisa")
-	private LocalDateTime datumIspisa;
+	private Date datumIspisa;
 	
 	@Column(name="datumOvere")
-	private LocalDateTime datumOvere;
+	private Date datumOvere;
 	
 	@Column(name = "sifraLek", nullable = false)
 	private String sifraLek;
@@ -53,8 +52,8 @@ public class Recept {
 		// TODO Auto-generated constructor stub
 	}
 
-	public Recept(Long id, String naziv, String opis, StatusRecepta status, LocalDateTime datumIspisa,
-			LocalDateTime datumOvere, String sifraLek, String lek) {
+	public Recept(Long id, String naziv, String opis, StatusRecepta status, Date datumIspisa,
+			Date datumOvere, String sifraLek, String lek) {
 		super();
 		this.id = id;
 		this.naziv = naziv;
@@ -98,20 +97,20 @@ public class Recept {
 		this.status = status;
 	}
 
-	public LocalDateTime getDatumIspisa() {
+	public Date getDatumIspisa() {
 		return datumIspisa;
 	}
 
-	public void setDatumIspisa(LocalDateTime datumIspisa) {
+	public void setDatumIspisa(Date datumIspisa) {
 		this.datumIspisa = datumIspisa;
 	}
 
-	public LocalDateTime getDatumOvere() {
+	public Date getDatumOvere() {
 		return datumOvere;
 	}
 
-	public void setDatumOvere(LocalDateTime datumOvere) {
-		this.datumOvere = datumOvere;
+	public void setDatumOvere(Date date) {
+		this.datumOvere = date;
 	}
 
 	public String getSifraLek() {

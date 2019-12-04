@@ -231,6 +231,51 @@
 	            }
             });
 	  	}
+  		
+  		function addNewDrug() {
+  			let sifra = $('#codeDrug').val();
+  			let ime = $('#nameDrug').val();
+  			let opis = $('#describeDrug').val();
+  			$.ajax({
+	            url:"/admin_klinickog_centra/novi_lek",
+	            type:"POST",
+	            data: JSON.stringify({sifra, ime, opis}),
+	            contentType:'application/json',
+	            success: function(odgovor) {
+	            	alert(odgovor);
+	            	$('#codeDrug').val('');
+	            	$('#nameDrug').val('');
+	            	$('#describeDrug').val('');
+	            	home();
+	            },
+	            error: function() {
+	            	alert('Desila se greska');
+	            }
+            });
+  		}
+  		
+  		function addNewDiagnose() {
+  			let sifra = $('#codeDiag').val();
+  			let ime = $('#nameDiag').val();
+  			let opis = $('#describeDiag').val();
+  			$.ajax({
+	            url:"/admin_klinickog_centra/nova_dijanoza",
+	            type:"POST",
+	            data: JSON.stringify({sifra, ime, opis}),
+	            contentType:'application/json',
+	            success: function(odgovor) {
+	            	alert(odgovor);
+	            	$('#codeDiag').val('');
+	            	$('#nameDiag').val('');
+	            	$('#describeDiag').val('');
+	            	home();
+	            },
+	            error: function() {
+	            	alert('Desila se greska');
+	            }
+            });
+  		}
+  		
 	  	function newAdmin() {
 	  		$('#newAdmin').attr('hidden', false);
 	  		$('#newClinic').attr('hidden', true);
@@ -240,6 +285,7 @@
 	  		$('#newClinicAdmin').attr('hidden', true);
 	  		$('#clinicAdminTable').attr('hidden', true);
 	  		$('#requestsTable').attr('hidden', true);
+	  		$('#newDiagnose').attr('hidden', true);
 	  		document.getElementById("title").innerHTML = "New clinic administrator";
 	    }
 	  	function newClinic() {
@@ -251,9 +297,38 @@
 	  		$('#newClinicAdmin').attr('hidden', true);
 	  		$('#clinicAdminTable').attr('hidden', true);
 	  		$('#requestsTable').attr('hidden', true);
+	  		$('#newDiagnose').attr('hidden', true);
+	  		$('#newDrug').attr('hidden', true);
 	  		document.getElementById("title").innerHTML = "New clinic";
 	  	}
+	  	function newDiagnose() {
+	  		$('#newDrug').attr('hidden', true);
+	  		$('#newDiagnose').attr('hidden', false);
+	  		$('#newClinic').attr('hidden', true);
+	  		$('#newAdmin').attr('hidden', true);
+	  		$('#adminSuccessAlert').attr('hidden', true);
+	  		$('#adminErrorAlert').attr('hidden', true);
+	  		$('#clinicTable').attr('hidden', true);
+	  		$('#newClinicAdmin').attr('hidden', true);
+	  		$('#clinicAdminTable').attr('hidden', true);
+	  		$('#requestsTable').attr('hidden', true);
+	  		document.getElementById("title").innerHTML = "New diagnose";
+	  	}
+	  	function newDrug() {
+	  		$('#newDrug').attr('hidden', false);
+	  		$('#newDiagnose').attr('hidden', true);
+	  		$('#newClinic').attr('hidden', true);
+	  		$('#newAdmin').attr('hidden', true);
+	  		$('#adminSuccessAlert').attr('hidden', true);
+	  		$('#adminErrorAlert').attr('hidden', true);
+	  		$('#clinicTable').attr('hidden', true);
+	  		$('#newClinicAdmin').attr('hidden', true);
+	  		$('#clinicAdminTable').attr('hidden', true);
+	  		$('#requestsTable').attr('hidden', true);
+	  		document.getElementById("title").innerHTML = "New drug";
+	  	}
 	  	function home() {
+	  		$('#newDiagnose').attr('hidden', true);
 	  		$('#newClinic').attr('hidden', true);
 	  		$('#newAdmin').attr('hidden', true);
 	  		$('#adminSuccessAlert').attr('hidden', true);
@@ -261,6 +336,7 @@
 	  		$('#clinicTable').attr('hidden', true);
 	  		$('#clinicAdminTable').attr('hidden', true);
 	  		$('#newClinicAdmin').attr('hidden', true);
+	  		$('#newDrug').attr('hidden', true);
 	  		document.getElementById("title").innerHTML = "";
 	  	}
 	  	
@@ -425,8 +501,8 @@
 	        <ul class="dropdown-menu">
 	          <li><a onclick="return newAdmin();">New administrator of clinical centre</a></li>
 	          <li><a onclick="return newClinic();">New clinic and its administrator</a></li>
-	          <li><a href="#">New diagnose</a></li>
-	          <li><a href="#">New drug</a></li>
+	          <li><a onclick="return newDiagnose();">New diagnose</a></li>
+	          <li><a onclick="return newDrug();">New drug</a></li>
 	        </ul>
 	      </li>
 	      <li><a onclick="return requests();">Registration request</a></li>
@@ -699,6 +775,71 @@
 		</table>
 		<textarea id="denyText" hidden="true"></textarea>
 		<a id="denyButton" hidden="true">Send</a>
+		</form>
+		
+		<form class="" method="post" action="#" id="newDiagnose" hidden="true">
+			<div class="form-group">
+				<label for="name" class="cols-sm-2 control-label">Code of diagnose</label>
+				<div class="cols-sm-10">
+					<div class="input-group">
+						<input type="text" class="form-control" name="name" id="codeDiag"  placeholder="Enter the Code of diagnose"/>
+					</div>
+				</div>
+			</div>
+			
+			<div class="form-group">
+				<label for="username" class="cols-sm-2 control-label">Name of diagnose</label>
+				<div class="cols-sm-10">
+					<div class="input-group">
+						<input type="text" class="form-control" name="address" id="nameDiag"  placeholder="Enter the name of diagnose"/>
+					</div>
+				</div>
+			</div>
+			
+			<div class="form-group">
+				<label for="username" class="cols-sm-2 control-label">Describe of Diagnose</label>
+				<div class="cols-sm-10">
+					<div class="input-group">
+						<textarea class="form-control" rows="5" cols="50" id="describeDiag"></textarea>
+					</div>
+				</div>
+			</div>
+			
+			<div class="form-group ">
+				<a target="_blank" type="button" id="newDiagnoseButton" class="btn btn-primary btn-lg btn-block login-button" onclick="addNewDiagnose()">Register diagnose</a>
+			</div>
+		</form>
+		<form class="" method="post" action="#" id="newDrug" hidden="true">
+			<div class="form-group">
+				<label for="name" class="cols-sm-2 control-label">Code of drug</label>
+				<div class="cols-sm-10">
+					<div class="input-group">
+						<input type="text" class="form-control" name="name" id="codeDrug"  placeholder="Enter the Code of drug"/>
+					</div>
+				</div>
+			</div>
+			
+			<div class="form-group">
+				<label for="username" class="cols-sm-2 control-label">Name of drug</label>
+				<div class="cols-sm-10">
+					<div class="input-group">
+						<input type="text" class="form-control" name="address" id="nameDrug"  placeholder="Enter the name of drug"/>
+					</div>
+				</div>
+			</div>
+			
+			<div class="form-group">
+				<label for="username" class="cols-sm-2 control-label">Describe of drug</label>
+				<div class="cols-sm-10">
+					<div class="input-group">
+						<textarea class="form-control" rows="5" cols="50" id="describeDrug"></textarea>
+					</div>
+				</div>
+			</div>
+			
+			<div class="form-group ">
+				<a target="_blank" type="button" id="newDiagnoseButton" class="btn btn-primary btn-lg btn-block login-button" onclick="addNewDrug()">Register drug</a>
+			</div>
 		</form>
 	</div>
 
