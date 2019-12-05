@@ -1,5 +1,8 @@
-insert into klinika (ime, adresa, opis, prosecna_ocena) values ('MC Klinika', 'Bulevar Cara Lazara 72', '', 0);
+insert into klinika (ime, adresa, opis, prosecna_ocena) values ('MC Klinika', 'Bulevar Cara Lazara 72', 'Radi 24/7', 3.5);
+insert into klinika (ime, adresa, opis, prosecna_ocena) values ('Klinika za ortopedsku hirurgiju i traumatologiju', 'Futoska 76', 'Radi 24/7', 5.0);
+insert into klinika (ime, adresa, opis, prosecna_ocena) values ('Poliklinika Atina', 'Bulevar Evrope 22', 'Radi 24/7', 4.5);
 insert into klinika (ime, adresa, opis, prosecna_ocena) values ('Nova klinika', 'Strazilovska 5', 'Tek otvorena', 0);
+
 
 insert into korisnik (ime, prezime, email, username, password, grad, drzava, jmbg, adresa, telefon, datum_rodjenja, uloga, aktivan, aktiviran) values ('Petar', 'Petrovic', 'petar.pertovic@gmail.com','njegos', 'njegos', 'Beograd', 'Srbija', '2607426985147', 'Njegoseva 38', 114587698, '1972-4-5', 4, TRUE, TRUE);
 insert into korisnik (ime, prezime, email, username, password, grad, drzava, jmbg, adresa, telefon, datum_rodjenja, uloga, aktivan, aktiviran) values ('Steva', 'Stevic', 'steva.stevic@gmail.com','steva', 'steva', 'Novi Sad', 'Srbija', '1452663358994', 'Steviceva 8', 634152698, '1980-7-16', 4, FALSE, FALSE);
