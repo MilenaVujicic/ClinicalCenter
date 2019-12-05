@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<meta charset="utf-8">
+    <!-- This file has been downloaded from Bootsnipp.com. Enjoy! -->
+    <title>Patient</title>
+    <link href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.0/css/bootstrap.min.css" rel="stylesheet">
+    
+    <script src="./js/lib/jquery-3.3.1.min.js" type="text/javascript"></script>
+    <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.0/js/bootstrap.min.js"></script>
+    <script src="./js/medicinskaSestra.js" type="text/javascript"></script>
+
+	<!-- Website CSS style -->
+	<link href="css/bootstrap.min.css" rel="stylesheet">
+	<link rel="stylesheet" href="medicinskaSestra.css">
+	
+	<!-- Website Font style -->
+    <script src="https://kit.fontawesome.com/a065fea601.js" crossorigin="anonymous"></script>
+	<!-- Google Fonts -->
+	<link href='https://fonts.googleapis.com/css?family=Passion+One' rel='stylesheet' type='text/css'>
+	<link href='https://fonts.googleapis.com/css?family=Oxygen' rel='stylesheet' type='text/css'>
+	<script>		
+		function prikaziKliniku(klinika) {
+			let tr = $('<tr></tr>');
+			let tdIme = $('<td>'+klinika.ime+'</td>');
+			let tdAdresa = $('<td>'+klinika.adresa+'</td>');
+			let tdOpis = $('<td>'+klinika.opis+'</td>');
+			let tdOcena = $('<td>'+klinika.prosecnaOcena+'</td>');
+			tr.append(tdIme).append(tdAdresa).append(tdOpis).append(tdOcena);
+			$('#clinicsTable tbody').append(tr);
+		}
+		
+		function search() {
+			let name = $('#clinicName').val();
+			let address = $('#clinicAddress').val();
+			let desc = $('#clinicDescription').val();
+			let rating = $('#clinicRating').val();
+			
+			$.ajax({
+				type: 'GET',
+				url:'pacijent/searchClinics',
+				data: {
+					name:name,
+					address:address,
+					desc:desc,
+					rating:rating
+				},
+				success: function(clinics) {
+					$('#clinicsTable tbody').html('');
+	           		for (i = 0; i < clinics.length; i++) {
+	           			prikaziKliniku(clinics[i]);
+	           		}
+	           		$('#clinicsTable').attr('hidden', false);
+				},
+				error: function() {
+	           		alert('Desila se greska');
+	           	}
+			});
+			
+		}
+	
+		function home() {
+			$('#clinicsTable').attr('hidden', true);
+			$('#clinic').attr('hidden', true);
+		}
+		
+		function allClinics() {
+			$.ajax({
+	            url:"/pacijent/sveKlinike",
+	            type:"GET",
+	           	success: function(clinics){
+	           		$('#clinicsTable tbody').html('');
+	           		for (i = 0; i < clinics.length; i++) {
+	           			prikaziKliniku(clinics[i]);
+	           		}
+ 	           	},
+	           	error: function() {
+	           		alert('Desila se greska');
+	           	}
+         	});
+			
+			$('#clinicsTable').attr('hidden', false);
+			$('#clinic').attr('hidden', true);
+		}
+		function personalData() {
+			$('#clinicsTable').attr('hidden', true);
+			$('#clinic').attr('hidden', true);
+		}
+	</script>
+</head>
+<body>
+	<nav class="navbar navbar-inverse">
+	  <div class="container-fluid">
+	    <div class="navbar-header">
+	      <a class="navbar-brand">Clinical center</a>
+	    </div>
+	    <ul class="nav navbar-nav">
+	      <li><a onclick="return home();">Home</a></li>
+	      <li><a onclick="return allClinics()">All clinics</a></li>
+	      <li><a onclick="return personalData()">Personal data</a></li>
+	    </ul>
+	    <ul class="nav navbar-nav navbar-right">
+	      <li><a href="#"><span class="glyphicon glyphicon-log-out"></span> Logout</a></li>
+	    </ul>
+	  </div>
+	</nav>
+	
+	<table class="table" id="clinicsTable" hidden="true">
+	  <thead>
+	    <tr>
+	      <th scope="col">Name</th>
+	      <th scope="col">Address</th>
+	      <th scope="col">Description</th>
+	      <th scope="col">Rating</th>
+	    </tr>
+	  </thead>
+	  <tbody>
+	    
+	  </tbody>
+	</table>
+	
+	<form id='form' >
+	  <fieldset>
+	    <legend>Search:</legend>
+	    <table>
+	    	<tr>
+	    		<td>Name:</td>
+	    		<td><input type="text" id="clinicName" name="clinicName" value=""></td>
+	    	</tr>
+	    	<tr>
+	    		<td>Address:</td>
+	    		<td><input type="text" id="clinicAddress" name="clinicAddress" value=""></td>
+	    	</tr>
+	    	<tr>
+	    		<td>Description:</td>
+	    		<td><input type="text" id="clinicDescription" name="clinicDescription" value=""></td>
+	    	</tr>
+	    	<tr>
+	    		<td>Rating:</td>
+	    		<td><input type="text" id="clinicRating" name="clinicRating" value=""><br></td>
+	    	</tr>
+	    </table>
+	    
+	    <input type="button" value="Search" onclick="search()">
+	  </fieldset>
+	</form>
+
+</body>
+</html>
