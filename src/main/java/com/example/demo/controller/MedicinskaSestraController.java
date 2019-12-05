@@ -65,8 +65,9 @@ public class MedicinskaSestraController {
 		return new ResponseEntity<List<Recept>>(neovereni, HttpStatus.OK);
 	}
 	
-	@RequestMapping(value = "/overi/{id}", method = RequestMethod.POST)
+	@RequestMapping(value = "/overi/{id}", method = RequestMethod.GET)
 	public ResponseEntity<String> overa(@PathVariable("id") Long identifikacija) {
+		System.out.println("########################");
 		List<Recept> recepti = receptService.findAll();
 		for (Recept r : recepti) {
 			if (r.getPacijent().getId().equals(identifikacija) && r.getStatus().equals(StatusRecepta.NEOVEREN)) {

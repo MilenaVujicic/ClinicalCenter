@@ -79,12 +79,13 @@
 		
 		function verifyAll() {
 			let id = $('#patientID').val();
+			let url = "/medicinska_sestra/overi/" + id;
 			$.ajax({
-	            url:"/medicinska_sestra/overi/" + id,
+	            url: url,
 	            type:"GET",
 	           	success: function(odgovor){
 	           		alert(odgovor);
-	           	 	home();
+	           		unverifiedReciped();
  	           	},
 	           	error: function() {
 	           		alert('Desila se greska');
