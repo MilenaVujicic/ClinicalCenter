@@ -1,104 +1,169 @@
 <!DOCTYPE html>
 <html>
 <head>
-	<meta name="viewport" content="width=device-width, initial-scale=1">
-	<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+	<meta charset="UTF-8">
     <!-- This file has been downloaded from Bootsnipp.com. Enjoy! -->
     <title>Patient</title>
     <link href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.0/css/bootstrap.min.css" rel="stylesheet">
     
     <script src="./js/lib/jquery-3.3.1.min.js" type="text/javascript"></script>
     <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.0/js/bootstrap.min.js"></script>
-    <script src="./js/medicinskaSestra.js" type="text/javascript"></script>
+    <script src="./js/pacijent.js" type="text/javascript"></script>
 
 	<!-- Website CSS style -->
 	<link href="css/bootstrap.min.css" rel="stylesheet">
-	<link rel="stylesheet" href="medicinskaSestra.css">
+	<link rel="stylesheet" href="pacijent.css">
 	
 	<!-- Website Font style -->
     <script src="https://kit.fontawesome.com/a065fea601.js" crossorigin="anonymous"></script>
 	<!-- Google Fonts -->
 	<link href='https://fonts.googleapis.com/css?family=Passion+One' rel='stylesheet' type='text/css'>
 	<link href='https://fonts.googleapis.com/css?family=Oxygen' rel='stylesheet' type='text/css'>
-	<script>		
-		function prikaziKliniku(klinika) {
-			let tr = $('<tr></tr>');
-			let tdIme = $('<td>'+klinika.ime+'</td>');
-			let tdAdresa = $('<td>'+klinika.adresa+'</td>');
-			let tdOpis = $('<td>'+klinika.opis+'</td>');
-			let tdOcena = $('<td>'+klinika.prosecnaOcena+'</td>');
-			tr.append(tdIme).append(tdAdresa).append(tdOpis).append(tdOcena);
-			$('#clinicsTable tbody').append(tr);
-		}
-		
-		function search() {
-			let name = $('#clinicName').val();
-			let address = $('#clinicAddress').val();
-			let desc = $('#clinicDescription').val();
-			let rating = $('#clinicRating').val();
-			
-			$.ajax({
-				type: 'GET',
-				url:'pacijent/searchClinics',
-				data: {
-					name:name,
-					address:address,
-					desc:desc,
-					rating:rating
-				},
-				success: function(clinics) {
-					$('#clinicsTable tbody').html('');
-	           		for (i = 0; i < clinics.length; i++) {
-	           			prikaziKliniku(clinics[i]);
-	           		}
-	           		$('#clinicsTable').attr('hidden', false);
-				},
-				error: function() {
-	           		alert('Desila se greska');
-	           	}
-			});
-			
-		}
+	<script type="text/javascript">
+
+	$(document).ready(()=>{
+		document.getElementById ("bPretraga").addEventListener ("click", searchUser, false);
+		document.getElementById ("bFilter").addEventListener ("click", filterUser, false);
+
+	})
+
+	function home(){
+		$('#patientsTable').attr('hidden', true);
+		$('#patient').attr('hidden', true);
+		$('#sSearch').attr('hidden', false);
+		document.getElementById("title").innerHTML = "";
 	
-		function home() {
-			$('#clinicsTable').attr('hidden', true);
-			$('#clinic').attr('hidden', true);
+		
+	}
+	
+	function searchKorisnikF(type, value){
+
+		if (value.length === 0){
+			alert("Niste uneli kriterijum pretrage!");
+			return;
 		}
 		
-		function allClinics() {
-			$.ajax({
-	            url:"/pacijent/sveKlinike",
-	            type:"GET",
-	           	success: function(clinics){
-	           		$('#clinicsTable tbody').html('');
-	           		for (i = 0; i < clinics.length; i++) {
-	           			prikaziKliniku(clinics[i]);
-	           		}
- 	           	},
-	           	error: function() {
-	           		alert('Desila se greska');
-	           	}
-         	});
+		$.ajax({
+			url: "/pacijent/searchK/" + value + ":" + type,
+			type: "GET",
+			success: function(korisnici){
+				$("#patientsTable tr").remove();
+				if(korisnici.length > 0){
+					$('#patientsTable').attr('hidden', false);
+					$('#lFilter').attr('hidden', false);
+					$('#fSearch').attr('hidden', false);
+					$('#bFilter').attr('hidden', false);
+					$('#cIme').attr('hidden', false);
+					$('#cPrezime').attr('hidden', false);
+					$('#cBr').attr('hidden', false);
+					$('#lIme').attr('hidden', false);
+					$('#lPrezime').attr('hidden', false);
+					$('#lBr').attr('hidden', false);
+				}else{
+					alert("Pretraga nije pronasla pacijenta sa zadatim parametrima");
+					$('#patientsTable').attr('hidden', true);
+					$('#lFilter').attr('hidden', true);
+					$('#fSearch').attr('hidden', true);
+					$('#bFilter').attr('hidden', true);
+					$('#cIme').attr('hidden', true);
+					$('#cPrezime').attr('hidden', true);
+					$('#cBr').attr('hidden', true);
+					$('#lIme').attr('hidden', true);
+					$('#lPrezime').attr('hidden', true);
+					$('#lBr').attr('hidden', true);
+				}
+				let tdHead = $('<th id = "tdIme"><b>Ime</b></th><th id = "tdPrezime"><b>Prezime</b></th><th id = "tdID"><b>Jedinstveni Broj</b></th><th id = "tdLink"><b>Karton</b></th>');
+				$('#patientsTable thead').append(tdHead);
+				for (i = 0; i < korisnici.length; i++){
+					
+					let tr = $('<tr></tr>');
+					
+					let tdIme = $('<td id = \"tdIme\">' + korisnici[i].ime + '</td>');
+					let tdPrezime = $('<td id = \"tdPrezime\">' + korisnici[i].prezime + '</td>');
+					let tdID = $('<td id = \"tdID\">' + korisnici[i].id + '</td>');
+					let tdLin = $('<td><a href = \"karton.html\">Karton pacijenta</a></td>');
+					tr.append(tdIme).append(tdPrezime).append(tdID).append(tdLin);
+					
+					$('#patientsTable tbody').append(tr);
+					
+				}
+			},
+			error: function(e){
+				console.log(e)
+				alert("error");
+			}
+		})
+	}
+	
+	
+	function searchUser(){
+		let type = $('#sSearch').val();
+		let value = $('#tfSearch').val();
+		searchKorisnikF(type, value);		
+	}
+
+	function filterUser(){
+		let cIme = '';
+		let cPrezime = '';
+		let cBr = '';
+		if($('#cIme').is(':checked')){
+			cIme = $('#cIme').val();
+		}
 			
-			$('#clinicsTable').attr('hidden', false);
-			$('#clinic').attr('hidden', true);
+		if($('#cPrezime').is(':checked')){
+			cPrezime = $('#cPrezime').val();
 		}
-		function personalData() {
-			$('#clinicsTable').attr('hidden', true);
-			$('#clinic').attr('hidden', true);
+			
+		if($('#cBr').is(':checked')){	
+			cBr  = $('#cBr').val();
 		}
+		
+		var criteria = cIme + '_' + cPrezime + '_' + cBr;
+
+		if(criteria === "Ime__"){
+			$("[id=tdIme]").attr('hidden', false);
+			$("[id=tdPrezime]").attr('hidden', true);
+			$("[id=tdID]").attr('hidden', true);
+		}else if(criteria === "_Prezime_"){
+			$("[id=tdIme]").attr('hidden', true);
+			$("[id=tdPrezime]").attr('hidden', false);
+			$("[id=tdID]").attr('hidden', true);
+		}else if(criteria === "__JedinstveniBroj"){
+			$("[id=tdIme]").attr('hidden', true);
+			$("[id=tdPrezime]").attr('hidden', true);
+			$("[id=tdID]").attr('hidden', false);
+		}else if(criteria ==="Ime_Prezime_"){
+			$("[id=tdIme]").attr('hidden', false);
+			$("[id=tdPrezime]").attr('hidden', false);
+			$("[id=tdID]").attr('hidden', true);
+		}else if(criteria === "Ime__JedinstveniBroj"){
+			$("[id=tdIme]").attr('hidden', false);
+			$("[id=tdPrezime]").attr('hidden', true);
+			$("[id=tdID]").attr('hidden', false);
+		}else if(criteria ==="_Prezime_JedinstveniBroj"){
+			$("[id=tdIme]").attr('hidden', true);
+			$("[id=tdPrezime]").attr('hidden', false);
+			$("[id=tdID]").attr('hidden', false);
+		}else if(criteria === "Ime_Prezime_JedinstveniBroj"){
+			$("[id=tdIme]").attr('hidden', false);
+			$("[id=tdPrezime]").attr('hidden', false);
+			$("[id=tdID]").attr('hidden', false);
+		}else{
+			alert("Odabrati kriterijum filtriranja")
+		}
+		
+	}
+
 	</script>
-</head>
 <body>
-	<nav class="navbar navbar-inverse">
+<nav class="navbar navbar-inverse">
 	  <div class="container-fluid">
 	    <div class="navbar-header">
-	      <a class="navbar-brand">Clinical center</a>
+	      <a class="navbar-brand">Clinical centre</a>
 	    </div>
-	    <ul class="nav navbar-nav">
-	      <li><a onclick="return home();">Home</a></li>
-	      <li><a onclick="return allClinics()">All clinics</a></li>
-	      <li><a onclick="return personalData()">Personal data</a></li>
+	    <ul class="nav navbar-nav" id = "clickList">
+	      <li><a id = "aHome" onclick = "home()" href = "#">New Seach</a></li>
 	    </ul>
 	    <ul class="nav navbar-nav navbar-right">
 	      <li><a href="#"><span class="glyphicon glyphicon-log-out"></span> Logout</a></li>
@@ -106,45 +171,36 @@
 	  </div>
 	</nav>
 	
-	<table class="table" id="clinicsTable" hidden="true">
+	<h1 id="title"></h1>
+	
+	<label id = "lSearch">Select search criteria</label>
+	<select id = "sSearch" align = "center">
+	<option id = "sIme" value = "Ime">Name</option>
+	<option id = "sPrezime" value = "Prezime">Surname</option>
+	<option id = "sBroj" value = "JedinstveniBroj">ID number</option>
+	</select>
+	<input type = "text" id = "tfSearch">
+	<input type = "submit" value = "Pretraga" id = "bPretraga">
+	
+	<table class="table" id="patientsTable" hidden="true">
 	  <thead>
 	    <tr>
 	      <th scope="col">Name</th>
-	      <th scope="col">Address</th>
-	      <th scope="col">Description</th>
-	      <th scope="col">Rating</th>
+	      <th scope="col">Surname</th>
+	      <th scope="col">ID</th>
+	      <th scope="col">More</th>
 	    </tr>
 	  </thead>
 	  <tbody>
+
 	    
 	  </tbody>
 	</table>
 	
-	<form id='form' >
-	  <fieldset>
-	    <legend>Search:</legend>
-	    <table>
-	    	<tr>
-	    		<td>Name:</td>
-	    		<td><input type="text" id="clinicName" name="clinicName" value=""></td>
-	    	</tr>
-	    	<tr>
-	    		<td>Address:</td>
-	    		<td><input type="text" id="clinicAddress" name="clinicAddress" value=""></td>
-	    	</tr>
-	    	<tr>
-	    		<td>Description:</td>
-	    		<td><input type="text" id="clinicDescription" name="clinicDescription" value=""></td>
-	    	</tr>
-	    	<tr>
-	    		<td>Rating:</td>
-	    		<td><input type="text" id="clinicRating" name="clinicRating" value=""><br></td>
-	    	</tr>
-	    </table>
-	    
-	    <input type="button" value="Search" onclick="search()">
-	  </fieldset>
-	</form>
-
+	<label id = "lFilter" hidden = "true">Select Filter Criteria</label><br>
+	<input type = "checkbox" id = "cIme" value = "Ime" hidden = "true"><label id = "lIme" hidden = "true">Name</label><br>
+	<input type = "checkbox" id = "cPrezime" value = Prezime hidden = "true"><label id = "lPrezime" hidden = "true">Surname</label><br>
+	<input type = "checkbox" id = "cBr" value = "JedinstveniBroj" hidden = "true"><label id = "lBr" hidden = "true">ID</label><br>
+	<input type = "submit" value = "filter" id = "bFilter" hidden = "true">
 </body>
 </html>

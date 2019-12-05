@@ -36,8 +36,20 @@ public class KorisnikService {
 		return korisnikRepository.findAll();
 	}
 	
-	public Korisnik findById(Long id) {
-		return korisnikRepository.findById(id).orElseGet(null);
+
+	public List<Korisnik> findByIme(String ime){
+		return korisnikRepository.findByIme(ime);
 	}
+	
+	public List<Korisnik> findByPrezime(String prezime){
+		return korisnikRepository.findByPrezime(prezime);
+	}
+	
+	public Optional<Korisnik> findById(Long id){
+		return korisnikRepository.findById(id);
+	}
+	
+	
+
 
 }
