@@ -41,7 +41,7 @@ public class PacijentController {
 	@Autowired
 	KorisnikService korisnikService;
 	
-	@RequestMapping(value = "/sveKlinike", method=RequestMethod.GET, consumes = MediaType.APPLICATION_JSON_VALUE)
+	@RequestMapping(value = "/sveKlinike", method=RequestMethod.GET)
 	public ResponseEntity<List<KlinikaDTO>> getAllClinics() {
 		List<Klinika> clinics = klinikaService.findAll();
 		List<KlinikaDTO> klinikaDTO = new ArrayList<>();
@@ -108,7 +108,31 @@ public class PacijentController {
 		}
 		
 		return new ResponseEntity<>(doktoriDTO, HttpStatus.OK);	
+	}
+	
+	
+	
+	@RequestMapping(value = "/searchClinics", method = RequestMethod.GET)
+	@ResponseStatus(value = HttpStatus.OK)
+	public ResponseEntity<List<KlinikaDTO>> getClinicsSearch(@RequestParam(value="name") String name,
+															 @RequestParam(value="address") String address,
+															 @RequestParam(value="desc") String desc,
+															 @RequestParam(value="rating") String rating) {
 		
+		System.out.println(name+" " + address +  " " + desc + " " + rating);
+		List<Klinika> clinics = klinikaService.findAll();
+		List<KlinikaDTO> klinikaDTO = new ArrayList<>();
+		
+		for (Klinika k : clinics) {
+			if(k.getIme().contains(name) && k.getAdresa().contains(address)
+					&& k.getOpis().contains(desc) && Double.toString(k.getProsecnaOcena()).contains(rating))
+			{
+				klinikaDTO.add(new KlinikaDTO(k));
+			}
+			
+		}
+		
+		return new ResponseEntity<>(klinikaDTO, HttpStatus.OK);	
 	}
 	
 	@RequestMapping(value = "/lekar/{id}", method=RequestMethod.GET)

@@ -29,7 +29,36 @@
 			let tdOcena = $('<td>'+klinika.prosecnaOcena+'</td>');
 			tr.append(tdIme).append(tdAdresa).append(tdOpis).append(tdOcena);
 			$('#clinicsTable tbody').append(tr);
-		}	
+		}
+		
+		function search() {
+			let name = $('#clinicName').val();
+			let address = $('#clinicAddress').val();
+			let desc = $('#clinicDescription').val();
+			let rating = $('#clinicRating').val();
+			
+			$.ajax({
+				type: 'GET',
+				url:'pacijent/searchClinics',
+				data: {
+					name:name,
+					address:address,
+					desc:desc,
+					rating:rating
+				},
+				success: function(clinics) {
+					$('#clinicsTable tbody').html('');
+	           		for (i = 0; i < clinics.length; i++) {
+	           			prikaziKliniku(clinics[i]);
+	           		}
+	           		$('#clinicsTable').attr('hidden', false);
+				},
+				error: function() {
+	           		alert('Desila se greska');
+	           	}
+			});
+			
+		}
 	
 		function home() {
 			$('#clinicsTable').attr('hidden', true);
@@ -91,24 +120,31 @@
 	  </tbody>
 	</table>
 	
-	<table class="table" id="clinic" hidden="true">
-		<tr>
-			<td>Name:</td>
-			<td><input id="clinicName" readonly="readonly"></td>
-		</tr>
-		<tr>
-			<td>Address:</td>
-			<td><input id="clinicAddress" readonly="readonly"></td>
-		</tr>
-		<tr>
-			<td>Description:</td>
-			<td><input id="clinicDescription" readonly="readonly"></td>
-		</tr>
-		<tr>
-			<td>Rating:</td>
-			<td><input id="clinicRating" readonly="readonly"></td>
-		</tr>
-	</table>
+	<form id='form' >
+	  <fieldset>
+	    <legend>Search:</legend>
+	    <table>
+	    	<tr>
+	    		<td>Name:</td>
+	    		<td><input type="text" id="clinicName" name="clinicName" value=""></td>
+	    	</tr>
+	    	<tr>
+	    		<td>Address:</td>
+	    		<td><input type="text" id="clinicAddress" name="clinicAddress" value=""></td>
+	    	</tr>
+	    	<tr>
+	    		<td>Description:</td>
+	    		<td><input type="text" id="clinicDescription" name="clinicDescription" value=""></td>
+	    	</tr>
+	    	<tr>
+	    		<td>Rating:</td>
+	    		<td><input type="text" id="clinicRating" name="clinicRating" value=""><br></td>
+	    	</tr>
+	    </table>
+	    
+	    <input type="button" value="Search" onclick="search()">
+	  </fieldset>
+	</form>
 
 </body>
 </html>
