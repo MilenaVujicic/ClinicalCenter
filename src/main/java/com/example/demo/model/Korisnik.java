@@ -16,6 +16,8 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 @Entity
 public class Korisnik {
 	
@@ -59,6 +61,7 @@ public class Korisnik {
 	@Column(name = "uloga", nullable = true) 
 	private UlogaKorisnika uloga;		
 	
+	@JsonIgnore
 	@OneToMany(mappedBy = "korisnik", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 	private Set<Odsustvo> odsustva = new HashSet<Odsustvo>();
 	

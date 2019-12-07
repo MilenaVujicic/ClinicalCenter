@@ -38,11 +38,10 @@ public class PacijentController {
 	KlinikaService klinikaService;
 	
 	@Autowired
-
 	PacijentService pacijentService;
 
+	@Autowired
 	DoktorService doktorService;
-
 	
 	@Autowired
 	KorisnikService korisnikService;
@@ -199,8 +198,7 @@ public class PacijentController {
 		List<DoktorDTO> doktoriDTO = new ArrayList<>();
 		
 		for(Doktor d : doctors) {
-			Optional<Korisnik> kr = korisnikService.findById(d.getIdKorisnik());
-			Korisnik k = kr.get();
+			Korisnik k = korisnikService.findOne(d.getIdKorisnik());
 			if(k.getIme().contains(ime) && k.getPrezime().contains(prezime) && d.getSpecijalizacija().contains(specijalizacija)
 					&& Double.toString(d.getProsenaOcena()).contains(prosecnaOcena))
 			{
