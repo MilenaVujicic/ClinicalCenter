@@ -107,4 +107,10 @@ public class DoktorController {
 		Recept r = receptService.save(recept);
 		return new ResponseEntity<String>("", HttpStatus.OK);
 	}
+	
+	@RequestMapping(value = "/pacijent/{id}", method=RequestMethod.GET)
+	public Pacijent getPatient(@PathVariable Long id) {
+		Pacijent pacijent = pacijentService.findByIdKorisnik(id);
+		return pacijent;
+	}
 }
