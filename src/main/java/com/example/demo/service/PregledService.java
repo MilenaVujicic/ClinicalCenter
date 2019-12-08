@@ -21,4 +21,12 @@ public class PregledService {
 	public List<Pregled> findAll() {
 		return pregledRespository.findAll();
 	}
+	
+	public Pregled findOne(Long id) {
+		return pregledRespository.findById(id).orElse(null);
+	}
+	
+	public void delete(Pregled pregled) {
+		pregledRespository.delete(pregled);
+	}
 }

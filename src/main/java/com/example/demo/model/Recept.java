@@ -136,6 +136,8 @@ public class Recept {
 	public void setPacijent(Pacijent pacijent) {
 		this.pacijent = pacijent;
 	}
+	
+	
 
 	@Override
 	public String toString() {

@@ -19,7 +19,6 @@ import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Entity
 public class Pregled {
@@ -34,7 +33,7 @@ public class Pregled {
 	@Column(name = "anamneza", nullable = false)
 	private String anamneza;
 	
-	@Column(name = "DdatumIVremePregleda", nullable = false)
+	@Column(name = "datumIVremePregleda", nullable = false)
 	private Date datumIVremePregleda;
 	
 	@Column(name = "tipPregleda")

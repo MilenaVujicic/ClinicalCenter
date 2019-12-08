@@ -214,7 +214,13 @@
                            <a class="nav-link" id="examination-tab" data-toggle="tab" href="#examination" role="tab" aria-controls="examination" aria-selected="false">Examinations</a>
                        </li>
                        <li class="nav-item">
+                           <a class="nav-link" id="recipe-tab" data-toggle="tab" href="#recipe" role="tab" aria-controls="recipe" aria-selected="false">Recipes</a>
+                       </li>
+                       <li class="nav-item">
                            <a class="nav-link" id="operation-tab" data-toggle="tab" href="#operation" role="tab" aria-controls="operation" aria-selected="false">Operations</a>
+                       </li>
+                       <li class="nav-item">
+                           <a class="nav-link" id="alergie-tab" data-toggle="tab" href="#alergie" role="tab" aria-controls="alergie" aria-selected="false">Allergies</a>
                        </li>
                    </ul>
                </div>
@@ -259,7 +265,7 @@
                           </div>
                           <div class="row">
                               <div class="col-md-6">
-                                  <label>Date of birth:</label>
+                                  <label>Date of birth</label>
                               </div>
                               <div class="col-md-6">
                                   <p id="aboutPatientDateOfBirth"></p>
@@ -289,6 +295,14 @@
                                   <p id="aboutPatientDioptre"></p>
                               </div>
                           </div>
+                          <div class="row" hidden="true">
+                              <div class="col-md-6">
+                                  <label>ID</label>
+                              </div>
+                              <div class="col-md-6">
+                                  <p id="aboutPatientID"></p>
+                              </div>
+                          </div>
                        	  <div class="col-md-4">
 			                <a class="btn btn-success" id="editPatient" onclick="return editPatient();">Edit Profile</a>
 			         	  </div>
@@ -313,6 +327,25 @@
                          	</div>
                        </div>
                        
+                       <div class="tab-pane fade" id="recipe" role="tabpanel" aria-labelledby="recipe-tab">
+                        	<table class="table" id="allRecipes">
+                        		<thead>
+							    <tr>
+							      <th scope="col">Name</th>
+							      <th scope="col">Describe</th>
+							      <th scope="col">Status</th>
+							      <th scope="col">Date</th>
+							      <th scope="col">Verify date</th>
+							      <th scope="col">Code</th>
+							      <th scope="col">Drug</th>
+							    </tr>
+							  </thead>
+							  <tbody>
+							    
+							  </tbody>
+                        	</table>
+                       </div>
+                       
                        <div class="tab-pane fade" id="operation" role="tabpanel" aria-labelledby="operation-tab">
                          	<table class="table" id="allOperation">
                          		<thead>
@@ -326,10 +359,110 @@
 								  </tbody>
                          	</table>
                        </div>
+                       
+                       <div class="tab-pane fade" id="alergie" role="tabpanel" aria-labelledby="alergie-tab">
+                         	<table class="table" id="allAlergies">
+                         		<thead>
+							    <tr>
+							      <th scope="col">Name</th>
+							      <th scope="col">Describe</th>
+							    </tr>
+							  	</thead>
+								  <tbody>
+								    
+								  </tbody>
+                         	</table>
+                         	<div class="col-md-4">
+			                	<a class="btn btn-primary" id="addAllergies" onclick="return addAllergies();">Add allergies</a>
+			         	  	</div>
+                       </div>
                    </div>
                	</div>
            </div>
+           
+           <div class="row">
+               <div class="col-md-8">
+               		<div id="editAbout" hidden="true">
+               			<table>
+               				<tr>
+               					<td>Height (cm)</td>
+               					<td><input type="number" id="editHeigth"></td>
+               				</tr>
+               				<tr>
+               					<td>Width (kg)</td>
+               					<td><input type="number" id="editWidth"></td>
+               				</tr>
+               				<tr>
+               					<td>Dioptre</td>
+               					<td><input type="number" id="editDioptre"></td>
+               				</tr>
+               			</table>
+               			<div class="col-md-4">
+		                	<a class="btn btn-primary" onclick="return editAbout();">Edit patient</a>
+		         	  	</div>
+               		</div>
+               		
+               		<div id="editRecipe" hidden="true">
+               			<table>
+               				<tr>
+               					<td>Name</td>
+               					<td><input type="text" id="editRecipeName"></td>
+               				</tr>
+               				<tr>
+               					<td>Describe</td>
+               					<td><input type="text" id="editRecipeDescribe"></td>
+               				</tr>
+               				<tr>
+               					<td>Drug</td>
+               					<td>
+               						<select class="browser-default custom-select" id="selectRecipeDrugs">
+               							
+               						</select>
+               					</td>
+               				</tr>
+               				<tr hidden="true">
+               					<td>ID</td>
+               					<td><input type="text" id="editRecipeID"></td>
+               				</tr>
+               			</table>
+               			<div class="col-md-4">
+		                	<a class="btn btn-primary" onclick="return editRecipes();">Edit patient</a>
+		         	  	</div>
+               		</div>
+               		
+               		<div id="editExamination" hidden="true">
+               			<table>
+               				<tr>
+               					<td>Name</td>
+               					<td><input type="text" id="editExaminationName"></td>
+               				</tr>
+               				<tr>
+               					<td>Anamnesis</td>
+               					<td><textarea id="editExaminationAnamnesis"></textarea></td>
+               				</tr>
+               				<tr>
+               					<td>Type</td>
+               					<td><input type="text" id="editExaminationType"></td>
+               				</tr>
+               				
+               				<tr>
+               					<td>Price</td>
+               					<td><input type="number" id="editExaminationPrice"></td>
+               				</tr>
+               				<tr hidden="true">
+               					<td>ID</td>
+               					<td><input type="text" id="editExaminationID"></td>
+               				</tr>
+               			</table>
+               			<div class="col-md-4">
+		                	<a class="btn btn-primary" onclick="return editExaminations();">Edit patient</a>
+		         	  	</div>
+               		</div>
+               </div>
+           </div>
+           
        </form>           
+   		
     </div>
 </body>
 </html>

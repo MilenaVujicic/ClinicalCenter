@@ -49,5 +49,11 @@ insert into dijagnoza(sifra, ime, opis) values ('I95', 'Nizak krvni pritisak', '
 insert into dijagnoza(sifra, ime, opis) values ('J01', 'Akutno zapaljenje sinusa', '');
 insert into dijagnoza(sifra, ime, opis) values ('J20', 'Akutni bronhitis', 'Akutna upala disajnih puteva');
 
+insert into alergija(naziv, opis, pacijent_id) values ('Ambrozija', 'Svrab nosa i ociju', 1);
+
 insert into recept (naziv, opis, status, datum_ispisa, sifra_lek, lek_ime, pacijent_id) values ('Recept Amoksicilin', '2x1 na dan', 0, '2019-12-01', 'J01CA04', 'Amoksicilin', 1);
 insert into recept (naziv, opis, status, datum_ispisa, sifra_lek, lek_ime, pacijent_id) values ('Recept Panklav', '3x1 na dan', 0, '2019-12-01', 'J01CR02', 'Panklav', 1);
+
+insert into pregled (naziv, anamneza, datumivreme_pregleda, status, tip_pregleda, cena, doktor_id, pacijent_id, sala_id) values ('Prvi pregled', 'Pacijent je dosao sa povisenom temperaturom', '12-12-19', 1, 'Opsti pregled', 50, 1, 1, 1);
+
+insert into pregledi_dijagnoze(pregled_id, dijagnoza_id) values(1, 2);
