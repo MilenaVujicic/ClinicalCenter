@@ -1,6 +1,6 @@
 package com.example.demo.dto;
 
-import java.util.Date;
+import java.util.Calendar;
 
 import com.example.demo.model.Sala;
 import com.example.demo.model.Termin;
@@ -9,14 +9,14 @@ public class TerminDTO {
 
 	private Long id;
 	
-	private Date datum;
+	private Calendar datum;
 	
 	private boolean slobodan;
 
 	private Sala sala;
 
 	
-	public TerminDTO(Long id, Date datum, boolean slobodan, Sala sala) {
+	public TerminDTO(Long id, Calendar datum, boolean slobodan, Sala sala) {
 		super();
 		this.id = id;
 		this.datum = datum;
@@ -36,11 +36,11 @@ public class TerminDTO {
 		this.id = id;
 	}
 
-	public Date getDatum() {
+	public Calendar getDatum() {
 		return datum;
 	}
 
-	public void setDatum(Date datum) {
+	public void setDatum(Calendar datum) {
 		this.datum = datum;
 	}
 

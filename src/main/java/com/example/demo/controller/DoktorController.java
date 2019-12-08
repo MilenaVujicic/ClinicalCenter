@@ -1,5 +1,6 @@
 package com.example.demo.controller;
 
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
@@ -76,7 +77,7 @@ public class DoktorController {
 		pregled.setAnamneza(pregledDTO.getAnamneza());
 		pregled.setTipPregleda(pregledDTO.getTipPregleda());
 		pregled.setCena(pregledDTO.getCena());
-		pregled.setDatumIVremePregleda(new Date());
+		pregled.setDatumIVremePregleda(pregledDTO.getDatumIVremePregleda());
 		pregled.setDoktor(doktor);
 		pregled.setStatus(StatusPregleda.ZAVRSEN);
 		pregled.setPacijent(pacijent);

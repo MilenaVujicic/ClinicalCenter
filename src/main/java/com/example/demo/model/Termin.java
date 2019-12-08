@@ -1,5 +1,6 @@
 package com.example.demo.model;
 
+import java.util.Calendar;
 import java.util.Date;
 
 import javax.persistence.CascadeType;
@@ -19,7 +20,7 @@ public class Termin {
 	private Long id;
 	
 	@Column(name = "datum")
-	private Date datum;
+	private Calendar datum;
 	
 	@Column(name = "slobodan")
 	private boolean slobodan;
@@ -32,7 +33,7 @@ public class Termin {
 		// TODO Auto-generated constructor stub
 	}
 
-	public Termin(Date datum, boolean slobodan) {
+	public Termin(Calendar datum, boolean slobodan) {
 		super();
 		this.datum = datum;
 		this.slobodan = slobodan;
@@ -40,7 +41,7 @@ public class Termin {
 	
 	
 
-	public Termin(Long id, Date datum, boolean slobodan, Sala sala) {
+	public Termin(Long id, Calendar datum, boolean slobodan, Sala sala) {
 		super();
 		this.id = id;
 		this.datum = datum;
@@ -48,11 +49,11 @@ public class Termin {
 		this.sala = sala;
 	}
 
-	public Date getDatum() {
+	public Calendar getDatum() {
 		return datum;
 	}
 
-	public void setDatum(Date datum) {
+	public void setDatum(Calendar datum) {
 		this.datum = datum;
 	}
 
