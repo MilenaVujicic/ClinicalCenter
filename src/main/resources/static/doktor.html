@@ -306,6 +306,27 @@
                        	  <div class="col-md-4">
 			                <a class="btn btn-success" id="editPatient" onclick="return editPatient();">Edit Profile</a>
 			         	  </div>
+			         	  
+			         	  
+			         	  <div id="editAbout" hidden="true">
+	               			<table>
+	               				<tr>
+	               					<td>Height (cm)</td>
+	               					<td><input type="number" id="editHeigth"></td>
+	               				</tr>
+	               				<tr>
+	               					<td>Width (kg)</td>
+	               					<td><input type="number" id="editWidth"></td>
+	               				</tr>
+	               				<tr>
+	               					<td>Dioptre</td>
+	               					<td><input type="number" id="editDioptre"></td>
+	               				</tr>
+	               			</table>
+	               			<div class="col-md-4">
+			                	<a class="btn btn-primary" onclick="return editAbout();">Edit patient</a>
+			         	  	</div>
+	               		 </div>
                        </div>
                        
                        <div class="tab-pane fade" id="examination" role="tabpanel" aria-labelledby="examination-tab">
@@ -325,6 +346,62 @@
 									  </tbody>
 	                         	</table>
                          	</div>
+                         	
+                         	<div id="editExamination" hidden="true">
+	               			<table>
+	               				<tr>
+	               					<td>Name</td>
+	               					<td><input type="text" id="editExaminationName"></td>
+	               				</tr>
+	               				<tr>
+	               					<td>Anamnesis</td>
+	               					<td><textarea id="editExaminationAnamnesis"></textarea></td>
+	               				</tr>
+	               				<tr>
+	               					<td>Type</td>
+	               					<td><input type="text" id="editExaminationType"></td>
+	               				</tr>
+	               				
+	               				<tr>
+	               					<td>Price</td>
+	               					<td><input type="number" id="editExaminationPrice"></td>
+	               				</tr>
+	               				<tr hidden="true">
+	               					<td>ID</td>
+	               					<td><input type="text" id="editExaminationID"></td>
+	               				</tr>
+	               			</table>
+	               			<div class="col-md-4">
+			                	<a class="btn btn-primary" onclick="return editExaminations();">Edit patient</a>
+			         	  	</div>
+	               			</div>
+                         	
+                         	<div id="examinationDiagnosis" hidden="true">
+		               			<table id="examinationDiagnosisTable" hidden="true" class="table">
+		               				<thead>
+		               					<tr>
+		               						<th>Code</th>
+		               						<th>Name</th>
+		               						<th>Describe</th>
+		               					</tr>
+		               				</thead>
+		               				<tbody>
+		               				</tbody>
+		               			</table>
+		               			<p id="examID" hidden="true"></p> 
+		               			<div class="col-md-4">
+				                	<a class="btn btn-success" onclick="return getDiagnosis();">Change diagnosis</a>
+				         	  	</div>
+				         	  	<div class="col-md-4">
+				                	<a class="btn btn-danger" onclick="return closeDiagnosis();">Close diagnosis</a>
+				         	  	</div>
+				         	  	<div class="col-md-4" hidden="true" id="buttonAddNewDiag">
+				                	<a class="btn btn-primary" onclick="return addDiag();">Add diagnosis</a>
+				         	  	</div>
+				         	  	<div class="form-row" id="diagnosisExam">
+			  	
+			  					</div>	
+		               		</div>
                        </div>
                        
                        <div class="tab-pane fade" id="recipe" role="tabpanel" aria-labelledby="recipe-tab">
@@ -344,6 +421,34 @@
 							    
 							  </tbody>
                         	</table>
+                        	
+                        	<div id="editRecipe" hidden="true">
+	               			<table>
+	               				<tr>
+	               					<td>Name</td>
+	               					<td><input type="text" id="editRecipeName"></td>
+	               				</tr>
+	               				<tr>
+	               					<td>Describe</td>
+	               					<td><input type="text" id="editRecipeDescribe"></td>
+	               				</tr>
+	               				<tr>
+	               					<td>Drug</td>
+	               					<td>
+	               						<select class="browser-default custom-select" id="selectRecipeDrugs">
+	               							
+	               						</select>
+	               					</td>
+	               				</tr>
+	               				<tr hidden="true">
+	               					<td>ID</td>
+	               					<td><input type="text" id="editRecipeID"></td>
+	               				</tr>
+	               			</table>
+	               			<div class="col-md-4">
+			                	<a class="btn btn-primary" onclick="return editRecipes();">Edit patient</a>
+			         	  	</div>
+               			    </div>
                        </div>
                        
                        <div class="tab-pane fade" id="operation" role="tabpanel" aria-labelledby="operation-tab">
@@ -375,6 +480,46 @@
                          	<div class="col-md-4">
 			                	<a class="btn btn-primary" id="addAllergies" onclick="return addAllergies();">Add allergies</a>
 			         	  	</div>
+			         	  	
+			         	  	<div id="addAllergy" hidden="true">
+		               			<table class="table">
+		               				<tr>
+		               					<td>Name</td>
+		               					<td><input type="text" id="addAllergieName"></td>
+		               				</tr>
+		               				<tr>
+		               					<td>Describe</td>
+		               					<td><input type="text" id="addAllergieDesc"></td>
+		               				</tr>
+		               				<tr hidden="true">
+		               					<td>ID</td>
+		               					<td><input type="text" id="addAllergiePatientID"></td>
+		               				</tr>
+		               			</table>
+		               			<div class="col-md-4">
+				                	<a class="btn btn-primary" onclick="return addAllergie();">Add allergy</a>
+				         	  	</div>
+		               		</div>
+		               		
+		               		<div id="editAllergie" hidden="true">
+		               			<table class="table">
+		               				<tr>
+		               					<td>Name</td>
+		               					<td><input type="text" id="editAllergieName"></td>
+		               				</tr>
+		               				<tr>
+		               					<td>Describe</td>
+		               					<td><input type="text" id="editAllergieDesc"></td>
+		               				</tr>
+		               				<tr hidden="true">
+		               					<td>ID</td>
+		               					<td><input type="text" id="editAllergieID"></td>
+		               				</tr>
+		               			</table>
+		               			<div class="col-md-4">
+				                	<a class="btn btn-primary" onclick="return editAllergie();">Edit allergy</a>
+				         	  	</div>
+		               		</div>
                        </div>
                    </div>
                	</div>
@@ -382,82 +527,15 @@
            
            <div class="row">
                <div class="col-md-8">
-               		<div id="editAbout" hidden="true">
-               			<table>
-               				<tr>
-               					<td>Height (cm)</td>
-               					<td><input type="number" id="editHeigth"></td>
-               				</tr>
-               				<tr>
-               					<td>Width (kg)</td>
-               					<td><input type="number" id="editWidth"></td>
-               				</tr>
-               				<tr>
-               					<td>Dioptre</td>
-               					<td><input type="number" id="editDioptre"></td>
-               				</tr>
-               			</table>
-               			<div class="col-md-4">
-		                	<a class="btn btn-primary" onclick="return editAbout();">Edit patient</a>
-		         	  	</div>
-               		</div>
                		
-               		<div id="editRecipe" hidden="true">
-               			<table>
-               				<tr>
-               					<td>Name</td>
-               					<td><input type="text" id="editRecipeName"></td>
-               				</tr>
-               				<tr>
-               					<td>Describe</td>
-               					<td><input type="text" id="editRecipeDescribe"></td>
-               				</tr>
-               				<tr>
-               					<td>Drug</td>
-               					<td>
-               						<select class="browser-default custom-select" id="selectRecipeDrugs">
-               							
-               						</select>
-               					</td>
-               				</tr>
-               				<tr hidden="true">
-               					<td>ID</td>
-               					<td><input type="text" id="editRecipeID"></td>
-               				</tr>
-               			</table>
-               			<div class="col-md-4">
-		                	<a class="btn btn-primary" onclick="return editRecipes();">Edit patient</a>
-		         	  	</div>
-               		</div>
                		
-               		<div id="editExamination" hidden="true">
-               			<table>
-               				<tr>
-               					<td>Name</td>
-               					<td><input type="text" id="editExaminationName"></td>
-               				</tr>
-               				<tr>
-               					<td>Anamnesis</td>
-               					<td><textarea id="editExaminationAnamnesis"></textarea></td>
-               				</tr>
-               				<tr>
-               					<td>Type</td>
-               					<td><input type="text" id="editExaminationType"></td>
-               				</tr>
-               				
-               				<tr>
-               					<td>Price</td>
-               					<td><input type="number" id="editExaminationPrice"></td>
-               				</tr>
-               				<tr hidden="true">
-               					<td>ID</td>
-               					<td><input type="text" id="editExaminationID"></td>
-               				</tr>
-               			</table>
-               			<div class="col-md-4">
-		                	<a class="btn btn-primary" onclick="return editExaminations();">Edit patient</a>
-		         	  	</div>
-               		</div>
+               		
+               		
+               		
+               		
+               		
+               		
+               		
                </div>
            </div>
            

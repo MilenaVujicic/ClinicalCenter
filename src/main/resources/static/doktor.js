@@ -2,6 +2,8 @@ function home() {
 	$('#examinationForm').attr('hidden', true);
 	$('#schPatTable').attr('hidden', true);
 	$('#allPatients').attr('hidden', true);
+	$('#examinationDiagnosis').attr('hidden', true);
+	$('#aboutPatient').attr('hidden', true);
 }
 
 function startExamination(pacijent) {
@@ -9,6 +11,8 @@ function startExamination(pacijent) {
 		$('#examinationForm').attr('hidden', false);
 		$('#schPatTable').attr('hidden', true);
 		$('#allPatients').attr('hidden', true);
+		$('#examinationDiagnosis').attr('hidden', true);
+		$('#aboutPatient').attr('hidden', true);
 		$('#patientName').val(pacijent.ime);
 		$('#patientSurname').val(pacijent.prezime);
 		$('#patientJMBG').val(pacijent.jmbg);
@@ -18,6 +22,8 @@ function startExamination(pacijent) {
 
 function dodajRecept() {
 	$('#recipeForm').attr('hidden', false);
+	$('#examinationDiagnosis').attr('hidden', true);
+	$('#aboutPatient').attr('hidden', true);
 	$('#recipePatientName').val($('#patientName').val());
 	$('#recipePatientSurname').val($('#patientSurname').val());
 	$('#recipePatientJMBG').val($('#patientJMBG').val());
@@ -26,6 +32,8 @@ function dodajRecept() {
 
 function cancelRecipe() {
 	$('#recipeForm').attr('hidden', true);
+	$('#examinationDiagnosis').attr('hidden', true);
+	$('#aboutPatient').attr('hidden', true);
 	$('#recipePatientName').val('');
 	$('#recipePatientSurname').val('');
 	$('#recipePatientJMBG').val('');
@@ -124,6 +132,7 @@ function scheduledPatients() {
 	$('#schPatTable').attr('hidden', false);
 	$('#examinationForm').attr('hidden', true);
 	$('#allPatients').attr('hidden', true);
+	$('#examinationDiagnosis').attr('hidden', true);
 	dijagnoze();
 	lekovi();
 	$.ajax({
@@ -221,6 +230,7 @@ function editExaminations() {
         	pacijent_id = document.getElementById("aboutPatientID").innerHTML;
         	examinations(pacijent_id);
         	$('#editExamination').attr('hidden', true);
+        	$('#examinationDiagnosis').attr('hidden', true);
         },
         error: function() {
         	alert('Desila se greska');
@@ -231,6 +241,7 @@ function editExaminations() {
 function editExamination(pregled) {
 	return function() {
 		$('#editExamination').attr('hidden', false);
+		$('#examinationDiagnosis').attr('hidden', true);
 		$('#editExaminationName').val(pregled.naziv);
 		$('#editExaminationAnamnesis').val(pregled.anamneza);
 		$('#editExaminationType').val(pregled.tipPregleda);
@@ -255,6 +266,103 @@ function deleteExamination(id) {
 	}
 }
 
+function showDiagnose(dijagnoza) {
+	let tr = $('<tr></tr>');
+	let tdCode = $('<td>'+dijagnoza.sifra+'</td>');
+	let tdName = $('<td>'+dijagnoza.ime+'</td>');
+	let tdDesc = $('<td>'+dijagnoza.opis+'</td>');
+	tr.append(tdCode).append(tdName).append(tdDesc);
+	$('#examinationDiagnosisTable tbody').append(tr);
+}
+
+function addDiag() {
+	let id = document.getElementById("examID").innerHTML;
+	let url = 'dijagnoza/izmeni_pregled/' + id;
+	$.ajax({
+		url:"dijagnoza/sve_dijagnoze",
+        type:"GET",
+       	success: function(dijagnoze) {
+       		for (let dijagnoza of dijagnoze) {
+       			let str = 'diagnosisExam' + dijagnoza.id;
+       			let x = document.getElementById(str).checked;
+       			if (x == true) {
+       				url += '~' + dijagnoza.id;
+       			}
+       		}
+       		$.ajax({
+       			url: url,
+       			type: "GET",
+       			success: function() {
+       				allDiagn(id);
+       				$('#diagnosisExam').attr('hidden', true);
+       				$('#buttonAddNewDiag').attr('hidden', true);
+       			},
+       			error: function() {
+       				alert('Desila se greska ovde');
+       			}
+       		});
+       	},
+       	error: function() {
+       		alert('Desila se greska');
+       	}
+	});
+}
+
+function showDiag(dijagnoza) {
+	let tr = $('<div class="form-group col-md-3">'+
+  			'<div class="custom-control custom-checkbox" >' +
+  			'<input type="checkbox" class="form-check-input" id="diagnosisExam'+dijagnoza.id+'">'+
+			'<label class="custom-control-label" for="diagnosisExam'+dijagnoza.id+'">('+dijagnoza.sifra+') '+
+			dijagnoza.ime+'</label></div></div>');
+	$('#diagnosisExam').append(tr);
+}
+
+function closeDiagnosis() {
+	$('#examinationDiagnosis').attr('hidden', true);
+}
+
+function getDiagnosis() {
+	$.ajax({
+        url:"/dijagnoza/sve_dijagnoze",
+        type:"GET",
+       	success: function(dijagnoze) {
+       		$('#diagnosisExam').html('');
+       		for (let dijagnoza of dijagnoze) {
+       			showDiag(dijagnoza);
+       		}
+       		$('#buttonAddNewDiag').attr('hidden', false);
+       	},
+       	error: function() {
+       		alert('Desila se greska');
+       	}
+ 	});
+}
+
+function allDiagn(id) {
+	$.ajax({
+		url: 'dijagnoza/pregled/' + id,
+		type: "GET",
+		success: function(dijagnoze) {
+			$('#examinationDiagnosisTable tbody').html('');
+			for (let dijagnoza of dijagnoze) {
+				showDiagnose(dijagnoza);
+			}
+			$('#examinationDiagnosisTable').attr('hidden', false);
+			$('#examinationDiagnosis').attr('hidden', false);
+			document.getElementById("examID").innerHTML = id;
+		},
+		error: function() {
+			alert('Desila se greska');
+		}
+	});
+}
+
+function allDiagnosis(id) {
+	return function() {
+		allDiagn(id);
+	}
+}
+
 function prikaziPregled(pregled) {
 	let tr = $('<tr></tr>');
 	let tdName = $('<td>'+pregled.naziv+'</td>');
@@ -263,6 +371,7 @@ function prikaziPregled(pregled) {
 	let tdAnamnesis = $('<td>'+pregled.anamneza+'</td>');
 	let tdPrice = $('<td>'+pregled.cena+'</td>');
 	let aDiagnosis = $('<td><a class="btn btn-primary">Diagnosis</a></td>');
+	aDiagnosis.click(allDiagnosis(pregled.id));
 	let aEditExamination = $('<td><a class="btn btn-success">Edit examination</a></td>');
 	aEditExamination.click(editExamination(pregled));
 	let aDeleteExamination = $('<td><a class="btn btn-danger">Delete examination</a></td>');
@@ -289,8 +398,78 @@ function examinations(id) {
 	});
 }
 
+function addAllergie() {
+	let naziv = $('#addAllergieName').val();
+	let opis = $('#addAllergieDesc').val();
+	let id = $('#addAllergiePatientID').val();
+	$.ajax({
+		url: "alergija/dodaj/" + id,
+		type:"POST",
+        data: JSON.stringify({naziv, opis}),
+        contentType:'application/json',
+        success: function() {
+        	$('#addAllergy').attr('hidden', true);
+        	pacijent_id = document.getElementById("aboutPatientID").innerHTML;
+        	alergies(pacijent_id);
+        },
+        error: function() {
+        	alert('Desila se greska');
+        }
+	});
+}
+
 function addAllergies() {
-	alert('OK');
+	$('#addAllergy').attr('hidden', false);
+	$('#examinationDiagnosis').attr('hidden', true);
+	$('#addAllergieName').val('');
+	$('#addAllergieDesc').val('');
+	$('#addAllergiePatientID').val(document.getElementById("aboutPatientID").innerHTML);
+}
+
+function editAllergie() {
+	let naziv = $('#editAllergieName').val();
+	let opis = $('#editAllergieDesc').val();
+	let id = $('#editAllergieID').val();
+	$.ajax({
+		url: "alergija/izmeni/" + id,
+		type:"PUT",
+        data: JSON.stringify({id, naziv, opis}),
+        contentType:'application/json',
+        success: function() {
+        	$('#editAllergie').attr('hidden', true);
+        	pacijent_id = document.getElementById("aboutPatientID").innerHTML;
+        	alergies(pacijent_id);
+        },
+        error: function() {
+        	alert('Desila se greska');
+        }
+	});
+}
+
+function editAlergy(alergija) {
+	return function() {
+		$('#editAllergie').attr('hidden', false);
+		$('#examinationDiagnosis').attr('hidden', true);
+		$('#editAllergieName').val(alergija.naziv);
+		$('#editAllergieDesc').val(alergija.opis);
+		$('#editAllergieID').val(alergija.id);
+	}
+}
+
+function deleteAlergy(id) {
+	return function() {
+		$.ajax({
+			url: "alergija/obrisi/" + id,
+			type:"DELETE",
+	        success: function() {
+	        	pacijent_id = document.getElementById("aboutPatientID").innerHTML;
+	        	alergies(pacijent_id);
+	        },
+	        error: function() {
+	        	alert('Desila se greska');
+	        }
+		});
+	}
 }
 
 function prikaziAlergiju(alergija) {
@@ -298,13 +477,15 @@ function prikaziAlergiju(alergija) {
 	let tdName = $('<td>'+alergija.naziv+'</td>');
 	let tdDesc = $('<td>'+alergija.opis+'</td>');
 	let aEdit = $('<td><a class="btn btn-success">Edit allergie</a></td>');
+	aEdit.click(editAlergy(alergija));
 	let aDelete = $('<td><a class="btn btn-danger">Delete allergie</a></td>');
+	aDelete.click(deleteAlergy(alergija.id));
 	tr.append(tdName).append(tdDesc).append(aEdit).append(aDelete);
 	$('#allAlergies tbody').append(tr);
 }
 
-function alergies(pacijent) {
-	let url = "alergija/sveAlergije/" + pacijent.id;
+function alergies(id) {
+	let url = "alergija/sveAlergije/" + id;
 	$.ajax({
         url:url,
         type:"GET",
@@ -344,6 +525,7 @@ function editRecipes() {
 function editRecipe(recept) {
 	return function() {
 		$('#editRecipe').attr('hidden', false);
+		$('#examinationDiagnosis').attr('hidden', true);
 		$('#editRecipeName').val(recept.naziv);
 		$('#editRecipeDescribe').val(recept.opis);
 		$('#editRecipeID').val(recept.id);
@@ -422,7 +604,7 @@ function medicalRecord(korisnik) {
            		$('#aboutPatient').attr('hidden', false);
            		document.getElementById("title").innerHTML = "";
            		examinations(pacijent.id);
-           		alergies(pacijent);
+           		alergies(pacijent.id);
            		recipes(pacijent.id);
 	        },
            	error: function() {
@@ -450,6 +632,7 @@ function allPatients() {
 	$('#examinationForm').attr('hidden', true);
 	$('#schPatTable').attr('hidden', true);
 	$('#allPatients').attr('hidden', false);
+	$('#examinationDiagnosis').attr('hidden', true);
 	$.ajax({
         url:"/doktor/svi_pacijenti",
         type:"GET",
@@ -470,6 +653,7 @@ function allPatients() {
 
 function editPatient() {
 	$('#editAbout').attr('hidden', false);
+	$('#examinationDiagnosis').attr('hidden', true);
 	let visina = document.getElementById("aboutPatientHeight").innerHTML;
 	visina = visina.substring(0, visina.length - 2);
 	let tezina = document.getElementById("aboutPatientWeight").innerHTML;
