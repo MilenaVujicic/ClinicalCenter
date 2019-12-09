@@ -51,13 +51,13 @@ public class ReceptController {
 	@RequestMapping(value = "/obrisi/{id}", method = RequestMethod.GET)
 	public ResponseEntity<String> obrisi(@PathVariable("id") Long identifikacija) {
 		List<Recept> sviRecepti = receptService.findAll();
-		/*Recept r = new Recept();
+		Recept r = new Recept();
 		for(Recept recept : sviRecepti) {
 			if (recept.getId().equals(identifikacija)) {
 				r = recept;
 			}
 		}
-		receptService.delete(r);*/
+		receptService.delete(r);
 		return new ResponseEntity<String>("", HttpStatus.OK);
 	}
 }

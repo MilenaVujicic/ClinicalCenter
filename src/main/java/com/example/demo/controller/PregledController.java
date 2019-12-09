@@ -49,8 +49,8 @@ public class PregledController {
 	
 	@RequestMapping(value = "/obrisi/{id}", method = RequestMethod.DELETE)
 	public ResponseEntity<String> obrisi(@PathVariable("id") Long identifikacija) {
-		/*Pregled pregled = pregledService.findOne(identifikacija);
-		pregledService.delete(pregled);*/
+		Pregled pregled = pregledService.findOne(identifikacija);
+		pregledService.delete(pregled);
 		return new ResponseEntity<String>("", HttpStatus.OK);
 	}
 }
