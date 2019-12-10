@@ -20,7 +20,7 @@
 <script>
 
 $(document).ready(()=>{
-
+	document.getElementById ("sKlinika").addEventListener ("change", promenaSala, false);
 	$.ajax({
         url:"/pacijent/sveKlinike",
         type:"GET",
@@ -35,12 +35,38 @@ $(document).ready(()=>{
        	}
  	});
 	
+
+	
+	
 	function optionKlinika(klinika){
 		let oName = $('<option id = \"' + klinika.ime + '\">' + klinika.ime + "</option>");
 		$("#sKlinika").append(oName);
 	}
 	
 })
+
+function promenaSala(){
+	var sel = $('#sKlinika').find(":selected").text();
+	$.ajax({
+		url: "sala/sveSale/" + sel,
+		type:"GET",
+		success: function(rooms){
+			for(i = 0; i < rooms.length; i++){
+				optionSala(rooms[i]);
+			}
+		},
+		error: function(){
+			alert('Desila se greska');
+		}
+	})
+}
+
+function optionSala(sala){
+	$('#sSala').empty();
+	let oName = $('<option id = \"' + sala.ime + '\">' + sala.ime + "</option>");
+	$("#sSala").append(oName);
+	alert(sala.ime);
+}
 </script>
 </head>
 <body>
@@ -73,7 +99,7 @@ $(document).ready(()=>{
 				<div class="cols-sm-10">
 					<div class="input-group">
 						<span class="input-group-addon"><i class="fa fa-user fa" aria-hidden="true"></i></span>
-						<select name = "sSale" id = "sSala"></select>
+						<select name = "sSale" id = "sSala" ></select>
 					</div>
 				</div>
 			</div>
