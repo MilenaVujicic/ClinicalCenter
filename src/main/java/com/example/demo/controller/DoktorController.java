@@ -122,7 +122,8 @@ public class DoktorController {
 	public Pacijent getPatient(@PathVariable Long id) {
 		Pacijent pacijent = pacijentService.findByIdKorisnik(id);
 		return pacijent;
-
+	}
+	
 	@RequestMapping(value = "/sviDoktori/{val}", method = RequestMethod.GET)
 	public ResponseEntity<List<KorisnikDTO>> sviDoktori(@PathVariable String val){
 		List<KorisnikDTO> doktori = new ArrayList<KorisnikDTO>();
@@ -131,9 +132,8 @@ public class DoktorController {
 	
 		for(Doktor doc : d) {
 			DoktorDTO temp = new DoktorDTO(doc);
-			Optional<Korisnik> oTemp = korisnikService.findById(temp.getId());
-			Korisnik kTemp = oTemp.get();
-			KorisnikDTO kDto =  new KorisnikDTO(kTemp);
+			Korisnik oTemp = korisnikService.findOne(temp.getId());
+			KorisnikDTO kDto =  new KorisnikDTO(oTemp);
 			doktori.add(kDto);
 			
 		}
