@@ -12,7 +12,7 @@ import com.example.demo.repository.DijagnozaRepository;
 public class DijagnozaService {
 
 	@Autowired
-	DijagnozaRepository dijagnozaRepository;
+	private DijagnozaRepository dijagnozaRepository;
 	
 	public List<Dijagnoza> findAll() {
 		return dijagnozaRepository.findAll();

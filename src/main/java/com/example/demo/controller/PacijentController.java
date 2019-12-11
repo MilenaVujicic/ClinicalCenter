@@ -1,6 +1,5 @@
 package com.example.demo.controller;
 
-import java.awt.PageAttributes.MediaType;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -76,7 +75,6 @@ public class PacijentController {
 	@RequestMapping(value = "/pacijent/{id}", method=RequestMethod.GET)
 	public Pacijent getPatient(@PathVariable Long id) {
 		Pacijent pacijent = pacijentService.findByIdKorisnik(id);
-		System.out.println("#########################");
 		return pacijent;
 	}
 	
@@ -265,8 +263,5 @@ public class PacijentController {
 		Pacijent p = pacijentService.save(pacijent);
 		return new ResponseEntity<PacijentDTO>(new PacijentDTO(p), HttpStatus.OK);
 	}
-	
-	
-	
 }
 			
