@@ -80,7 +80,7 @@
 	            url:"/pacijent/pacijent/" + korisnik.id,
 	            type:"GET",
 	           	success: function(pacijent){
-	           		alert(korisnik.ime)
+	           		
 	           		document.getElementById("profilePatientName").innerHTML = korisnik.ime + " " + korisnik.prezime;
 	           		document.getElementById("aboutPatientName").innerHTML = korisnik.ime + " " + korisnik.prezime;
 	           		document.getElementById("aboutPatientEmail").innerHTML = korisnik.email;
@@ -92,10 +92,11 @@
 	           		document.getElementById("aboutPatientDioptre").innerHTML = pacijent.dioptrija;
 	           		document.getElementById("aboutPatientID").innerHTML = pacijent.id;
 	           		$('#aboutPatient').attr('hidden', false);
-	           		document.getElementById("title").innerHTML = "";
-	           		//examinations(pacijent.id);
-	           		//alergies(pacijent.id);
-	           		//recipes(pacijent.id);
+	           		//document.getElementById("title").innerHTML = "";
+	           		alert(pacijent.id)
+	           		examinations(pacijent.id);
+	           		alergies(pacijent.id);
+	           		recipes(pacijent.id);
 		        },
 	           	error: function() {
 	           		alert('Desila se greska');
@@ -119,6 +120,73 @@
 		        	alert('Desila se greska ovde');
 		        }
 			});
+		}
+		
+		function alergies(id) {
+			let url = "alergija/sveAlergije/" + id;
+			$.ajax({
+		        url:url,
+		        type:"GET",
+		        success: function(alergije) {
+		        	$('#allAlergies tbody').html('');
+		        	for(let alergija of alergije) {
+		        		prikaziAlergiju(alergija);
+		        	}
+		        },
+		        error: function() {
+		        	alert('Desila se greska ovde');
+		        }
+			});
+		}
+		
+		function recipes(id) {
+			let url = "recept/sviRecepti/" + id;
+			$.ajax({
+		        url:url,
+		        type:"GET",
+		        success: function(recepti) {
+		        	$('#allRecipes tbody').html('');
+		        	for(let recept of recepti) {
+		        		prikaziRecept(recept);
+		        	}
+		        	drugs();
+		        },
+		        error: function() {
+		        	alert('Desila se greska ovde');
+		        }
+			});
+		}
+		
+		function prikaziRecept(recept) {
+			let tr = $('<tr></tr>');
+			let tdName = $('<td>'+recept.naziv+'</td>');
+			let tdDesc = $('<td>'+recept.opis+'</td>');
+			let tdStatus = $('<td>'+recept.status+'</td>');
+			let tdDate = $('<td>'+recept.datumIspisa+'</td>');
+			let tdVerify = $('<td>'+recept.datumOvere+'</td>');
+			let tdCode = $('<td>'+recept.sifraLek+'</td>');
+			let tdDrug = $('<td>'+recept.lek+'</td>');
+			tr.append(tdName).append(tdDesc).append(tdStatus).append(tdDate).append(tdVerify).append(tdCode).append(tdDrug);
+			$('#allRecipes tbody').append(tr);
+		}
+		
+		function prikaziAlergiju(alergija) {
+			let tr = $('<tr></tr>');
+			let tdName = $('<td>'+alergija.naziv+'</td>');
+			let tdDesc = $('<td>'+alergija.opis+'</td>');
+			tr.append(tdName).append(tdDesc);
+			$('#allAlergies tbody').append(tr);
+		}
+		
+		function prikaziPregled(pregled) {
+			let tr = $('<tr></tr>');
+			let tdName = $('<td>'+pregled.naziv+'</td>');
+			let tdDate = $('<td>'+pregled.datumIVremePregleda.toString().substr(0, 10)+'</td>');
+			let tdType = $('<td>'+pregled.tipPregleda+'</td>');
+			let tdAnamnesis = $('<td>'+pregled.anamneza+'</td>');
+			let tdPrice = $('<td>'+pregled.cena+'</td>');
+			tr.append(tdName).append(tdDate).append(tdType).append(tdAnamnesis).append(tdPrice);
+			$('#allExaminations tbody').append(tr);
 		}
 	</script>
 </head>
@@ -254,7 +322,7 @@
                           	<a class="btn btn-success" id="editPatient" onclick="return editPatient();">Edit Profile</a>
                           </div>
                           
-                          <div id="editAbout" hidden="true">
+                          <div id="editAbout" hidden="false">
                           	<table>
                           		<tr>
                           			<td>Height (cm)</td>
@@ -273,7 +341,7 @@
 			                	<a class="btn btn-primary" onclick="return editAbout();">Edit patient</a>
 			         	  	</div>
                           </div>
-                          
+                        </div>
                           <!-- EXAMINATION -->
                           <div class="tab-pane fade" id="examination" role="tabpanel" aria-labelledby="examination-tab">
                           	<div class="row">
@@ -344,15 +412,15 @@
                           </div>
                           
                           
-				 		</div>
+				 		
 				 	</div>
 				 </div>
 				 
-				 <div class ="row">
+				<!--  <div class ="row">
 				 	<div class="col-md-8">
 				 	
 				 	</div>
-				 </div>
+				 </div> -->
 			</div>
 			
 		</form>
