@@ -3,7 +3,7 @@
  */
 package com.example.demo.dto;
 
-import java.util.Calendar;
+import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -22,7 +22,7 @@ public class PregledDTO {
 	private String naziv;
 	private String anamneza;
 	private Pacijent pacijent;
-	private Calendar datumIVremePregleda;
+	private Date datumIVremePregleda;
 	private String tipPregleda;
 	private int duzina;
 	private Sala sala;
@@ -37,7 +37,7 @@ public class PregledDTO {
 		// TODO Auto-generated constructor stub
 	}
 
-	public PregledDTO(Long id, String naziv, String anamneza, Pacijent pacijent, Calendar datumIVremePregleda,
+	public PregledDTO(Long id, String naziv, String anamneza, Pacijent pacijent, Date datumIVremePregleda,
 			String tipPregleda, int duzina, Sala sala, Doktor doktori, double cena, Set<Dijagnoza> dijagnoze,
 			Set<Lek> lekovi, StatusPregleda status) {
 		super();
@@ -61,7 +61,7 @@ public class PregledDTO {
 		this.naziv = p.getNaziv();
 		this.anamneza = p.getAnamneza();
 		this.pacijent = p.getPacijent();
-		//this.datumIVremePregleda = p.getDatumIVremePregleda();
+		this.datumIVremePregleda = p.getDatumIVremePregleda();
 		this.tipPregleda = p.getTipPregleda();
 		this.sala = p.getSala();
 		this.doktori = p.getDoktor();
@@ -102,11 +102,11 @@ public class PregledDTO {
 		this.pacijent = pacijent;
 	}
 
-	public Calendar getDatumIVremePregleda() {
+	public Date getDatumIVremePregleda() {
 		return datumIVremePregleda;
 	}
 
-	public void setDatumIVremePregleda(Calendar datumIVremePregleda) {
+	public void setDatumIVremePregleda(Date datumIVremePregleda) {
 		this.datumIVremePregleda = datumIVremePregleda;
 	}
 
