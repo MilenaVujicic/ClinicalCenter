@@ -1,7 +1,8 @@
 package com.example.demo.dto;
 
-import java.util.Date;
+import java.util.Calendar;
 
+import com.example.demo.model.Doktor;
 import com.example.demo.model.Sala;
 import com.example.demo.model.Termin;
 
@@ -9,23 +10,31 @@ public class TerminDTO {
 
 	private Long id;
 	
-	private Date datum;
+	private Calendar datum;
 	
 	private boolean slobodan;
 
 	private Sala sala;
 
+	private Doktor doktor;
 	
-	public TerminDTO(Long id, Date datum, boolean slobodan, Sala sala) {
+	private String tip;
+	
+	private double trajanje;
+	
+	private double cena;
+	
+	public TerminDTO(Long id, Calendar datum, boolean slobodan, String tip, double trajanje, double cena, Sala sala, Doktor doktor) {
 		super();
 		this.id = id;
 		this.datum = datum;
 		this.slobodan = slobodan;
 		this.sala = sala;
+		this.doktor = doktor;
 	}
 	
 	public TerminDTO(Termin t) {
-		this(t.getId(), t.getDatum(), t.isSlobodan(), t.getSala());
+		this(t.getId(), t.getDatum(), t.isSlobodan(), t.getTip(), t.getTrajanje(), t.getCena(), t.getSala(), t.getDoktor());
 	}
 
 	public Long getId() {
@@ -36,11 +45,11 @@ public class TerminDTO {
 		this.id = id;
 	}
 
-	public Date getDatum() {
+	public Calendar getDatum() {
 		return datum;
 	}
 
-	public void setDatum(Date datum) {
+	public void setDatum(Calendar datum) {
 		this.datum = datum;
 	}
 
@@ -59,6 +68,42 @@ public class TerminDTO {
 	public void setSala(Sala sala) {
 		this.sala = sala;
 	}
+
+	public Doktor getDoktor() {
+		return doktor;
+	}
+
+	public void setDoktor(Doktor doktor) {
+		this.doktor = doktor;
+	}
+
+	public String getTip() {
+		return tip;
+	}
+
+	public void setTip(String tip) {
+		this.tip = tip;
+	}
+
+	public double getTrajanje() {
+		return trajanje;
+	}
+
+	public void setTrajanje(double trajanje) {
+		this.trajanje = trajanje;
+	}
+
+	public double getCena() {
+		return cena;
+	}
+
+	public void setCena(double cena) {
+		this.cena = cena;
+	}
+	
+	
+
+
 	
 	
 	

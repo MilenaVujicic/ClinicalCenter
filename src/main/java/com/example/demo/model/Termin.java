@@ -1,6 +1,6 @@
 package com.example.demo.model;
 
-import java.util.Date;
+import java.util.Calendar;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -11,6 +11,8 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 @Entity
 public class Termin {
 
@@ -19,20 +21,35 @@ public class Termin {
 	private Long id;
 	
 	@Column(name = "datum")
-	private Date datum;
+	private Calendar datum;
 	
 	@Column(name = "slobodan")
 	private boolean slobodan;
 	
+	@Column(name = "tip")
+	private String tip;
+	
+	@Column(name = "trajanje")
+	private double trajanje;
+	
+	@Column(name = "cena")
+	private double cena;
+	
+	@JsonIgnore
 	@ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
 	private Sala sala;
+ 
+	@ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+	private Doktor doktor;
+
+
 	
 	public Termin() {
 		super();
 		// TODO Auto-generated constructor stub
 	}
 
-	public Termin(Date datum, boolean slobodan) {
+	public Termin(Calendar datum, boolean slobodan) {
 		super();
 		this.datum = datum;
 		this.slobodan = slobodan;
@@ -40,19 +57,34 @@ public class Termin {
 	
 	
 
-	public Termin(Long id, Date datum, boolean slobodan, Sala sala) {
+	public Termin(Long id, Calendar datum, boolean slobodan, Sala sala, Doktor doktor) {
 		super();
 		this.id = id;
 		this.datum = datum;
 		this.slobodan = slobodan;
 		this.sala = sala;
+		this.doktor = doktor;
+	}
+	
+	
+
+	public Termin( Calendar datum, boolean slobodan, String tip, double trajanje, double cena, Sala sala,
+			Doktor doktor) {
+		super();
+		this.datum = datum;
+		this.slobodan = slobodan;
+		this.tip = tip;
+		this.trajanje = trajanje;
+		this.cena = cena;
+		this.sala = sala;
+		this.doktor = doktor;
 	}
 
-	public Date getDatum() {
+	public Calendar getDatum() {
 		return datum;
 	}
 
-	public void setDatum(Date datum) {
+	public void setDatum(Calendar datum) {
 		this.datum = datum;
 	}
 
@@ -80,10 +112,40 @@ public class Termin {
 		this.sala = sala;
 	}
 
-	@Override
-	public String toString() {
-		return "Termin [id=" + id + ", datum=" + datum + ", slobodan=" + slobodan + ", klinika=" + sala + "]";
+
+	public Doktor getDoktor() {
+		return doktor;
 	}
+
+	public void setDoktor(Doktor doktor) {
+		this.doktor = doktor;
+	}
+
+	public String getTip() {
+		return tip;
+	}
+
+	public void setTip(String tip) {
+		this.tip = tip;
+	}
+
+	public double getTrajanje() {
+		return trajanje;
+	}
+
+	public void setTrajanje(double trajanje) {
+		this.trajanje = trajanje;
+	}
+
+	public double getCena() {
+		return cena;
+	}
+
+	public void setCena(double cena) {
+		this.cena = cena;
+	}
+
+	
 	
 	
 	

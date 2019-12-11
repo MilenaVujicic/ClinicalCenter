@@ -5,3 +5,8 @@ body, html{
  	font-family: 'Oxygen', sans-serif;
     background-size: cover;
 }
+
+thead {
+	background-color: #151e3d;
+	color: white
+}
