@@ -1,12 +1,16 @@
 package com.example.demo.controller;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.mail.MailException;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -23,11 +27,14 @@ import com.example.demo.model.Doktor;
 import com.example.demo.model.Klinika;
 import com.example.demo.model.Korisnik;
 import com.example.demo.model.Pacijent;
+import com.example.demo.model.Pregled;
 import com.example.demo.model.UlogaKorisnika;
 import com.example.demo.service.DoktorService;
+import com.example.demo.service.EmailService;
 import com.example.demo.service.KlinikaService;
 import com.example.demo.service.KorisnikService;
 import com.example.demo.service.PacijentService;
+import com.example.demo.service.PregledService;
 
 
 @RestController
@@ -46,6 +53,10 @@ public class PacijentController {
 	
 	@Autowired
 	KorisnikService korisnikService;
+	
+	PregledService pregledService;
+	
+	EmailService emailService;
 	
 	private List<Korisnik> foundUsers = new ArrayList<Korisnik>();
 
@@ -262,6 +273,45 @@ public class PacijentController {
 		pacijent.setDioptrija(pacijentDTO.getDioptrija());
 		Pacijent p = pacijentService.save(pacijent);
 		return new ResponseEntity<PacijentDTO>(new PacijentDTO(p), HttpStatus.OK);
+	}
+	
+	@RequestMapping(value="/zakazi", method=RequestMethod.PUT)
+	public ResponseEntity<String> zakaziPregled(@RequestBody String dt) throws ParseException, InterruptedException {
+		dt = dt.substring(1, dt.length()-1);
+		System.out.println(dt);
+		Date date1=new SimpleDateFormat("dd/MM/yyyy").parse(dt);  
+		System.out.println(date1+"\t"+dt);  
+		
+		List<Doktor> doktori = doktorService.findAll();
+		Doktor doktor = doktori.get(0);
+		System.out.println("dr spec: "+doktor.getSpecijalizacija());
+		
+		List<Korisnik> korisnici = korisnikService.findByIme("Petar");
+		Korisnik user = korisnici.get(0);
+		Pacijent pacijent = pacijentService.findByIdKorisnik(user.getId());
+		System.out.println("visina pacijent: "+pacijent.getVisina());
+		
+		List<Korisnik> administratori = korisnikService.findByUloga(UlogaKorisnika.ADMIN_KLINIKE);
+		Korisnik admin = administratori.get(0);
+		System.out.println("admin: "+admin.getIme());
+		
+		//List<Doktor> doktori = doktorService.findAll();
+		//System.out.println("dr spec: "+doktor.getSpecijalizacija());
+		
+		Pregled pregled = new Pregled();
+		pregled.setDatumIVremePregleda(date1);
+		pregled.setPacijent(pacijent);
+		
+		//pregledService.save(pregled);
+		try {
+			emailService.sendNotificaitionPregled(user, admin, pregled);
+		} catch (MailException e) {
+			// TODO Auto-generated catch block
+			System.out.println("##################### Desila se greska1" + e.getMessage());
+		}
+		
+		return new ResponseEntity<String>("", HttpStatus.OK);
+		
 	}
 }
 			

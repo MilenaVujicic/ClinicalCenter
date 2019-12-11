@@ -8,6 +8,7 @@ import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Service;
 
 import com.example.demo.model.Korisnik;
+import com.example.demo.model.Pregled;
 import com.example.demo.model.UlogaKorisnika;
 
 import org.springframework.mail.MailException;
@@ -74,6 +75,22 @@ public class EmailService {
 					+ "\nVaš email: " + korisnik.getEmail()
 					+ "\n\nZa dalje korišćenje naše aplikacije idite na:\nhttp://localhost:8080/");
 		}
+		mail.setSentDate(new Date());
+		System.out.println(mail);
+		javaMailSender.send(mail);
+		System.out.println("Email poslat!");
+	}
+	
+	@Async
+	public void sendNotificaitionPregled(Korisnik user, Korisnik admin, Pregled pregled) throws MailException, InterruptedException {
+		SimpleMailMessage mail = new SimpleMailMessage();
+		mail.setTo("filip.vozarevic@gmail.com");
+		mail.setFrom(env.getProperty("spring.mail.username"));
+		mail.setSubject("Zahtev za pregled");
+		mail.setText("Postovani/-a" + admin.getIme() + " " + admin.getPrezime() + "\n "
+				+ "Stigao vam je zahtev za pregled od korisnika" + user.getIme() + " " + user.getPrezime()
+				+ "\n za datum: "+ pregled.getDatumIVremePregleda()
+				+ "\n kod lekara: "+ pregled.getDoktor());
 		mail.setSentDate(new Date());
 		System.out.println(mail);
 		javaMailSender.send(mail);
