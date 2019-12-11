@@ -8,6 +8,7 @@ import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Service;
 
 import com.example.demo.model.Korisnik;
+import com.example.demo.model.Pregled;
 import com.example.demo.model.UlogaKorisnika;
 
 import org.springframework.mail.MailException;

@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.example.demo.dto.DoktorDTO;
 import com.example.demo.dto.KlinikaDTO;
 import com.example.demo.dto.KorisnikDTO;
+import com.example.demo.dto.PacijentDTO;
 import com.example.demo.model.Doktor;
 import com.example.demo.model.Klinika;
 import com.example.demo.model.Korisnik;
@@ -254,5 +255,18 @@ public class PacijentController {
 		System.out.println(doktor.getSpecijalizacija());
 		return doktor;
 	}
+	
+	@RequestMapping(value = "/izmeni", method = RequestMethod.PUT)
+	public ResponseEntity<PacijentDTO> izmeni(@RequestBody PacijentDTO pacijentDTO) {
+		Pacijent pacijent = pacijentService.findOne(pacijentDTO.getId());
+		pacijent.setVisina(pacijentDTO.getVisina());
+		pacijent.setTezina(pacijentDTO.getTezina());
+		pacijent.setDioptrija(pacijentDTO.getDioptrija());
+		Pacijent p = pacijentService.save(pacijent);
+		return new ResponseEntity<PacijentDTO>(new PacijentDTO(p), HttpStatus.OK);
+	}
+	
+	
+	
 }
 			
