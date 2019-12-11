@@ -19,7 +19,6 @@ import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Entity
 public class Pregled {
@@ -34,7 +33,7 @@ public class Pregled {
 	@Column(name = "anamneza", nullable = false)
 	private String anamneza;
 	
-	@Column(name = "DdatumIVremePregleda", nullable = false)
+	@Column(name = "datumIVremePregleda", nullable = false)
 	private Date datumIVremePregleda;
 	
 	@Column(name = "tipPregleda")
@@ -50,13 +49,13 @@ public class Pregled {
 	@Column(name = "status")
 	private StatusPregleda status;
 	
-	@ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+	@ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.REFRESH, CascadeType.MERGE, CascadeType.DETACH}, fetch = FetchType.EAGER)
 	private Pacijent pacijent;
 	
-	@ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+	@ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.REFRESH, CascadeType.MERGE, CascadeType.DETACH}, fetch = FetchType.EAGER)
 	private Doktor doktor;
 	
-	@ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+	@ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.REFRESH, CascadeType.MERGE, CascadeType.DETACH}, fetch = FetchType.EAGER)
 	private Sala sala;
 
 	public Pregled() {

@@ -21,4 +21,12 @@ public class ReceptService {
 	public Recept save(Recept recept) {
 		return receptRespository.save(recept);
 	}
+	
+	public void delete(Recept recept) {
+		receptRespository.deleteById(recept.getId());
+	}
+	
+	public Recept findOne(Long id) {
+		return receptRespository.findById(id).orElse(null);
+	} 
 }

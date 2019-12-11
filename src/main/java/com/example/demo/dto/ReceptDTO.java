@@ -1,13 +1,12 @@
 package com.example.demo.dto;
 
-import java.time.LocalDateTime;
+import java.util.Date;
 
 import com.example.demo.model.Doktor;
 import com.example.demo.model.Pacijent;
+import com.example.demo.model.Recept;
+import com.example.demo.model.StatusRecepta;
 
-enum StatusRecepta {
-	NEOVEREN, OVEREN
-}
 
 public class ReceptDTO {
 
@@ -15,18 +14,17 @@ public class ReceptDTO {
 	private String naziv;
 	private String opis;
 	private StatusRecepta status;
-	private LocalDateTime datumIspisa;
-	private LocalDateTime datumOvere;
+	private Date datumIspisa;
+	private Date datumOvere;
 	private Pacijent pacijent;
-	private Doktor doktor;
 	
 	public ReceptDTO() {
 		super();
 		// TODO Auto-generated constructor stub
 	}
 
-	public ReceptDTO(Long id, String naziv, String opis, StatusRecepta status, LocalDateTime datumIspisa,
-			LocalDateTime datumOvere, Pacijent pacijent, Doktor doktor) {
+	public ReceptDTO(Long id, String naziv, String opis, StatusRecepta status, Date datumIspisa,
+			Date datumOvere, Pacijent pacijent) {
 		super();
 		this.id = id;
 		this.naziv = naziv;
@@ -35,7 +33,16 @@ public class ReceptDTO {
 		this.datumIspisa = datumIspisa;
 		this.datumOvere = datumOvere;
 		this.pacijent = pacijent;
-		this.doktor = doktor;
+	}
+	
+	public ReceptDTO(Recept r) {
+		this.id = r.getId();
+		this.naziv = r.getNaziv();
+		this.opis = r.getOpis();
+		this.status = r.getStatus();
+		this.datumIspisa = r.getDatumIspisa();
+		this.datumOvere = r.getDatumOvere();
+		this.pacijent = r.getPacijent();
 	}
 
 	public Long getId() {
@@ -70,19 +77,19 @@ public class ReceptDTO {
 		this.status = status;
 	}
 
-	public LocalDateTime getDatumIspisa() {
+	public Date getDatumIspisa() {
 		return datumIspisa;
 	}
 
-	public void setDatumIspisa(LocalDateTime datumIspisa) {
+	public void setDatumIspisa(Date datumIspisa) {
 		this.datumIspisa = datumIspisa;
 	}
 
-	public LocalDateTime getDatumOvere() {
+	public Date getDatumOvere() {
 		return datumOvere;
 	}
 
-	public void setDatumOvere(LocalDateTime datumOvere) {
+	public void setDatumOvere(Date datumOvere) {
 		this.datumOvere = datumOvere;
 	}
 
@@ -94,19 +101,11 @@ public class ReceptDTO {
 		this.pacijent = pacijent;
 	}
 
-	public Doktor getDoktor() {
-		return doktor;
-	}
-
-	public void setDoktor(Doktor doktor) {
-		this.doktor = doktor;
-	}
 
 	@Override
 	public String toString() {
 		return "ReceptDTO [id=" + id + ", naziv=" + naziv + ", opis=" + opis + ", status=" + status + ", datumIspisa="
-				+ datumIspisa + ", datumOvere=" + datumOvere + ", pacijent=" + pacijent + ", doktor=" + doktor
-				+ "]";
+				+ datumIspisa + ", datumOvere=" + datumOvere + ", pacijent=" + pacijent + "]";
 	}
 	
 }
