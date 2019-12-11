@@ -15,13 +15,31 @@ insert into korisnik (ime, prezime, email, username, password, grad, drzava, jmb
 insert into korisnik (ime, prezime, email, username, password, grad, drzava, jmbg, adresa, telefon, datum_rodjenja, uloga, aktivan, aktiviran) values ('Borisav', 'Petkovic', 'bora.peka@gmail.com','bora', 'bora', 'Novi Sad', 'Srbija', '1412984800147', 'Perkoviceva 7', 637412458, '1984-12-14', 2, TRUE, TRUE);
 insert into korisnik (ime, prezime, email, username, password, grad, drzava, jmbg, adresa, telefon, datum_rodjenja, uloga, aktivan, aktiviran) values ('Lekar', 'Lekarovic', 'lekar.lekarovic@gmail.com','lekar', 'lekar', 'Novi Sad', 'Srbija', '1412123800147', 'Lekarova 7', 631232321, '1985-12-14',2, TRUE, TRUE);
 
+insert into korisnik (ime, prezime, email, username, password, grad, drzava, jmbg, adresa, telefon, datum_rodjenja, uloga, aktivan, aktiviran) values ('Seka', 'Sestric', 'saka.s@gmail.com','seka', 'seka', 'Beograd', 'Srbija', '1402698541236', 'Sekovljeva 38', 11632547, '1972-4-5', 3, TRUE, TRUE);
+
+insert into korisnik (ime, prezime, email, username, password, grad, drzava, jmbg, adresa, telefon, datum_rodjenja, uloga, aktivan, aktiviran) values ('Petar', 'Kocic', 'petar.k@gmail.com','peka', 'peka', 'Beograd', 'Srbija', '1254784106521', 'Njegoseva 38', 114587698, '1973-3-3', 4, TRUE, TRUE);
+insert into korisnik (ime, prezime, email, username, password, grad, drzava, jmbg, adresa, telefon, datum_rodjenja, uloga, aktivan, aktiviran) values ('Milan', 'Kokic', 'milan.k@gmail.com','mika', 'mika', 'Beograd', 'Srbija', '6325987451036', 'Njegoseva 38', 115698520, '1978-4-15', 4, TRUE, TRUE);
+insert into korisnik (ime, prezime, email, username, password, grad, drzava, jmbg, adresa, telefon, datum_rodjenja, uloga, aktivan, aktiviran) values ('Arsenije', 'Nikolic', 'arsa.n@gmail.com','arsa', 'arsa', 'Beograd', 'Srbija', '1405632987450', 'Njegoseva 38', 114521063, '1982-4-15', 4, TRUE, TRUE);
+insert into korisnik (ime, prezime, email, username, password, grad, drzava, jmbg, adresa, telefon, datum_rodjenja, uloga, aktivan, aktiviran) values ('Kristina', 'Obradovic', 'kika.o@gmail.com','kris', 'kris', 'Beograd', 'Srbija', '9632510478951', 'Njegoseva 38', 114785410, '1971-4-15', 4, TRUE, TRUE);
+insert into korisnik (ime, prezime, email, username, password, grad, drzava, jmbg, adresa, telefon, datum_rodjenja, uloga, aktivan, aktiviran) values ('Milica', 'Barovic', 'milica.b@gmail.com','mica', 'mica', 'Beograd', 'Srbija', '0241578496520', 'Njegoseva 38', 1452638, '1980-5-15', 4, TRUE, TRUE);
+insert into korisnik (ime, prezime, email, username, password, grad, drzava, jmbg, adresa, telefon, datum_rodjenja, uloga, aktivan, aktiviran) values ('Lucija', 'Gacanovic', 'lucija.g@gmail.com','lucija', 'lucija', 'Beograd', 'Srbija', '6352147895410', 'Njegoseva 38', 114525746, '1972-8-7', 4, TRUE, TRUE);
+insert into korisnik (ime, prezime, email, username, password, grad, drzava, jmbg, adresa, telefon, datum_rodjenja, uloga, aktivan, aktiviran) values ('Petar', 'Milosevic', 'petar.m@gmail.com','milos', 'milos', 'Beograd', 'Srbija', '6325440158741', 'Njegoseva 38', 113652985, '1973-4-9', 4, TRUE, TRUE);
 
 insert into pacijent (id_korisnik, visina, tezina, dioptrija, klinika_id) values (1, 168, 70, -4.0, 1);
 insert into pacijent (id_korisnik, visina, tezina, dioptrija, klinika_id) values (2, 174, 88, 0.5, 1);
+insert into pacijent (id_korisnik, visina, tezina, dioptrija, klinika_id) values (5, 174, 88, 0.5, 1);
 insert into pacijent (id_korisnik, visina, tezina, dioptrija, klinika_id) values (6, 174, 88, 0.5, 1);
+insert into pacijent (id_korisnik, visina, tezina, dioptrija, klinika_id) values (10, 174, 88, 0.5, 1);
+insert into pacijent (id_korisnik, visina, tezina, dioptrija, klinika_id) values (11, 174, 88, 0.5, 1);
+insert into pacijent (id_korisnik, visina, tezina, dioptrija, klinika_id) values (12, 174, 88, 0.5, 1);
+insert into pacijent (id_korisnik, visina, tezina, dioptrija, klinika_id) values (13, 174, 88, 0.5, 1);
+insert into pacijent (id_korisnik, visina, tezina, dioptrija, klinika_id) values (14, 174, 88, 0.5, 1);
+insert into pacijent (id_korisnik, visina, tezina, dioptrija, klinika_id) values (15, 174, 88, 0.5, 1);
+insert into pacijent (id_korisnik, visina, tezina, dioptrija, klinika_id) values (16, 174, 88, 0.5, 1);
 insert into administrator_klinike(id_korisnik, klinika_id) values (4, 1);
 
 insert into administrator_klinickog_centra(id_korisnik) values (3);
+insert into medicinska_sestra(id_korisnika, klinika_id) values (9, 1);
 
 insert into sala(ime, opis, klinika_id) values('Sala Op', 'Sala za opercaije', 1);
 insert into sala(ime, opis, klinika_id) values('Sala 2', 'Sala za preglede', 1);
