@@ -6,7 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.example.demo.model.Doktor;
-import com.example.demo.model.Pacijent;
+import com.example.demo.model.Klinika;
 import com.example.demo.repository.DoktorRespository;
 
 
@@ -26,5 +26,9 @@ public class DoktorService {
 
 	public Doktor findByIdKorisnik(Long id) {
 		return doktorRespository.findByIdKorisnik(id);
+	}
+	
+	public List<Doktor> findAllByKlinika(Klinika k){
+		return doktorRespository.findAllByKlinika(k);
 	}
 }

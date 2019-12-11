@@ -21,12 +21,19 @@
 
 $(document).ready(()=>{
 	document.getElementById ("sKlinika").addEventListener ("change", promenaSala, false);
+	document.getElementById ("bTermin").addEventListener ("click", potvrdaSale, false);
+	document.getElementById ("bCancel").addEventListener ("click", cancel, false);
+	document.getElementById ("bPregled").addEventListener ("click", dodavanjePregleda, false);
+	let oName = $('<option disabled selected value>Odabir klinike</option>');
+	$("#sKlinika").append(oName);
+
 	$.ajax({
         url:"/pacijent/sveKlinike",
         type:"GET",
        	success: function(clinics){
        		for (i = 0; i < clinics.length; i++) {
        			optionKlinika(clinics[i]);
+
        		} 
        	
            	},
@@ -47,6 +54,9 @@ $(document).ready(()=>{
 
 function promenaSala(){
 	var sel = $('#sKlinika').find(":selected").text();
+	$('#sSala').empty();
+	$('#noviPregled').attr('hidden', true);
+	$('#sLekar').empty();
 	$.ajax({
 		url: "sala/sveSale/" + sel,
 		type:"GET",
@@ -62,10 +72,67 @@ function promenaSala(){
 }
 
 function optionSala(sala){
-	$('#sSala').empty();
+	
 	let oName = $('<option id = \"' + sala.ime + '\">' + sala.ime + "</option>");
 	$("#sSala").append(oName);
-	alert(sala.ime);
+
+}
+
+function optionDoktor(doktor){
+	let oName = $('<option id = \"' + doktor.ime + '_' + doktor.prezime + '\">' + doktor.ime + ' ' + doktor.prezime + "</option>");
+	$("#sLekar").append(oName);
+}
+
+function potvrdaSale(){
+	$('#noviPregled').attr('hidden', false);
+	$('#sLekar').empty();
+	var sel = $('#sKlinika').find(":selected").text();
+	$.ajax({
+		url: "/doktor/sviDoktori/" + sel,
+		type: "GET",
+		success: function(doktori){
+			for(i = 0; i < doktori.length; i++){
+				optionDoktor(doktori[i]);
+			}
+		},
+		error: function(){
+			alert("Desila se greska");
+		}
+ 	})
+}
+
+function cancel(){
+	$('#noviPregled').attr('hidden', true);
+}
+
+function dodavanjePregleda(){
+	let klinika = $('#sKlinika').find(":selected").text();
+	let sala = $('#sSala').find(":selected").text();
+	let datum = $('#datum').val();
+	let vreme = $('#vreme').val();
+	let tip = $('#tip').val();
+	let trajanje = $('#trajanje').val();
+	let cena = $('#cena').val();
+	let lekar = $('#sLekar').find(":selected").text();
+	
+	if(klinika == "" || sala == "" || datum == "" || vreme == "" || tip == "" || trajanje == "" || cena == "" || lekar == ""){
+		alert("Polja ne smeju biti prazna");
+		return;
+	}
+	
+	$.ajax({
+		url: "termin/noviTermin",
+		type: "POST",
+		data: JSON.stringify({klinika, sala, datum, vreme, tip, trajanje, cena, lekar}),
+		contentType: 'application/json',
+		success: function(){
+			alert("Termin uspesno dodat");
+			$('#noviPregled').attr('hidden', true);
+		},
+		error: function(){
+			alert("Doslo je do greske");
+		}
+	})
 }
 </script>
 </head>
@@ -74,15 +141,7 @@ function optionSala(sala){
 	<h1 id="title"></h1>
 		<form class="" method="post" action="#" id="noviTermin">
 		<div class="form-group">
-				<label for="name" class="cols-sm-2 control-label">Datum:</label>
-				<div class="cols-sm-10">
-					<div class="input-group">
-						<span class="input-group-addon"><i class="fa fa-user fa" aria-hidden="true"></i></span>
-						<input type="text" class="form-control" name="datum" id="datum"  placeholder="Enter Date"/>
-					</div>
-				</div>
-			
-			
+					
 			</div>
 			<div class="form-group">
 				<label for="username" class="cols-sm-2 control-label">Klinika: </label>
@@ -99,13 +158,71 @@ function optionSala(sala){
 				<div class="cols-sm-10">
 					<div class="input-group">
 						<span class="input-group-addon"><i class="fa fa-user fa" aria-hidden="true"></i></span>
-						<select name = "sSale" id = "sSala" ></select>
+						<select name = "sSale" id = "sSala" >
+						</select>
 					</div>
 				</div>
 			</div>
 			
 			<div class="form-group ">
-				<a target="_blank" type="button" id="submitButton" class="btn btn-primary btn-lg btn-block login-button">Dodavanje termina</a>
+				<a target="_blank" type="button" id="bTermin" class="btn btn-primary btn-lg btn-block login-button">Dodavanje termina</a>
+			</div>
+	</form>
+
+</div>
+<div class="container">
+	<h1 id="title"></h1>
+	<form class="" method="post" action="#" id="noviPregled" hidden = "true">
+		<label for="name" class="cols-sm-2 control-label">Datum:</label>
+			<div class="cols-sm-10">
+				<div class="input-group">
+					<span class="input-group-addon"><i class="fa fa-user fa" aria-hidden="true"></i></span>
+					<input type="text" class="form-control" name="datum" id="datum"  placeholder="(dd.mm.yyyy)"/>
+				</div>
+			</div>
+	
+		<div class="form-group">
+		<label for="name" class="cols-sm-2 control-label">Vreme pregleda:</label>
+			<div class="cols-sm-10">
+					<div class="input-group">
+						<span class="input-group-addon"><i class="fa fa-user fa" aria-hidden="true"></i></span>
+						<input type="text" class="form-control" name="vreme" id="vreme"  placeholder="(hh:mm)"/>
+					</div>
+			</div>
+			
+			<label for="name" class="cols-sm-2 control-label">Tip pregleda:</label>
+			<div class="cols-sm-10">
+					<div class="input-group">
+						<span class="input-group-addon"><i class="fa fa-user fa" aria-hidden="true"></i></span>
+						<input type="text" class="form-control" name="tip" id="tip"/>
+					</div>
+			</div>
+			
+			<label for="name" class="cols-sm-2 control-label">Trajanje pregleda:</label>
+			<div class="cols-sm-10">
+					<div class="input-group">
+						<span class="input-group-addon"><i class="fa fa-user fa" aria-hidden="true"></i></span>
+						<input type="text" class="form-control" name="trajanje" id="trajanje"/>
+					</div>
+			</div>
+			<label for="name" class="cols-sm-2 control-label">Cena: </label>
+			<div class="cols-sm-10">
+					<div class="input-group">
+						<span class="input-group-addon"><i class="fa fa-user fa" aria-hidden="true"></i></span>
+						<input type="text" class="form-control" name="cena" id="cena"/>
+					</div>
+			</div>
+			<label for="name" class="cols-sm-2 control-label">Lekar: </label>
+			<div class="cols-sm-10">
+					<div class="input-group">
+						<span class="input-group-addon"><i class="fa fa-user fa" aria-hidden="true"></i></span>
+						<select name = "sLekar" id = "sLekar" ></select>
+					</div>
+			</div>
+		</div>
+		<div class="form-group ">
+				<a target="_blank" type="button" id="bPregled" class="btn btn-primary btn-lg btn-block login-button">Dodavanje pregleda</a>
+				<a target="_blank" type="button" id="bCancel" class="btn btn-primary btn-lg btn-block login-button">Ponistavanje</a>
 			</div>
 	</form>
 </div>
