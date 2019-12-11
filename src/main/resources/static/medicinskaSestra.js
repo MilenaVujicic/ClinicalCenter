@@ -4,6 +4,7 @@ function detaljanPrikazPacijenta(pacijent) {
 	        url:"/medicinska_sestra/pacijent/" + pacijent.id,
 	        type:"GET",
 	       	success: function(pacijenti){
+	       		$('#patientsTable').parents('div.dataTables_wrapper').first().hide();
 	       		$('#patientName').val(pacijent.ime)
 	       		$('#patientSurname').val(pacijent.prezime)
 	       		$('#patientBirth').val(pacijent.datumRodjenja)
@@ -29,13 +30,15 @@ function prikaziPacijenta(pacijent) {
 	let tdIme = $('<td>'+pacijent.ime+'</td>');
 	let tdPrezime = $('<td>'+pacijent.prezime+'</td>');
 	let tdDatumRodjenja = $('<td>'+pacijent.datumRodjenja+'</td>');
+	let tdJMBG = $('<td>'+pacijent.jmbg+'</td>');
 	let tdMore = $('<td><a href="#'+pacijent.ime+'_'+pacijent.prezime+'">More</a></td>');
 	tdMore.click(detaljanPrikazPacijenta(pacijent));
-	tr.append(tdIme).append(tdPrezime).append(tdDatumRodjenja).append(tdMore);
+	tr.append(tdIme).append(tdPrezime).append(tdDatumRodjenja).append(tdJMBG).append(tdMore);
 	$('#patientsTable tbody').append(tr);
 }	
 
 function home() {
+	$('#patientsTable').parents('div.dataTables_wrapper').first().hide();
 	$('#patientsTable').attr('hidden', true);
 	$('#patient').attr('hidden', true);
 	$('#recipesForm').attr('hidden', true);
@@ -72,6 +75,7 @@ function verifyAll() {
 }
 
 function unverifiedReciped() {
+	$('#patientsTable').parents('div.dataTables_wrapper').first().hide();
 	let id = $('#patientID').val();
 	$.ajax({
         url:"/medicinska_sestra/recepti/" + id,
@@ -93,17 +97,24 @@ function unverifiedReciped() {
 }
 
 function allPatients() {
+	$('#patientsTable').parents('div.dataTables_wrapper').first().show();
 	$.ajax({
         url:"/medicinska_sestra/sviPacijenti",
         type:"GET",
        	success: function(pacijenti){
        		document.getElementById("title").innerHTML = "All patients";
-       		$('#patientsTable tbody').html('');
+       		var table = $('#patientsTable').DataTable();
+       		table.destroy();
+            $('#patientsTable tbody').html('');
        		for (i = 0; i < pacijenti.length; i++) {
        			prikaziPacijenta(pacijenti[i]);
        		}
-     
-       		
+       		$('#patientsTable').DataTable({
+       	        "columnDefs": [ {
+       	          "targets": 'no-sort',
+       	          "orderable": false,
+       	        }]
+       		});
        	},
        	error: function() {
        		alert('Desila se greska');
@@ -138,6 +149,7 @@ function requestHoliday() {
 }
 
 function rest() {
+	$('#patientsTable').parents('div.dataTables_wrapper').first().hide();
 	$('#patientsTable').attr('hidden', true);
 	$('#patient').attr('hidden', true);
 	$('#recipesForm').attr('hidden', true);
@@ -146,10 +158,15 @@ function rest() {
 }
 
 function personalData() {
+	$('#patientsTable').parents('div.dataTables_wrapper').first().hide();
 	$('#patientsTable').attr('hidden', true);
 	$('#patient').attr('hidden', true);
 	$('#recipesForm').attr('hidden', true);
 	$('#restForm').attr('hidden', true);
 	document.getElementById("title").innerHTML = "";
 }
+
+
+
+
 
