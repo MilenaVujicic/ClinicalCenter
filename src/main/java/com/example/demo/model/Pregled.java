@@ -3,7 +3,6 @@
  */
 package com.example.demo.model;
 
-import java.util.Calendar;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
@@ -19,6 +18,8 @@ import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToOne;
+
 
 @Entity
 public class Pregled {
@@ -33,8 +34,8 @@ public class Pregled {
 	@Column(name = "anamneza", nullable = false)
 	private String anamneza;
 	
-	@Column(name = "DdatumIVremePregleda", nullable = false)
-	private Calendar datumIVremePregleda;
+	@Column(name = "datumIVremePregleda", nullable = false)
+	private Date datumIVremePregleda;
 	
 	@Column(name = "tipPregleda")
 	private String tipPregleda;
@@ -49,14 +50,15 @@ public class Pregled {
 	@Column(name = "status")
 	private StatusPregleda status;
 	
-	@ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+	@ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.REFRESH, CascadeType.MERGE, CascadeType.DETACH}, fetch = FetchType.EAGER)
 	private Pacijent pacijent;
 	
-	@ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+	@ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.REFRESH, CascadeType.MERGE, CascadeType.DETACH}, fetch = FetchType.EAGER)
 	private Doktor doktor;
 	
-	@ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+	@ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.REFRESH, CascadeType.MERGE, CascadeType.DETACH}, fetch = FetchType.EAGER)
 	private Sala sala;
+
 
 	public Pregled() {
 		super();
@@ -87,11 +89,11 @@ public class Pregled {
 		this.anamneza = anamneza;
 	}
 
-	public Calendar getDatumIVremePregleda() {
+	public Date getDatumIVremePregleda() {
 		return datumIVremePregleda;
 	}
 
-	public void setDatumIVremePregleda(Calendar datumIVremePregleda) {
+	public void setDatumIVremePregleda(Date datumIVremePregleda) {
 		this.datumIVremePregleda = datumIVremePregleda;
 	}
 

@@ -61,7 +61,7 @@ public class PregledDTO {
 		this.naziv = p.getNaziv();
 		this.anamneza = p.getAnamneza();
 		this.pacijent = p.getPacijent();
-		this.datumIVremePregleda = p.getDatumIVremePregleda();
+		//this.datumIVremePregleda = p.getDatumIVremePregleda();
 		this.tipPregleda = p.getTipPregleda();
 		this.sala = p.getSala();
 		this.doktori = p.getDoktor();
