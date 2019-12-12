@@ -9,6 +9,7 @@ import com.example.demo.model.Odsustvo;
 import com.example.demo.model.Operacija;
 import com.example.demo.model.Pregled;
 import com.example.demo.model.Recept;
+import com.example.demo.model.Termin;
 
 public class DoktorDTO {
 	
@@ -25,7 +26,7 @@ public class DoktorDTO {
 	private Long idKorisnik;
 	private String ime;
 	private String prezime;
-	
+	private Set<Termin> termini = new HashSet<Termin>();
 	public DoktorDTO() {
 		super();
 		// TODO Auto-generated constructor stub
@@ -33,7 +34,7 @@ public class DoktorDTO {
 	
 	public DoktorDTO(Long id, Set<Pregled> preglediZakazani, Set<Pregled> preglediZavrseni,
 			Set<Operacija> operacijeZakazane, Set<Operacija> operacijeZavrsene, Set<Odsustvo> odsustva,
-			ArrayList<Integer> ocene, double prosecnaOcena, Set<Recept> ispisaniRecepti,String specijalizacija) {
+			ArrayList<Integer> ocene, double prosecnaOcena, Set<Recept> ispisaniRecepti,String specijalizacija, Set<Termin> termini) {
 		super();
 		this.id = id;
 		this.preglediZakazani = preglediZakazani;
@@ -45,6 +46,7 @@ public class DoktorDTO {
 		this.prosecnaOcena = prosecnaOcena;
 		this.ispisaniRecepti = ispisaniRecepti;
 		this.specijalizacija = specijalizacija;
+		this.termini = termini;
 	}
 
 	public DoktorDTO(Doktor d) {
@@ -165,6 +167,15 @@ public class DoktorDTO {
 	public void setIdKorisnik(Long idKorisnik) {
 		this.idKorisnik = idKorisnik;
 	}
+
+	public Set<Termin> getTermini() {
+		return termini;
+	}
+
+	public void setTermini(Set<Termin> termini) {
+		this.termini = termini;
+	}
+	
 	
 	
 }
