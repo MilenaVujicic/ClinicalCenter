@@ -90,8 +90,7 @@ public class EmailService {
 	public void sendNotificaitionPregled(Korisnik user, Korisnik admin, Pregled pregled) throws MailException, InterruptedException {
 		SimpleMailMessage mail = new SimpleMailMessage();
 		Doktor doktor = pregled.getDoktor();
-		Optional<Korisnik> doktor_opt_kor = korisnikService.findById(doktor.getIdKorisnik());
-		Korisnik doktor_korisnik = doktor_opt_kor.get();
+		Korisnik doktor_korisnik = korisnikService.findOne(doktor.getIdKorisnik());
 		
 		mail.setTo("filip.vozarevic@gmail.com");
 		mail.setFrom(env.getProperty("spring.mail.username"));
