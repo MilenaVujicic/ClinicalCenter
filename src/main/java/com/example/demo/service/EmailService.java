@@ -1,12 +1,14 @@
 package com.example.demo.service;
 
 import java.util.Date;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Service;
 
+import com.example.demo.model.Doktor;
 import com.example.demo.model.Korisnik;
 import com.example.demo.model.Pregled;
 import com.example.demo.model.UlogaKorisnika;
@@ -24,6 +26,9 @@ public class EmailService {
 
 	@Autowired
 	private Environment env;
+	
+	@Autowired
+	KorisnikService korisnikService;
 	
 	@Async
 	public void sendNotificaitionAllow(Korisnik user) throws MailException, InterruptedException {
@@ -84,13 +89,17 @@ public class EmailService {
 	@Async
 	public void sendNotificaitionPregled(Korisnik user, Korisnik admin, Pregled pregled) throws MailException, InterruptedException {
 		SimpleMailMessage mail = new SimpleMailMessage();
+		Doktor doktor = pregled.getDoktor();
+		Optional<Korisnik> doktor_opt_kor = korisnikService.findById(doktor.getIdKorisnik());
+		Korisnik doktor_korisnik = doktor_opt_kor.get();
+		
 		mail.setTo("filip.vozarevic@gmail.com");
 		mail.setFrom(env.getProperty("spring.mail.username"));
 		mail.setSubject("Zahtev za pregled");
-		mail.setText("Postovani/-a" + admin.getIme() + " " + admin.getPrezime() + "\n "
-				+ "Stigao vam je zahtev za pregled od korisnika" + user.getIme() + " " + user.getPrezime()
+		mail.setText("Postovani/-a " + admin.getIme() + " " + admin.getPrezime()
+				+ "\nStigao vam je zahtev za pregled od korisnika " + user.getIme() + " " + user.getPrezime()
 				+ "\n za datum: "+ pregled.getDatumIVremePregleda()
-				+ "\n kod lekara: "+ pregled.getDoktor());
+				+ "\n kod lekara: "+ doktor_korisnik.getIme() + " " + doktor_korisnik.getPrezime());
 		mail.setSentDate(new Date());
 		System.out.println(mail);
 		javaMailSender.send(mail);

@@ -48,14 +48,17 @@ public class PacijentController {
 
 	PacijentService pacijentService;
 
+	@Autowired
 	DoktorService doktorService;
 
 	
 	@Autowired
 	KorisnikService korisnikService;
 	
+	@Autowired
 	PregledService pregledService;
 	
+	@Autowired
 	EmailService emailService;
 	
 	private List<Korisnik> foundUsers = new ArrayList<Korisnik>();
@@ -295,13 +298,11 @@ public class PacijentController {
 		Korisnik admin = administratori.get(0);
 		System.out.println("admin: "+admin.getIme());
 		
-		//List<Doktor> doktori = doktorService.findAll();
-		//System.out.println("dr spec: "+doktor.getSpecijalizacija());
 		
 		Pregled pregled = new Pregled();
 		pregled.setDatumIVremePregleda(date1);
 		pregled.setPacijent(pacijent);
-		
+		pregled.setDoktor(doktor);
 		//pregledService.save(pregled);
 		try {
 			emailService.sendNotificaitionPregled(user, admin, pregled);
