@@ -38,7 +38,7 @@ public class PacijentService {
 	public Pacijent findOne(Long id) {
 		return pacijentRepository.findById(id).orElseGet(null);
 	}
-	
+
 	public Pacijent save(Pacijent pacijent) {
 		return pacijentRepository.save(pacijent);
 	}

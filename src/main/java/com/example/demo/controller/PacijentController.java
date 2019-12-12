@@ -187,12 +187,16 @@ public class PacijentController {
 		
 		for(Korisnik k : users) {
 			for(DoktorDTO d: doktoriDTO) {
+				System.out.println(k.getId() +" "+d.getIdKorisnik());
 				if (k.getId() == d.getIdKorisnik()) {
 					d.setId(k.getId());
 					d.setIme(k.getIme());
 					d.setPrezime(k.getPrezime());
 				}
 			}
+		}
+		for(DoktorDTO d : doktoriDTO) {
+			System.out.println(d.getIme() + " " + d.getPrezime());
 		}
 		return new ResponseEntity<>(doktoriDTO, HttpStatus.OK);	
 	}
