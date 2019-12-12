@@ -47,8 +47,8 @@ insert into sala(ime, opis, klinika_id) values('Sala 1', 'Sala 1 u novoj klinici
 
 insert into termin(datum, slobodan, sala_id) values ('2020-1-30 9:00', true, 1);
 
-insert into doktor (id_korisnik, specijalizacija, prosecna_ocena, klinika_id) values (5, 'Lekar opste prakse', 0, 1);
-insert into doktor (id_korisnik, specijalizacija, prosecna_ocena, klinika_id) values (6, 'Hirurg', 5, 1);
+insert into doktor (id_korisnik, specijalizacija, prosecna_ocena, klinika_id) values (7, 'Lekar opste prakse', 0, 1);
+insert into doktor (id_korisnik, specijalizacija, prosecna_ocena, klinika_id) values (8, 'Hirurg', 5, 1);
 
 insert into sala (klinika_id, ime, opis) values (1, 'Sala 1', 'Sala za opste preglede');
 
