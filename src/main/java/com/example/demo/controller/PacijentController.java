@@ -103,13 +103,9 @@ public class PacijentController {
 		List<Pacijent> pacijenti = pacijentService.findAll();
 		if(type.equals("Ime")) {
 			for(Korisnik k : korisnici) {
-				System.out.println(k.getIme() + " " +  k.getId());
 				if(k.getIme().toLowerCase().contains(value) || k.getIme().toLowerCase().equals(value)) {
-					System.out.println(k.getIme());
-					for(Pacijent p : pacijenti) {
-						if(p.getId() == k.getId()) {
-							retVal.add(new KorisnikDTO(k));
-						}
+					if(k.getUloga() == UlogaKorisnika.PACIJENT) {
+						retVal.add(new KorisnikDTO(k));
 					}
 					
 				}
@@ -117,12 +113,24 @@ public class PacijentController {
 		}else if(type.equals("Prezime")) {
 			for(Korisnik k: korisnici) {
 				if(k.getPrezime().toLowerCase().contains(value) || k.getPrezime().toLowerCase().equals(value)) {
-					for(Pacijent p : pacijenti) {
-						if(p.getId() == k.getId()) {
+					if(k.getUloga() == UlogaKorisnika.PACIJENT) {
+						retVal.add(new KorisnikDTO(k));
+					}
+				}
+			}
+		}else if(type.equals("JedinstveniBroj")) {
+			try {
+				Long id = Long.parseLong(value);
+				for(Korisnik k : korisnici) {
+					if(k.getId() == id) {
+						if(k.getUloga() == UlogaKorisnika.PACIJENT) {
 							retVal.add(new KorisnikDTO(k));
 						}
 					}
 				}
+			}catch(Exception e) {
+				e.printStackTrace();
+				return new ResponseEntity<>(retVal, HttpStatus.BAD_REQUEST);
 			}
 		}
 		return new ResponseEntity<>(retVal, HttpStatus.OK);
