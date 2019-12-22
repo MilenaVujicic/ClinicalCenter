@@ -101,7 +101,7 @@
 	  		<button type="button" class="btn btn-dark" id = "btnExam">Add new examination</button>
   		</div>
   		<div class="form-group col-md-4">
-	  		<button type="button" class="btn btn-dark" onclick="dodajOperaciju();">Add new operation</button>
+	  		<button type="button" class="btn btn-dark" id = "btnOp">Add new operation</button>
   		</div>
 	  </div>
 	  <div class="form-row">
@@ -182,13 +182,13 @@
 	<form id="examForm" hidden="true">
 		<div class="form-row">
 		  <div class="form-group col-md-8">
-		    <label for="recipeName">Date of examination</label>
+		    <label for="exDate">Date of examination</label>
 		    <input type="date" class="form-control" id="dateExam">
 		  </div>
 	  	</div>
 	  	<div class="form-row">
 		  <div class="form-group col-md-8">
-		   <label for="recipeName">Time of examination</label>
+		   <label for="exTime">Time of examination</label>
 		   <input type="text" class="form-control" id="timeExam" placeholder = "hh:mm">
 		 </div>
 	  	</div>
@@ -202,6 +202,33 @@
 	  	  </div>
 	  	  <div class="form-group col-md-1">
 		  	<a type="button" class="btn btn-danger" id = "btnCancelExam">Cancel</a>
+	  	  </div>
+	    </div>
+	</form>	
+	
+	<form id="operationForm" hidden="true">
+		<div class="form-row">
+		  <div class="form-group col-md-8">
+		    <label for="opDate">Date of operation</label>
+		    <input type="date" class="form-control" id="dateOp">
+		  </div>
+	  	</div>
+	  	<div class="form-row">
+		  <div class="form-group col-md-8">
+		   <label for="opTime">Time of operation</label>
+		   <input type="text" class="form-control" id="timeOp" placeholder = "hh:mm">
+		 </div>
+	  	</div>
+	  	<div class="form-row">
+   	 		<div class="form-group col-md-8">
+    		</div>
+	  	</div>
+	  	  	<div class="form-row">
+		  <div class="form-group col-md-1">
+		  	<a class="btn btn-primary" id = "btnSaveOp">Save operation</a>
+	  	  </div>
+	  	  <div class="form-group col-md-1">
+		  	<a type="button" class="btn btn-danger" id = "btnCancelOp">Cancel</a>
 	  	  </div>
 	    </div>
 	</form>	

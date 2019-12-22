@@ -168,4 +168,23 @@ public class DoktorController {
 		}
 		return new ResponseEntity<String>("Uspesno rezervisan pregled", HttpStatus.OK);
 	}	
+	
+	@RequestMapping(value = "/operacija", method = RequestMethod.POST)
+	public ResponseEntity<String> dodavanjeOperacije(HttpEntity<String> json) throws ParseException, MailException, InterruptedException{
+		System.out.println(json);
+		String jString = json.getBody();
+		Exception te = new Exception("Pogresan format datuma ili vremena");
+		JSONParser parser = new JSONParser();
+		JSONObject jObj = (JSONObject)parser.parse(jString);
+		String datum = (String)jObj.get("opDate");
+		String vreme = (String)jObj.get("opTime");
+		
+		Korisnik admin = korisnikService.findOne(4L);
+		Korisnik doktor = korisnikService.findOne(7L);
+		try{emailService.sendNotificationRoom(admin, doktor, datum, vreme);
+		}catch(Exception e) {
+			e.printStackTrace();
+		}
+		return new ResponseEntity<String>("Uspesno rezervisana sala", HttpStatus.OK);
+	}	
 }

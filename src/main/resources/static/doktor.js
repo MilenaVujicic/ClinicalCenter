@@ -1,6 +1,10 @@
 $(document).ready(()=>{
-	document.getElementById ("btnExam").addEventListener ("click", dodajPregled, false);
+	document.getElementById ("btnExam").addEventListener("click", dodajPregled, false);
+	document.getElementById ("btnOp").addEventListener("click", dodajOperaciju, false);
 	document.getElementById ("btnSaveExam").addEventListener("click", savePregled, false);
+	document.getElementById ("btnCancelExam").addEventListener("click", cancelPregled, false);
+	document.getElementById ("btnSaveOp").addEventListener("click", saveOperation, false);
+	document.getElementById ("btnCancelOp").addEventListener("click", cancelOperation, false);
 })
 
 function home() { 
@@ -36,10 +40,17 @@ function cancelRecipe() {
 
 function dodajPregled() {
 	$('#examForm').attr('hidden', false);
+	$('#operationForm').attr('hidden', true);
+	$('#dateOp').val('');
+	$('#timeOp').val('');
+	
 }
 
 function dodajOperaciju() {
-	alert('Work in progress');
+	$('#operationForm').attr('hidden', false);
+	$('#examForm').attr('hidden', true);
+	$('#dateExam').val('');
+	$('#timeExam').val('');
 }
 
 function prikaziPacijenta(pacijent, i) {
@@ -197,7 +208,7 @@ function savePregled(){
 		data: JSON.stringify({examDate, examTime}),
 		contentType: 'application/json',
 		succes: function(ret){
-			
+			alert('The request has been sent');
 		},
 		error: function(){
 			alert('Desila se greska');
@@ -205,5 +216,35 @@ function savePregled(){
 	})
 }
 
+function saveOperation(){
+	let opDate = $('#dateOp').val();
+	let opTime = $('#timeOp').val();
+	$.ajax({
+		url: 'doktor/operacija',
+		type: "POST",
+		data: JSON.stringify({opDate, opTime}),
+		contentType: 'application/json',
+		succes: function(ret){
+			alert('The request has been sent');
+		},
+		error: function(){
+			alert('Desila se greska');
+		}
+	})
+	
+}
+
+function cancelPregled(){
+	$('#examForm').attr('hidden', true);
+	$('#dateExam').val('');
+	$('#timeExam').val('');
+}
+
+function cancelOperation(){
+
+	$('#operationForm').attr('hidden', true);
+	$('#dateOp').val('');
+	$('#timeOp').val('');
+}
 
 
