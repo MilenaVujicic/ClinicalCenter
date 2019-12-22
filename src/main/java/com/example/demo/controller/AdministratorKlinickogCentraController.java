@@ -135,6 +135,7 @@ public class AdministratorKlinickogCentraController {
 	
 	@RequestMapping(value = "/novi_admin_klinike/{id}", method = RequestMethod.POST)
 	public ResponseEntity<KlinikaDTO> noviAdminKlinike(@PathVariable("id") Long identifikacija, @RequestBody KorisnikDTO korisnikDTO) {
+		System.out.println("#######################");
 		Korisnik korisnik = new Korisnik();
 		korisnik.setIme(korisnikDTO.getIme());
 		korisnik.setPrezime(korisnikDTO.getPrezime());

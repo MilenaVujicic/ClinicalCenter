@@ -67,3 +67,7 @@ insert into recept (naziv, opis, status, datum_ispisa, sifra_lek, lek_ime, pacij
 insert into pregled (naziv, anamneza, datumivreme_pregleda, status, tip_pregleda, cena, doktor_id, pacijent_id, sala_id) values ('Prvi pregled', 'Pacijent je dosao sa povisenom temperaturom', '12-12-19', 1, 'Opsti pregled', 50, 1, 1, 1);
 
 insert into pregledi_dijagnoze(pregled_id, dijagnoza_id) values(1, 2);
+
+insert into odsustvo (korisnik_id, vrsta_odsustva, pocetak_odsustva, zavrsetak_odsustva, odobren) values (9, 0, '2019-12-25', '2020-01-07', TRUE);
+insert into odsustvo (korisnik_id, vrsta_odsustva, pocetak_odsustva, zavrsetak_odsustva, odobren) values (9, 1, '2020-01-25', '2020-01-28', TRUE);
+insert into odsustvo (korisnik_id, vrsta_odsustva, pocetak_odsustva, zavrsetak_odsustva, odobren) values (9, 1, '2020-02-25', '2020-02-28', FALSE);
