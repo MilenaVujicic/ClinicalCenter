@@ -150,9 +150,8 @@ public class DoktorController {
 
 	}
 	
-	@RequestMapping(value = "/pregled", method = RequestMethod.POST)
-	public ResponseEntity<String> dodavanjePregleda(HttpEntity<String> json) throws ParseException, MailException, InterruptedException{
-		System.out.println(json);
+	@RequestMapping(value = "/pregled/{pName}/{dID}", method = RequestMethod.POST)
+	public ResponseEntity<String> dodavanjePregleda(HttpEntity<String> json, @PathVariable String pName, @PathVariable Long dID) throws ParseException, MailException, InterruptedException{
 		String jString = json.getBody();
 		Exception te = new Exception("Pogresan format datuma ili vremena");
 		JSONParser parser = new JSONParser();
@@ -160,17 +159,32 @@ public class DoktorController {
 		String datum = (String)jObj.get("examDate");
 		String vreme = (String)jObj.get("examTime");
 		
-		Korisnik admin = korisnikService.findOne(4L);
+		String[] parts = pName.split("_");
+		String name = parts[0];
+		String surname = parts[1];
+		
+		Korisnik pacijent = null;
+		List<Korisnik> sviKorisnici = korisnikService.findAll();
+		
+		for(Korisnik k : sviKorisnici) {
+			if(k.getIme().toLowerCase().equals(name.toLowerCase()) && k.getPrezime().toLowerCase().equals(surname.toLowerCase())){
+				pacijent = k;
+				break;
+			}
+					
+		}
+		
+		Korisnik admin = korisnikService.findOne(dID);
 		Korisnik doktor = korisnikService.findOne(7L);
-		try{emailService.sendNotificationExam(admin, doktor, datum, vreme);
+		try{emailService.sendNotificationExam(admin, doktor, pacijent, datum, vreme);
 		}catch(Exception e) {
 			e.printStackTrace();
 		}
 		return new ResponseEntity<String>("Uspesno rezervisan pregled", HttpStatus.OK);
 	}	
 	
-	@RequestMapping(value = "/operacija", method = RequestMethod.POST)
-	public ResponseEntity<String> dodavanjeOperacije(HttpEntity<String> json) throws ParseException, MailException, InterruptedException{
+	@RequestMapping(value = "/operacija/{pName}/{dID}", method = RequestMethod.POST)
+	public ResponseEntity<String> dodavanjeOperacije(HttpEntity<String> json, @PathVariable String pName, @PathVariable Long dID) throws ParseException, MailException, InterruptedException{
 		System.out.println(json);
 		String jString = json.getBody();
 		Exception te = new Exception("Pogresan format datuma ili vremena");
@@ -179,9 +193,24 @@ public class DoktorController {
 		String datum = (String)jObj.get("opDate");
 		String vreme = (String)jObj.get("opTime");
 		
-		Korisnik admin = korisnikService.findOne(4L);
+		String[] parts = pName.split("_");
+		String name = parts[0];
+		String surname = parts[1];
+		
+		Korisnik pacijent = null;
+		List<Korisnik> sviKorisnici = korisnikService.findAll();
+		
+		for(Korisnik k : sviKorisnici) {
+			if(k.getIme().toLowerCase().equals(name.toLowerCase()) && k.getPrezime().toLowerCase().equals(surname.toLowerCase())){
+				pacijent = k;
+				break;
+			}
+					
+		}
+		
+		Korisnik admin = korisnikService.findOne(dID);
 		Korisnik doktor = korisnikService.findOne(7L);
-		try{emailService.sendNotificationRoom(admin, doktor, datum, vreme);
+		try{emailService.sendNotificationRoom(admin, doktor, pacijent, datum, vreme);
 		}catch(Exception e) {
 			e.printStackTrace();
 		}

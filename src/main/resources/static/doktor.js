@@ -10,12 +10,16 @@ $(document).ready(()=>{
 function home() { 
 	$('#examinationForm').attr('hidden', true);
 	$('#schPatTable').attr('hidden', true);
+	$('#examForm').attr('hidden', true);
+	$('#operationForm').attr('hidden', true);
 }
 
 function startExamination(pacijent) {
 	return function() {
 		$('#examinationForm').attr('hidden', false);
 		$('#schPatTable').attr('hidden', true);
+		$('#examForm').attr('hidden', true);
+		$('#operationForm').attr('hidden', true);
 		$('#patientName').val(pacijent.ime);
 		$('#patientSurname').val(pacijent.prezime);
 		$('#patientJMBG').val(pacijent.jmbg);
@@ -201,9 +205,12 @@ function saveRecipe() {
 function savePregled(){
 	let examDate = $('#dateExam').val();
 	let examTime = $('#timeExam').val();
-	
+	let name = $('#patientName').val();
+	let surname = $('#patientSurname').val();
+	let patient = name + '_' + surname;
+	let id = 4;
 	$.ajax({
-		url: 'doktor/pregled',
+		url: 'doktor/pregled/' + patient + '/' + id,
 		type: "POST",
 		data: JSON.stringify({examDate, examTime}),
 		contentType: 'application/json',
@@ -219,8 +226,12 @@ function savePregled(){
 function saveOperation(){
 	let opDate = $('#dateOp').val();
 	let opTime = $('#timeOp').val();
+	let name = $('#patientName').val();
+	let surname = $('#patientSurname').val();
+	let patient = name + '_' + surname;
+	let id = 4;
 	$.ajax({
-		url: 'doktor/operacija',
+		url: 'doktor/operacija/' + patient +'/' + id,
 		type: "POST",
 		data: JSON.stringify({opDate, opTime}),
 		contentType: 'application/json',

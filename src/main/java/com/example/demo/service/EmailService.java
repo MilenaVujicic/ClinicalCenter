@@ -106,7 +106,7 @@ public class EmailService {
 	}
 	
 	@Async
-	public void sendNotificationExam(Korisnik admin, Korisnik doktor, String datum, String vreme) throws MailException, InterruptedException{
+	public void sendNotificationExam(Korisnik admin, Korisnik doktor, Korisnik pacijent, String datum, String vreme) throws MailException, InterruptedException{
 		SimpleMailMessage mail = new SimpleMailMessage();
 		
 		mail.setTo("isaps174@gmail.com");
@@ -114,6 +114,7 @@ public class EmailService {
 		mail.setSubject("Zahtev za pregled");
 		mail.setText("Postovani/-a " + admin.getIme() + " " + admin.getPrezime()
 				+ "\nStigao vam je zahtev za pregled od lekara " + doktor.getIme() + " " + doktor.getPrezime()
+				+"\nza pacijenta: " + pacijent.getIme() + " " + pacijent.getPrezime()
 				+ "\nza datum: "+ datum + " " + vreme);
 		mail.setSentDate(new Date());
 		System.out.println(mail);
@@ -122,14 +123,15 @@ public class EmailService {
 	}
 	
 	@Async
-	public void sendNotificationRoom(Korisnik admin, Korisnik doktor, String datum, String vreme) throws MailException, InterruptedException{
+	public void sendNotificationRoom(Korisnik admin, Korisnik doktor, Korisnik pacijent, String datum, String vreme) throws MailException, InterruptedException{
 		SimpleMailMessage mail = new SimpleMailMessage();
 		
 		mail.setTo("isaps174@gmail.com");
 		mail.setFrom(env.getProperty("spring.mail.username"));
-		mail.setSubject("Zahtev za pregled");
+		mail.setSubject("Zahtev za salu");
 		mail.setText("Postovani/-a " + admin.getIme() + " " + admin.getPrezime()
 				+ "\nStigao vam je zahtev za nalazenje sale za operaciju od lekara " + doktor.getIme() + " " + doktor.getPrezime()
+				+"\nza pacijenta: " + pacijent.getIme() + " " + pacijent.getPrezime()
 				+ "\nza datum: "+ datum + " " + vreme);
 		mail.setSentDate(new Date());
 		System.out.println(mail);
