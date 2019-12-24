@@ -34,7 +34,7 @@ public class Pregled {
 	@Column(name = "anamneza", nullable = false)
 	private String anamneza;
 	
-	@Column(name = "datumIVremePregleda", nullable = false)
+	@Column(name = "datumIVremePregleda", nullable = true)
 	private Date datumIVremePregleda;
 	
 	@Column(name = "tipPregleda")
