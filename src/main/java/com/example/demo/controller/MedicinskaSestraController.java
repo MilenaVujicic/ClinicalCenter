@@ -136,4 +136,14 @@ public class MedicinskaSestraController {
 		
 		return new ResponseEntity<String>("Zahtev je poslat", HttpStatus.OK);
 	}
+	
+	@RequestMapping(value = "/kalendar", method = RequestMethod.GET)
+	public ResponseEntity<List<Odsustvo>> kalendar() {
+		Korisnik korisnik = korisnikService.findOne((long) 9);
+		List<Odsustvo> odsustva = new ArrayList<Odsustvo>();
+		for (Odsustvo o : korisnik.getOdsustva()) {
+			odsustva.add(o);
+		}
+		return new ResponseEntity<List<Odsustvo>>(odsustva, HttpStatus.OK);
+	}
 }

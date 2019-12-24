@@ -7,14 +7,21 @@
     <title>Nurse</title>
     <link href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.0/css/bootstrap.min.css" rel="stylesheet">
     
-    <script src="./js/lib/jquery-3.3.1.min.js" type="text/javascript"></script>
-    <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.0/js/bootstrap.min.js"></script>
-    <script src = "/medicinskaSestra.js" type = 'text/javascript'></script>
-
-	<!-- Website CSS style -->
+    <!-- Website CSS style -->
 	<link href="css/bootstrap.min.css" rel="stylesheet">
 	<link rel="stylesheet" href="medicinskaSestra.css">
+    
+    <script src="http://code.jquery.com/jquery-1.11.1.min.js"></script>
+	<link href='https://fullcalendar.io/releases/fullcalendar/3.9.0/fullcalendar.min.css' rel='stylesheet' />
+	<link rel='stylesheet' href='https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css'>
+	<link href='https://fullcalendar.io/releases/fullcalendar/3.9.0/fullcalendar.print.min.css' rel='stylesheet' media='print' />
+	<script src='https://fullcalendar.io/releases/fullcalendar/3.9.0/lib/moment.min.js'></script>
+	<script src='https://fullcalendar.io/releases/fullcalendar/3.9.0/lib/jquery.min.js'></script>
+	<script src='https://fullcalendar.io/releases/fullcalendar/3.9.0/fullcalendar.min.js'></script>
+	<script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.0/js/bootstrap.min.js"></script>
 	
+    <script src = "/medicinskaSestra.js" type = 'text/javascript'></script>
+    
 	<!-- Website Font style -->
     <script src="https://kit.fontawesome.com/a065fea601.js" crossorigin="anonymous"></script>
 	<!-- Google Fonts -->
@@ -41,6 +48,7 @@
 	      <li><a onclick="return home();">Home</a></li>
 	      <li><a onclick="return allPatients();">All patients</a></li>
 	      <li><a onclick="return rest();">Holiday request</a></li>
+	      <li><a onclick="return calendar();">Calendar</a></li>
 	      <li><a onclick="return personalData();">Personal data</a></li>
 	    </ul>
 	    <ul class="nav navbar-nav navbar-right">
@@ -167,5 +175,8 @@
 				<a target="_blank" type="button" id="requestHoliday" class="btn btn-primary btn-lg btn-block login-button" onclick="return requestHoliday();">Send request for holiday</a>
 		</div>
 	</form>
+	<div id="calendar" hidden="true">
+    
+    </div>
 </body>
 </html>
