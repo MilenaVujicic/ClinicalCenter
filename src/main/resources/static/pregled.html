@@ -20,17 +20,77 @@
 	<!-- Google Fonts -->
 	<link href='https://fonts.googleapis.com/css?family=Passion+One' rel='stylesheet' type='text/css'>
 	<link href='https://fonts.googleapis.com/css?family=Oxygen' rel='stylesheet' type='text/css'>
+	<script>
+		$(document).ready(()=>{
+			document.getElementById ("btnSaveExam").addEventListener("click", noviPregled, false);
+			
+			$.ajax({
+				url:'usluga/sve_usluge',
+				type: 'GET',
+				success: function(usluge){
+					let sNew =  $('<option>NewExamination</option>');
+					$('#allExams').append(sNew);
+					for (i = 0; i < usluge.length; i++) {
+						let option =  $('<option>'+ usluge[i].id + '. ' + usluge[i].naziv+'</option>');
+						$('#allExams').append(option)
+					}
+						
+
+				},
+				error:function(){
+					alert('Something went wrong');
+				}
+			})
+		})
+		
+		function noviPregled(){
+			let eSel = $('#allExams').val();
+			let eName = $('#examName').val();
+			let ePrice = $('#examPrice').val();
+			let eDescription = $('examDescription').val()
+			$.ajax({
+				url:'usluga/nova_usluga',
+				type:'POST',
+				data: JSON.stringify({eSel, eName, ePrice, eDescription}),
+				success: function(){
+					alert('The examination has been successfuly added');
+				},
+				error: function(){
+					alert('Something went wrong');
+				}
+			})
+		}
+		
+		function clearData(){
+			$('examName').val('');
+			$('examPrice').val('');
+			$('examDescription').val('');
+		}
+	</script>
 </head>
 <body>
 <h3>Change examination data</h3>
 
 <form id="examForm" >
- <div class="form-row">
+<div class="form-row">
 		  <div class="form-group col-md-12">
-		    <label for="examName">Examination name:</label>
-		    <input type="number" class="form-control" id="examName">
+		  		<select class="browser-default custom-select" id="allExams">
+		  			
+		  		</select>
 		  </div>
 	  </div>
+	  <div class="form-row">
+		  <div class="form-group col-md-12">
+		    <label for="examName">Examination name:</label>
+		    <input type="text" class="form-control" id="examName" >
+		  </div>
+</div>
+<div class="form-row">
+		  <div class="form-group col-md-12">
+		    <label for="examDescription">Examination description:</label>
+		    <input type="text" class="form-control" id="examDescription" >
+		  </div>
+</div>
  <div class="form-row">
 		  <div class="form-group col-md-12">
 		    <label for="examPrice">Examination price:</label>
@@ -39,7 +99,7 @@
 	  </div>
 	  <div class="form-row">
 		  <div class="form-group col-md-1">
-		  	<a class="btn btn-primary" id = "btnSaveExam">Save examination</a>
+		  	<a class="btn btn-primary" id = "btnSaveExam">Save new examination</a>
 	  	  </div>
 	  </div>
 </form>
