@@ -12,6 +12,12 @@
 	<link rel="stylesheet" href="doktor.css">
     
     <script src="http://code.jquery.com/jquery-1.11.1.min.js"></script>
+    <link href='https://fullcalendar.io/releases/fullcalendar/3.9.0/fullcalendar.min.css' rel='stylesheet' />
+	<link rel='stylesheet' href='https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css'>
+	<link href='https://fullcalendar.io/releases/fullcalendar/3.9.0/fullcalendar.print.min.css' rel='stylesheet' media='print' />
+	<script src='https://fullcalendar.io/releases/fullcalendar/3.9.0/lib/moment.min.js'></script>
+	<script src='https://fullcalendar.io/releases/fullcalendar/3.9.0/lib/jquery.min.js'></script>
+	<script src='https://fullcalendar.io/releases/fullcalendar/3.9.0/fullcalendar.min.js'></script>
     <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.0/js/bootstrap.min.js"></script>
     <script src = "/doktor.js" type = 'text/javascript'></script>
 	
@@ -38,6 +44,7 @@
 	      </li>
 	      <li><a onclick="return scheduledPatients();">Scheduled patients</a></li>
 	      <li><a onclick="return allPatients();">All patients</a></li>
+	      <li><a onclick="return calendar();">Calendar</a></li>
 	      <li><a href="#">Personal data</a></li>
 	    </ul>
 	    <ul class="nav navbar-nav navbar-right">
@@ -527,20 +534,14 @@
            
            <div class="row">
                <div class="col-md-8">
-               		
-               		
-               		
-               		
-               		
-               		
-               		
-               		
+               	
                		
                </div>
            </div>
-           
-       </form>           
-   		
+       </form>     
+    </div>
+    <div id="calendar" hidden="true">
+    
     </div>
 </body>
 </html>
