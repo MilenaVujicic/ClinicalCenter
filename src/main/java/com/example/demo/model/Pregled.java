@@ -18,6 +18,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToOne;
 
 
 @Entity
@@ -33,7 +34,7 @@ public class Pregled {
 	@Column(name = "anamneza", nullable = false)
 	private String anamneza;
 	
-	@Column(name = "datumIVremePregleda", nullable = false)
+	@Column(name = "datumIVremePregleda", nullable = true)
 	private Date datumIVremePregleda;
 	
 	@Column(name = "tipPregleda")
@@ -57,6 +58,7 @@ public class Pregled {
 	
 	@ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.REFRESH, CascadeType.MERGE, CascadeType.DETACH}, fetch = FetchType.EAGER)
 	private Sala sala;
+
 
 	public Pregled() {
 		super();

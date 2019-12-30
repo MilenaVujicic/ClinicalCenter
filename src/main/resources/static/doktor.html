@@ -7,10 +7,6 @@
     <title>Doctor</title>
     <link href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.0/css/bootstrap.min.css" rel="stylesheet">
     
-    <!-- Website CSS style -->
-	<link href="css/bootstrap.min.css" rel="stylesheet">
-	<link rel="stylesheet" href="doktor.css">
-    
     <script src="http://code.jquery.com/jquery-1.11.1.min.js"></script>
     <link href='https://fullcalendar.io/releases/fullcalendar/3.9.0/fullcalendar.min.css' rel='stylesheet' />
 	<link rel='stylesheet' href='https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css'>
@@ -20,14 +16,16 @@
 	<script src='https://fullcalendar.io/releases/fullcalendar/3.9.0/fullcalendar.min.js'></script>
     <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.0/js/bootstrap.min.js"></script>
     <script src = "/doktor.js" type = 'text/javascript'></script>
+
+	<!-- Website CSS style -->
+	<link href="css/bootstrap.min.css" rel="stylesheet">
+	<link rel="stylesheet" href="doktor.css">
 	
 	<!-- Website Font style -->
     <script src="https://kit.fontawesome.com/a065fea601.js" crossorigin="anonymous"></script>
 	<!-- Google Fonts -->
 	<link href='https://fonts.googleapis.com/css?family=Passion+One' rel='stylesheet' type='text/css'>
 	<link href='https://fonts.googleapis.com/css?family=Oxygen' rel='stylesheet' type='text/css'>
-	
-	
 </head>
 <body>
 	<nav class="navbar navbar-inverse">
@@ -52,24 +50,6 @@
 	    </ul>
 	  </div>
 	</nav>
-	
-	<h1 id="title"></h1>
-	
-	<table class="table" hidden="true" id="allPatients">
-	  <thead>
-	    <tr>
-	      <th scope="col">#</th>
-	      <th scope="col">First Name</th>
-	      <th scope="col">Last Name</th>
-	      <th scope="col">JMBG</th>
-	      <th scope="col">Medical record</th>
-	      <th scope="col" hidden="true">ID</th>
-	    </tr>
-	  </thead>
-	  <tbody>
-	    
-	  </tbody>
-	</table>
 	
 	<table class="table" hidden="true" id="schPatTable">
 	  <thead>
@@ -123,13 +103,13 @@
 	  </div>
 	  <div class="form-row">
 	  	<div class="form-group col-md-4">
-	  		<button type="button" class="btn btn-dark" onclick="dodajRecept();">Add recipe</button>
+	  		<button type="button" class="btn btn-dark" onclick="dodajRecept();">Add prescription</button>
   		</div>
   		<div class="form-group col-md-4">
-	  		<button type="button" class="btn btn-dark" onclick="dodajPregled();">Add new examination</button>
+	  		<button type="button" class="btn btn-dark" id = "btnExam">Add new examination</button>
   		</div>
   		<div class="form-group col-md-4">
-	  		<button type="button" class="btn btn-dark" onclick="dodajOperaciju();">Add new operation</button>
+	  		<button type="button" class="btn btn-dark" id = "btnOp">Add new operation</button>
   		</div>
 	  </div>
 	  <div class="form-row">
@@ -174,14 +154,14 @@
 	  	</div>
 	  	<div class="form-row">
 		  <div class="form-group col-md-8">
-		    <label for="recipeName">Recipe name</label>
+		    <label for="recipeName">Prescription name</label>
 		    <input type="text" class="form-control" id="recipeName">
 		  </div>
 	  	</div>
 	  	<div class="form-row">
 	  	  <div class="form-group col-md-8">
 		    <div class="form-group shadow-textarea">
-			  <label for="recipeDescribe">Describe</label>
+			  <label for="recipeDescribe">Description</label>
 			  <textarea class="form-control z-depth-1" id="recipeDescribe" rows="3" placeholder="Write something here..."></textarea>
 		    </div>
 		  </div>
@@ -206,7 +186,7 @@
 	        <input type="text" class="form-control" id="recipePatientID" readonly="readonly"> 
       	</div>
 	</form>
-	
+
 	<div class="container emp-profile" hidden="true" id="aboutPatient">
        <form method="post">
        	  <div class="row">
@@ -543,5 +523,58 @@
     <div id="calendar" hidden="true">
     
     </div>
+	<form id="examForm" hidden="true">
+		<div class="form-row">
+		  <div class="form-group col-md-8">
+		    <label for="exDate">Date of examination</label>
+		    <input type="date" class="form-control" id="dateExam">
+		  </div>
+	  	</div>
+	  	<div class="form-row">
+		  <div class="form-group col-md-8">
+		   <label for="exTime">Time of examination</label>
+		   <input type="text" class="form-control" id="timeExam" placeholder = "hh:mm">
+		 </div>
+	  	</div>
+	  	<div class="form-row">
+   	 		<div class="form-group col-md-8">
+    		</div>
+	  	</div>
+	  	  	<div class="form-row">
+		  <div class="form-group col-md-1">
+		  	<a class="btn btn-primary" id = "btnSaveExam">Save examination</a>
+	  	  </div>
+	  	  <div class="form-group col-md-1">
+		  	<a type="button" class="btn btn-danger" id = "btnCancelExam">Cancel</a>
+	  	  </div>
+	    </div>
+	</form>	
+	
+	<form id="operationForm" hidden="true">
+		<div class="form-row">
+		  <div class="form-group col-md-8">
+		    <label for="opDate">Date of operation</label>
+		    <input type="date" class="form-control" id="dateOp">
+		  </div>
+	  	</div>
+	  	<div class="form-row">
+		  <div class="form-group col-md-8">
+		   <label for="opTime">Time of operation</label>
+		   <input type="text" class="form-control" id="timeOp" placeholder = "hh:mm">
+		 </div>
+	  	</div>
+	  	<div class="form-row">
+   	 		<div class="form-group col-md-8">
+    		</div>
+	  	</div>
+	  	  	<div class="form-row">
+		  <div class="form-group col-md-1">
+		  	<a class="btn btn-primary" id = "btnSaveOp">Save operation</a>
+	  	  </div>
+	  	  <div class="form-group col-md-1">
+		  	<a type="button" class="btn btn-danger" id = "btnCancelOp">Cancel</a>
+	  	  </div>
+	    </div>
+	</form>	
 </body>
 </html>

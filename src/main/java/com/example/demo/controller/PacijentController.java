@@ -1,12 +1,16 @@
 package com.example.demo.controller;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.mail.MailException;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -23,11 +27,14 @@ import com.example.demo.model.Doktor;
 import com.example.demo.model.Klinika;
 import com.example.demo.model.Korisnik;
 import com.example.demo.model.Pacijent;
+import com.example.demo.model.Pregled;
 import com.example.demo.model.UlogaKorisnika;
 import com.example.demo.service.DoktorService;
+import com.example.demo.service.EmailService;
 import com.example.demo.service.KlinikaService;
 import com.example.demo.service.KorisnikService;
 import com.example.demo.service.PacijentService;
+import com.example.demo.service.PregledService;
 
 
 @RestController
@@ -45,6 +52,12 @@ public class PacijentController {
 	
 	@Autowired
 	KorisnikService korisnikService;
+	
+	@Autowired
+	PregledService pregledService;
+	
+	@Autowired
+	EmailService emailService;
 	
 	private List<Korisnik> foundUsers = new ArrayList<Korisnik>();
 
@@ -90,13 +103,9 @@ public class PacijentController {
 		List<Pacijent> pacijenti = pacijentService.findAll();
 		if(type.equals("Ime")) {
 			for(Korisnik k : korisnici) {
-				System.out.println(k.getIme() + " " +  k.getId());
 				if(k.getIme().toLowerCase().contains(value) || k.getIme().toLowerCase().equals(value)) {
-					System.out.println(k.getIme());
-					for(Pacijent p : pacijenti) {
-						if(p.getId() == k.getId()) {
-							retVal.add(new KorisnikDTO(k));
-						}
+					if(k.getUloga() == UlogaKorisnika.PACIJENT) {
+						retVal.add(new KorisnikDTO(k));
 					}
 					
 				}
@@ -104,12 +113,24 @@ public class PacijentController {
 		}else if(type.equals("Prezime")) {
 			for(Korisnik k: korisnici) {
 				if(k.getPrezime().toLowerCase().contains(value) || k.getPrezime().toLowerCase().equals(value)) {
-					for(Pacijent p : pacijenti) {
-						if(p.getId() == k.getId()) {
+					if(k.getUloga() == UlogaKorisnika.PACIJENT) {
+						retVal.add(new KorisnikDTO(k));
+					}
+				}
+			}
+		}else if(type.equals("JedinstveniBroj")) {
+			try {
+				Long id = Long.parseLong(value);
+				for(Korisnik k : korisnici) {
+					if(k.getId() == id) {
+						if(k.getUloga() == UlogaKorisnika.PACIJENT) {
 							retVal.add(new KorisnikDTO(k));
 						}
 					}
 				}
+			}catch(Exception e) {
+				e.printStackTrace();
+				return new ResponseEntity<>(retVal, HttpStatus.BAD_REQUEST);
 			}
 		}
 		return new ResponseEntity<>(retVal, HttpStatus.OK);
@@ -174,12 +195,16 @@ public class PacijentController {
 		
 		for(Korisnik k : users) {
 			for(DoktorDTO d: doktoriDTO) {
+				System.out.println(k.getId() +" "+d.getIdKorisnik());
 				if (k.getId() == d.getIdKorisnik()) {
 					d.setId(k.getId());
 					d.setIme(k.getIme());
 					d.setPrezime(k.getPrezime());
 				}
 			}
+		}
+		for(DoktorDTO d : doktoriDTO) {
+			System.out.println(d.getIme() + " " + d.getPrezime());
 		}
 		return new ResponseEntity<>(doktoriDTO, HttpStatus.OK);	
 	}
@@ -260,6 +285,43 @@ public class PacijentController {
 		pacijent.setDioptrija(pacijentDTO.getDioptrija());
 		Pacijent p = pacijentService.save(pacijent);
 		return new ResponseEntity<PacijentDTO>(new PacijentDTO(p), HttpStatus.OK);
+	}
+	
+	@RequestMapping(value="/zakazi", method=RequestMethod.PUT)
+	public ResponseEntity<String> zakaziPregled(@RequestBody String dt) throws ParseException, InterruptedException {
+		dt = dt.substring(1, dt.length()-1);
+		System.out.println(dt);
+		Date date1=new SimpleDateFormat("dd/MM/yyyy").parse(dt);  
+		System.out.println(date1+"\t"+dt);  
+		
+		List<Doktor> doktori = doktorService.findAll();
+		Doktor doktor = doktori.get(0);
+		System.out.println("dr spec: "+doktor.getSpecijalizacija());
+		
+		List<Korisnik> korisnici = korisnikService.findByIme("Petar");
+		Korisnik user = korisnici.get(0);
+		Pacijent pacijent = pacijentService.findByIdKorisnik(user.getId());
+		System.out.println("visina pacijent: "+pacijent.getVisina());
+		
+		List<Korisnik> administratori = korisnikService.findByUloga(UlogaKorisnika.ADMIN_KLINIKE);
+		Korisnik admin = administratori.get(0);
+		System.out.println("admin: "+admin.getIme());
+		
+		
+		Pregled pregled = new Pregled();
+		pregled.setDatumIVremePregleda(date1);
+		pregled.setPacijent(pacijent);
+		pregled.setDoktor(doktor);
+		//pregledService.save(pregled);
+		try {
+			emailService.sendNotificaitionPregled(user, admin, pregled);
+		} catch (MailException e) {
+			// TODO Auto-generated catch block
+			System.out.println("##################### Desila se greska1" + e.getMessage());
+		}
+		
+		return new ResponseEntity<String>("", HttpStatus.OK);
+		
 	}
 }
 			

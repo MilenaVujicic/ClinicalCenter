@@ -157,6 +157,49 @@ function rest() {
 	document.getElementById("title").innerHTML = "Holiday request";
 }
 
+function showCalendar(odsustva) {
+	$('#calendar').attr('hidden', false);
+	let today = new Date();
+	$('#calendar').fullCalendar({
+	    header: {
+	        left: 'prev,next today',
+	        center: 'title',
+	        right: 'month,agendaWeek,agendaDay,listWeek'
+	    },
+	    defaultDate: today,
+	    navLinks: true,
+	    eventLimit: true
+	});
+	
+	for (let odsustsvo of odsustva) {
+		let color = 'red';
+		if (odsustsvo.odobren) {
+			color = 'green';
+		}
+		var event={title: odsustsvo.vrstaOdsustva , start:odsustsvo.pocetakOdsustva, end:odsustsvo.zavrsetakOdsustva, color:color};
+		$('#calendar').fullCalendar( 'renderEvent', event, true);
+	}
+}
+
+function calendar() {
+	$('#patientsTable').parents('div.dataTables_wrapper').first().hide();
+	$('#patientsTable').attr('hidden', true);
+	$('#patient').attr('hidden', true);
+	$('#recipesForm').attr('hidden', true);
+	$('#restForm').attr('hidden', true);
+	document.getElementById("title").innerHTML = "";
+	$.ajax({
+		url:"/medicinska_sestra/kalendar",
+        type:"GET",
+       	success: function(odsustva){
+       		showCalendar(odsustva);
+       	},
+       	error: function() {
+       		alert('Desila se greska');
+       	}
+	});
+}
+
 function personalData() {
 	$('#patientsTable').parents('div.dataTables_wrapper').first().hide();
 	$('#patientsTable').attr('hidden', true);

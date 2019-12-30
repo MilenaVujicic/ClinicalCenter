@@ -5,18 +5,23 @@ import java.util.Date;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.mail.MailException;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.example.demo.dto.DoktorDTO;
+import com.example.demo.dto.KorisnikDTO;
 import com.example.demo.dto.PregledDTO;
 import com.example.demo.dto.ReceptDTO;
 import com.example.demo.model.Dijagnoza;
 import com.example.demo.model.Doktor;
+import com.example.demo.model.Klinika;
 import com.example.demo.model.Korisnik;
 import com.example.demo.model.Odsustvo;
 import com.example.demo.model.Pacijent;
@@ -28,11 +33,17 @@ import com.example.demo.model.StatusRecepta;
 import com.example.demo.model.UlogaKorisnika;
 import com.example.demo.service.DijagnozaService;
 import com.example.demo.service.DoktorService;
+import com.example.demo.service.EmailService;
+import com.example.demo.service.KlinikaService;
 import com.example.demo.service.KorisnikService;
 import com.example.demo.service.PacijentService;
 import com.example.demo.service.PregledService;
 import com.example.demo.service.ReceptService;
 import com.example.demo.service.SalaService;
+
+import net.minidev.json.JSONObject;
+import net.minidev.json.parser.JSONParser;
+import net.minidev.json.parser.ParseException;
 
 
 @RestController
@@ -60,6 +71,12 @@ public class DoktorController {
 	@Autowired
 	private DijagnozaService dijagnozaService;
 	
+	@Autowired
+	private KlinikaService klinikaService;
+	
+	@Autowired
+	private EmailService emailService;
+	
 	@RequestMapping(value = "/svi_pacijenti", method = RequestMethod.GET)
 	public ResponseEntity<List<Korisnik>> sviPacijenti() {
 		List<Korisnik> pacijenti = korisnikService.findByUloga(UlogaKorisnika.PACIJENT);
@@ -78,7 +95,7 @@ public class DoktorController {
 		pregled.setAnamneza(pregledDTO.getAnamneza());
 		pregled.setTipPregleda(pregledDTO.getTipPregleda());
 		pregled.setCena(pregledDTO.getCena());
-		pregled.setDatumIVremePregleda(new Date());
+		pregled.setDatumIVremePregleda(pregledDTO.getDatumIVremePregleda());
 		pregled.setDoktor(doktor);
 		pregled.setStatus(StatusPregleda.ZAVRSEN);
 		pregled.setPacijent(pacijent);
@@ -110,6 +127,7 @@ public class DoktorController {
 		return new ResponseEntity<String>("", HttpStatus.OK);
 	}
 	
+
 	@RequestMapping(value = "/pacijent/{id}", method=RequestMethod.GET)
 	public Pacijent getPatient(@PathVariable Long id) {
 		Pacijent pacijent = pacijentService.findByIdKorisnik(id);
@@ -146,4 +164,89 @@ public class DoktorController {
 		}
 		return new ResponseEntity<List<Pregled>>(doktorevi_pregledi, HttpStatus.OK);
 	}
+
+	@RequestMapping(value = "/sviDoktori/{val}", method = RequestMethod.GET)
+	public ResponseEntity<List<KorisnikDTO>> sviDoktori(@PathVariable String val){
+		List<KorisnikDTO> doktori = new ArrayList<KorisnikDTO>();
+		Klinika k = klinikaService.findByName(val);
+		List<Doktor> d = doktorService.findAllByKlinika(k);
+	
+		for(Doktor doc : d) {
+			DoktorDTO temp = new DoktorDTO(doc);
+			Korisnik oTemp = korisnikService.findOne(temp.getId());
+			KorisnikDTO kDto =  new KorisnikDTO(oTemp);
+			doktori.add(kDto);
+			
+		}
+		return new ResponseEntity<List<KorisnikDTO>>(doktori, HttpStatus.OK);
+
+	}
+	
+	@RequestMapping(value = "/pregled/{pName}/{dID}", method = RequestMethod.POST)
+	public ResponseEntity<String> dodavanjePregleda(HttpEntity<String> json, @PathVariable String pName, @PathVariable Long dID) throws ParseException, MailException, InterruptedException{
+		String jString = json.getBody();
+		Exception te = new Exception("Pogresan format datuma ili vremena");
+		JSONParser parser = new JSONParser();
+		JSONObject jObj = (JSONObject)parser.parse(jString);
+		String datum = (String)jObj.get("examDate");
+		String vreme = (String)jObj.get("examTime");
+		
+		String[] parts = pName.split("_");
+		String name = parts[0];
+		String surname = parts[1];
+		
+		Korisnik pacijent = null;
+		List<Korisnik> sviKorisnici = korisnikService.findAll();
+		
+		for(Korisnik k : sviKorisnici) {
+			if(k.getIme().toLowerCase().equals(name.toLowerCase()) && k.getPrezime().toLowerCase().equals(surname.toLowerCase())){
+				pacijent = k;
+				break;
+			}
+					
+		}
+		
+		Korisnik admin = korisnikService.findOne(dID);
+		Korisnik doktor = korisnikService.findOne(7L);
+		try{emailService.sendNotificationExam(admin, doktor, pacijent, datum, vreme);
+		}catch(Exception e) {
+			e.printStackTrace();
+		}
+		return new ResponseEntity<String>("Uspesno rezervisan pregled", HttpStatus.OK);
+	}	
+	
+	@RequestMapping(value = "/operacija/{pName}/{dID}", method = RequestMethod.POST)
+	public ResponseEntity<String> dodavanjeOperacije(HttpEntity<String> json, @PathVariable String pName, @PathVariable Long dID) throws ParseException, MailException, InterruptedException{
+		System.out.println(json);
+		String jString = json.getBody();
+		Exception te = new Exception("Pogresan format datuma ili vremena");
+		JSONParser parser = new JSONParser();
+		JSONObject jObj = (JSONObject)parser.parse(jString);
+		String datum = (String)jObj.get("opDate");
+		String vreme = (String)jObj.get("opTime");
+		
+		String[] parts = pName.split("_");
+		String name = parts[0];
+		String surname = parts[1];
+		
+		Korisnik pacijent = null;
+		List<Korisnik> sviKorisnici = korisnikService.findAll();
+		
+		for(Korisnik k : sviKorisnici) {
+			if(k.getIme().toLowerCase().equals(name.toLowerCase()) && k.getPrezime().toLowerCase().equals(surname.toLowerCase())){
+				pacijent = k;
+				break;
+			}
+					
+		}
+		
+		Korisnik admin = korisnikService.findOne(dID);
+		Korisnik doktor = korisnikService.findOne(7L);
+		try{emailService.sendNotificationRoom(admin, doktor, pacijent, datum, vreme);
+		}catch(Exception e) {
+			e.printStackTrace();
+		}
+		return new ResponseEntity<String>("Uspesno rezervisana sala", HttpStatus.OK);
+	}	
+
 }

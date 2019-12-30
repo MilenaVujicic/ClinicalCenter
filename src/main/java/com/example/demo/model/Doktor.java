@@ -45,6 +45,10 @@ public class Doktor {
 	@OneToMany(mappedBy = "doktor", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 	private Set<Pregled> pregledi = new HashSet<Pregled>();
 
+	@JsonIgnore
+	@OneToMany(mappedBy = "doktor", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+	private Set<Termin> termin = new HashSet<Termin>();
+	
 	public Doktor() {
 		super();
 		// TODO Auto-generated constructor stub
@@ -106,6 +110,15 @@ public class Doktor {
 		this.klinika = klinika;
 	}
 
+	public Set<Termin> getTermin() {
+		return termin;
+	}
+
+	public void setTermin(Set<Termin> termin) {
+		this.termin = termin;
+	}
+
+	
 	
 	
 }

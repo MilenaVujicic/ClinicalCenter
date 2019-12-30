@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<meta charset="utf-8">
+    <!-- This file has been downloaded from Bootsnipp.com. Enjoy! -->
+    <title>Doctor</title>
+    <link href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.0/css/bootstrap.min.css" rel="stylesheet">
+    
+    <script src="http://code.jquery.com/jquery-1.11.1.min.js"></script>
+    <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.0/js/bootstrap.min.js"></script>
+    <script src = "/doktor.js" type = 'text/javascript'></script>
+
+	<!-- Website CSS style -->
+	<link href="css/bootstrap.min.css" rel="stylesheet">
+	<link rel="stylesheet" href="doktor.css">
+	
+	<!-- Website Font style -->
+    <script src="https://kit.fontawesome.com/a065fea601.js" crossorigin="anonymous"></script>
+	<!-- Google Fonts -->
+	<link href='https://fonts.googleapis.com/css?family=Passion+One' rel='stylesheet' type='text/css'>
+	<link href='https://fonts.googleapis.com/css?family=Oxygen' rel='stylesheet' type='text/css'>
+</head>
+<body>
+	<nav class="navbar navbar-inverse">
+	  <div class="container-fluid">
+	    <div class="navbar-header">
+	      <a class="navbar-brand">Clinical centre</a>
+	    </div>
+	    <ul class="nav navbar-nav">
+	      <li><a onclick="return home();">Home</a></li>
+	      <li class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">Add <span class="caret"></span></a>
+	        <ul class="dropdown-menu">
+	          <li><a href="#">New</a></li>
+	        </ul>
+	      </li>
+	      <li><a onclick="return scheduledPatients();">Scheduled patients</a></li>
+	      <li><a href="#">Personal data</a></li>
+	    </ul>
+	    <ul class="nav navbar-nav navbar-right">
+	      <li><a href="#"><span class="glyphicon glyphicon-log-out"></span> Logout</a></li>
+	    </ul>
+	  </div>
+	</nav>
+	
+	<table class="table" hidden="true" id="schPatTable">
+	  <thead>
+	    <tr>
+	      <th scope="col">#</th>
+	      <th scope="col">First Name</th>
+	      <th scope="col">Last Name</th>
+	      <th scope="col">JMBG</th>
+	      <th scope="col">Start examination</th>
+	      <th scope="col" hidden="true">ID</th>
+	    </tr>
+	  </thead>
+	  <tbody>
+	    
+	  </tbody>
+	</table>
+	
+	<form id="examinationForm" hidden="true">
+	  <div class="form-row">
+	      <div class="form-group col-md-6">
+	        <label for="patientName">Name</label>
+	        <input type="text" class="form-control" id="patientName" readonly="readonly">
+	      </div>
+	      <div class="form-group col-md-6">
+	        <label for="patientSurname">Surname</label>
+	        <input type="text" class="form-control" id="patientSurname" readonly="readonly"> 
+	      </div>
+	  </div>
+	  <div class="form-row">
+		  <div class="form-group col-md-12">
+		    <label for="patientJMBG">JMBG</label>
+		    <input type="number" class="form-control" id="patientJMBG" readonly="readonly">
+		  </div>
+	  </div>
+	  <div class="form-row">
+		  <div class="form-group col-md-12">
+		    <label for="examinationName">Examination name</label>
+		    <input type="text" class="form-control" id="examinationName">
+		  </div>
+	  </div>
+	  <div class="form-row">
+	  	<div class="form-group col-md-12">
+		  <div class="form-group shadow-textarea">
+			  <label for="exampleFormControlTextarea6">Anamnesis</label>
+			  <textarea class="form-control z-depth-1" id="examinationAnamnesis" rows="8" placeholder="Write anamnesis here..."></textarea>
+		  </div>
+		 </div>
+	  </div>
+	  <div class="form-row" id="diagnosis">
+	  	
+	  </div>
+	  <div class="form-row">
+	  	<div class="form-group col-md-4">
+	  		<button type="button" class="btn btn-dark" onclick="dodajRecept();">Add recipe</button>
+  		</div>
+  		<div class="form-group col-md-4">
+	  		<button type="button" class="btn btn-dark" onclick="dodajPregled();">Add new examination</button>
+  		</div>
+  		<div class="form-group col-md-4">
+	  		<button type="button" class="btn btn-dark" onclick="dodajOperaciju();">Add new operation</button>
+  		</div>
+	  </div>
+	  <div class="form-row">
+		  <div class="form-group col-md-12">
+		    <label for="examinationType">Examination type</label>
+		    <input type="text" class="form-control" id="examinationType">
+		  </div>
+	  </div>
+	  <div class="form-row">
+		  <div class="form-group col-md-12">
+		    <label for="examinationPrice">Price</label>
+		    <input type="number" class="form-control" id="examinationPrice">
+		  </div>
+	  </div>
+	  <div class="form-row">
+	  	<div class="form-group col-md-12">
+	  		<a type="submit" class="btn btn-primary" onclick="return saveExamination();">Save examination</a>
+  		</div>
+	  </div>
+	  <div class="form-group col-md-12" hidden="true">
+	        <label for="patientID">ID</label>
+	        <input type="text" class="form-control" id="patientID" readonly="readonly"> 
+      </div>
+	</form>
+	
+	<form id="recipeForm" hidden="true">
+		<div class="form-row">
+	      <div class="form-group col-md-4">
+	        <label for="recipePatientName">Name</label>
+	        <input type="text" class="form-control" id="recipePatientName" readonly="readonly">
+	      </div>
+	      <div class="form-group col-md-4">
+	        <label for="recipePatientSurname">Surname</label>
+	        <input type="text" class="form-control" id="recipePatientSurname" readonly="readonly"> 
+	      </div>
+	  	</div>
+	  	<div class="form-row">
+		  <div class="form-group col-md-8">
+		    <label for="recipePatientJMBG">JMBG</label>
+		    <input type="text" class="form-control" id="recipePatientJMBG" readonly="readonly">
+		  </div>
+	  	</div>
+	  	<div class="form-row">
+		  <div class="form-group col-md-8">
+		    <label for="recipeName">Recipe name</label>
+		    <input type="text" class="form-control" id="recipeName">
+		  </div>
+	  	</div>
+	  	<div class="form-row">
+	  	  <div class="form-group col-md-8">
+		    <div class="form-group shadow-textarea">
+			  <label for="recipeDescribe">Description</label>
+			  <textarea class="form-control z-depth-1" id="recipeDescribe" rows="3" placeholder="Write something here..."></textarea>
+		    </div>
+		  </div>
+	  	</div>
+	  	<div class="form-row">
+	  		<div class="form-group col-md-12">
+		  		<select class="browser-default custom-select" id="drugs">
+		  			
+		  		</select>
+	  		</div>
+	  	</div>
+	  	<div class="form-row">
+		  <div class="form-group col-md-1">
+		  	<a class="btn btn-primary" onclick="return saveRecipe();">Save recipe</a>
+	  	  </div>
+	  	  <div class="form-group col-md-1">
+		  	<a type="button" class="btn btn-danger" onclick="return cancelRecipe();">Cancel</a>
+	  	  </div>
+	    </div>
+	    <div class="form-group col-md-12" hidden="true">
+	        <label for="recipePatientID">ID</label>
+	        <input type="text" class="form-control" id="recipePatientID" readonly="readonly"> 
+      	</div>
+	</form>
+	
+	<form id="examForm" hidden="true">
+		<div class="form-row">
+		  <div class="form-group col-md-8">
+		    <label for="recipeName">Date of examination</label>
+		    <input type="date" class="form-control" id="dateExam">
+		  </div>
+	  	</div>
+	  	<div class="form-row">
+		  <div class="form-group col-md-8">
+		   <label for="recipeName">Time of examination</label>
+		   <input type="text" class="form-control" id="timeExam" placeholder = "hh:mm">
+		 </div>
+	  	</div>
+	</form>	
+</body>
+</html>

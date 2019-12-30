@@ -1,3 +1,12 @@
+$(document).ready(()=>{
+	document.getElementById ("btnExam").addEventListener("click", dodajPregled, false);
+	document.getElementById ("btnOp").addEventListener("click", dodajOperaciju, false);
+	document.getElementById ("btnSaveExam").addEventListener("click", savePregled, false);
+	document.getElementById ("btnCancelExam").addEventListener("click", cancelPregled, false);
+	document.getElementById ("btnSaveOp").addEventListener("click", saveOperation, false);
+	document.getElementById ("btnCancelOp").addEventListener("click", cancelOperation, false);
+})
+
 function home() { 
 	$('#examinationForm').attr('hidden', true);
 	$('#schPatTable').attr('hidden', true);
@@ -19,11 +28,21 @@ function stExam(pacijent) {
 	$('#patientSurname').val(pacijent.prezime);
 	$('#patientJMBG').val(pacijent.jmbg);
 	$('#patientID').val(pacijent.id);
+	$('#examForm').attr('hidden', true);
+	$('#operationForm').attr('hidden', true);
 }
 
 function startExamination(pacijent) {
 	return function() {
 		stExam(pacijent);
+		$('#examinationForm').attr('hidden', false);
+		$('#schPatTable').attr('hidden', true);
+		$('#examForm').attr('hidden', true);
+		$('#operationForm').attr('hidden', true);
+		$('#patientName').val(pacijent.ime);
+		$('#patientSurname').val(pacijent.prezime);
+		$('#patientJMBG').val(pacijent.jmbg);
+		$('#patientID').val(pacijent.id);
 	}
 }
 
@@ -49,14 +68,21 @@ function cancelRecipe() {
 }
 
 function dodajPregled() {
-	alert('Work in progress');
+	$('#examForm').attr('hidden', false);
+	$('#operationForm').attr('hidden', true);
+	$('#dateOp').val('');
+	$('#timeOp').val('');
+	
 }
 
 function dodajOperaciju() {
-	alert('Work in progress');
+	$('#operationForm').attr('hidden', false);
+	$('#examForm').attr('hidden', true);
+	$('#dateExam').val('');
+	$('#timeExam').val('');
 }
 
-function prikaziZakazanogPacijenta(pacijent, i) {
+function prikaziPacijenta(pacijent, i) {
 	let tr = $('<tr></tr>');
 	let tdNum = $('<td>'+i+'</td>');
 	let tdIme = $('<td>'+pacijent.ime+'</td>');
@@ -84,27 +110,6 @@ function lekovi() {
        		$('#drugs').append(option);
        		for (let lek of lekovi) {
        			prikaziLek(lek);
-       		}
-       	},
-       	error: function() {
-       		alert('Desila se greska');
-       	}
- 	});
-}
-
-function printDrug(lek) {
-	let option = $('<option>('+lek.sifra+') '+lek.ime+'</option>');
-	$('#selectRecipeDrugs').append(option);
-} 
-
-function drugs() {
-	$.ajax({
-        url:"/lek/svi_lekovi",
-        type:"GET",
-       	success: function(lekovi) {
-       		$('#selectRecipeDrugs').html('');
-       		for (let lek of lekovi) {
-       			printDrug(lek);
        		}
        	},
        	error: function() {
@@ -153,7 +158,7 @@ function scheduledPatients() {
        		let i = 0;
        		for (let pacijent of pacijenti) {
        			i = i + 1;
-       			prikaziZakazanogPacijenta(pacijent, i);
+       			prikaziPacijenta(pacijent, i);
        		}
        	},
        	error: function() {
@@ -225,12 +230,13 @@ function saveRecipe() {
  	});
 }
 
-function editExaminations() {
-	let naziv = $('#editExaminationName').val();
-	let anamneza = $('#editExaminationAnamnesis').val();
-	let tipPregleda = $('#editExaminationType').val();
-	let cena = $('#editExaminationPrice').val();
-	let id = $('#editExaminationID').val();
+function savePregled(){
+	let examDate = $('#dateExam').val();
+	let examTime = $('#timeExam').val();
+	let name = $('#patientName').val();
+	let surname = $('#patientSurname').val();
+	let patient = name + '_' + surname;
+	let id = 4;
 	$.ajax({
 		url: 'pregled/izmeni',
 		type:"PUT",
@@ -361,58 +367,26 @@ function allDiagn(id) {
 			$('#examinationDiagnosisTable').attr('hidden', false);
 			$('#examinationDiagnosis').attr('hidden', false);
 			document.getElementById("examID").innerHTML = id;
+		url: 'doktor/pregled/' + patient + '/' + id,
+		type: "POST",
+		data: JSON.stringify({examDate, examTime}),
+		contentType: 'application/json',
+		succes: function(ret){
+			alert('The request has been sent');
 		},
-		error: function() {
+		error: function(){
 			alert('Desila se greska');
 		}
-	});
+	})
 }
 
-function allDiagnosis(id) {
-	return function() {
-		allDiagn(id);
-	}
-}
-
-function prikaziPregled(pregled) {
-	let tr = $('<tr></tr>');
-	let tdName = $('<td>'+pregled.naziv+'</td>');
-	let tdDate = $('<td>'+pregled.datumIVremePregleda.toString().substr(0, 10)+'</td>');
-	let tdType = $('<td>'+pregled.tipPregleda+'</td>');
-	let tdAnamnesis = $('<td>'+pregled.anamneza+'</td>');
-	let tdPrice = $('<td>'+pregled.cena+'</td>');
-	let aDiagnosis = $('<td><a class="btn btn-primary">Diagnosis</a></td>');
-	aDiagnosis.click(allDiagnosis(pregled.id));
-	let aEditExamination = $('<td><a class="btn btn-success">Edit examination</a></td>');
-	aEditExamination.click(editExamination(pregled));
-	let aDeleteExamination = $('<td><a class="btn btn-danger">Delete examination</a></td>');
-	aDeleteExamination.click(deleteExamination(pregled.id));
-	tr.append(tdName).append(tdDate).append(tdType).append(tdAnamnesis).append(tdPrice).append(aDiagnosis)
-	.append(aEditExamination).append(aDeleteExamination);
-	$('#allExaminations tbody').append(tr);
-}
-
-function examinations(id) {
-	let url = "/pregled/sviPregledi/" + id;
-	$.ajax({
-        url:url,
-        type:"GET",
-        success: function(pregledi) {
-        	$('#allExaminations tbody').html('');
-        	for(let pregled of pregledi) {
-        		prikaziPregled(pregled);
-        	}
-        },
-        error: function() {
-        	alert('Desila se greska ovde');
-        }
-	});
-}
-
-function addAllergie() {
-	let naziv = $('#addAllergieName').val();
-	let opis = $('#addAllergieDesc').val();
-	let id = $('#addAllergiePatientID').val();
+function saveOperation(){
+	let opDate = $('#dateOp').val();
+	let opTime = $('#timeOp').val();
+	let name = $('#patientName').val();
+	let surname = $('#patientSurname').val();
+	let patient = name + '_' + surname;
+	let id = 4;
 	$.ajax({
 		url: "alergija/dodaj/" + id,
 		type:"POST",
@@ -662,42 +636,24 @@ function allPatients() {
        		alert('Desila se greska');
        	}
  	});
+		url: 'doktor/operacija/' + patient +'/' + id,
+		type: "POST",
+		data: JSON.stringify({opDate, opTime}),
+		contentType: 'application/json',
+		succes: function(ret){
+			alert('The request has been sent');
+		},
+		error: function(){
+			alert('Desila se greska');
+		}
+	})
 	
 }
 
-function editPatient() {
-	$('#editAbout').attr('hidden', false);
-	$('#examinationDiagnosis').attr('hidden', true);
-	let visina = document.getElementById("aboutPatientHeight").innerHTML;
-	visina = visina.substring(0, visina.length - 2);
-	let tezina = document.getElementById("aboutPatientWeight").innerHTML;
-	tezina = tezina.substring(0, tezina.length - 2);
-	$('#editHeigth').val(visina);
-	$('#editWidth').val(tezina);
-	$('#editDioptre').val(document.getElementById("aboutPatientDioptre").innerHTML);
-}
-
-function editAbout() {
-	let id = document.getElementById("aboutPatientID").innerHTML;
-	let url = "pacijent/izmeni";
-	let visina = $('#editHeigth').val();
-	let tezina = $('#editWidth').val();
-	let dioptrija = $('#editDioptre').val();
-	$.ajax({
-        url:url,
-        type:"PUT",
-        data: JSON.stringify({id, visina, tezina, dioptrija}),
-        contentType:'application/json',
-        success: function() {
-        	$('#editAbout').attr('hidden', true);
-        	document.getElementById("aboutPatientHeight").innerHTML = visina + "cm";
-        	document.getElementById("aboutPatientWeight").innerHTML = tezina + "kg";
-        	document.getElementById("aboutPatientDioptre").innerHTML = dioptrija;
-        },
-        error: function() {
-        	alert('Desila se greska');
-        }
-    });
+function cancelPregled(){
+	$('#examForm').attr('hidden', true);
+	$('#dateExam').val('');
+	$('#timeExam').val('');
 }
 
 function examinationFor(id) {
@@ -797,9 +753,10 @@ function calendar() {
 	});
 }
 
-
-
-
-
+function cancelOperation(){
+	$('#operationForm').attr('hidden', true);
+	$('#dateOp').val('');
+	$('#timeOp').val('');
+}
 
 
