@@ -14,8 +14,25 @@ function home() {
 	$('#operationForm').attr('hidden', true);
 }
 
+function stExam(pacijent) {
+	$('#examinationForm').attr('hidden', false);
+	$('#schPatTable').attr('hidden', true);
+	$('#calendar').attr('hidden', true);
+	$('#allPatients').attr('hidden', true);
+	$('#examinationDiagnosis').attr('hidden', true);
+	$('#aboutPatient').attr('hidden', true);
+	$('#calendar').attr('hidden', true);
+	$('#patientName').val(pacijent.ime);
+	$('#patientSurname').val(pacijent.prezime);
+	$('#patientJMBG').val(pacijent.jmbg);
+	$('#patientID').val(pacijent.id);
+	$('#examForm').attr('hidden', true);
+	$('#operationForm').attr('hidden', true);
+}
+
 function startExamination(pacijent) {
 	return function() {
+		stExam(pacijent);
 		$('#examinationForm').attr('hidden', false);
 		$('#schPatTable').attr('hidden', true);
 		$('#examForm').attr('hidden', true);
@@ -251,11 +268,95 @@ function cancelPregled(){
 	$('#timeExam').val('');
 }
 
+
+
+function showCalendar(odsustva, pregledi) {
+	$('#calendar').attr('hidden', false);
+	let today = new Date();
+	$('#calendar').fullCalendar({
+	    header: {
+	        left: 'prev,next today',
+	        center: 'title',
+	        right: 'month,agendaWeek,agendaDay,listWeek'
+	    },
+	    defaultDate: today,
+	    navLinks: true,
+	    eventLimit: true,
+	    eventClick: function(event) {
+	    	examinationFor(event.id);
+        }
+	});
+	
+	for (let odsustsvo of odsustva) {
+		let color = 'red';
+		if (odsustsvo.odobren) {
+			color = 'green';
+		}
+		var event={title: odsustsvo.vrstaOdsustva , start:odsustsvo.pocetakOdsustva, end:odsustsvo.zavrsetakOdsustva, color:color, id:0};
+		$('#calendar').fullCalendar( 'renderEvent', event, true);
+	}
+	
+	for (let pregled of pregledi) {
+		$.ajax({
+   			url:"/doktor/pacijent_korisnik/" + pregled.pacijent.id,
+   	        type:"GET",
+   	       	success: function(korisnik){
+	   	       	let color = 'blue';
+	   	       	let id = korisnik.id;
+	   			if (pregled.status == "ZAVRSEN") {
+	   				color = 'purple';
+	   				id = 0;
+	   			}
+	   		    let end = new Date(pregled.datumIVremePregleda);
+	   		    let start = new Date(pregled.datumIVremePregleda);
+	   		    end.setMinutes(end.getMinutes() + 30);
+	   		    let title = "Pregled:" + korisnik.ime + " " + korisnik.prezime;
+	   			var event={title: title , start:start, end:end, color:color, id:id};
+	   			$('#calendar').fullCalendar('renderEvent', event, true);
+   	       	},
+   	       	error: function() {
+   	       		alert('Desila se greska ovde');
+   	       	}
+   		});
+		
+	}
+	
+}
+
+function calendar() {
+	$('#calendar').attr('hidden', false);
+	$('#examinationForm').attr('hidden', true);
+	$('#schPatTable').attr('hidden', true);
+	$('#allPatients').attr('hidden', true);
+	$('#examinationDiagnosis').attr('hidden', true);
+	$('#aboutPatient').attr('hidden', true);
+	$.ajax({
+		url:"/doktor/odsustva",
+        type:"GET",
+       	success: function(odsustva){
+       		$.ajax({
+       			url:"/doktor/zakazani_pregledi",
+       	        type:"GET",
+       	       	success: function(pregledi){
+       	       		$('#calendar').fullCalendar('removeEvents');
+       	       		showCalendar(odsustva, pregledi);
+       	       	},
+       	       	error: function() {
+       	       		alert('Desila se greska ovde');
+       	       	}
+       		});
+       	},
+       	error: function() {
+       		alert('Desila se greska');
+       	}
+	});
+}
+
+
 function cancelOperation(){
 
 	$('#operationForm').attr('hidden', true);
 	$('#dateOp').val('');
 	$('#timeOp').val('');
 }
-
 

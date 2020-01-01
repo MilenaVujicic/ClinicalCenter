@@ -45,4 +45,10 @@ public class KorisnikController {
 		}
 		return new ResponseEntity<KorisnikDTO>(new KorisnikDTO(k), HttpStatus.OK);
 	}
+	
+	@RequestMapping(value = "/preuzmi/{id}", method = RequestMethod.GET)
+	public ResponseEntity<Korisnik> preuzmi(@PathVariable("id") Long identifikacija) {
+		Korisnik korisnik = korisnikService.findOne(identifikacija);
+		return new ResponseEntity<Korisnik>(korisnik, HttpStatus.OK);
+	}
 }

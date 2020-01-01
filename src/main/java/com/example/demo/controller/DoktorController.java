@@ -23,6 +23,7 @@ import com.example.demo.model.Dijagnoza;
 import com.example.demo.model.Doktor;
 import com.example.demo.model.Klinika;
 import com.example.demo.model.Korisnik;
+import com.example.demo.model.Odsustvo;
 import com.example.demo.model.Pacijent;
 import com.example.demo.model.Pregled;
 import com.example.demo.model.Recept;
@@ -133,6 +134,37 @@ public class DoktorController {
 		return pacijent;
 	}
 	
+	@RequestMapping(value = "/pacijent_korisnik/{id}", method=RequestMethod.GET)
+	public Korisnik getKorisnik(@PathVariable Long id) {
+		Pacijent pacijent = pacijentService.findOne(id);
+		Korisnik korisnik = korisnikService.findOne(pacijent.getIdKorisnik());
+		return korisnik;
+	}
+	
+	@RequestMapping(value = "/odsustva", method = RequestMethod.GET)
+	public ResponseEntity<List<Odsustvo>> odsustva() {
+		Korisnik korisnik = korisnikService.findOne((long) 5);
+		List<Odsustvo> odsustva = new ArrayList<Odsustvo>();
+		for(Odsustvo o : korisnik.getOdsustva()) {
+			odsustva.add(o);
+		}
+		return new ResponseEntity<List<Odsustvo>>(odsustva, HttpStatus.OK);
+	}
+	
+	@RequestMapping(value = "/zakazani_pregledi", method = RequestMethod.GET)
+	public ResponseEntity<List<Pregled>> pregledi() {
+		List<Pregled> pregledi = pregledService.findAll();
+		List<Pregled> doktorevi_pregledi = new ArrayList<Pregled>();
+		Doktor doktor = doktorService.findOne((long) 1);
+		for (Pregled p : pregledi) {
+			if (p.getDoktor().getId().equals(doktor.getId())) {
+				doktorevi_pregledi.add(p);
+				System.out.println(p.getDatumIVremePregleda());
+			}
+		}
+		return new ResponseEntity<List<Pregled>>(doktorevi_pregledi, HttpStatus.OK);
+	}
+
 	@RequestMapping(value = "/sviDoktori/{val}", method = RequestMethod.GET)
 	public ResponseEntity<List<KorisnikDTO>> sviDoktori(@PathVariable String val){
 		List<KorisnikDTO> doktori = new ArrayList<KorisnikDTO>();
@@ -185,6 +217,7 @@ public class DoktorController {
 	
 	@RequestMapping(value = "/operacija/{pName}/{dID}", method = RequestMethod.POST)
 	public ResponseEntity<String> dodavanjeOperacije(HttpEntity<String> json, @PathVariable String pName, @PathVariable Long dID) throws ParseException, MailException, InterruptedException{
+		System.out.println(json);
 		String jString = json.getBody();
 		Exception te = new Exception("Pogresan format datuma ili vremena");
 		JSONParser parser = new JSONParser();
@@ -215,4 +248,6 @@ public class DoktorController {
 		}
 		return new ResponseEntity<String>("Uspesno rezervisana sala", HttpStatus.OK);
 	}	
+
 }
+
