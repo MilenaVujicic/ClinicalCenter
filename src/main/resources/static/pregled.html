@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <title>Pregled</title>
 <meta name="viewport" content="width=device-width, initial-scale=1">
-	<meta charset="utf-8">
+	<meta charset="UTF-8">
     <!-- This file has been downloaded from Bootsnipp.com. Enjoy! -->
     <title>Doctor</title>
     <link href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.0/css/bootstrap.min.css" rel="stylesheet">
@@ -28,10 +28,10 @@
 				url:'usluga/sve_usluge',
 				type: 'GET',
 				success: function(usluge){
-					let sNew =  $('<option>NewExamination</option>');
+					let sNew =  $('<option>New Examination</option>');
 					$('#allExams').append(sNew);
 					for (i = 0; i < usluge.length; i++) {
-						let option =  $('<option>'+ usluge[i].id + '. ' + usluge[i].naziv+'</option>');
+						let option =  $('<option>'+ usluge[i].id + '.' + usluge[i].naziv+'</option>');
 						$('#allExams').append(option)
 					}
 						
@@ -44,16 +44,23 @@
 		})
 		
 		function noviPregled(){
+			
 			let eSel = $('#allExams').val();
 			let eName = $('#examName').val();
 			let ePrice = $('#examPrice').val();
-			let eDescription = $('examDescription').val()
+			let eDescription = $('#examDescription').val()
 			$.ajax({
 				url:'usluga/nova_usluga',
 				type:'POST',
-				data: JSON.stringify({eSel, eName, ePrice, eDescription}),
+				data: {
+					eSel : eSel,
+					eName : eName, 
+					ePrice : ePrice,
+					eDescription, eDescription
+				},
 				success: function(){
-					alert('The examination has been successfuly added');
+					alert('Succesfully saved the examination');
+					clearData();
 				},
 				error: function(){
 					alert('Something went wrong');
@@ -62,9 +69,10 @@
 		}
 		
 		function clearData(){
-			$('examName').val('');
-			$('examPrice').val('');
-			$('examDescription').val('');
+			$('#examName').val('');
+			$('#examPrice').val('');
+			$('#examDescription').val('');
+			location.reload();
 		}
 	</script>
 </head>

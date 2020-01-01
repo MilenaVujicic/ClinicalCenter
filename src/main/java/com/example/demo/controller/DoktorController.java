@@ -185,7 +185,6 @@ public class DoktorController {
 	
 	@RequestMapping(value = "/operacija/{pName}/{dID}", method = RequestMethod.POST)
 	public ResponseEntity<String> dodavanjeOperacije(HttpEntity<String> json, @PathVariable String pName, @PathVariable Long dID) throws ParseException, MailException, InterruptedException{
-		System.out.println(json);
 		String jString = json.getBody();
 		Exception te = new Exception("Pogresan format datuma ili vremena");
 		JSONParser parser = new JSONParser();

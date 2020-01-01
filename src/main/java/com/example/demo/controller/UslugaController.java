@@ -5,9 +5,9 @@ import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
@@ -16,8 +16,6 @@ import com.example.demo.dto.UslugaDTO;
 import com.example.demo.model.Usluga;
 import com.example.demo.service.UslugaService;
 
-import net.minidev.json.JSONObject;
-import net.minidev.json.parser.JSONParser;
 import net.minidev.json.parser.ParseException;
 
 
@@ -30,27 +28,60 @@ public class UslugaController {
 	private UslugaService uslugaService;
 	
 	@RequestMapping(value = "/nova_usluga", method = RequestMethod.POST)
-	public ResponseEntity<Object> noviPregled(HttpEntity<String> json) throws ParseException{
-		String jString = json.getBody();
-		JSONParser parser = new JSONParser();
-		JSONObject jObj = (JSONObject)parser.parse(jString);
-		String eName = (String)jObj.get("eName");
-		String eDescription = (String)jObj.get("eDescription");
-		String ePriceS = (String)jObj.get("ePrice");
-		String sel = (String)jObj.get("eSel");
-		double ePrice = Double.parseDouble(ePriceS);
+	public ResponseEntity<Object> noviPregled(@RequestBody String json) throws ParseException{
+		System.out.println(json);
+		String[] selData = null;
+		String sel = null;
+		String[] nameData = null;
+		String eName = null;
+		String[] priceData = null;
+		String priceS = null;
+		double ePrice = 0.0;
+		String[] descData = null;
+		String eDescription = null;
+		
+		String[] data = json.split("&");
+		
+		if((data[0].charAt(data[0].length()-1)) != '=') {
+			selData = data[0].split("=");
+			sel = selData[1];
+			
+		}
+		
+		if((data[1].charAt(data[1].length()-1)) != '=') {
+			nameData = data[1].split("=");
+			eName = nameData[1];
+		}
+		
+		if((data[2].charAt(data[2].length()-1)) != '=') {
+			priceData = data[2].split("=");
+			priceS = priceData[1];
+			ePrice = Double.parseDouble(priceS);
+		}
+		
+		
+		if((data[3].charAt(data[3].length()-1)) != '=') {
+			descData = data[3].split("=");
+			eDescription = descData[1];
+		}
+
 		Usluga u;
-		if (sel.equals("New Examination")) {
+		if (sel.equals("New+Examination")) {
 			u = new Usluga(eName, eDescription, ePrice);
 			uslugaService.save(u);
 		}else {
-			String[] parts = sel.split(".");
+			System.out.println(sel);
+			String[] parts = sel.split("\\.");
+			System.out.println(parts.length);
 			Long eId = Long.parseLong(parts[0]);
 			Optional<Usluga> ou = uslugaService.findById(eId);
 			u = ou.get();
-			u.setIme(eName);
-			u.setOpis(eDescription);
-			u.setCena(ePrice);
+			if(eName != null)
+				u.setIme(eName);
+			if(eDescription != null)
+				u.setOpis(eDescription);
+			if(ePrice != 0.0)
+				u.setCena(ePrice);
 			uslugaService.save(u);
 		}
 		
