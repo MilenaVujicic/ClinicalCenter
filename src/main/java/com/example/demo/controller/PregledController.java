@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -15,6 +16,10 @@ import org.springframework.web.bind.annotation.RestController;
 import com.example.demo.dto.PregledDTO;
 import com.example.demo.model.Pregled;
 import com.example.demo.service.PregledService;
+
+import net.minidev.json.JSONObject;
+import net.minidev.json.parser.JSONParser;
+import net.minidev.json.parser.ParseException;
 
 
 @RestController
@@ -53,4 +58,5 @@ public class PregledController {
 		pregledService.delete(pregled);
 		return new ResponseEntity<String>("", HttpStatus.OK);
 	}
+
 }
