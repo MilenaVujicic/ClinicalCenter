@@ -1,6 +1,9 @@
 package com.example.demo.controller;
 
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -11,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.example.demo.dto.KlinikaDTO;
 import com.example.demo.model.Klinika;
 import com.example.demo.service.KlinikaService;
 
@@ -70,5 +74,17 @@ public class KlinikaController {
 			return new ResponseEntity<Object>(null, HttpStatus.NOT_FOUND);
 		}
 		return new ResponseEntity<Object>(null, HttpStatus.OK);
+	}
+	
+	@RequestMapping(value = "sve_klinike", method = RequestMethod.GET)
+	public ResponseEntity<List<KlinikaDTO>> sveKlinike(){
+		List<Klinika> klinike = klinikaService.findAll();
+		List<KlinikaDTO> retVal = new ArrayList<KlinikaDTO>();
+		for(Klinika k : klinike) {
+			KlinikaDTO kd = new KlinikaDTO(k);
+			retVal.add(kd);
+		}
+		
+		return new ResponseEntity<List<KlinikaDTO>>(retVal, HttpStatus.OK);
 	}
 }

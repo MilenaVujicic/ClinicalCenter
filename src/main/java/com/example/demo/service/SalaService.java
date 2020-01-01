@@ -38,6 +38,9 @@ public class SalaService {
 		return salaRepository.findByOpis(opis);
 	}
 	
+	public Sala save(Sala s) {
+		return salaRepository.save(s);
+	}
 
 	public Sala findOne(Long id) {
 		Sala sala = new Sala();

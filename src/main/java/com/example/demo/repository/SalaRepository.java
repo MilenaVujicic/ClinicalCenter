@@ -26,6 +26,6 @@ public interface SalaRepository extends JpaRepository<Sala, Long> {
 	
 	Sala findByOpis(String opis);
 	
-	
+	Sala save(Sala s);
 	
 }

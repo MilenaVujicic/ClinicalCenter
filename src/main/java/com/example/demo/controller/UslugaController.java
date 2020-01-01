@@ -51,6 +51,8 @@ public class UslugaController {
 		if((data[1].charAt(data[1].length()-1)) != '=') {
 			nameData = data[1].split("=");
 			eName = nameData[1];
+			if(eName.contains("\\+"))
+				eName.replaceAll("\\+", " ");
 		}
 		
 		if((data[2].charAt(data[2].length()-1)) != '=') {
@@ -63,6 +65,8 @@ public class UslugaController {
 		if((data[3].charAt(data[3].length()-1)) != '=') {
 			descData = data[3].split("=");
 			eDescription = descData[1];
+			if(eDescription.contains("\\+"))
+				eDescription.replaceAll("\\+", " ");
 		}
 
 		Usluga u;
