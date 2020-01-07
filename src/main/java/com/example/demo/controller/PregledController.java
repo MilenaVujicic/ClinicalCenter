@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.example.demo.dto.PregledDTO;
 import com.example.demo.model.Pregled;
+import com.example.demo.model.StatusPregleda;
 import com.example.demo.service.PregledService;
 
 import net.minidev.json.JSONObject;
@@ -34,10 +35,11 @@ public class PregledController {
 		List<Pregled> sviPregledi = pregledService.findAll();
 		List<Pregled> pregledi = new ArrayList<Pregled>();
 		for (Pregled pregled : sviPregledi) {
-			if (pregled.getPacijent().getId().equals(identifikacija)) {
+			if (pregled.getPacijent().getId().equals(identifikacija) && pregled.getStatus().equals(StatusPregleda.ZAVRSEN)) {
 				pregledi.add(pregled);
 			}
 		}
+		System.out.println("#############" + pregledi.size());
 		return new ResponseEntity<List<Pregled>>(pregledi, HttpStatus.OK);
 	}
 	

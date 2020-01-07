@@ -96,7 +96,7 @@ public class DoktorController {
 		pregled.setAnamneza(pregledDTO.getAnamneza());
 		pregled.setTipPregleda(pregledDTO.getTipPregleda());
 		pregled.setCena(pregledDTO.getCena());
-		pregled.setDatumIVremePregleda(pregledDTO.getDatumIVremePregleda());
+		pregled.setDatumIVremePregleda(new Date());
 		pregled.setDoktor(doktor);
 		pregled.setStatus(StatusPregleda.ZAVRSEN);
 		pregled.setPacijent(pacijent);

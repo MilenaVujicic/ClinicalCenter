@@ -468,6 +468,7 @@ function examinations(id) {
         type:"GET",
         success: function(pregledi) {
         	$('#allExaminations tbody').html('');
+        	alert(pregledi.length);
         	for(let pregled of pregledi) {
         		prikaziPregled(pregled);
         	}
@@ -704,7 +705,7 @@ function prikaziPacijenta(pacijent, i) {
 	let tdPrezime = $('<td>'+pacijent.prezime+'</td>');
 	let tdJmbg = $('<td>'+pacijent.jmbg+'</td>');
 	let aRecord = $('<td><a>Medical record</a></td>');
-	//aRecord.click(medicalRecord(pacijent));
+	aRecord.click(medicalRecord(pacijent));
 	let idId = $('<td hidden="true"><input type="text" value="'+pacijent.id+'"></td>');
 	tr.append(tdNum).append(tdIme).append(tdPrezime).append(tdJmbg).append(aRecord).append(idId);
 	$('#allPatients tbody').append(tr);
@@ -852,6 +853,7 @@ function showCalendar(odsustva, pregledi) {
 	   				color = 'purple';
 	   				id = 0;
 	   			}
+
 	   		    let end = new Date(pregled.datumIVremePregleda);
 	   		    let start = new Date(pregled.datumIVremePregleda);
 	   		    end.setMinutes(end.getMinutes() + 30);
