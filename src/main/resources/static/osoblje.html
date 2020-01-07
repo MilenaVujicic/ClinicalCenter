@@ -21,21 +21,24 @@
 
 	<script>
 		$(document).ready(()=>{
-			document.getElementById('btnSaveData').addEventListener('click', saveData(), false);
-		
-			let korinisk = null;
+			document.getElementById('btnSaveData').addEventListener('click', saveData, false);
+			
+			let k;
 			var d = retData();
-			d.success(function(k){
-				korisnik = k;
+			d.success(function(korisnik){
+				
+				k = korisnik;
+				$('#uName').val(k.ime);
+				$('#uSurname').val(k.prezime);
+				$('#uEmail').val(k.email);
+				$('#uPassword').val(k.password);
+				$('#uCity').val(k.grad);
+				$('#uCountry').val(k.drzava);
+				$('#uAddress').val(k.adresa);
+				$('#uPhone').val(k.telefon);
 			})
 			
-			$('#uName').val(k.ime);
-			$('#uSurname').val(k.prezime);
-			$('#uPassword').val(k.password);
-			$('#uCity').val(k.grad);
-			$('#uCountry').val(k.drzava);
-			$('#uAddress').val(k.adresa);
-			$('#uPhone').val(k.telefon);
+			
 			
 		})
 		
@@ -50,17 +53,19 @@
 		
 		function saveData(){
 			let id = 1;
-			let name = $('#uName').val();
-			let surname = $('#uSurname').val();
+			let ime = $('#uName').val();
+			let prezime = $('#uSurname').val();
 			let password = $('#uPassword').val();
-			let city = $('#uCity').val();
-			let country = $('#uCountry').val();
-			let address = $('#uAddress').val();
-			let phone = $('#uPhone').val();
+			let email = $('#uEmail').val();
+			let grad = $('#uCity').val();
+			let drzava = $('#uCountry').val();
+			let adresa = $('#uAddress').val();
+			let telefon = $('#uPhone').val();
 			$.ajax({
 				url: 'korisnik/izmena_podataka/' + id,
 				type: 'PUT',
-				data: JSON.stringify({name, surname, password, city, country, address, phone}),
+				data: JSON.stringify({ime, prezime, password, grad, drzava, adresa, telefon, email}),
+				contentType: 'application/json',
 				success: function(){
 					alert('Data successfully changed');
 				},
