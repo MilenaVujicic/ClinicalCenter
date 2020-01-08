@@ -22,6 +22,16 @@
 	<script>
 		$(document).ready(()=>{
 			document.getElementById('btnSaveData').addEventListener('click', saveData, false);
+			document.getElementById('uName').addEventListener('click', nameColor, false);
+			document.getElementById('uSurname').addEventListener('click', surnameColor, false);
+			document.getElementById('uEmail').addEventListener('click', emailColor, false);
+			document.getElementById('uPassword').addEventListener('click', passColor, false);
+			document.getElementById('uCity').addEventListener('click', cityColor, false);
+			document.getElementById('uCountry').addEventListener('click', countryColor, false);
+			document.getElementById('uAddress').addEventListener('click', addressColor, false);
+			document.getElementById('uPhone').addEventListener('click', phoneColor, false);
+			
+			
 			
 			let k;
 			var d = retData();
@@ -40,8 +50,39 @@
 			
 			
 			
-		})
+		});
 		
+		function nameColor(){
+			$('#uName').css('background-color', '#ffffff');
+		}
+		
+		function surnameColor(){
+			$('#uSurname').css('background-color', '#ffffff');
+		}
+		
+		function emailColor(){
+			$('#uEmail').css('background-color', '#ffffff');
+		}
+		
+		function passColor(){
+			$('#uPassword').css('background-color', '#ffffff');
+		}
+		
+		function cityColor(){
+			$('#uCity').css('background-color', '#ffffff');
+		}
+		
+		function countryColor(){
+			$('#uCountry').css('background-color', '#ffffff');
+		}
+		
+		function addressColor(){
+			$('#uAddress').css('background-color', '#ffffff');
+		}
+		
+		function phoneColor(){
+			$('#uPhone').css('background-color', '#ffffff');
+		}
 		function retData(){
 			id = 1;
 			return $.ajax({
@@ -61,6 +102,45 @@
 			let drzava = $('#uCountry').val();
 			let adresa = $('#uAddress').val();
 			let telefon = $('#uPhone').val();
+			
+			let err = false;
+			if(ime === ''){
+				$('#uName').css('background-color', '#ff0000');
+				err = true;
+			}
+			if(prezime === ''){
+				$('#uSurname').css('background-color', '#ff0000');
+				err = true;
+			}
+			if(password === ''){
+				$('#uPassword').css('background-color', '#ff0000');
+				err = true;
+			}
+			if(email === ''){
+				$('#uEmail').css('background-color', '#ff0000');
+				err = true;
+			}
+			if(grad === ''){
+				$('#uCity').css('background-color', '#ff0000');
+				err = true;
+			}
+			if(drzava === ''){
+				$('#uCountry').css('background-color', '#ff0000');
+				err = true;
+			}
+			if(adresa === ''){
+				$('#uAddress').css('background-color', '#ff0000');
+				err = true;
+			}
+			if(telefon === ''){
+				$('#uPhone').css('background-color', '#ff0000');
+				err = true;
+			}
+			
+			if(err){
+				alert('The fields must not be empty');
+				return;
+			}
 			$.ajax({
 				url: 'korisnik/izmena_podataka/' + id,
 				type: 'PUT',

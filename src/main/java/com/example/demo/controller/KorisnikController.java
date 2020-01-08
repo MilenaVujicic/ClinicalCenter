@@ -79,7 +79,7 @@ public class KorisnikController {
 			if(!korisnik.getAdresa().equals("")) {
 				k.setAdresa(korisnik.getAdresa());
 			}
-			if(korisnik.getTelefon() != 0) {
+			if(!korisnik.getTelefon().equals("")) {
 				k.setTelefon(korisnik.getTelefon());
 			}
 			if(!korisnik.getEmail().equals("")) {
