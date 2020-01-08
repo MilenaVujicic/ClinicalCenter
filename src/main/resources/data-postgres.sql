@@ -24,6 +24,8 @@ insert into korisnik (ime, prezime, email, username, password, grad, drzava, jmb
 insert into korisnik (ime, prezime, email, username, password, grad, drzava, jmbg, adresa, telefon, datum_rodjenja, uloga, aktivan, aktiviran) values ('Milica', 'Barovic', 'milica.b@gmail.com','mica', 'mica', 'Beograd', 'Srbija', '0241578496520', 'Njegoseva 38', 1452638, '1980-5-15', 4, TRUE, TRUE);
 insert into korisnik (ime, prezime, email, username, password, grad, drzava, jmbg, adresa, telefon, datum_rodjenja, uloga, aktivan, aktiviran) values ('Lucija', 'Gacanovic', 'lucija.g@gmail.com','lucija', 'lucija', 'Beograd', 'Srbija', '6352147895410', 'Njegoseva 38', 114525746, '1972-8-7', 4, TRUE, TRUE);
 insert into korisnik (ime, prezime, email, username, password, grad, drzava, jmbg, adresa, telefon, datum_rodjenja, uloga, aktivan, aktiviran) values ('Petar', 'Milosevic', 'petar.m@gmail.com','milos', 'milos', 'Beograd', 'Srbija', '6325440158741', 'Njegoseva 38', 113652985, '1973-4-9', 4, TRUE, TRUE);
+insert into korisnik (ime, prezime, email, username, password, grad, drzava, jmbg, adresa, telefon, datum_rodjenja, uloga, aktivan, aktiviran) values ('Petar', 'Markovic', 'petar.mi@gmail.com','miki', 'miki', 'Beograd', 'Srbija', '6325440158741', 'Njegoseva 38', 113652985, '1973-4-9', 2, TRUE, TRUE);
+insert into korisnik (ime, prezime, email, username, password, grad, drzava, jmbg, adresa, telefon, datum_rodjenja, uloga, aktivan, aktiviran) values ('Petar', 'Milosevic', 'petar.mil@gmail.com','mili', 'mili', 'Beograd', 'Srbija', '6325440158741', 'Njegoseva 38', 113652985, '1973-4-9', 2, TRUE, TRUE);
 
 insert into pacijent (id_korisnik, visina, tezina, dioptrija, klinika_id) values (1, 168, 70, -4.0, 1);
 insert into pacijent (id_korisnik, visina, tezina, dioptrija, klinika_id) values (2, 174, 88, 0.5, 1);
@@ -44,21 +46,29 @@ insert into medicinska_sestra(id_korisnika, klinika_id) values (9, 1);
 insert into sala(ime, opis, klinika_id) values('Sala Op', 'Sala za opercaije', 1);
 insert into sala(ime, opis, klinika_id) values('Sala 2', 'Sala za preglede', 1);
 insert into sala(ime, opis, klinika_id) values('Sala 1', 'Sala 1 u novoj klinici', 2);
+insert into sala (klinika_id, ime, opis) values (1, 'Sala 1', 'Sala za opste preglede');
+insert into sala(ime, opis, klinika_id) values('Sala 3', 'Sala 3', 2);
+insert into sala(ime, opis, klinika_id) values('Sala 4', 'Sala 4', 2);
 
-insert into termin(datum, slobodan, sala_id) values ('1-12-19 9:00:00', true, 1);
-insert into termin(datum, slobodan, sala_id) values ('1-12-19 10:00:00', false, 1);
-insert into termin(datum, slobodan, sala_id) values ('1-12-19 11:30:00', true, 1);
-insert into termin(datum, slobodan, sala_id) values ('1-12-19 15:00:00', false, 2);
-insert into termin(datum, slobodan, sala_id) values ('1-12-19 16:00:00', false, 2);
-insert into termin(datum, slobodan, sala_id) values ('1-12-19 17:00:00', true, 2);
-insert into termin(datum, slobodan, sala_id) values ('1-12-19 15:00:00', true, 3);
-insert into termin(datum, slobodan, sala_id) values ('1-12-19 16:00:00', true, 3);
-insert into termin(datum, slobodan, sala_id) values ('1-12-19 17:00:00', true, 3);
+insert into termin(datum, slobodan, sala_id, trajanje, cena) values ('1-12-19 9:00:00', true, 1, 0, 0);
+insert into termin(datum, slobodan, sala_id, trajanje, cena) values ('1-12-19 10:00:00', false, 1, 0, 0);
+insert into termin(datum, slobodan, sala_id, trajanje, cena) values ('1-12-19 11:30:00', true, 1, 0, 0);
+insert into termin(datum, slobodan, sala_id, trajanje, cena) values ('1-12-19 15:00:00', false, 2, 0, 0);
+insert into termin(datum, slobodan, sala_id, trajanje, cena) values ('1-12-19 16:00:00', false, 2, 0, 0);
+insert into termin(datum, slobodan, sala_id, trajanje, cena) values ('1-12-19 17:00:00', true, 2, 0, 0);
+insert into termin(datum, slobodan, sala_id, trajanje, cena) values ('1-12-19 15:00:00', true, 3, 0, 0);
+insert into termin(datum, slobodan, sala_id, trajanje, cena) values ('1-12-19 16:00:00', true, 3, 0, 0);
+insert into termin(datum, slobodan, sala_id, trajanje, cena) values ('1-12-19 17:00:00', true, 3, 0, 0);
+insert into termin(datum, slobodan, sala_id, trajanje, cena) values ('25-1-20 17:00:00', true, 3, 0, 0);
+insert into termin(datum, slobodan, sala_id, trajanje, cena) values ('25-1-20 17:00:00', true, 5, 0, 0);
+insert into termin(datum, slobodan, sala_id, trajanje, cena) values ('25-1-20 17:00:00', true, 6, 0, 0);
+insert into termin(datum, slobodan, sala_id, trajanje, cena) values ('25-1-20 18:00:00', true, 3, 0, 0);
+insert into termin(datum, slobodan, sala_id, trajanje, cena) values ('25-2-20 21:00:00', true, 3, 0, 0);
 
 insert into doktor (id_korisnik, specijalizacija, prosecna_ocena, klinika_id) values (5, 'Lekar opste prakse', 0, 1);
 insert into doktor (id_korisnik, specijalizacija, prosecna_ocena, klinika_id) values (6, 'Hirurg', 5, 1);
-
-insert into sala (klinika_id, ime, opis) values (1, 'Sala 1', 'Sala za opste preglede');
+insert into doktor (id_korisnik, specijalizacija, prosecna_ocena, klinika_id) values (17, 'Hirurg', 5, 2);
+insert into doktor (id_korisnik, specijalizacija, prosecna_ocena, klinika_id) values (18, 'Lekar opste prakse', 0, 2);
 
 insert into lek(sifra, ime, opis) values ('J01CA04', 'Amoksicilin', 'Lek na bazi penicilina');
 insert into lek(sifra, ime, opis) values ('J01CR02', 'Panklav', 'Lek na bayi amoksicilina i klavulinske kiseline');
@@ -80,6 +90,12 @@ insert into pregled (naziv, anamneza, datumivreme_pregleda, status, tip_pregleda
 insert into pregled (naziv, anamneza, datumivreme_pregleda, status, tip_pregleda, cena, doktor_id, pacijent_id, sala_id) values ('', '', '2-2-20 18:00:00', 0, '', 50, 1, 3, 1);
 insert into pregled (naziv, anamneza, datumivreme_pregleda, status, tip_pregleda, cena, doktor_id, pacijent_id, sala_id) values ('', '', '2-2-20 19:00:00', 0, '', 50, 1, 1, 1);
 insert into pregledi_dijagnoze(pregled_id, dijagnoza_id) values(1, 2);
+
+insert into operacija(pacijent_id, status, datumivreme_operacije, trajanje) values(1, 0, '25-1-2020 17:00', 0);
+insert into operacija(pacijent_id, status, datumivreme_operacije, trajanje) values(2, 0, '25-1-2020 17:00', 0);
+insert into operacija(pacijent_id, status, datumivreme_operacije, trajanje) values(2, 0, '25-2-2020 21:00', 0);
+insert into operacija(pacijent_id, status, datumivreme_operacije, trajanje) values(1, 0, '25-2-2020 20:00', 0);
+insert into operacija(pacijent_id, status, datumivreme_operacije, trajanje) values(1, 1, '10-1-2020 18:00', 0);
 
 insert into odsustvo (korisnik_id, vrsta_odsustva, pocetak_odsustva, zavrsetak_odsustva, odobren) values (9, 0, '2019-12-25', '2020-01-07', TRUE);
 insert into odsustvo (korisnik_id, vrsta_odsustva, pocetak_odsustva, zavrsetak_odsustva, odobren) values (9, 1, '2020-01-25', '2020-01-28', TRUE);

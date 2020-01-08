@@ -31,4 +31,8 @@ public class DoktorService {
 	public List<Doktor> findAllByKlinika(Klinika k){
 		return doktorRespository.findAllByKlinika(k);
 	}
+	
+	public Doktor save(Doktor doktor) {
+		return doktorRespository.save(doktor);
+	}
 }

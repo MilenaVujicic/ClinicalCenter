@@ -24,6 +24,7 @@ import com.example.demo.model.Doktor;
 import com.example.demo.model.Klinika;
 import com.example.demo.model.Korisnik;
 import com.example.demo.model.Odsustvo;
+import com.example.demo.model.Operacija;
 import com.example.demo.model.Pacijent;
 import com.example.demo.model.Pregled;
 import com.example.demo.model.Recept;
@@ -36,6 +37,7 @@ import com.example.demo.service.DoktorService;
 import com.example.demo.service.EmailService;
 import com.example.demo.service.KlinikaService;
 import com.example.demo.service.KorisnikService;
+import com.example.demo.service.OperacijaService;
 import com.example.demo.service.PacijentService;
 import com.example.demo.service.PregledService;
 import com.example.demo.service.ReceptService;
@@ -76,6 +78,9 @@ public class DoktorController {
 	
 	@Autowired
 	private EmailService emailService;
+	
+	@Autowired
+	private OperacijaService operacijaService;
 	
 	@RequestMapping(value = "/svi_pacijenti", method = RequestMethod.GET)
 	public ResponseEntity<List<Korisnik>> sviPacijenti() {
@@ -249,6 +254,22 @@ public class DoktorController {
 		}
 		return new ResponseEntity<String>("Uspesno rezervisana sala", HttpStatus.OK);
 	}	
+	
+	@RequestMapping(value="/svi_sa_klinike", method = RequestMethod.GET)
+	public ResponseEntity<List<Korisnik>> svi_sa_klinike() {
+		Klinika k = klinikaService.findOne((long) 2);
+		List<Doktor> doktori = doktorService.findAllByKlinika(k);
+		List<Korisnik> lekari = korisnikService.findByUloga(UlogaKorisnika.LEKAR);
+		List<Korisnik> doktori_klinike = new ArrayList<Korisnik>();
+		for (Korisnik korisnik : lekari) {
+			for (Doktor doktor : doktori) {
+				if (doktor.getIdKorisnik().equals(korisnik.getId())) {
+					doktori_klinike.add(korisnik);
+				}
+			} 
+		}
+		return new ResponseEntity<List<Korisnik>>(doktori_klinike, HttpStatus.OK);
+	}
 
 }
 
