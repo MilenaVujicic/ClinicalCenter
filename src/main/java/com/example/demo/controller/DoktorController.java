@@ -31,6 +31,7 @@ import com.example.demo.model.Sala;
 import com.example.demo.model.StatusPregleda;
 import com.example.demo.model.StatusRecepta;
 import com.example.demo.model.UlogaKorisnika;
+import com.example.demo.model.Zahtev;
 import com.example.demo.service.DijagnozaService;
 import com.example.demo.service.DoktorService;
 import com.example.demo.service.EmailService;
@@ -40,6 +41,7 @@ import com.example.demo.service.PacijentService;
 import com.example.demo.service.PregledService;
 import com.example.demo.service.ReceptService;
 import com.example.demo.service.SalaService;
+import com.example.demo.service.ZahtevService;
 
 import net.minidev.json.JSONObject;
 import net.minidev.json.parser.JSONParser;
@@ -76,6 +78,9 @@ public class DoktorController {
 	
 	@Autowired
 	private EmailService emailService;
+	
+	@Autowired
+	private ZahtevService zahtevService;
 	
 	@RequestMapping(value = "/svi_pacijenti", method = RequestMethod.GET)
 	public ResponseEntity<List<Korisnik>> sviPacijenti() {
@@ -243,6 +248,11 @@ public class DoktorController {
 		
 		Korisnik admin = korisnikService.findOne(dID);
 		Korisnik doktor = korisnikService.findOne(7L);
+		
+		Zahtev z = new Zahtev(doktor.getId(), datum, vreme, null);
+		zahtevService.save(z);
+		
+		
 		try{emailService.sendNotificationRoom(admin, doktor, pacijent, datum, vreme);
 		}catch(Exception e) {
 			e.printStackTrace();

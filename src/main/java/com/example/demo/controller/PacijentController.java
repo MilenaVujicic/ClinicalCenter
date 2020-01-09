@@ -5,7 +5,6 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -29,12 +28,14 @@ import com.example.demo.model.Korisnik;
 import com.example.demo.model.Pacijent;
 import com.example.demo.model.Pregled;
 import com.example.demo.model.UlogaKorisnika;
+import com.example.demo.model.Zahtev;
 import com.example.demo.service.DoktorService;
 import com.example.demo.service.EmailService;
 import com.example.demo.service.KlinikaService;
 import com.example.demo.service.KorisnikService;
 import com.example.demo.service.PacijentService;
 import com.example.demo.service.PregledService;
+import com.example.demo.service.ZahtevService;
 
 
 @RestController
@@ -59,6 +60,8 @@ public class PacijentController {
 	@Autowired
 	EmailService emailService;
 	
+	@Autowired
+	ZahtevService zahtevService;
 	private List<Korisnik> foundUsers = new ArrayList<Korisnik>();
 
 	@RequestMapping(value = "/sveKlinike", method=RequestMethod.GET)
@@ -287,6 +290,7 @@ public class PacijentController {
 		return new ResponseEntity<PacijentDTO>(new PacijentDTO(p), HttpStatus.OK);
 	}
 	
+	@SuppressWarnings("deprecation")
 	@RequestMapping(value="/zakazi", method=RequestMethod.PUT)
 	public ResponseEntity<String> zakaziPregled(@RequestBody String dt) throws ParseException, InterruptedException {
 		dt = dt.substring(1, dt.length()-1);
@@ -307,12 +311,30 @@ public class PacijentController {
 		Korisnik admin = administratori.get(0);
 		System.out.println("admin: "+admin.getIme());
 		
+		int day = date1.getDay();
+		int month = date1.getMonth();
+		int year = date1.getYear();
+		int hour = date1.getHours();
+		int minutes = date1.getMinutes();
+		
+		Integer dayI = new Integer(day);
+		Integer monthI = new Integer(month);
+		Integer yearI = new Integer(year);
+		Integer hourI = new Integer(hour);
+		Integer minutesI = new Integer(minutes);
+		
+		String dateS = dayI.toString() + "/" + monthI.toString() + "/" + yearI.toString(); 
+		String timeS = hourI.toString() + ":" + minutesI.toString();
 		
 		Pregled pregled = new Pregled();
 		pregled.setDatumIVremePregleda(date1);
 		pregled.setPacijent(pacijent);
 		pregled.setDoktor(doktor);
 		//pregledService.save(pregled);
+		
+		Zahtev z = new Zahtev(user.getId(), dateS, timeS, null);
+		zahtevService.save(z);
+		
 		try {
 			emailService.sendNotificaitionPregled(user, admin, pregled);
 		} catch (MailException e) {
