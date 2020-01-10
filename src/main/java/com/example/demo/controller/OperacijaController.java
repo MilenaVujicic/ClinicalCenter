@@ -40,7 +40,7 @@ public class OperacijaController {
 	
 	@RequestMapping(value = "/zahtevi", method=RequestMethod.GET) 
 	public ResponseEntity<List<Operacija>> zahtevi() {
-		List<Operacija> operacije = operacijaService.findByStatus(StatusOperacije.NEPOTVRĐEN);
+		List<Operacija> operacije = operacijaService.findByStatus(StatusOperacije.NERASPOREDJEN);
 		return new ResponseEntity<List<Operacija>>(operacije, HttpStatus.OK);
 	}
 	
@@ -52,19 +52,26 @@ public class OperacijaController {
 		operacija.setStatus(StatusOperacije.ZAKAZAN);
 		operacija.setSala(sala);
 		String[] splitter = text.split("~");
+		List<Termin> termini = terminService.findAll();
+
+		for (Termin termin : termini) {
+			if (termin.getSala().getId().equals(sala.getId()) && termin.getDatum().equals(operacija.getDatumIVremeOperacije())) {
+				termin.setSlobodan(false);
+				terminService.save(termin);
+			}
+		}
+		
 		for (String s : splitter) {
 			if (!s.equals("")) {
 				Doktor doktor = doktorService.findByIdKorisnik(Long.parseLong(s));
+				System.out.println("###pre" + doktor.getOperacije().size());
 				doktor.getOperacije().add(operacija);
+				operacija.getDoktori().add(doktor);
+				System.out.println("###posle" + doktor.getOperacije().size());
 				doktorService.save(doktor);
 			}
 		}
-		List<Termin> termini = terminService.findAll();
-		for (Termin termin : termini) {
-			if (termin.getSala().getId().equals(sala.getId())) {
-				termin.setSlobodan(false);
-			}
-		}
+		
 		operacijaService.save(operacija);
 		
 		return new ResponseEntity<String>("Uspesno rezervisana sala", HttpStatus.OK);

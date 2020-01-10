@@ -1,8 +1,10 @@
 package com.example.demo.controller;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpEntity;
@@ -101,7 +103,7 @@ public class DoktorController {
 		pregled.setAnamneza(pregledDTO.getAnamneza());
 		pregled.setTipPregleda(pregledDTO.getTipPregleda());
 		pregled.setCena(pregledDTO.getCena());
-		pregled.setDatumIVremePregleda(new Date());
+		pregled.setDatumIVremePregleda(Calendar.getInstance());
 		pregled.setDoktor(doktor);
 		pregled.setStatus(StatusPregleda.ZAVRSEN);
 		pregled.setPacijent(pacijent);
@@ -261,6 +263,7 @@ public class DoktorController {
 		List<Doktor> doktori = doktorService.findAllByKlinika(k);
 		List<Korisnik> lekari = korisnikService.findByUloga(UlogaKorisnika.LEKAR);
 		List<Korisnik> doktori_klinike = new ArrayList<Korisnik>();
+		
 		for (Korisnik korisnik : lekari) {
 			for (Doktor doktor : doktori) {
 				if (doktor.getIdKorisnik().equals(korisnik.getId())) {
@@ -268,6 +271,60 @@ public class DoktorController {
 				}
 			} 
 		}
+		
+		
+		return new ResponseEntity<List<Korisnik>>(doktori_klinike, HttpStatus.OK);
+	}
+	
+	@RequestMapping(value="/svi_slobodni_sa_klinike/{id}", method = RequestMethod.GET)
+	public ResponseEntity<List<Korisnik>> svi_sa_klinike_slobodni(@PathVariable("id") Long identifikacija) {
+		Klinika k = klinikaService.findOne((long) 2);
+		List<Doktor> doktori = doktorService.findAllByKlinika(k);
+		List<Korisnik> lekari = korisnikService.findByUloga(UlogaKorisnika.LEKAR);
+		List<Korisnik> doktori_klinike = new ArrayList<Korisnik>();
+		List<Doktor> slobodni_doktori = new ArrayList<Doktor>();
+		
+		Operacija operacija = operacijaService.findOne(identifikacija);
+		System.out.println("#####operacija_vreme" + operacija.getDatumIVremeOperacije().getTimeInMillis());
+		for (Doktor doktor : doktori) {
+			Boolean nasla = false;
+			for (Pregled pregled : doktor.getPregledi()) {
+				if (pregled.getDatumIVremePregleda().getTimeInMillis() == operacija.getDatumIVremeOperacije().getTimeInMillis()) {
+					nasla = true;
+					continue;
+				}
+			}
+			
+			for (Operacija o : doktor.getOperacije()) {
+				if (o.getDatumIVremeOperacije().getTimeInMillis() == operacija.getDatumIVremeOperacije().getTimeInMillis()) {
+					nasla = true;
+					continue;
+				}
+			}
+			
+			Korisnik kor = korisnikService.findOne(doktor.getIdKorisnik());
+			
+			for (Odsustvo od : kor.getOdsustva()) {
+				if (od.getPocetakOdsustva().compareTo(operacija.getDatumIVremeOperacije().getTime()) < 0 && od.getZavrsetakOdsustva().compareTo(operacija.getDatumIVremeOperacije().getTime()) > 0){
+					nasla = true;
+					continue;
+				}
+			}
+			
+			if (!nasla)
+				slobodni_doktori.add(doktor);
+			
+		}
+		
+		for (Korisnik korisnik : lekari) {
+			for (Doktor doktor : slobodni_doktori) {
+				if (doktor.getIdKorisnik().equals(korisnik.getId())) {
+					doktori_klinike.add(korisnik);
+				}
+			} 
+		}
+		
+		
 		return new ResponseEntity<List<Korisnik>>(doktori_klinike, HttpStatus.OK);
 	}
 

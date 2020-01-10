@@ -215,6 +215,7 @@ public class SalaController {
 		Operacija operacija = operacijaService.findOne(identifikacija);
 		Klinika klinika = klinikaService.findOne((long) 2);
 		List<Sala> sveSale = salaService.findByKlinika(klinika);
+		System.out.println("##########sve_sale" + sveSale.size());
 		List<Sala> slobodneSale = new ArrayList<Sala>();
 		for (Sala sala : sveSale) {
 			for (Termin termin : sala.getSlobodniTermini()) {
@@ -223,44 +224,55 @@ public class SalaController {
 				}
 			}
 		}
-		System.out.println(slobodneSale.size());
+		System.out.println("##########################" + slobodneSale.size());
 		return new ResponseEntity<List<Sala>>(slobodneSale, HttpStatus.OK);
 	}
 	
 	@RequestMapping(value = "/drugi_slobodni_termini/{id}")
 	public ResponseEntity<Sala> prviSlobodan(@PathVariable("id") Long identifikacija) {
+		System.out.println("##############drugi slobodni termini");
 		Operacija operacija = operacijaService.findOne(identifikacija);
 		Klinika klinika = klinikaService.findOne((long) 2);
 		List<Sala> sveSale = salaService.findByKlinika(klinika);
 		Sala rezervisanaSala = sveSale.get(0);
 		long min = new Long(Long.MAX_VALUE);
 		Termin slobodanTermin = new Termin();
-		for (Sala sala : sveSale) {
-			for (Termin termin : sala.getSlobodniTermini()) {
-				if (termin.isSlobodan()) {
-					slobodanTermin = termin;
-					break;
+		System.out.println("############# sve sale size" + sveSale.size());
+		try {
+			for (Sala sala : sveSale) {
+				for (Termin termin : sala.getSlobodniTermini()) {
+					if (termin.isSlobodan()) {
+						slobodanTermin = termin;
+						break;
+					}
 				}
 			}
-		}
-		for (Sala sala : sveSale) {
-			for (Termin termin : sala.getSlobodniTermini()) {
-				if (termin.isSlobodan()) {
-					long end = termin.getDatum().getTimeInMillis();
-				    long start = operacija.getDatumIVremeOperacije().getTimeInMillis();
-				    if (min > Math.abs(end - start)) {
-				    	min = Math.abs(end - start);
-				    	slobodanTermin = termin;
-				    }
+	
+			for (Sala sala : sveSale) {
+				for (Termin termin : sala.getSlobodniTermini()) {
+					if (termin.isSlobodan()) {
+						long end = termin.getDatum().getTimeInMillis();
+					    long start = operacija.getDatumIVremeOperacije().getTimeInMillis();
+					    if (min > Math.abs(end - start)) {
+					    	min = Math.abs(end - start);
+					    	slobodanTermin = termin;
+					    }
+					}
 				}
 			}
-		}
 		
-		for (Sala sala : sveSale) {
-			if (slobodanTermin.getSala().getId().equals(sala.getId())) {
-				rezervisanaSala = sala;
+		
+			for (Sala sala : sveSale) {
+				if (slobodanTermin.getSala().getId().equals(sala.getId())) {
+					rezervisanaSala = sala;
+				}
 			}
 		}
+		catch (Exception e) {
+			System.out.println("########" + e);
+			return new ResponseEntity<Sala>(HttpStatus.NOT_FOUND);
+		} 
+
 		operacija.setDatumIVremeOperacije(slobodanTermin.getDatum());
 		operacijaService.save(operacija);
 		return new ResponseEntity<Sala>(rezervisanaSala, HttpStatus.OK);

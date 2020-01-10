@@ -64,6 +64,7 @@ insert into termin(datum, slobodan, sala_id, trajanje, cena) values ('25-1-20 17
 insert into termin(datum, slobodan, sala_id, trajanje, cena) values ('25-1-20 17:00:00', true, 6, 0, 0);
 insert into termin(datum, slobodan, sala_id, trajanje, cena) values ('25-1-20 18:00:00', true, 3, 0, 0);
 insert into termin(datum, slobodan, sala_id, trajanje, cena) values ('25-2-20 21:00:00', true, 3, 0, 0);
+insert into termin(datum, slobodan, sala_id, trajanje, cena) values ('25-2-20 21:00:00', true, 6, 0, 0);
 
 insert into doktor (id_korisnik, specijalizacija, prosecna_ocena, klinika_id) values (5, 'Lekar opste prakse', 0, 1);
 insert into doktor (id_korisnik, specijalizacija, prosecna_ocena, klinika_id) values (6, 'Hirurg', 5, 1);

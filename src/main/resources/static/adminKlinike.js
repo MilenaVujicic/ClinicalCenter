@@ -12,9 +12,9 @@ function prikaziDoktora(doktor) {
 	$('#doctors').append(tr);
 }
 
-function allDoctors() {
+function allDoctors(id) {
 	$.ajax({
-		url: 'doktor/svi_sa_klinike',
+		url: 'doktor/svi_slobodni_sa_klinike/' + id,
 		type: "GET",
 		success: function(doktori) {
 			$('#doctors').html('');
@@ -32,7 +32,7 @@ function allDoctors() {
 function rezSala(sala, operacija) {
 	let url = 'operacija/rezervisi/' + sala.id + '/' + operacija.id + '/';
 	$.ajax({
-		url: 'doktor/svi_sa_klinike',
+		url: 'doktor/svi_slobodni_sa_klinike/' + operacija.id,
 		type: "GET",
 		success: function(doktori) {
 			for (let doktor of doktori) {
@@ -56,7 +56,7 @@ function rezSala(sala, operacija) {
 			});
 		},
 		error: function() {
-			alert('Desila se greska');
+			alert('Desila se greska kod rezervisanja sale');
 		}
 	});
 }
@@ -93,7 +93,7 @@ function slTer(operacija) {
 				for (let sala of sale) {
 					slobodnaSala(sala, operacija);
 				} 
-				allDoctors();
+				allDoctors(operacija.id);
 			} else {
 				$.ajax({
 					url: '/sala/drugi_slobodni_termini/' + operacija.id,
@@ -104,7 +104,7 @@ function slTer(operacija) {
 							type:"GET",
 							success: function(operacij) {
 								slobodnaSala(sala, operacij);
-								allDoctors();
+								allDoctors(operacija.id);
 							},
 							error: function() {
 								alert('Desila se greska');
@@ -113,7 +113,7 @@ function slTer(operacija) {
 						
 					},
 					error: function() {
-						alert('Desila se greska kod rezervisanja sala');
+						alert('Nema vise slobodnih sala i termina');
 					}
 				});
 			}
