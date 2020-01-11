@@ -26,6 +26,7 @@ insert into korisnik (ime, prezime, email, username, password, grad, drzava, jmb
 insert into korisnik (ime, prezime, email, username, password, grad, drzava, jmbg, adresa, telefon, datum_rodjenja, uloga, aktivan, aktiviran) values ('Petar', 'Milosevic', 'petar.m@gmail.com','milos', 'milos', 'Beograd', 'Srbija', '6325440158741', 'Njegoseva 38', 113652985, '1973-4-9', 4, TRUE, TRUE);
 insert into korisnik (ime, prezime, email, username, password, grad, drzava, jmbg, adresa, telefon, datum_rodjenja, uloga, aktivan, aktiviran) values ('Petar', 'Markovic', 'petar.mi@gmail.com','miki', 'miki', 'Beograd', 'Srbija', '6325440158741', 'Njegoseva 38', 113652985, '1973-4-9', 2, TRUE, TRUE);
 insert into korisnik (ime, prezime, email, username, password, grad, drzava, jmbg, adresa, telefon, datum_rodjenja, uloga, aktivan, aktiviran) values ('Petar', 'Milosevic', 'petar.mil@gmail.com','mili', 'mili', 'Beograd', 'Srbija', '6325440158741', 'Njegoseva 38', 113652985, '1973-4-9', 2, TRUE, TRUE);
+insert into korisnik (ime, prezime, email, username, password, grad, drzava, jmbg, adresa, telefon, datum_rodjenja, uloga, aktivan, aktiviran) values ('Klinika', 'KLinikikic', 'klinika.kl@gmail.com','klinika', 'klinika', 'Beograd', 'Srbija', '6325440158741', 'Njegoseva 38', 113652985, '1973-4-9', 1, TRUE, TRUE);
 
 insert into pacijent (id_korisnik, visina, tezina, dioptrija, klinika_id) values (1, 168, 70, -4.0, 1);
 insert into pacijent (id_korisnik, visina, tezina, dioptrija, klinika_id) values (2, 174, 88, 0.5, 1);
@@ -39,6 +40,7 @@ insert into pacijent (id_korisnik, visina, tezina, dioptrija, klinika_id) values
 insert into pacijent (id_korisnik, visina, tezina, dioptrija, klinika_id) values (15, 174, 88, 0.5, 1);
 insert into pacijent (id_korisnik, visina, tezina, dioptrija, klinika_id) values (16, 174, 88, 0.5, 1);
 insert into administrator_klinike(id_korisnik, klinika_id) values (4, 1);
+insert into administrator_klinike(id_korisnik, klinika_id) values (19, 2);
 
 insert into administrator_klinickog_centra(id_korisnik) values (3);
 insert into medicinska_sestra(id_korisnika, klinika_id) values (9, 1);

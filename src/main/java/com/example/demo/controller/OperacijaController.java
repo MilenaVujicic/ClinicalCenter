@@ -11,11 +11,16 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.example.demo.model.Doktor;
+import com.example.demo.model.Klinika;
+import com.example.demo.model.Korisnik;
 import com.example.demo.model.Operacija;
 import com.example.demo.model.Sala;
 import com.example.demo.model.StatusOperacije;
 import com.example.demo.model.Termin;
 import com.example.demo.service.DoktorService;
+import com.example.demo.service.EmailService;
+import com.example.demo.service.KlinikaService;
+import com.example.demo.service.KorisnikService;
 import com.example.demo.service.OperacijaService;
 import com.example.demo.service.SalaService;
 import com.example.demo.service.TerminService;
@@ -37,6 +42,15 @@ public class OperacijaController {
 	@Autowired
 	private TerminService terminService;
 	
+	@Autowired
+	private KorisnikService korisnikService;
+	
+	@Autowired
+	private EmailService emailService;
+	
+	@Autowired
+	private KlinikaService klinikaService;
+	
 	
 	@RequestMapping(value = "/zahtevi", method=RequestMethod.GET) 
 	public ResponseEntity<List<Operacija>> zahtevi() {
@@ -53,7 +67,9 @@ public class OperacijaController {
 		operacija.setSala(sala);
 		String[] splitter = text.split("~");
 		List<Termin> termini = terminService.findAll();
-
+		Korisnik pacijent = korisnikService.findOne(operacija.getPacijent().getIdKorisnik());
+		Klinika klinika = klinikaService.findOne(operacija.getSala().getKlinika().getId());
+		
 		for (Termin termin : termini) {
 			if (termin.getSala().getId().equals(sala.getId()) && termin.getDatum().equals(operacija.getDatumIVremeOperacije())) {
 				termin.setSlobodan(false);
@@ -68,12 +84,14 @@ public class OperacijaController {
 				doktor.getOperacije().add(operacija);
 				operacija.getDoktori().add(doktor);
 				System.out.println("###posle" + doktor.getOperacije().size());
+				Korisnik dok = korisnikService.findOne(doktor.getIdKorisnik());
+				emailService.sendSuccessfulReservationDoctor(pacijent, operacija, dok, klinika);
 				doktorService.save(doktor);
 			}
 		}
 		
 		operacijaService.save(operacija);
-		
+		emailService.sendSuccessfulReservationPatient(pacijent, operacija, klinika);
 		return new ResponseEntity<String>("Uspesno rezervisana sala", HttpStatus.OK);
 	}
 	
