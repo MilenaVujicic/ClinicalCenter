@@ -3,6 +3,7 @@
  */
 package com.example.demo.model;
 
+import java.util.Calendar;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
@@ -18,7 +19,6 @@ import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
-import javax.persistence.OneToOne;
 
 
 @Entity
@@ -35,7 +35,7 @@ public class Pregled {
 	private String anamneza;
 	
 	@Column(name = "datumIVremePregleda", nullable = true)
-	private Date datumIVremePregleda;
+	private Calendar datumIVremePregleda;
 	
 	@Column(name = "tipPregleda")
 	private String tipPregleda;
@@ -89,11 +89,11 @@ public class Pregled {
 		this.anamneza = anamneza;
 	}
 
-	public Date getDatumIVremePregleda() {
+	public Calendar getDatumIVremePregleda() {
 		return datumIVremePregleda;
 	}
 
-	public void setDatumIVremePregleda(Date datumIVremePregleda) {
+	public void setDatumIVremePregleda(Calendar datumIVremePregleda) {
 		this.datumIVremePregleda = datumIVremePregleda;
 	}
 

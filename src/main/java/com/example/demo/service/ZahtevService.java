@@ -1,5 +1,7 @@
 package com.example.demo.service;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -15,6 +17,10 @@ public class ZahtevService {
 	
 	public Zahtev save(Zahtev z) {
 		return zahtevRepository.save(z);
+	}
+	
+	public List<Zahtev> findAll(){
+		return zahtevRepository.findAll();
 	}
 	
 }

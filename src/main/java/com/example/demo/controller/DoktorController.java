@@ -1,8 +1,10 @@
 package com.example.demo.controller;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpEntity;
@@ -19,6 +21,7 @@ import com.example.demo.dto.DoktorDTO;
 import com.example.demo.dto.KorisnikDTO;
 import com.example.demo.dto.PregledDTO;
 import com.example.demo.dto.ReceptDTO;
+import com.example.demo.model.AdministratorKlinike;
 import com.example.demo.model.Dijagnoza;
 import com.example.demo.model.Doktor;
 import com.example.demo.model.Klinika;
@@ -32,6 +35,7 @@ import com.example.demo.model.StatusPregleda;
 import com.example.demo.model.StatusRecepta;
 import com.example.demo.model.UlogaKorisnika;
 import com.example.demo.model.Zahtev;
+import com.example.demo.service.AdministratorKlinikeService;
 import com.example.demo.service.DijagnozaService;
 import com.example.demo.service.DoktorService;
 import com.example.demo.service.EmailService;
@@ -82,6 +86,9 @@ public class DoktorController {
 	@Autowired
 	private ZahtevService zahtevService;
 	
+	@Autowired
+	private AdministratorKlinikeService administratorService;
+	
 	@RequestMapping(value = "/svi_pacijenti", method = RequestMethod.GET)
 	public ResponseEntity<List<Korisnik>> sviPacijenti() {
 		List<Korisnik> pacijenti = korisnikService.findByUloga(UlogaKorisnika.PACIJENT);
@@ -101,7 +108,8 @@ public class DoktorController {
 		pregled.setAnamneza(pregledDTO.getAnamneza());
 		pregled.setTipPregleda(pregledDTO.getTipPregleda());
 		pregled.setCena(pregledDTO.getCena());
-		pregled.setDatumIVremePregleda(new Date());
+		Calendar c = Calendar.getInstance();
+		pregled.setDatumIVremePregleda(c);
 		pregled.setDoktor(doktor);
 		pregled.setStatus(StatusPregleda.ZAVRSEN);
 		pregled.setPacijent(pacijent);
@@ -214,10 +222,21 @@ public class DoktorController {
 		
 		Korisnik admin = korisnikService.findOne(dID);
 		Korisnik doktor = korisnikService.findOne(7L);
-		try{emailService.sendNotificationExam(admin, doktor, pacijent, datum, vreme);
+		Zahtev z = new Zahtev(doktor.getId(), datum, vreme, null);
+		List<AdministratorKlinike> allAdmins = administratorService.findAll();
+		AdministratorKlinike a = allAdmins.get(0);
+		z.setAdministrator_klinike(a);
+		zahtevService.save(z);
+		
+		System.out.println();
+		System.out.println(z.getDatum() + " " + z.getVreme());
+		
+		z.makeDate();
+		
+		/*try{emailService.sendNotificationExam(admin, doktor, pacijent, datum, vreme);
 		}catch(Exception e) {
 			e.printStackTrace();
-		}
+		}*/
 		return new ResponseEntity<String>("Uspesno rezervisan pregled", HttpStatus.OK);
 	}	
 	
@@ -249,14 +268,12 @@ public class DoktorController {
 		Korisnik admin = korisnikService.findOne(dID);
 		Korisnik doktor = korisnikService.findOne(7L);
 		
-		Zahtev z = new Zahtev(doktor.getId(), datum, vreme, null);
-		zahtevService.save(z);
 		
-		
-		try{emailService.sendNotificationRoom(admin, doktor, pacijent, datum, vreme);
+			
+		/*try{emailService.sendNotificationRoom(admin, doktor, pacijent, datum, vreme);
 		}catch(Exception e) {
 			e.printStackTrace();
-		}
+		}*/
 		return new ResponseEntity<String>("Uspesno rezervisana sala", HttpStatus.OK);
 	}	
 

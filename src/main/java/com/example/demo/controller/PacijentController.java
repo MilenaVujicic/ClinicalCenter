@@ -3,6 +3,7 @@ package com.example.demo.controller;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
@@ -311,12 +312,14 @@ public class PacijentController {
 		Korisnik admin = administratori.get(0);
 		System.out.println("admin: "+admin.getIme());
 		
+		
 		int day = date1.getDay();
 		int month = date1.getMonth();
 		int year = date1.getYear();
 		int hour = date1.getHours();
 		int minutes = date1.getMinutes();
-		
+		Calendar c = Calendar.getInstance();
+		c.set(year, month, day, hour, minutes);
 		Integer dayI = new Integer(day);
 		Integer monthI = new Integer(month);
 		Integer yearI = new Integer(year);
@@ -327,7 +330,7 @@ public class PacijentController {
 		String timeS = hourI.toString() + ":" + minutesI.toString();
 		
 		Pregled pregled = new Pregled();
-		pregled.setDatumIVremePregleda(date1);
+		pregled.setDatumIVremePregleda(c);
 		pregled.setPacijent(pacijent);
 		pregled.setDoktor(doktor);
 		//pregledService.save(pregled);

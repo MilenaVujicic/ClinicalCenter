@@ -90,7 +90,6 @@ public class Sala  {
 		this.operacije = operacije;
 	}
 	
-	
 
 	public Long getId() {
 		return id;
