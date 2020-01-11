@@ -3,6 +3,7 @@ package com.example.demo.controller;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
@@ -309,7 +310,9 @@ public class PacijentController {
 		
 		
 		Pregled pregled = new Pregled();
-		pregled.setDatumIVremePregleda(date1);
+		Calendar cal = Calendar.getInstance();
+		cal.setTime(date1);
+		pregled.setDatumIVremePregleda(cal);
 		pregled.setPacijent(pacijent);
 		pregled.setDoktor(doktor);
 		//pregledService.save(pregled);

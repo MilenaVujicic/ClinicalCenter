@@ -28,8 +28,6 @@ public class Klinika {
 	
 	@Column(name = "opis")
 	private String opis;
-	
-
 
 	@JsonIgnore
 	@OneToMany(mappedBy = "klinika", fetch = FetchType.LAZY, cascade = CascadeType.ALL)

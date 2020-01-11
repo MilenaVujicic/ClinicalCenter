@@ -4,6 +4,7 @@
 package com.example.demo.model;
 
 import java.time.LocalDateTime;
+import java.util.Calendar;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -19,9 +20,6 @@ import javax.persistence.ManyToMany;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 
-enum StatusOperacije {
-	ZAKAZAN, ZAVRSEN, OTKAZAN
-}
 
 @Entity
 public class Operacija {
@@ -40,9 +38,12 @@ public class Operacija {
 	private StatusOperacije status;
 	
 	@Column(name = "datumIVremeOperacije", nullable = false)
-	private LocalDateTime datumIVremeOperacije;
+	private Calendar datumIVremeOperacije;
 	
-	@Column(name = "trajanje")
+	@Column(name = "opis")
+	private String opis = "";
+	
+	@Column(name = "trajanje", nullable = false)
 	private int trajanje;
 	
 	@ManyToMany
@@ -78,11 +79,11 @@ public class Operacija {
 		this.status = status;
 	}
 
-	public LocalDateTime getDatumIVremeOperacije() {
+	public Calendar getDatumIVremeOperacije() {
 		return datumIVremeOperacije;
 	}
 
-	public void setDatumIVremeOperacije(LocalDateTime datumIVremeOperacije) {
+	public void setDatumIVremeOperacije(Calendar datumIVremeOperacije) {
 		this.datumIVremeOperacije = datumIVremeOperacije;
 	}
 
@@ -109,12 +110,22 @@ public class Operacija {
 	public void setDoktori(Set<Doktor> doktori) {
 		this.doktori = doktori;
 	}
+	
+	
+
+	public String getOpis() {
+		return opis;
+	}
+
+	public void setOpis(String opis) {
+		this.opis = opis;
+	}
 
 	@Override
 	public String toString() {
 		return "Operacija [id=" + id + ", pacijent=" + pacijent + ", sala=" + sala + ", status=" + status
-				+ ", datumIVremeOperacije=" + datumIVremeOperacije + ", trajanje=" + trajanje + ", doktori=" + doktori
-				+ "]";
+				+ ", datumIVremeOperacije=" + datumIVremeOperacije + ", opis=" + opis + ", trajanje=" + trajanje
+				+ ", doktori=" + doktori + "]";
 	}
 	
 	
