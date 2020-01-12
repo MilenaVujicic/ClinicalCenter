@@ -50,7 +50,7 @@ public class AdministratorController {
 		String address = (String)jObj.get("address");
 		String country = (String)jObj.get("country");
 		String phoneS = (String)jObj.get("phone");
-		int phone = Integer.parseInt(phoneS);
+		//int phone = Integer.parseInt(phoneS);
 		
 		Korisnik k = korisnikService.findOne(adminID);
 		k.setIme(name);
@@ -59,7 +59,7 @@ public class AdministratorController {
 		k.setGrad(city);
 		k.setDrzava(country);
 		k.setAdresa(address);
-		k.setTelefon(phone);
+		k.setTelefon(phoneS);
 		
 		korisnikService.save(k);
 		return new ResponseEntity<>("uspsena izmena", HttpStatus.OK);

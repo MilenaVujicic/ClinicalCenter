@@ -71,7 +71,7 @@ public class AdministratorKlinickogCentraController {
 		korisnik.setAdresa(korisnikDTO.getAdresa());
 		korisnik.setGrad(korisnikDTO.getGrad());
 		korisnik.setDrzava(korisnikDTO.getDrzava());
-		korisnik.setTelefon(3625415);
+		korisnik.setTelefon("3625415");
 		korisnik.setJmbg(korisnikDTO.getJmbg());
 		korisnik.setPassword(UUID.randomUUID().toString());
 		korisnik.setDatumRodjenja(new Date());
