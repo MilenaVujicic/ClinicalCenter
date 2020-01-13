@@ -4,9 +4,10 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
-import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -324,6 +325,64 @@ public class PacijentController {
 		}
 		
 		return new ResponseEntity<String>("", HttpStatus.OK);
+		
+	}
+	
+	@RequestMapping(value = "sortiraniPacijenti/{tip}", method = RequestMethod.GET)
+	public ResponseEntity<List<KorisnikDTO>> sortiraniPacijenti(@PathVariable String tip){
+		List<KorisnikDTO> retVal = new ArrayList<KorisnikDTO>();
+		List<Pacijent> pacijenti = pacijentService.findAll();
+		
+		List<Korisnik> sviKorisnici = korisnikService.findAll();
+		List<Korisnik> kPacijenti = new ArrayList<Korisnik>();
+		
+		for(Pacijent p: pacijenti) {
+			for(Korisnik k : sviKorisnici) {
+				if(k.getId() == p.getId()) {
+					kPacijenti.add(k);
+					continue;
+				}
+			}
+		}
+		
+		if(tip.equals("ime")) {
+			Collections.sort(kPacijenti, new Comparator<Korisnik>(){
+
+				@Override
+				public int compare(Korisnik o1, Korisnik o2) {
+					// TODO Auto-generated method stub
+					return o1.getIme().compareTo(o2.getIme());
+				}
+				
+			});
+		}else if(tip.equals("prezime")) {
+			Collections.sort(kPacijenti, new Comparator<Korisnik>() {
+
+				@Override
+				public int compare(Korisnik o1, Korisnik o2) {
+					// TODO Auto-generated method stub
+					return o1.getPrezime().compareTo(o2.getPrezime());
+				}
+				
+			});
+			
+		}else if(tip.equals("id")) {
+			Collections.sort(kPacijenti, new Comparator<Korisnik>() {
+
+				@Override
+				public int compare(Korisnik o1, Korisnik o2) {
+					// TODO Auto-generated method stub
+					return o1.getJmbg().compareTo(o2.getJmbg());
+				}
+				
+			});
+		}
+	
+		for(Korisnik k : kPacijenti) {
+			retVal.add(new KorisnikDTO(k));
+		}
+		
+		return new ResponseEntity<List<KorisnikDTO>>(retVal, HttpStatus.OK);
 		
 	}
 }

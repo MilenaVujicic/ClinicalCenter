@@ -5,6 +5,7 @@ $(document).ready(()=>{
 	document.getElementById ("btnCancelExam").addEventListener("click", cancelPregled, false);
 	document.getElementById ("btnSaveOp").addEventListener("click", saveOperation, false);
 	document.getElementById ("btnCancelOp").addEventListener("click", cancelOperation, false);
+	
 })
 
 function home() { 
@@ -17,6 +18,14 @@ function home() {
 	$('#aboutPatient').attr('hidden', true);
 	$('#calendar').attr('hidden', true);
 }
+
+/*function sortByName(){
+	$('#allPatients').empty();
+	
+	$.get({
+		url:
+	})
+}*/
 
 function stExam(pacijent) {
 	$('#examinationForm').attr('hidden', false);
