@@ -5,7 +5,7 @@ $(document).ready(()=>{
 	document.getElementById ("btnCancelExam").addEventListener("click", cancelPregled, false);
 	document.getElementById ("btnSaveOp").addEventListener("click", saveOperation, false);
 	document.getElementById ("btnCancelOp").addEventListener("click", cancelOperation, false);
-	
+	document.getElementById ("aPersonalData").addEventListener("click", showPersonalData, false);
 })
 
 function home() { 
@@ -19,13 +19,54 @@ function home() {
 	$('#calendar').attr('hidden', true);
 }
 
-/*function sortByName(){
-	$('#allPatients').empty();
+function showPersonalData(event){
+	event.preventDefault();
+	var id = 5;
+	$.ajax({
+		url: "/doktor/doctor_data/" + id,
+		type: "GET",
+		success: function(doktor){
+			$('#tPersonalData').attr('hidden', false);
+			let tdName = $('<td></td>');
+			tdName.append(doktor.ime);
+			
+			let tdSurname = $('<td></td>');
+			tdSurname.append(doktor.prezime);
+			
+			let tdUsername = $('<td></td>');
+			tdUsername.append(doktor.username);
+			
+			let tdEmail = $('<td></td>');
+			tdEmail.append(doktor.email);
+			
+			let tdCity = $('<td></td>');
+			tdCity.append(doktor.grad);
+			
+			let tdCountry = $('<td></td>');
+			tdCountry.append(doktor.drzava);
+			
+			let tdAddress = $('<td></td>');
+			tdAddress.append(doktor.adresa);
+			
+			let tdPhone = $('<td></td>');
+			tdPhone.append(doktor.telefon);
+			
+			
+			$('#trName').append(tdName);
+			$('#trSurname').append(tdSurname);
+			$('#trUsername').append(tdUsername);
+			$('#trEmail').append(tdEmail);
+			$('#trCity').append(tdCity);
+			$('#trCountry').append(tdCountry);
+			$('#trAddress').append(tdAddress);
+			$('#trPhone').append(tdPhone);
+		},
+		error: function(){
+			alert('Something went wrong');
+		}
 	
-	$.get({
-		url:
 	})
-}*/
+}
 
 function stExam(pacijent) {
 	$('#examinationForm').attr('hidden', false);

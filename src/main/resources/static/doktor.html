@@ -44,7 +44,7 @@
 	      <li><a onclick="return scheduledPatients();">Scheduled patients</a></li>
 	      <li><a onclick="return allPatients();">All patients</a></li>
 	      <li><a onclick="return calendar();">Calendar</a></li>
-	      <li><a href="#">Personal data</a></li>
+	      <li><a href="#" id = "aPersonalData">Personal data</a></li>
 	    </ul>
 	    <ul class="nav navbar-nav navbar-right">
 	      <li><a href="#"><span class="glyphicon glyphicon-log-out"></span> Logout</a></li>
@@ -595,5 +595,36 @@
 	  	  </div>
 	    </div>
 	</form>	
+	
+	<table class = "table" id = "tPersonalData" hidden = "true">
+	<h4 id = "tPersonalData" hidden = "true">Personal data</h4>
+	<tr id = "trUsername">
+	<td>Username: </td>
+	</tr>
+	<tr id = "trName">
+	<td>Name: </td>
+	</tr>
+	<tr id = "trSurname">
+	<td>Surname: </td>
+	</tr>
+	<tr id = "trEmail">
+	<td>Email: </td>
+	</tr>
+	<tr id = "trCity">
+	<td>City:</td>
+	</tr>
+	<tr id = "trCountry">
+	<td>Country: </td>
+	</tr>
+	<tr id = "trAddress">
+	<td>Address:</td>
+	</tr>
+	<tr id = "trPhone">
+	<td>Phone: </td>
+	</tr>
+	<tr>
+	<td colspan = "2"><a href = "#">Change personal data</a></td>
+	</tr>
+	</table>
 </body>
 </html>

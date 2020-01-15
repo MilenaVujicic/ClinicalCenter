@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
-import java.util.Locale;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpEntity;
@@ -328,5 +327,15 @@ public class DoktorController {
 		return new ResponseEntity<List<Korisnik>>(doktori_klinike, HttpStatus.OK);
 	}
 
+	@RequestMapping(value = "/doctor_data/{id}", method = RequestMethod.GET)
+	public ResponseEntity<KorisnikDTO> podaciDoktora(@PathVariable("id") Long id){
+		KorisnikDTO retVal = null;
+		
+		Korisnik k = korisnikService.findOne(id);
+		
+		retVal = new KorisnikDTO(k);
+		
+		return new ResponseEntity<KorisnikDTO>(retVal, HttpStatus.OK);
+	}
 }
 
