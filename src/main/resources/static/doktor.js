@@ -6,7 +6,10 @@ $(document).ready(()=>{
 	document.getElementById ("btnSaveOp").addEventListener("click", saveOperation, false);
 	document.getElementById ("btnCancelOp").addEventListener("click", cancelOperation, false);
 	document.getElementById ("aPersonalData").addEventListener("click", showPersonalData, false);
+	document.getElementById ("aDayOff").addEventListener("click", newAbsence, false);
+	document.getElementById ("bRequestHoliday").addEventListener("click", requestHoliday, false);
 })
+
 
 function home() { 
 	$('#examinationForm').attr('hidden', true);
@@ -17,8 +20,36 @@ function home() {
 	$('#examinationDiagnosis').attr('hidden', true);
 	$('#aboutPatient').attr('hidden', true);
 	$('#calendar').attr('hidden', true);
+	$('#absenceForm').attr('hidden', true);
 }
 
+
+function newAbsence(event){
+	event.preventDefault();
+	$('#absenceForm').attr('hidden', false);
+	
+
+}
+
+function requestHoliday(){
+	let type = $('#selectRest').val();
+	let to = $('#aTo').val();
+	let from = $('#aFrom').val();
+	let url = "/doktor/odmor/" + type + "~" + from + "~" + to;
+	$.ajax({
+		url : url,
+		type: "GET",
+		success: function(response){
+			alert(response);
+			$('#restFrom').val('');
+       		$('#restTo').val('');
+       		home();
+		},
+		error: function() {
+   		alert('Something went wrong');
+		}
+	})
+}
 function showPersonalData(event){
 	event.preventDefault();
 	var id = 5;
@@ -956,4 +987,5 @@ function cancelOperation(){
 	$('#dateOp').val('');
 	$('#timeOp').val('');
 }
+
 
