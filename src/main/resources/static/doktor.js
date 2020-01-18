@@ -21,6 +21,9 @@ function home() {
 	$('#aboutPatient').attr('hidden', true);
 	$('#calendar').attr('hidden', true);
 	$('#absenceForm').attr('hidden', true);
+	$('#tPersonalData').attr('hidden', true);
+	$('#tPersonalDataH').attr('hidden', true);
+
 }
 
 
@@ -53,14 +56,26 @@ function requestHoliday(){
 function showPersonalData(event){
 	event.preventDefault();
 	var id = 5;
+	$('#tPersonalData').attr('hidden', false);
+	$('#tPersonalDataH').attr('hidden', false);
+	$('#examinationForm').attr('hidden', true);
+	$('#schPatTable').attr('hidden', true);
+	$('#examForm').attr('hidden', true);
+	$('#operationForm').attr('hidden', true);
+	$('#allPatients').attr('hidden', true);
+	$('#examinationDiagnosis').attr('hidden', true);
+	$('#aboutPatient').attr('hidden', true);
+	$('#calendar').attr('hidden', true);
+	$('#absenceForm').attr('hidden', true);
+	
 	$.ajax({
 		url: "/doktor/doctor_data/" + id,
 		type: "GET",
 		success: function(doktor){
-			$('#tPersonalData').attr('hidden', false);
+			
 			let tdName = $('<td></td>');
 			tdName.append(doktor.ime);
-			
+	
 			let tdSurname = $('<td></td>');
 			tdSurname.append(doktor.prezime);
 			
@@ -91,6 +106,7 @@ function showPersonalData(event){
 			$('#trCountry').append(tdCountry);
 			$('#trAddress').append(tdAddress);
 			$('#trPhone').append(tdPhone);
+			
 		},
 		error: function(){
 			alert('Something went wrong');
@@ -113,6 +129,10 @@ function stExam(pacijent) {
 	$('#patientID').val(pacijent.id);
 	$('#examForm').attr('hidden', true);
 	$('#operationForm').attr('hidden', true);
+	$('#absenceForm').attr('hidden', true);
+	
+	$('#tPersonalData').attr('hidden', true);
+	$('#tPersonalDataH').attr('hidden', true);
 }
 
 function startExamination(pacijent) {
@@ -122,6 +142,7 @@ function startExamination(pacijent) {
 		$('#schPatTable').attr('hidden', true);
 		$('#examForm').attr('hidden', true);
 		$('#operationForm').attr('hidden', true);
+		
 		$('#patientName').val(pacijent.ime);
 		$('#patientSurname').val(pacijent.prezime);
 		$('#patientJMBG').val(pacijent.jmbg);
@@ -269,6 +290,9 @@ function scheduledPatients() {
 	$('#allPatients').attr('hidden', true);
 	$('#calendar').attr('hidden', true);
 	$('#examinationDiagnosis').attr('hidden', true);
+	
+	$('#tPersonalData').attr('hidden', true);
+	$('#tPersonalDataH').attr('hidden', true);
 	dijagnoze();
 	lekovi();
 	$.ajax({
@@ -402,6 +426,7 @@ function deleteExamination(id) {
 		});
 	}
 }
+
 
 function showDiagnose(dijagnoza) {
 	let tr = $('<tr></tr>');
@@ -793,26 +818,53 @@ function prikaziPacijenta(pacijent, i) {
 }
 
 function allPatients() {
+	
 	$('#examinationForm').attr('hidden', true);
 	$('#schPatTable').attr('hidden', true);
-	$('#allPatients').attr('hidden', false);
+	$('#examForm').attr('hidden', true);
+	$('#operationForm').attr('hidden', true);
+
 	$('#examinationDiagnosis').attr('hidden', true);
+	$('#aboutPatient').attr('hidden', true);
 	$('#calendar').attr('hidden', true);
+	$('#absenceForm').attr('hidden', true);
+	$('#tPersonalData').attr('hidden', true);
+	$('#tPersonalDataH').attr('hidden', true);
+	
+	$('#allPatients').parents('div.dataTables_wrapper').first().show();
+
 	$.ajax({
         url:"/doktor/svi_pacijenti",
         type:"GET",
        	success: function(pacijenti) {
-       		$('#allPatients tbody').html('');
+       		document.getElementById("title").innerHTML = "All patients";
+       		var table = $('#allPatients').DataTable();
+       		table.destroy();
+       	    $('#allPatients tbody').html('');
        		let i = 0;
        		for (let pacijent of pacijenti) {
        			i = i + 1;
        			prikaziPacijenta(pacijent, i);
        		}
+       		$('#allPatients').DataTable({
+       	        "columnDefs": [ {
+       	          "targets": 'no-sort',
+       	          "orderable": false,
+       	        }]
+       		});
        	},
        	error: function() {
        		alert('Desila se greska');
        	}
  	});
+	
+	$('#examinationForm').attr('hidden', true);
+	$('#schPatTable').attr('hidden', true);
+	$('#allPatients').attr('hidden', false);
+	//$('#allPatients').empty();
+	$('#examinationDiagnosis').attr('hidden', true);
+	$('#calendar').attr('hidden', true);
+	$('#absenceForm').attr('hidden', true);
 	
 }
 
@@ -958,6 +1010,7 @@ function calendar() {
 	$('#allPatients').attr('hidden', true);
 	$('#examinationDiagnosis').attr('hidden', true);
 	$('#aboutPatient').attr('hidden', true);
+	$('#absenceForm').attr('hidden', true);
 	$.ajax({
 		url:"/doktor/odsustva",
         type:"GET",

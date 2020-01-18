@@ -68,16 +68,24 @@
 	  <thead>
 	    <tr>
 	      <th scope="col">#</th>
-	      <th scope="col" id = "taName"><a href = "#" id = "taName">First Name</a></th>
+	      <th scope="col" id = "taName">First Name</th>
 	      <th scope="col">Last Name</th>
 	      <th scope="col">JMBG</th>
-	      <th scope="col">Medical record</th>
+	      <th scope="col" class = "no-sort">Medical record</th>
 	      <th scope="col" hidden="true">ID</th>
 	    </tr>
 	  </thead>
 	  <tbody>
 	    
 	  </tbody>
+		  <tfoot>
+            <tr>
+                <th>Name</th>
+                <th>Surname</th>
+                <th>Date of Birth</th>
+                <th>JMBG</th>
+            </tr>
+        </tfoot>
 	</table>
 	
 	<table class="table" hidden="true" id="schPatTable">
@@ -606,7 +614,7 @@
 	    </div>
 	</form>	
 	 
-	 <h4 id = "tPersonalData" hidden = "true">Personal data</h4>
+	<h4 id = "tPersonalDataH" hidden = "true">Personal data</h4>
 	<table class = "table" id = "tPersonalData" hidden = "true">
 	<tr id = "trUsername">
 	<td>Username: </td>
@@ -636,7 +644,6 @@
 	<td colspan = "2"><a href = "#">Change personal data</a></td>
 	</tr>
 	</table>
-	
 	
 	<form id = "absenceForm" hidden = "true">
 			<table id="restTable" class="table">
