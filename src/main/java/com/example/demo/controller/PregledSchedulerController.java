@@ -7,14 +7,19 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Controller;
 
+import com.example.demo.model.AdministratorKlinike;
 import com.example.demo.model.Klinika;
+import com.example.demo.model.Korisnik;
+import com.example.demo.model.Pregled;
+import com.example.demo.model.StatusPregleda;
 import com.example.demo.model.Termin;
-import com.example.demo.model.Zahtev;
+import com.example.demo.service.AdministratorKlinikeService;
 import com.example.demo.service.DoktorService;
+import com.example.demo.service.EmailService;
 import com.example.demo.service.KlinikaService;
+import com.example.demo.service.KorisnikService;
 import com.example.demo.service.PregledService;
 import com.example.demo.service.TerminService;
-import com.example.demo.service.ZahtevService;
 
 @Controller
 public class PregledSchedulerController {
@@ -31,107 +36,109 @@ public class PregledSchedulerController {
 	@Autowired
 	private KlinikaService klinikaService;
 	
-	@Autowired ZahtevService zahtevService;
+	@Autowired
+	private EmailService emailService;
+	
+	@Autowired
+	private KorisnikService korisnikService;
+	
+	@Autowired
+	private AdministratorKlinikeService administratorKlinikeService;
 	
 	
 	@SuppressWarnings("static-access")
 	@Scheduled(cron = "${greeting.cron}")
-	public void autoDodelaSale() {
+	public void autoDodelaPregleda() {
 		System.out.println("Pocetak dodele sale");
-		List<Zahtev> zahtevi = zahtevService.findAll();
-		List<Zahtev> nerasporedjeni = new ArrayList<Zahtev>();
-		for(Zahtev z : zahtevi) {
-			if(!z.isObradjen()) {
-				nerasporedjeni.add(z);
-			}
-		}
+		List<Pregled> nerasporedjeni_pregledi = pregledService.findByStatus(StatusPregleda.NERASPOREDJEN);
+		List<Termin> slobodni_termini  = terminService.findBySlobodan(true);
+		List<Pregled> rasporedjeni_pregledi = new ArrayList<Pregled>();
+		List<AdministratorKlinike> administratoriKlinike = administratorKlinikeService.findAll();
 		
-		List<Termin> slobodniTermini = terminService.findBySlobodan(true);
-		List<Zahtev> rasporedjeniZahtevi = new ArrayList<Zahtev>();
+		System.out.println("Nerasporedjeni pregledi " + nerasporedjeni_pregledi.size());
+		System.out.println("Rasporedjeni pregledi " + rasporedjeni_pregledi.size());
 		
-		for(Zahtev z : nerasporedjeni) {
-			for(Termin t: slobodniTermini) {
-				/*int tDay = t.getDatum().DAY_OF_MONTH;
-				int tMonth = t.getDatum().MONTH;
-				int tYear = t.getDatum().YEAR;
-				
-				int tHour = t.getDatum().HOUR;
-				int tMinute = t.getDatum().MINUTE;
-				String compT = tDay + " " + tMonth + " " + tYear + " " + tHour + " " + tMinute;
-				
-				int zDay = z.getDatumIVreme().DAY_OF_MONTH;
-				int zMonth = z.getDatumIVreme().MONTH;
-				int zYear = z.getDatumIVreme().YEAR;
-				
-				int zHour = z.getDatumIVreme().HOUR;
-				int zMinute = z.getDatumIVreme().MINUTE;
-				String compZ = zDay + " " + zMonth + " " + zYear + " " + zHour + " " + zMinute;
-				
-				if(compZ.equals(compT)) {
-					t.setSlobodan(true);
-					rasporedjeniZahtevi.add(z);
-					Klinika k = klinikaService.findOne(t.getSala().getKlinika().getId());
-					z.setObradjen(true);
-					z.setSalaID(t.getSala().getId());
-					zahtevService.save(z);
-					terminService.save(t);
-					slobodniTermini.remove(t);
-					break;
-				}*/
-				
-				if(z.getDatumIVreme().getTimeInMillis() == t.getDatum().getTimeInMillis()) {
-					t.setSlobodan(true);
-					rasporedjeniZahtevi.add(z);
-					Klinika k = klinikaService.findOne(t.getSala().getKlinika().getId());
-					z.setObradjen(true);
-					z.setSalaID(t.getSala().getId());
-					zahtevService.save(z);
-					terminService.save(t);
-					slobodniTermini.remove(t);
-					break;
+		for(Pregled pregled : nerasporedjeni_pregledi) {
+			for(Termin termin : slobodni_termini) {
+				if(pregled.getDatumIVremePregleda().getTimeInMillis() == termin.getDatum().getTimeInMillis()) {
+					termin.setSlobodan(false);
+					rasporedjeni_pregledi.add(pregled);
+					Klinika klinika = klinikaService.findOne(termin.getSala().getKlinika().getId());
+					pregled.setStatus(StatusPregleda.ZAKAZAN);
+					pregled.setSala(termin.getSala());
+					pregledService.save(pregled);
+					terminService.save(termin);
+					slobodni_termini.remove(termin);
+					Korisnik pacijent = korisnikService.findOne(pregled.getPacijent().getId());
+					for(AdministratorKlinike administrator: administratoriKlinike) {
+						if(administrator.getKlinika().getId().equals(klinika.getId())) {
+							Korisnik admin = korisnikService.findOne(administrator.getIdKorisnik());
+							
+							
+						}
+					}
+					System.out.println("####" + termin.getDatum().getTime() + " " + pregled.getPacijent().getIdKorisnik() + " " + termin.getSala().getIme());
 				}
 			}
 		}
 		
-		for(Zahtev z: rasporedjeniZahtevi) {
-			nerasporedjeni.remove(z);
+		for(Pregled pregled : rasporedjeni_pregledi) {
+			nerasporedjeni_pregledi.remove(pregled);
 		}
 		
-		if(nerasporedjeni.size() > 0) {
-			for(Zahtev z: nerasporedjeni) {
-				System.out.println(z.getId());
+		System.out.println("##########################");
+		System.out.println("Nerasporedjeni pregledi" + nerasporedjeni_pregledi.size());
+		System.out.println("Rasporedjeni pregledi" + rasporedjeni_pregledi.size());
+		System.out.println("##########################");
+		
+		if(nerasporedjeni_pregledi.size()>0) {
+			for(Pregled pregled: nerasporedjeni_pregledi) {
+				System.out.println(pregled.getId());
 				long min = new Long(Long.MAX_VALUE);
 				Termin slobodanTermin = new Termin();
-				Termin temp = new Termin();
-				
-				for(Termin t: slobodniTermini) {
-					long end = t.getDatum().getTimeInMillis();
-					long start = z.getDatumIVreme().getTimeInMillis();
+				Termin pomocTermin = new Termin();
+				for(Termin termin : slobodni_termini) {
+					long end = termin.getDatum().getTimeInMillis();
+					long start = pregled.getDatumIVremePregleda().getTimeInMillis();
 					if(min > Math.abs(end-start)) {
-						min = Math.abs(end-start);
-						slobodanTermin = t;
+						min = Math.abs(end - start);
+						slobodanTermin = termin;
 					}
 				}
-				
-				if(!slobodanTermin.equals(temp)) {
+				if(!slobodanTermin.equals(pomocTermin)) {
 					slobodanTermin.setSlobodan(false);
-					rasporedjeniZahtevi.add(z);
-					Klinika k = klinikaService.findOne(slobodanTermin.getSala().getKlinika().getId());
-					z.setObradjen(true);
-					z.setSalaID(slobodanTermin.getSala().getId());
+					rasporedjeni_pregledi.add(pregled);
+					Klinika klinika = klinikaService.findOne(slobodanTermin.getSala().getKlinika().getId());
+					pregled.setStatus(StatusPregleda.ZAKAZAN);
+					pregled.setSala(slobodanTermin.getSala());
+					pregledService.save(pregled);
 					terminService.save(slobodanTermin);
-					slobodniTermini.remove(slobodanTermin);
+					slobodni_termini.remove(slobodanTermin);
+					Korisnik pacijent = korisnikService.findOne(pregled.getPacijent().getIdKorisnik());
 					
+					for(AdministratorKlinike administrator : administratoriKlinike) {
+						if(administrator.getKlinika().getId().equals(klinika.getId())) {
+							Korisnik admin = korisnikService.findOne(administrator.getIdKorisnik());
+							
+						}
+					}
+					
+					System.out.println("####" + slobodanTermin.getDatum().getTime() + " " + pregled.getPacijent().getIdKorisnik() + " " + slobodanTermin.getSala().getIme());
 				}else {
 					System.out.println("Nema slobodnih termina");
+					Korisnik pacijent = korisnikService.findOne(pregled.getPacijent().getIdKorisnik());
+					
 				}
-				
 			}
 		}
 		
-		for(Zahtev z : rasporedjeniZahtevi) {
-			nerasporedjeni.remove(z);
+		for(Pregled pregled : rasporedjeni_pregledi) {
+			nerasporedjeni_pregledi.remove(pregled);
 		}
+
+		System.out.println("Nerasporedjeni pregledi" + nerasporedjeni_pregledi.size());
+		System.out.println("Rasporedjeni pregledi" + rasporedjeni_pregledi.size());
 		
+		System.out.println("Kraj dodoele sala");
 	}
 }

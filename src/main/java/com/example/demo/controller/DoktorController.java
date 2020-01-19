@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
-import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpEntity;
@@ -27,6 +26,7 @@ import com.example.demo.model.Doktor;
 import com.example.demo.model.Klinika;
 import com.example.demo.model.Korisnik;
 import com.example.demo.model.Odsustvo;
+import com.example.demo.model.Operacija;
 import com.example.demo.model.Pacijent;
 import com.example.demo.model.Pregled;
 import com.example.demo.model.Recept;
@@ -41,6 +41,7 @@ import com.example.demo.service.DoktorService;
 import com.example.demo.service.EmailService;
 import com.example.demo.service.KlinikaService;
 import com.example.demo.service.KorisnikService;
+import com.example.demo.service.OperacijaService;
 import com.example.demo.service.PacijentService;
 import com.example.demo.service.PregledService;
 import com.example.demo.service.ReceptService;
@@ -88,6 +89,9 @@ public class DoktorController {
 	
 	@Autowired
 	private AdministratorKlinikeService administratorService;
+	
+	@Autowired
+	private OperacijaService operacijaService;
 	
 	@RequestMapping(value = "/svi_pacijenti", method = RequestMethod.GET)
 	public ResponseEntity<List<Korisnik>> sviPacijenti() {
@@ -276,6 +280,77 @@ public class DoktorController {
 		}*/
 		return new ResponseEntity<String>("Uspesno rezervisana sala", HttpStatus.OK);
 	}	
+
+	@RequestMapping(value="/svi_sa_klinike", method = RequestMethod.GET)
+	public ResponseEntity<List<Korisnik>> svi_sa_klinike() {
+		Klinika k = klinikaService.findOne((long) 2);
+		List<Doktor> doktori = doktorService.findAllByKlinika(k);
+		List<Korisnik> lekari = korisnikService.findByUloga(UlogaKorisnika.LEKAR);
+		List<Korisnik> doktori_klinike = new ArrayList<Korisnik>();
+		
+		for (Korisnik korisnik : lekari) {
+			for (Doktor doktor : doktori) {
+				if (doktor.getIdKorisnik().equals(korisnik.getId())) {
+					doktori_klinike.add(korisnik);
+				}
+			} 
+		}
+		
+		
+		return new ResponseEntity<List<Korisnik>>(doktori_klinike, HttpStatus.OK);
+	}
+	
+	@RequestMapping(value="/svi_slobodni_sa_klinike/{id}", method = RequestMethod.GET)
+	public ResponseEntity<List<Korisnik>> svi_sa_klinike_slobodni(@PathVariable("id") Long identifikacija) {
+		Klinika k = klinikaService.findOne((long) 2);
+		List<Doktor> doktori = doktorService.findAllByKlinika(k);
+		List<Korisnik> lekari = korisnikService.findByUloga(UlogaKorisnika.LEKAR);
+		List<Korisnik> doktori_klinike = new ArrayList<Korisnik>();
+		List<Doktor> slobodni_doktori = new ArrayList<Doktor>();
+		
+		Operacija operacija = operacijaService.findOne(identifikacija);
+		System.out.println("#####operacija_vreme" + operacija.getDatumIVremeOperacije().getTimeInMillis());
+		for (Doktor doktor : doktori) {
+			Boolean nasla = false;
+			for (Pregled pregled : doktor.getPregledi()) {
+				if (pregled.getDatumIVremePregleda().getTimeInMillis() == operacija.getDatumIVremeOperacije().getTimeInMillis()) {
+					nasla = true;
+					continue;
+				}
+			}
+			
+			for (Operacija o : doktor.getOperacije()) {
+				if (o.getDatumIVremeOperacije().getTimeInMillis() == operacija.getDatumIVremeOperacije().getTimeInMillis()) {
+					nasla = true;
+					continue;
+				}
+			}
+			
+			Korisnik kor = korisnikService.findOne(doktor.getIdKorisnik());
+			
+			for (Odsustvo od : kor.getOdsustva()) {
+				if (od.getPocetakOdsustva().compareTo(operacija.getDatumIVremeOperacije().getTime()) < 0 && od.getZavrsetakOdsustva().compareTo(operacija.getDatumIVremeOperacije().getTime()) > 0){
+					nasla = true;
+					continue;
+				}
+			}
+			
+			if (!nasla)
+				slobodni_doktori.add(doktor);
+			
+		}
+		
+		for (Korisnik korisnik : lekari) {
+			for (Doktor doktor : slobodni_doktori) {
+				if (doktor.getIdKorisnik().equals(korisnik.getId())) {
+					doktori_klinike.add(korisnik);
+				}
+			} 
+		}
+		
+		
+		return new ResponseEntity<List<Korisnik>>(doktori_klinike, HttpStatus.OK);
+	}
 
 }
 

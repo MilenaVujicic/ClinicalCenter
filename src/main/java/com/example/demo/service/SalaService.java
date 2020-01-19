@@ -49,5 +49,9 @@ public class SalaService {
 		sala.setKlinika(new Klinika("", "", ""));
 		return salaRepository.findById(id).orElse(null);
 	}
+	
+	public List<Sala> findByKlinika(Klinika k){
+		return salaRepository.findByKlinika(k);
+	}
 }
 

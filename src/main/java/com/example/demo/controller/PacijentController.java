@@ -291,7 +291,6 @@ public class PacijentController {
 		return new ResponseEntity<PacijentDTO>(new PacijentDTO(p), HttpStatus.OK);
 	}
 	
-	@SuppressWarnings("deprecation")
 	@RequestMapping(value="/zakazi", method=RequestMethod.PUT)
 	public ResponseEntity<String> zakaziPregled(@RequestBody String dt) throws ParseException, InterruptedException {
 		dt = dt.substring(1, dt.length()-1);
@@ -313,31 +312,13 @@ public class PacijentController {
 		System.out.println("admin: "+admin.getIme());
 		
 		
-		int day = date1.getDay();
-		int month = date1.getMonth();
-		int year = date1.getYear();
-		int hour = date1.getHours();
-		int minutes = date1.getMinutes();
-		Calendar c = Calendar.getInstance();
-		c.set(year, month, day, hour, minutes);
-		Integer dayI = new Integer(day);
-		Integer monthI = new Integer(month);
-		Integer yearI = new Integer(year);
-		Integer hourI = new Integer(hour);
-		Integer minutesI = new Integer(minutes);
-		
-		String dateS = dayI.toString() + "/" + monthI.toString() + "/" + yearI.toString(); 
-		String timeS = hourI.toString() + ":" + minutesI.toString();
-		
 		Pregled pregled = new Pregled();
-		pregled.setDatumIVremePregleda(c);
+		Calendar cal = Calendar.getInstance();
+		cal.setTime(date1);
+		pregled.setDatumIVremePregleda(cal);
 		pregled.setPacijent(pacijent);
 		pregled.setDoktor(doktor);
 		//pregledService.save(pregled);
-		
-		Zahtev z = new Zahtev(user.getId(), dateS, timeS, null);
-		zahtevService.save(z);
-		
 		try {
 			emailService.sendNotificaitionPregled(user, admin, pregled);
 		} catch (MailException e) {

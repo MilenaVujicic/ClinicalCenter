@@ -3,7 +3,7 @@
  */
 package com.example.demo.model;
 
-import java.time.LocalDateTime;
+import java.util.Calendar;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -14,9 +14,9 @@ import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
-import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 
 enum StatusOperacije {
@@ -40,7 +40,7 @@ public class Operacija {
 	private StatusOperacije status;
 	
 	@Column(name = "datumIVremeOperacije", nullable = false)
-	private LocalDateTime datumIVremeOperacije;
+	private Calendar datumIVremeOperacije;
 	
 	@Column(name = "trajanje")
 	private int trajanje;
@@ -78,11 +78,11 @@ public class Operacija {
 		this.status = status;
 	}
 
-	public LocalDateTime getDatumIVremeOperacije() {
+	public Calendar getDatumIVremeOperacije() {
 		return datumIVremeOperacije;
 	}
 
-	public void setDatumIVremeOperacije(LocalDateTime datumIVremeOperacije) {
+	public void setDatumIVremeOperacije(Calendar datumIVremeOperacije) {
 		this.datumIVremeOperacije = datumIVremeOperacije;
 	}
 

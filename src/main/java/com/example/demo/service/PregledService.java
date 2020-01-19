@@ -5,8 +5,8 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.example.demo.model.Doktor;
 import com.example.demo.model.Pregled;
+import com.example.demo.model.StatusPregleda;
 import com.example.demo.repository.PregledRespository;
 
 @Service
@@ -31,5 +31,7 @@ public class PregledService {
 		pregledRespository.delete(pregled);
 	}
 	
-	
+	public List<Pregled> findByStatus(StatusPregleda status){
+		return pregledRespository.findByStatus(status);
+	}
 }

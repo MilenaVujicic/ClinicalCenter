@@ -31,4 +31,9 @@ public class DoktorService {
 	public List<Doktor> findAllByKlinika(Klinika k){
 		return doktorRespository.findAllByKlinika(k);
 	}
+
+	public Doktor save(Doktor doktor) {
+		// TODO Auto-generated method stub
+		return doktorRespository.save(doktor);
+	}
 }
