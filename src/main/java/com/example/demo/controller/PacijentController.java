@@ -60,6 +60,7 @@ public class PacijentController {
 	@Autowired
 	EmailService emailService;
 	
+	
 	private List<Korisnik> foundUsers = new ArrayList<Korisnik>();
 
 	@RequestMapping(value = "/sveKlinike", method=RequestMethod.GET)
@@ -209,6 +210,19 @@ public class PacijentController {
 		}
 		return new ResponseEntity<>(doktoriDTO, HttpStatus.OK);	
 	}
+	
+	@RequestMapping(value = "/pregledi", method = RequestMethod.GET)
+	@ResponseStatus(value = HttpStatus.OK)
+	public ResponseEntity<List<Pregled>> getPregledi(@RequestParam(value="id") int id)	{
+		System.out.println(id);
+		Long id_l = Integer.toUnsignedLong(id);
+		Pacijent p = pacijentService.findByIdKorisnik(id_l);
+		List<Pregled> pregledi = pregledService.findByPatientId(p.getId());
+		
+		return new ResponseEntity<>(pregledi,HttpStatus.OK);
+	}
+	
+	
 	
 	@RequestMapping(value = "/search", method = RequestMethod.GET)
 	@ResponseStatus(value = HttpStatus.OK)
