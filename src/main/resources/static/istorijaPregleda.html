@@ -29,7 +29,8 @@
 		let tdDatumIVreme = $('<td>'+pregled.datumIVremePregleda+'</td>');
 		let tdAnamneza = $('<td>'+pregled.anamneza+'</td>');
 		let tdCena = $('<td>'+pregled.cena+'</td>');
-		tr.append(tdId).append(tdNaziv).append(tdDatumIVreme).append(tdAnamneza).append(tdCena);
+		let tdImeIPrezimeDoktora = $('<td>'+pregled.imeDoktora+' '+pregled.prezimeDoktora+'</td>');
+		tr.append(tdId).append(tdNaziv).append(tdDatumIVreme).append(tdAnamneza).append(tdCena).append(tdImeIPrezimeDoktora);
 		$('#preglediTable tbody').append(tr);
 	}
 	
@@ -86,7 +87,7 @@
 	      <th scope="col">Datum i vreme pregleda</th>
 	      <th scope="col">Anamneza</th>
 	      <th scope="col">Cena</th>
-	      <!--  <th scope="col">Doktor</th>-->
+	      <th scope="col">Doktor</th>
 	    </tr>
 	  </thead>
 	  <tbody>

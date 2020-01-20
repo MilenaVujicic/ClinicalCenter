@@ -32,6 +32,9 @@ public class PregledDTO {
 	private Set<Dijagnoza> dijagnoze = new HashSet<Dijagnoza>();
 	private Set<Lek> lekovi = new HashSet<Lek>();
 	private StatusPregleda status;
+
+	private String imeDoktora;
+	private String prezimeDoktora;
 	
 	public PregledDTO() {
 		super();
@@ -181,6 +184,22 @@ public class PregledDTO {
 				+ ", datumIVremePregleda=" + datumIVremePregleda + ", tipPregleda=" + tipPregleda + ", duzina=" + duzina
 				+ ", sala=" + sala + ", doktori=" + doktori + ", cena=" + cena + ", dijagnoze=" + dijagnoze
 				+ ", lekovi=" + lekovi + ", status=" + status + "]";
+	}
+
+	public String getImeDoktora() {
+		return imeDoktora;
+	}
+
+	public void setImeDoktora(String imeDoktora) {
+		this.imeDoktora = imeDoktora;
+	}
+
+	public String getPrezimeDoktora() {
+		return prezimeDoktora;
+	}
+
+	public void setPrezimeDoktora(String prezimeDoktora) {
+		this.prezimeDoktora = prezimeDoktora;
 	}
 	
 	

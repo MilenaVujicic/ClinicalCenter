@@ -24,6 +24,7 @@ import com.example.demo.dto.DoktorDTO;
 import com.example.demo.dto.KlinikaDTO;
 import com.example.demo.dto.KorisnikDTO;
 import com.example.demo.dto.PacijentDTO;
+import com.example.demo.dto.PregledDTO;
 import com.example.demo.model.Doktor;
 import com.example.demo.model.Klinika;
 import com.example.demo.model.Korisnik;
@@ -213,13 +214,27 @@ public class PacijentController {
 	
 	@RequestMapping(value = "/pregledi", method = RequestMethod.GET)
 	@ResponseStatus(value = HttpStatus.OK)
-	public ResponseEntity<List<Pregled>> getPregledi(@RequestParam(value="id") int id)	{
+	public ResponseEntity<List<PregledDTO>> getPregledi(@RequestParam(value="id") int id)	{
 		System.out.println(id);
 		Long id_l = Integer.toUnsignedLong(id);
 		Pacijent p = pacijentService.findByIdKorisnik(id_l);
 		List<Pregled> pregledi = pregledService.findByPatientId(p.getId());
+		List<PregledDTO> preglediDTO = new ArrayList<>();
 		
-		return new ResponseEntity<>(pregledi,HttpStatus.OK);
+		for(Pregled preg : pregledi) {
+			PregledDTO pregDTO = new PregledDTO(preg);
+			Optional<Korisnik> k = korisnikService.findById(preg.getDoktor().getId()); //id doktora
+			pregDTO.setImeDoktora(k.get().getIme());
+			pregDTO.setPrezimeDoktora(k.get().getPrezime());
+			preglediDTO.add(pregDTO);
+		}
+		
+		for(PregledDTO preg:preglediDTO) {
+			System.out.println(preg.getId());
+			System.out.println(preg.getImeDoktora() + ' ' + preg.getPrezimeDoktora());
+		}
+		
+		return new ResponseEntity<>(preglediDTO,HttpStatus.OK);
 	}
 	
 	
