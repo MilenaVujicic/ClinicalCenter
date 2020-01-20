@@ -1,5 +1,7 @@
 package com.example.demo.controller;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -34,11 +36,13 @@ import com.example.demo.model.Sala;
 import com.example.demo.model.StatusPregleda;
 import com.example.demo.model.StatusRecepta;
 import com.example.demo.model.UlogaKorisnika;
+import com.example.demo.model.VrstaOdsustva;
 import com.example.demo.service.DijagnozaService;
 import com.example.demo.service.DoktorService;
 import com.example.demo.service.EmailService;
 import com.example.demo.service.KlinikaService;
 import com.example.demo.service.KorisnikService;
+import com.example.demo.service.OdsustvoService;
 import com.example.demo.service.OperacijaService;
 import com.example.demo.service.PacijentService;
 import com.example.demo.service.PregledService;
@@ -83,6 +87,9 @@ public class DoktorController {
 	
 	@Autowired
 	private OperacijaService operacijaService;
+	
+	@Autowired
+	OdsustvoService odsustvoService;
 	
 	@RequestMapping(value = "/svi_pacijenti", method = RequestMethod.GET)
 	public ResponseEntity<List<Korisnik>> sviPacijenti() {
@@ -328,5 +335,54 @@ public class DoktorController {
 		return new ResponseEntity<List<Korisnik>>(doktori_klinike, HttpStatus.OK);
 	}
 
+	@RequestMapping(value = "/doctor_data/{id}", method = RequestMethod.GET)
+	public ResponseEntity<KorisnikDTO> podaciDoktora(@PathVariable("id") Long id){
+		KorisnikDTO retVal = null;
+		
+		Korisnik k = korisnikService.findOne(id);
+		
+		retVal = new KorisnikDTO(k);
+		
+		return new ResponseEntity<KorisnikDTO>(retVal, HttpStatus.OK);
+	}
+	
+	@RequestMapping(value = "/odmor/{text}", method = RequestMethod.GET)
+	public ResponseEntity<String> odmor(@PathVariable("text") String text) throws java.text.ParseException, ParseException {
+		String[] splitter = text.split("~");
+		String type = splitter[0];
+		String from = splitter[1];
+		String to = splitter[2];
+		Odsustvo odsustvo = new Odsustvo();
+		if (type.equals("Vacation")) {
+			odsustvo.setVrstaOdsustva(VrstaOdsustva.ODMOR);
+		}
+		else {
+			odsustvo.setVrstaOdsustva(VrstaOdsustva.BOLOVANJE);
+		}
+		DateFormat format = new SimpleDateFormat("dd.MM.yyyy", Locale.ENGLISH);
+		
+		Date today = new Date();
+		Date date1 = new Date(today.getTime() + (1000 * 60 * 60 * 24));
+		
+		date1 = format.parse(from);
+		odsustvo.setPocetakOdsustva(date1);
+		
+		Date date2 = today;
+		date2 = format.parse(to);
+		odsustvo.setZavrsetakOdsustva(date2);
+		
+		if (date1.compareTo(date2) > 0) {
+			return new ResponseEntity<String>("Datum greska", HttpStatus.BAD_REQUEST);
+		}
+		
+		Korisnik korisnik = korisnikService.findOne((long) 9);
+		odsustvo.setKorisnik(korisnik);
+		odsustvo.setOdobren(false);
+		Odsustvo od = odsustvoService.save(odsustvo);
+		
+		return new ResponseEntity<String>("Zahtev je poslat", HttpStatus.OK);
+	}
+	
+	
 }
 

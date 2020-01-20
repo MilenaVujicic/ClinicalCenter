@@ -6,7 +6,7 @@
     <!-- This file has been downloaded from Bootsnipp.com. Enjoy! -->
     <title>Doctor</title>
     <link href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.0/css/bootstrap.min.css" rel="stylesheet">
-    
+    <link href="css/bootstrap.min.css" rel="stylesheet">
     <script src="http://code.jquery.com/jquery-1.11.1.min.js"></script>
     <link href='https://fullcalendar.io/releases/fullcalendar/3.9.0/fullcalendar.min.css' rel='stylesheet' />
 	<link rel='stylesheet' href='https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css'>
@@ -16,6 +16,7 @@
 	<script src='https://fullcalendar.io/releases/fullcalendar/3.9.0/fullcalendar.min.js'></script>
     <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.0/js/bootstrap.min.js"></script>
     <script src = "/doktor.js" type = 'text/javascript'></script>
+    <script src = "/doktorData.js" type = 'text/javascript'></script>
 
 	<!-- Website CSS style -->
 	<link href="css/bootstrap.min.css" rel="stylesheet">
@@ -26,6 +27,16 @@
 	<!-- Google Fonts -->
 	<link href='https://fonts.googleapis.com/css?family=Passion+One' rel='stylesheet' type='text/css'>
 	<link href='https://fonts.googleapis.com/css?family=Oxygen' rel='stylesheet' type='text/css'>
+
+<!-- Data Table -->
+	<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.20/css/jquery.dataTables.css">
+	<script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.10.20/js/jquery.dataTables.js"></script>
+	
+	<!-- Data picker -->
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+    <script src="https://unpkg.com/gijgo@1.9.13/js/gijgo.min.js" type="text/javascript"></script>
+    <link href="https://unpkg.com/gijgo@1.9.13/css/gijgo.min.css" rel="stylesheet" type="text/css" />
+	
 </head>
 <body>
 	<nav class="navbar navbar-inverse">
@@ -37,13 +48,13 @@
 	      <li><a onclick="return home();">Home</a></li>
 	      <li class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">Add <span class="caret"></span></a>
 	        <ul class="dropdown-menu">
-	          <li><a href="#">New</a></li>
+	          <li><a href="#" id = "aDayOff">New day off</a></li>
 	        </ul>
 	      </li>
 	      <li><a onclick="return scheduledPatients();">Scheduled patients</a></li>
 	      <li><a onclick="return allPatients();">All patients</a></li>
 	      <li><a onclick="return calendar();">Calendar</a></li>
-	      <li><a href="#">Personal data</a></li>
+	      <li><a href="#" id = "aPersonalData">Personal data</a></li>
 	    </ul>
 	    <ul class="nav navbar-nav navbar-right">
 	      <li><a href="#"><span class="glyphicon glyphicon-log-out"></span> Logout</a></li>
@@ -57,16 +68,24 @@
 	  <thead>
 	    <tr>
 	      <th scope="col">#</th>
-	      <th scope="col">First Name</th>
+	      <th scope="col" id = "taName">First Name</th>
 	      <th scope="col">Last Name</th>
 	      <th scope="col">JMBG</th>
-	      <th scope="col">Medical record</th>
+	      <th scope="col" class = "no-sort">Medical record</th>
 	      <th scope="col" hidden="true">ID</th>
 	    </tr>
 	  </thead>
 	  <tbody>
 	    
 	  </tbody>
+		  <tfoot>
+            <tr>
+                <th>Name</th>
+                <th>Surname</th>
+                <th>Date of Birth</th>
+                <th>JMBG</th>
+            </tr>
+        </tfoot>
 	</table>
 	
 	<table class="table" hidden="true" id="schPatTable">
@@ -594,5 +613,75 @@
 	  	  </div>
 	    </div>
 	</form>	
+	 
+	<h4 id = "tPersonalDataH" hidden = "true">Personal data</h4>
+	<table class = "table" id = "tPersonalData" hidden = "true">
+	<tr id = "trUsername">
+	<td>Username: </td>
+	</tr>
+	<tr id = "trName">
+	<td>Name: </td>
+	</tr>
+	<tr id = "trSurname">
+	<td>Surname: </td>
+	</tr>
+	<tr id = "trEmail">
+	<td>Email: </td>
+	</tr>
+	<tr id = "trCity">
+	<td>City:</td>
+	</tr>
+	<tr id = "trCountry">
+	<td>Country: </td>
+	</tr>
+	<tr id = "trAddress">
+	<td>Address:</td>
+	</tr>
+	<tr id = "trPhone">
+	<td>Phone: </td>
+	</tr>
+	<tr>
+	<td colspan = "2"><a href = "#">Change personal data</a></td>
+	</tr>
+	</table>
+	
+	<form id = "absenceForm" hidden = "true">
+			<table id="restTable" class="table">
+			<tr>
+				<td>From:</td>
+				<td>
+					<input id="aFrom" width="270" />
+				    <script>
+				        $('#aFrom').datepicker({
+				        	minDate: new Date(),
+				            uiLibrary: 'bootstrap',
+				            format: 'dd.mm.yyyy'
+				        });
+				    </script>
+				</td>
+			</tr>
+			<tr>
+				<td>To:</td>
+				<td>
+					<input id="aTo" width="270" />
+				    <script>
+				        $('#aTo').datepicker({
+				        	minDate: new Date(),
+				            uiLibrary: 'bootstrap',
+				            format: 'dd.mm.yyyy'
+				        });
+				    </script>
+				</td>
+			</tr>
+			<tr>
+				<td>Type</td>
+				<td><select id="selectRest"><option>Vacation</option><option>Sick leave</option></select></td>
+			</tr>
+		</table>
+		<div class="form-group ">
+				<a target="_blank" type="button" id="bRequestHoliday" class="btn btn-primary btn-lg btn-block login-button" >Send request for holiday</a>
+		</div>
+	</form>
+	
 </body>
 </html>
