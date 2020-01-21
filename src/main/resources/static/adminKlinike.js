@@ -4,11 +4,11 @@ function home() {
 	$('#doctors').attr('hidden', true);
 }
 
-function prikaziDoktora(doktor) {
+function prikaziDoktora(doktor, specijalizacija) {
 	let tr = $('<div class="form-group col-md-3">'+
   			'<div class="custom-control custom-checkbox" >' +
   			'<input type="checkbox" class="form-check-input" id="doktor'+doktor.id+'">'+
-			'<label class="custom-control-label" for="doctors'+doktor.id+'">'+doktor.ime+' '+doktor.prezime+'</label></div></div>');
+			'<label class="custom-control-label" for="doctors'+doktor.id+'">'+doktor.ime+' '+doktor.prezime+' ('+specijalizacija+')'+'</label></div></div>');
 	$('#doctors').append(tr);
 }
 
@@ -19,7 +19,17 @@ function allDoctors(id) {
 		success: function(doktori) {
 			$('#doctors').html('');
        		for (let doktor of doktori) {
-       			prikaziDoktora(doktor);
+       			let url = 'doktor/specijalizacija/' + doktor.id;
+       			$.ajax({
+       				url: url,
+       				type: "GET",
+       				success: function(specijalizacija) {
+       					prikaziDoktora(doktor, specijalizacija);
+       				},
+       				error: function() {
+       					alert('Desila se greska');
+       				}
+       			});
        		}
        		$('#doctors').attr('hidden', false);
 		},

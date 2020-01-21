@@ -1,21 +1,26 @@
 package com.example.demo.controller;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.example.demo.dto.OperacijaDTO;
 import com.example.demo.model.Doktor;
 import com.example.demo.model.Klinika;
 import com.example.demo.model.Korisnik;
 import com.example.demo.model.Operacija;
+import com.example.demo.model.Pregled;
 import com.example.demo.model.Sala;
 import com.example.demo.model.StatusOperacije;
+import com.example.demo.model.StatusPregleda;
 import com.example.demo.model.Termin;
 import com.example.demo.service.DoktorService;
 import com.example.demo.service.EmailService;
@@ -60,6 +65,7 @@ public class OperacijaController {
 	
 	@RequestMapping(value = "/rezervisi/{sala}/{operacija}/{doktori}", method = RequestMethod.GET)
 	public ResponseEntity<String> rezervisi(@PathVariable("sala") Long sala_id, @PathVariable("operacija") Long operacija_id, @PathVariable("doktori") String text) {
+		System.out.println("#######################");
 		System.out.println("sala" + sala_id + "operacija" + operacija_id + "doktori" + text);
 		Sala sala = salaService.findOne(sala_id);
 		Operacija operacija = operacijaService.findOne(operacija_id);
@@ -99,6 +105,34 @@ public class OperacijaController {
 	public ResponseEntity<Operacija> preuzmi(@PathVariable("id") Long identifikacija) {
 		Operacija operacija = operacijaService.findOne(identifikacija);
 		return new ResponseEntity<Operacija>(operacija, HttpStatus.OK);
+	}
+	
+	@RequestMapping(value = "/sveOperacije/{id}", method = RequestMethod.GET)
+	public ResponseEntity<List<Operacija>> sveOperacijePacijenta(@PathVariable("id") Long identifikacija) {
+		List<Operacija> sveOperacije = operacijaService.findAll();
+		List<Operacija> operacije = new ArrayList<Operacija>();
+		for (Operacija operacija : sveOperacije) {
+			if (operacija.getPacijent().getId().equals(identifikacija) && operacija.getStatus().equals(StatusOperacije.ZAVRSEN)) {
+				operacije.add(operacija);
+			}
+		}
+		System.out.println("#############" + operacije.size());
+		return new ResponseEntity<List<Operacija>>(operacije, HttpStatus.OK);
+	}
+	
+	@RequestMapping(value = "/obrisi/{id}", method = RequestMethod.DELETE)
+	public ResponseEntity<String> obrisi(@PathVariable("id") Long identifikacija) {
+		Operacija operacija = operacijaService.findOne(identifikacija);
+		operacijaService.delete(operacija);
+		return new ResponseEntity<String>(HttpStatus.OK);
+	}
+	
+	@RequestMapping(value = "/izmeni", method = RequestMethod.PUT)
+	public ResponseEntity<OperacijaDTO> izmeni(@RequestBody OperacijaDTO operacijaDTO) {
+		Operacija operacija = operacijaService.findOne(operacijaDTO.getId());
+		operacija.setOpis(operacijaDTO.getOpis());
+		Operacija o = operacijaService.save(operacija);
+		return new ResponseEntity<OperacijaDTO>(new OperacijaDTO(o), HttpStatus.OK);
 	}
 	
 }

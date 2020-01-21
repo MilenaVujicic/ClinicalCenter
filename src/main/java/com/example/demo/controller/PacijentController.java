@@ -285,6 +285,8 @@ public class PacijentController {
 		pacijent.setVisina(pacijentDTO.getVisina());
 		pacijent.setTezina(pacijentDTO.getTezina());
 		pacijent.setDioptrija(pacijentDTO.getDioptrija());
+		if(pacijentDTO.getKrvna_grupa() != null)
+			pacijent.setKrvna_grupa(pacijentDTO.getKrvna_grupa());
 		Pacijent p = pacijentService.save(pacijent);
 		return new ResponseEntity<PacijentDTO>(new PacijentDTO(p), HttpStatus.OK);
 	}
