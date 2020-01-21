@@ -42,6 +42,8 @@
 	      <li><a onclick="return requests();">Registration request</a></li>
 	      <li><a onclick="return allClinics();">All clinics</a></li>
 	      <li><a onclick="return allCenterAdmins();">All clinic centre administrators</a></li>
+	      <li><a onclick="return allDrugs();">All drugs</a></li>
+	      <li><a onclick="return allDiagnosis();">All diagnosis</a></li>
 	      <li><a href="#">Personal data</a></li>
 	    </ul>
 	    <ul class="nav navbar-nav navbar-right">
@@ -179,6 +181,80 @@
 		    
 		  </tbody>
 		</table>
+		
+		<div id="drugs" hidden="true">
+			<table id="allDrugs" hidden="true" class="table">
+				<thead>
+					<tr>
+						<th scope="col">Code</th>
+						<th scope="col">Name</th>
+						<th scope="col">Describe</th>
+					</tr>
+				</thead>
+				<tbody>
+				</tbody>
+			</table>
+			<div id="editDrugs" hidden="true">
+				<table>
+					<tr>
+						<td>Code</td>
+						<td><input type="text" id="editDrugCode"></td>
+					</tr>
+					<tr>
+						<td>Name</td>
+						<td><input type="text" id="editDrugName"></td>
+					</tr>
+					<tr>
+						<td>Describe</td>
+						<td><textarea id="editDrugDesc"></textarea></td>
+					</tr>
+					<tr hidden="true">
+						<td>ID</td>
+						<td><input type="text" id="editDrugID"></td>
+					</tr>
+				</table>
+				<div>
+					<a class="btn btn-success" onclick="return editDrug();">Edit drug</a>
+				</div>
+			</div>
+		</div>
+		
+		<div id="diagnosis" hidden="true">
+			<table id="allDiagnosis" hidden="true" class="table">
+				<thead>
+					<tr>
+						<th scope="col">Code</th>
+						<th scope="col">Name</th>
+						<th scope="col">Describe</th>
+					</tr>
+				</thead>
+				<tbody>
+				</tbody>
+			</table>
+			<div id="editDiagnosis" hidden="true">
+				<table>
+					<tr>
+						<td>Code</td>
+						<td><input type="text" id="editDiagnosisCode"></td>
+					</tr>
+					<tr>
+						<td>Name</td>
+						<td><input type="text" id="editDiagnosisName"></td>
+					</tr>
+					<tr>
+						<td>Describe</td>
+						<td><textarea id="editDiagnoseDesc"></textarea></td>
+					</tr>
+					<tr hidden="true">
+						<td>ID</td>
+						<td><input type="text" id="editDiagnosisID"></td>
+					</tr>
+				</table>
+				<div>
+					<a class="btn btn-success" onclick="return editDiagnosis();">Edit diagnosis</a>
+				</div>
+			</div>
+		</div>
 		
 		<table class="table" id="clinicAdminTable" hidden="true">
 		  <thead>

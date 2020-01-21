@@ -34,6 +34,10 @@ function newClinicAdministrator() {
 			$('#clinicTable').attr('hidden', true);
 			$('#clinicAdminTable').attr('hidden', true);
 			$('#requestsTable').attr('hidden', true);
+			$('#drugs').attr('hidden', true);
+			$('#diagnosis').attr('hidden', true);
+			$('#allDiagnosis').attr('hidden', true);
+			$('#editDiagnosis').attr('hidden', true);
         },
         error: function() {
         	$('#nameClicnicAdmin').val('');
@@ -53,6 +57,10 @@ function newClinicAdministrator() {
 			$('#clinicTable').attr('hidden', true);
 			$('#clinicAdminTable').attr('hidden', true);
 			$('#requestsTable').attr('hidden', true);
+			$('#drugs').attr('hidden', true);
+			$('#diagnosis').attr('hidden', true);
+			$('#allDiagnosis').attr('hidden', true);
+			$('#editDiagnosis').attr('hidden', true);
         }
     });
 }
@@ -87,6 +95,10 @@ function newAdministrator() {
 	  		$('#newClinicAdmin').attr('hidden', true);
 	  		$('#clinicTable').attr('hidden', true);
 	  		$('#requestsTable').attr('hidden', true);
+	  		$('#drugs').attr('hidden', true);
+	  		$('#diagnosis').attr('hidden', true);
+	  		$('#allDiagnosis').attr('hidden', true);
+	  		$('#editDiagnosis').attr('hidden', true);
        	},
        	error: function() {
        		$('#name').val('');
@@ -104,6 +116,10 @@ function newAdministrator() {
 	  		$('#newClinicAdmin').attr('hidden', true);
 	  		$('#clinicTable').attr('hidden', true);
 	  		$('#requestsTable').attr('hidden', true);
+	  		$('#drugs').attr('hidden', true);
+	  		$('#diagnosis').attr('hidden', true);
+	  		$('#allDiagnosis').attr('hidden', true);
+	  		$('#editDiagnosis').attr('hidden', true);
        	}
  	});
 }
@@ -136,6 +152,10 @@ function allAdmin(klinika) {
     	  		$('#adminSuccessAlert').attr('hidden', true);
     	  		$('#adminErrorAlert').attr('hidden', true);	 	
     	  		$('#requestsTable').attr('hidden', true);
+    	  		$('#drugs').attr('hidden', true);
+    	  		$('#diagnosis').attr('hidden', true);
+    	  		$('#allDiagnosis').attr('hidden', true);
+    	  		$('#editDiagnosis').attr('hidden', true);
     	  	},
            	error: function() {
            		$('#clinicAdminTable').attr('hidden', true);
@@ -146,6 +166,10 @@ function allAdmin(klinika) {
     	  		$('#adminSuccessAlert').attr('hidden', true);
     	  		$('#adminErrorAlert').attr('hidden', false);
     	  		$('#requestsTable').attr('hidden', true);
+    	  		$('#drugs').attr('hidden', true);
+    	  		$('#diagnosis').attr('hidden', true);
+    	  		$('#allDiagnosis').attr('hidden', true);
+    	  		$('#editDiagnosis').attr('hidden', true);
     	  		document.getElementById("title").innerHTML = "";
            	}
      	});
@@ -162,6 +186,10 @@ function newClinicAdmin(klinika) {
   		$('#adminErrorAlert').attr('hidden', true);
   		$('#clinicAdminTable').attr('hidden', true);
   		$('#requestsTable').attr('hidden', true);
+  		$('#drugs').attr('hidden', true);
+  		$('#diagnosis').attr('hidden', true);
+  		$('#allDiagnosis').attr('hidden', true);
+  		$('#editDiagnosis').attr('hidden', true);
   		$('#idClinic').val(klinika.id);
   		document.getElementById("title").innerHTML = "New administrator of: " + klinika.ime;
 	}
@@ -205,6 +233,10 @@ function newClinicAndAdmin() {
 	  		$('#newClinicAdmin').attr('hidden', true);
 	  		$('#clinicTable').attr('hidden', true);
 	  		$('#requestsTable').attr('hidden', true);
+	  		$('#drugs').attr('hidden', true);
+	  		$('#diagnosis').attr('hidden', true);
+	  		$('#allDiagnosis').attr('hidden', true);
+	  		$('#editDiagnosis').attr('hidden', true);
 	  		document.getElementById("title").innerHTML = "";
         }
     });
@@ -264,6 +296,10 @@ function newAdmin() {
 	$('#clinicAdminTable').attr('hidden', true);
 	$('#requestsTable').attr('hidden', true);
 	$('#newDiagnose').attr('hidden', true);
+	$('#drugs').attr('hidden', true);
+	$('#diagnosis').attr('hidden', true);
+	$('#allDiagnosis').attr('hidden', true);
+	$('#editDiagnosis').attr('hidden', true);
 	document.getElementById("title").innerHTML = "New clinic administrator";
 }
 
@@ -278,6 +314,10 @@ function newClinic() {
 	$('#requestsTable').attr('hidden', true);
 	$('#newDiagnose').attr('hidden', true);
 	$('#newDrug').attr('hidden', true);
+	$('#drugs').attr('hidden', true);
+	$('#diagnosis').attr('hidden', true);
+	$('#allDiagnosis').attr('hidden', true);
+	$('#editDiagnosis').attr('hidden', true);
 	document.getElementById("title").innerHTML = "New clinic";
 }
 function newDiagnose() {
@@ -290,6 +330,10 @@ function newDiagnose() {
 	$('#clinicTable').attr('hidden', true);
 	$('#newClinicAdmin').attr('hidden', true);
 	$('#clinicAdminTable').attr('hidden', true);
+	$('#drugs').attr('hidden', true);
+	$('#diagnosis').attr('hidden', true);
+	$('#allDiagnosis').attr('hidden', true);
+	$('#editDiagnosis').attr('hidden', true);
 	$('#requestsTable').attr('hidden', true);
 	document.getElementById("title").innerHTML = "New diagnose";
 }
@@ -304,6 +348,10 @@ function newDrug() {
 	$('#newClinicAdmin').attr('hidden', true);
 	$('#clinicAdminTable').attr('hidden', true);
 	$('#requestsTable').attr('hidden', true);
+	$('#drugs').attr('hidden', true);
+	$('#diagnosis').attr('hidden', true);
+	$('#allDiagnosis').attr('hidden', true);
+	$('#editDiagnosis').attr('hidden', true);
 	document.getElementById("title").innerHTML = "New drug";
 }
 function home() {
@@ -316,6 +364,14 @@ function home() {
 	$('#clinicAdminTable').attr('hidden', true);
 	$('#newClinicAdmin').attr('hidden', true);
 	$('#newDrug').attr('hidden', true);
+	$('#drugs').attr('hidden', true);
+	$('#allDrugs').attr('hidden', true);
+	$('#diagnosis').attr('hidden', true);
+	$('#allDiagnosis').attr('hidden', true);
+	$('#editDiagnosis').attr('hidden', true);
+	$('#editDrugs').attr('hidden', true);
+	$('#requestsTable').attr('hidden', true);
+	
 	document.getElementById("title").innerHTML = "";
 }
 
@@ -328,6 +384,10 @@ function allClinics() {
 	$('#clinicTable').attr('hidden', true);
 	$('#newClinicAdmin').attr('hidden', true);
 	$('#requestsTable').attr('hidden', true);
+	$('#drugs').attr('hidden', true);
+	$('#diagnosis').attr('hidden', true);
+	$('#allDiagnosis').attr('hidden', true);
+	$('#editDiagnosis').attr('hidden', true);
 	$.ajax({
         url:"/admin_klinickog_centra/sve_klinike",
         type:"GET",
@@ -348,6 +408,10 @@ function allClinics() {
 	  		$('#newClinicAdmin').attr('hidden', true);
 	  		$('#clinicTable').attr('hidden', true);
 	  		$('#requestsTable').attr('hidden', true);
+	  		$('#drugs').attr('hidden', true);
+	  		$('#diagnosis').attr('hidden', true);
+	  		$('#allDiagnosis').attr('hidden', true);
+	  		$('#editDiagnosis').attr('hidden', true);
 	  		document.getElementById("title").innerHTML = "";
        	}
  	});
@@ -371,6 +435,10 @@ function allCenterAdmins() {
 	  		$('#newClinicAdmin').attr('hidden', true);
 	  		$('#clinicTable').attr('hidden', true);
 	  		$('#requestsTable').attr('hidden', true);
+	  		$('#drugs').attr('hidden', true);
+	  		$('#diagnosis').attr('hidden', true);
+	  		$('#allDiagnosis').attr('hidden', true);
+	  		$('#editDiagnosis').attr('hidden', true);
        	},
        	error: function() {
        		$('#adminErrorAlert').attr('hidden', false);
@@ -381,6 +449,10 @@ function allCenterAdmins() {
 	  		$('#newClinicAdmin').attr('hidden', true);
 	  		$('#clinicTable').attr('hidden', true);
 	  		$('#requestsTable').attr('hidden', true);
+	  		$('#drugs').attr('hidden', true);
+	  		$('#diagnosis').attr('hidden', true);
+	  		$('#allDiagnosis').attr('hidden', true);
+	  		$('#editDiagnosis').attr('hidden', true);
 	  		document.getElementById("title").innerHTML = "";
        	}
  	});
@@ -460,9 +532,168 @@ function requests() {
 	  		$('#adminSuccessAlert').attr('hidden', true);
 	  		$('#newClinicAdmin').attr('hidden', true);
 	  		$('#clinicTable').attr('hidden', true);
+	  		$('#drugs').attr('hidden', true);
+	  		$('#diagnosis').attr('hidden', true);
+	  		$('#allDiagnosis').attr('hidden', true);
+	  		$('#editDiagnosis').attr('hidden', true);
 		},
 		error: function() {
 			alert('Desila se greska');
 		}
 	});
 }
+
+function deleteDrug(id) {
+	return function() {
+		$.ajax({
+			url: 'lek/obrisi/' + id,
+			type: "DELETE",
+			success: function() {
+				allDrugs();
+			},
+			error: function() {
+				alert('Desila se greska prilikom brisanja leka');
+			}
+		});
+	}
+}
+
+function editDrug() {
+	let id = $('#editDrugID').val();
+	let ime = $('#editDrugName').val();
+	let opis = document.getElementById("editDrugDesc").value;
+	let sifra = $('#editDrugCode').val();
+	$.ajax({
+		url: 'lek/izmeni',
+		type: "PUT",
+		data: JSON.stringify({sifra, ime, opis, id}),
+        contentType:'application/json',
+		success: function() {
+			allDrugs();
+		},
+		error: function() {
+			alert('Desila se greska kod izmene leka');
+		}
+	});
+}
+
+function editDrugs(lek) {
+	return function() {
+		$('#editDrugCode').val(lek.sifra);
+		$('#editDrugName').val(lek.ime);
+		document.getElementById("editDrugDesc").value = lek.opis;
+		$('#editDrugID').val(lek.id);
+		$('#editDrugs').attr('hidden', false);
+	}
+}
+
+function prikaziLek(lek) {
+	let tr = $('<tr></tr>');
+	let tdCode = $('<td>'+lek.sifra+'</td>');
+	let tdName = $('<td>'+lek.ime+'</td>');
+	let tdDesc = $('<td>'+lek.opis+'</td>');
+	let tdEditDrug = $('<td><a class="btn btn-success">Edit drug</a></td>');
+	tdEditDrug.click(editDrugs(lek));
+	let tdDeleteDrug = $('<td><a class="btn btn-danger">Delete drug</a></td>');
+	tdDeleteDrug.click(deleteDrug(lek.id));
+	tr.append(tdCode).append(tdName).append(tdDesc).append(tdEditDrug).append(tdDeleteDrug);
+	$('#allDrugs tbody').append(tr);
+}
+
+function allDrugs() {
+	$.ajax({
+		url: 'lek/svi_lekovi',
+		type:"GET",
+		success: function(lekovi) {
+			$('#allDrugs tbody').html('');
+			for(let lek of lekovi) {
+				prikaziLek(lek);
+			}
+			home();
+			$('#drugs').attr('hidden', false);
+			$('#allDrugs').attr('hidden', false);
+		},
+		error: function() {
+			alert('Desila se greska kod izlistavanja lekova');
+		}
+	});
+}
+
+function deleteDiagnose(id) {
+	return function() {
+		$.ajax({
+			url: 'dijagnoza/obrisi/' + id,
+			type: "DELETE",
+			success: function() {
+				allDiagnosis();
+			},
+			error: function() {
+				alert('Desila se greska prilikom brisanja dijagnoze');
+			}
+		});
+	}
+}
+
+function editDiagnosis() {
+	let id = $('#editDiagnosisID').val();
+	let ime = $('#editDiagnosisName').val();
+	let opis = document.getElementById("editDiagnoseDesc").value;
+	let sifra = $('#editDiagnosisCode').val();
+	$.ajax({
+		url: 'dijagnoza/izmeni',
+		type: "PUT",
+		data: JSON.stringify({sifra, ime, opis, id}),
+        contentType:'application/json',
+		success: function() {
+			allDiagnosis();
+		},
+		error: function() {
+			alert('Desila se greska kod izmene dijagnoze');
+		}
+	});
+}
+
+function editDiagnose(dijagnoza) {
+	return function() {
+		$('#editDiagnosis').attr('hidden', false);
+		$('#editDiagnosisCode').val(dijagnoza.sifra);
+		$('#editDiagnosisID').val(dijagnoza.id);
+		$('#editDiagnosisName').val(dijagnoza.ime);
+		document.getElementById("editDiagnoseDesc").value = dijagnoza.opis;
+	}
+}
+
+function prikaziDijagnozu(dijagnoza) {
+	let tr = $('<tr></tr>');
+	let tdCode = $('<td>'+dijagnoza.sifra+'</td>');
+	let tdName = $('<td>'+dijagnoza.ime+'</td>');
+	let tdDesc = $('<td>'+dijagnoza.opis+'</td>');
+	let tdEditDiagnose = $('<td><a class="btn btn-success">Edit diagnose</a></td>');
+	tdEditDiagnose.click(editDiagnose(dijagnoza));
+	let tdDeleteDiagnose = $('<td><a class="btn btn-danger">Delete diagnose</a></td>');
+	tdDeleteDiagnose.click(deleteDiagnose(dijagnoza.id));
+	tr.append(tdCode).append(tdName).append(tdDesc).append(tdEditDiagnose).append(tdDeleteDiagnose);
+	$('#allDiagnosis tbody').append(tr);
+}
+
+function allDiagnosis() {
+	$.ajax({
+		url: 'dijagnoza/sve_dijagnoze',
+		type:"GET",
+		success: function(dijagnoze) {
+			$('#allDiagnosis tbody').html('');
+			for(let dijagnoza of dijagnoze) {
+				prikaziDijagnozu(dijagnoza);
+			}
+			home();
+			$('#diagnosis').attr('hidden', false);
+			$('#allDiagnosis').attr('hidden', false);
+		},
+		error: function() {
+			alert('Desila se greska kod izlistavanja dijagnoza');
+		}
+	});
+}
+
+
+
