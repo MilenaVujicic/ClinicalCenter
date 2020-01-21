@@ -37,6 +37,9 @@ public class Pacijent {
 	@Column(name = "dioptrija", nullable = false)
 	private double dioptrija;
 	
+	@Column(name = "krvna_grupa")
+	private KrvnaGrupa krvna_grupa;
+	
 	@JsonIgnore
 	@OneToMany(mappedBy = "pacijent", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 	private Set<Alergija> alergije = new HashSet<Alergija>();
@@ -149,6 +152,15 @@ public class Pacijent {
 		this.klinika = klinika;
 	}
 
+	public KrvnaGrupa getKrvna_grupa() {
+		return krvna_grupa;
+	}
+
+	public void setKrvna_grupa(KrvnaGrupa krvna_grupa) {
+		this.krvna_grupa = krvna_grupa;
+	}
+
+	
 	
 	
 }

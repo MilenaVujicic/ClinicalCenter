@@ -3,6 +3,7 @@ package com.example.demo.dto;
 import java.util.HashSet;
 import java.util.Set;
 
+import com.example.demo.model.Dijagnoza;
 import com.example.demo.model.Pregled;
 
 public class DijagnozaDTO {
@@ -23,6 +24,10 @@ public class DijagnozaDTO {
 		this.sifra = sifra;
 		this.ime = ime;
 		this.opis = opis;
+	}
+	
+	public DijagnozaDTO(Dijagnoza d) {
+		this(d.getSifra(), d.getIme(), d.getOpis());
 	}
 
 	public String getSifra() {
