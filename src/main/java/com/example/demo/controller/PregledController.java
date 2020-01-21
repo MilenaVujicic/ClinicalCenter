@@ -60,5 +60,11 @@ public class PregledController {
 		pregledService.delete(pregled);
 		return new ResponseEntity<String>("", HttpStatus.OK);
 	}
+	
+	@RequestMapping(value = "/preuzmi/{id}", method = RequestMethod.GET)
+	public ResponseEntity<Pregled> preuzmi(@PathVariable("id") Long identifikacija) {
+		Pregled pregled = pregledService.findOne(identifikacija);
+		return new ResponseEntity<Pregled>(pregled, HttpStatus.OK);
+	}
 
 }

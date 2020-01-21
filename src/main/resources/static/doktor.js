@@ -135,6 +135,7 @@ function stExam(pacijent) {
 	$('#allPatients').parents('div.dataTables_wrapper').first().hide();
 	$('#tPersonalData').attr('hidden', true);
 	$('#tPersonalDataH').attr('hidden', true);
+	dijagnoze();
 }
 
 function startExamination(pacijent) {
@@ -144,11 +145,11 @@ function startExamination(pacijent) {
 		$('#schPatTable').attr('hidden', true);
 		$('#examForm').attr('hidden', true);
 		$('#operationForm').attr('hidden', true);
-		
 		$('#patientName').val(pacijent.ime);
 		$('#patientSurname').val(pacijent.prezime);
 		$('#patientJMBG').val(pacijent.jmbg);
 		$('#patientID').val(pacijent.id);
+		$('#examinationID').val(0);
 	}
 }
 
@@ -317,12 +318,14 @@ function scheduledPatients() {
 }
 
 function saveExamination() {
-	let id = $('#patientID').val();
+	let id_pac = $('#patientID').val();
 	let naziv = $('#examinationName').val();
 	let anamneza = $('#examinationAnamnesis').val();
 	let cena = $('#examinationPrice').val();
 	let tipPregleda = $('#examinationType').val();
-	let url = 'doktor/posalji_pregled/' + id;
+	let id = $('#examinationID').val();
+	let url = 'doktor/posalji_pregled/'+ id_pac;
+	
 	$.ajax({
         url:"/dijagnoza/sve_dijagnoze",
         type:"GET",
@@ -337,7 +340,7 @@ function saveExamination() {
    			$.ajax({
    		        url:url,
    		        type:"POST",
-   		        data: JSON.stringify({naziv, anamneza, cena, tipPregleda}),
+   		        data: JSON.stringify({naziv, anamneza, cena, tipPregleda, id}),
    		        contentType:'application/json',
    		       	success: function(pregled) {
    		       		alert('Pregled uspesno unesen');
@@ -986,15 +989,26 @@ function editAbout() {
 function examinationFor(id) {
 	if (id != 0) {
 		$.ajax({
-			url:"/korisnik/preuzmi/" + id,
-		    type:"GET",
-		   	success: function(korisnik){
-		   		stExam(korisnik);
+			url: 'pregled/preuzmi/' + id,
+			type:"GET",
+			success: function(pregled) {
+				$.ajax({
+					url:"/korisnik/preuzmi/" + pregled.pacijent.idKorisnik,
+				    type:"GET",
+				   	success: function(korisnik){
+				   		stExam(korisnik);
+				   		$('#examinationID').val(id);
+					},
+				   	error: function() {
+				   		alert('Desila se greska ovde');
+				   	}
+				});
 			},
-		   	error: function() {
-		   		alert('Desila se greska ovde');
-		   	}
+			error: function() {
+				alert('Greska kod preuzimanja pregleda');
+			}
 		});
+		
 	}
 }
 
@@ -1061,7 +1075,7 @@ function showCalendar(odsustva, pregledi, operacije) {
    	        type:"GET",
    	       	success: function(korisnik){
 	   	       	let color = 'blue';
-	   	       	let id = korisnik.id;
+	   	       	let id = pregled.id;
 	   			if (pregled.status == "ZAVRSEN") {
 	   				color = 'purple';
 	   				id = 0;
@@ -1069,7 +1083,7 @@ function showCalendar(odsustva, pregledi, operacije) {
 
 	   		    let end = new Date(pregled.datumIVremePregleda);
 	   		    let start = new Date(pregled.datumIVremePregleda);
-	   		    end.setMinutes(end.getMinutes() + 30);
+	   		    end.setMinutes(end.getMinutes() + 15);
 	   		    let title = "Pregled:" + korisnik.ime + " " + korisnik.prezime;
 	   			var event={title: title , start:start, end:end, color:color, id:id};
 	   			$('#calendar').fullCalendar('renderEvent', event, true);

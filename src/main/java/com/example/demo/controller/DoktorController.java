@@ -106,9 +106,13 @@ public class DoktorController {
 		String[] splitter = text.split("~");
 		Long identifikacija = Long.parseLong(splitter[0]);
 		Pregled pregled = new Pregled();
+		if (pregledDTO.getId() != 0) {
+			pregled = pregledService.findOne(pregledDTO.getId());
+		}
+		
 		Doktor doktor = doktorService.findOne((long) 1);
 		Sala sala = salaService.findOne((long) 1);
-		Pacijent pacijent = pacijentService.findOne(identifikacija);
+		Pacijent pacijent = pacijentService.findByIdKorisnik(identifikacija);
 		pregled.setNaziv(pregledDTO.getNaziv());
 		pregled.setAnamneza(pregledDTO.getAnamneza());
 		pregled.setTipPregleda(pregledDTO.getTipPregleda());
@@ -118,7 +122,6 @@ public class DoktorController {
 		pregled.setStatus(StatusPregleda.ZAVRSEN);
 		pregled.setPacijent(pacijent);
 		pregled.setSala(sala);
-		
 		for (int i = 1; i < splitter.length; i++) {
 			Dijagnoza dijagnoza = dijagnozaService.findOne(Long.parseLong(splitter[i]));
 			pregled.getDijagnoze().add(dijagnoza);
