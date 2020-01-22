@@ -3,9 +3,6 @@ package com.example.demo.controller;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Collections;
-import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
@@ -26,7 +23,6 @@ import com.example.demo.dto.DoktorDTO;
 import com.example.demo.dto.KlinikaDTO;
 import com.example.demo.dto.KorisnikDTO;
 import com.example.demo.dto.PacijentDTO;
-import com.example.demo.dto.PregledDTO;
 import com.example.demo.model.Doktor;
 import com.example.demo.model.Klinika;
 import com.example.demo.model.Korisnik;
@@ -62,7 +58,6 @@ public class PacijentController {
 	
 	@Autowired
 	EmailService emailService;
-	
 	
 	private List<Korisnik> foundUsers = new ArrayList<Korisnik>();
 
@@ -108,9 +103,13 @@ public class PacijentController {
 		List<Pacijent> pacijenti = pacijentService.findAll();
 		if(type.equals("Ime")) {
 			for(Korisnik k : korisnici) {
+				System.out.println(k.getIme() + " " +  k.getId());
 				if(k.getIme().toLowerCase().contains(value) || k.getIme().toLowerCase().equals(value)) {
-					if(k.getUloga() == UlogaKorisnika.PACIJENT) {
-						retVal.add(new KorisnikDTO(k));
+					System.out.println(k.getIme());
+					for(Pacijent p : pacijenti) {
+						if(p.getId() == k.getId()) {
+							retVal.add(new KorisnikDTO(k));
+						}
 					}
 					
 				}
@@ -118,24 +117,12 @@ public class PacijentController {
 		}else if(type.equals("Prezime")) {
 			for(Korisnik k: korisnici) {
 				if(k.getPrezime().toLowerCase().contains(value) || k.getPrezime().toLowerCase().equals(value)) {
-					if(k.getUloga() == UlogaKorisnika.PACIJENT) {
-						retVal.add(new KorisnikDTO(k));
-					}
-				}
-			}
-		}else if(type.equals("JedinstveniBroj")) {
-			try {
-				Long id = Long.parseLong(value);
-				for(Korisnik k : korisnici) {
-					if(k.getId() == id) {
-						if(k.getUloga() == UlogaKorisnika.PACIJENT) {
+					for(Pacijent p : pacijenti) {
+						if(p.getId() == k.getId()) {
 							retVal.add(new KorisnikDTO(k));
 						}
 					}
 				}
-			}catch(Exception e) {
-				e.printStackTrace();
-				return new ResponseEntity<>(retVal, HttpStatus.BAD_REQUEST);
 			}
 		}
 		return new ResponseEntity<>(retVal, HttpStatus.OK);
@@ -214,33 +201,6 @@ public class PacijentController {
 		return new ResponseEntity<>(doktoriDTO, HttpStatus.OK);	
 	}
 	
-	@RequestMapping(value = "/pregledi", method = RequestMethod.GET)
-	@ResponseStatus(value = HttpStatus.OK)
-	public ResponseEntity<List<PregledDTO>> getPregledi(@RequestParam(value="id") int id)	{
-		System.out.println(id);
-		Long id_l = Integer.toUnsignedLong(id);
-		Pacijent p = pacijentService.findByIdKorisnik(id_l);
-		List<Pregled> pregledi = pregledService.findByPatientId(p.getId());
-		List<PregledDTO> preglediDTO = new ArrayList<>();
-		
-		for(Pregled preg : pregledi) {
-			PregledDTO pregDTO = new PregledDTO(preg);
-			Optional<Korisnik> k = korisnikService.findById(preg.getDoktor().getId()); //id doktora
-			pregDTO.setImeDoktora(k.get().getIme());
-			pregDTO.setPrezimeDoktora(k.get().getPrezime());
-			preglediDTO.add(pregDTO);
-		}
-		
-		for(PregledDTO preg:preglediDTO) {
-			System.out.println(preg.getId());
-			System.out.println(preg.getImeDoktora() + ' ' + preg.getPrezimeDoktora());
-		}
-		
-		return new ResponseEntity<>(preglediDTO,HttpStatus.OK);
-	}
-	
-	
-	
 	@RequestMapping(value = "/search", method = RequestMethod.GET)
 	@ResponseStatus(value = HttpStatus.OK)
 	public ResponseEntity<List<DoktorDTO>> getDoctorsSearch(@RequestParam(value="ime") String ime,
@@ -315,8 +275,6 @@ public class PacijentController {
 		pacijent.setVisina(pacijentDTO.getVisina());
 		pacijent.setTezina(pacijentDTO.getTezina());
 		pacijent.setDioptrija(pacijentDTO.getDioptrija());
-		if(pacijentDTO.getKrvna_grupa() != null)
-			pacijent.setKrvna_grupa(pacijentDTO.getKrvna_grupa());
 		Pacijent p = pacijentService.save(pacijent);
 		return new ResponseEntity<PacijentDTO>(new PacijentDTO(p), HttpStatus.OK);
 	}
@@ -343,9 +301,7 @@ public class PacijentController {
 		
 		
 		Pregled pregled = new Pregled();
-		Calendar cal = Calendar.getInstance();
-		cal.setTime(date1);
-		pregled.setDatumIVremePregleda(cal);
+		pregled.setDatumIVremePregleda(date1);
 		pregled.setPacijent(pacijent);
 		pregled.setDoktor(doktor);
 		//pregledService.save(pregled);
@@ -357,64 +313,6 @@ public class PacijentController {
 		}
 		
 		return new ResponseEntity<String>("", HttpStatus.OK);
-		
-	}
-	
-	@RequestMapping(value = "sortiraniPacijenti/{tip}", method = RequestMethod.GET)
-	public ResponseEntity<List<KorisnikDTO>> sortiraniPacijenti(@PathVariable String tip){
-		List<KorisnikDTO> retVal = new ArrayList<KorisnikDTO>();
-		List<Pacijent> pacijenti = pacijentService.findAll();
-		
-		List<Korisnik> sviKorisnici = korisnikService.findAll();
-		List<Korisnik> kPacijenti = new ArrayList<Korisnik>();
-		
-		for(Pacijent p: pacijenti) {
-			for(Korisnik k : sviKorisnici) {
-				if(k.getId() == p.getId()) {
-					kPacijenti.add(k);
-					continue;
-				}
-			}
-		}
-		
-		if(tip.equals("ime")) {
-			Collections.sort(kPacijenti, new Comparator<Korisnik>(){
-
-				@Override
-				public int compare(Korisnik o1, Korisnik o2) {
-					// TODO Auto-generated method stub
-					return o1.getIme().compareTo(o2.getIme());
-				}
-				
-			});
-		}else if(tip.equals("prezime")) {
-			Collections.sort(kPacijenti, new Comparator<Korisnik>() {
-
-				@Override
-				public int compare(Korisnik o1, Korisnik o2) {
-					// TODO Auto-generated method stub
-					return o1.getPrezime().compareTo(o2.getPrezime());
-				}
-				
-			});
-			
-		}else if(tip.equals("id")) {
-			Collections.sort(kPacijenti, new Comparator<Korisnik>() {
-
-				@Override
-				public int compare(Korisnik o1, Korisnik o2) {
-					// TODO Auto-generated method stub
-					return o1.getJmbg().compareTo(o2.getJmbg());
-				}
-				
-			});
-		}
-	
-		for(Korisnik k : kPacijenti) {
-			retVal.add(new KorisnikDTO(k));
-		}
-		
-		return new ResponseEntity<List<KorisnikDTO>>(retVal, HttpStatus.OK);
 		
 	}
 }

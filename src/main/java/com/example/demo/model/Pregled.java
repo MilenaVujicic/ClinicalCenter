@@ -3,7 +3,6 @@
  */
 package com.example.demo.model;
 
-import java.util.Calendar;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
@@ -36,7 +35,7 @@ public class Pregled {
 	private String anamneza;
 	
 	@Column(name = "datumIVremePregleda", nullable = true)
-	private Calendar datumIVremePregleda;
+	private Date datumIVremePregleda;
 	
 	@Column(name = "tipPregleda")
 	private String tipPregleda;
@@ -90,11 +89,11 @@ public class Pregled {
 		this.anamneza = anamneza;
 	}
 
-	public Calendar getDatumIVremePregleda() {
+	public Date getDatumIVremePregleda() {
 		return datumIVremePregleda;
 	}
 
-	public void setDatumIVremePregleda(Calendar datumIVremePregleda) {
+	public void setDatumIVremePregleda(Date datumIVremePregleda) {
 		this.datumIVremePregleda = datumIVremePregleda;
 	}
 

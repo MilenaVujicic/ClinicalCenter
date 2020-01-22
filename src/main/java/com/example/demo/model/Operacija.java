@@ -4,7 +4,6 @@
 package com.example.demo.model;
 
 import java.time.LocalDateTime;
-import java.util.Calendar;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -20,6 +19,9 @@ import javax.persistence.ManyToMany;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 
+enum StatusOperacije {
+	ZAKAZAN, ZAVRSEN, OTKAZAN
+}
 
 @Entity
 public class Operacija {
@@ -28,22 +30,19 @@ public class Operacija {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 	
-	@ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.REFRESH, CascadeType.MERGE, CascadeType.DETACH}, fetch = FetchType.EAGER)
+	@ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
 	private Pacijent pacijent;
 	
-	@ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.REFRESH, CascadeType.MERGE, CascadeType.DETACH}, fetch = FetchType.EAGER)
+	@ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
 	private Sala sala;
 	
 	@Column(name = "status", nullable = false)
 	private StatusOperacije status;
 	
 	@Column(name = "datumIVremeOperacije", nullable = false)
-	private Calendar datumIVremeOperacije;
+	private LocalDateTime datumIVremeOperacije;
 	
-	@Column(name = "opis")
-	private String opis = "";
-	
-	@Column(name = "trajanje", nullable = false)
+	@Column(name = "trajanje")
 	private int trajanje;
 	
 	@ManyToMany
@@ -79,11 +78,11 @@ public class Operacija {
 		this.status = status;
 	}
 
-	public Calendar getDatumIVremeOperacije() {
+	public LocalDateTime getDatumIVremeOperacije() {
 		return datumIVremeOperacije;
 	}
 
-	public void setDatumIVremeOperacije(Calendar datumIVremeOperacije) {
+	public void setDatumIVremeOperacije(LocalDateTime datumIVremeOperacije) {
 		this.datumIVremeOperacije = datumIVremeOperacije;
 	}
 
@@ -110,22 +109,12 @@ public class Operacija {
 	public void setDoktori(Set<Doktor> doktori) {
 		this.doktori = doktori;
 	}
-	
-	
-
-	public String getOpis() {
-		return opis;
-	}
-
-	public void setOpis(String opis) {
-		this.opis = opis;
-	}
 
 	@Override
 	public String toString() {
 		return "Operacija [id=" + id + ", pacijent=" + pacijent + ", sala=" + sala + ", status=" + status
-				+ ", datumIVremeOperacije=" + datumIVremeOperacije + ", opis=" + opis + ", trajanje=" + trajanje
-				+ ", doktori=" + doktori + "]";
+				+ ", datumIVremeOperacije=" + datumIVremeOperacije + ", trajanje=" + trajanje + ", doktori=" + doktori
+				+ "]";
 	}
 	
 	

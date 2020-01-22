@@ -5,7 +5,6 @@ import java.util.Set;
 
 import com.example.demo.model.Alergija;
 import com.example.demo.model.Klinika;
-import com.example.demo.model.KrvnaGrupa;
 import com.example.demo.model.Operacija;
 import com.example.demo.model.Pacijent;
 import com.example.demo.model.Pregled;
@@ -23,7 +22,6 @@ public class PacijentDTO {
 	private Set<Recept> recepti = new HashSet<Recept>(); 
 	private Set<Pregled> pregledi = new HashSet<Pregled>();
 	private Klinika klinika;
-	private KrvnaGrupa krvna_grupa;
 	
 	public PacijentDTO() {
 		super();
@@ -31,7 +29,7 @@ public class PacijentDTO {
 	}
 	
 	public PacijentDTO(Long id, Long idKorisnik, int visina, int tezina, double dioptrija, Set<Alergija> alergije,
-			Set<Operacija> operacije, Set<Recept> recepti, Set<Pregled> pregledi, Klinika klinika, KrvnaGrupa krvna_grupa) {
+			Set<Operacija> operacije, Set<Recept> recepti, Set<Pregled> pregledi, Klinika klinika) {
 		super();
 		this.id = id;
 		this.idKorisnik = idKorisnik;
@@ -43,12 +41,11 @@ public class PacijentDTO {
 		this.recepti = recepti;
 		this.pregledi = pregledi;
 		this.klinika = klinika;
-		this.krvna_grupa = krvna_grupa;
 	}
 
 	public PacijentDTO(Pacijent p) {
 		this(p.getId(), p.getIdKorisnik(), p.getVisina(), p.getTezina(), p.getDioptrija(), p.getAlergije(),
-				p.getOperacije(), p.getRecepti(),p.getPregledi(), p.getKlinika(), p.getKrvna_grupa());
+				p.getOperacije(), p.getRecepti(),p.getPregledi(), p.getKlinika());
 	}
 
 	public int getVisina() {
@@ -130,22 +127,11 @@ public class PacijentDTO {
 	public void setKlinika(Klinika klinika) {
 		this.klinika = klinika;
 	}
-	
-	
-
-	public KrvnaGrupa getKrvna_grupa() {
-		return krvna_grupa;
-	}
-
-	public void setKrvna_grupa(KrvnaGrupa krvna_grupa) {
-		this.krvna_grupa = krvna_grupa;
-	}
 
 	@Override
 	public String toString() {
-		return "PacijentDTO [id=" + id + ", idKorisnik=" + idKorisnik + ", visina=" + visina + ", tezina=" + tezina
-				+ ", dioptrija=" + dioptrija + ", alergije=" + alergije + ", operacije=" + operacije + ", recepti="
-				+ recepti + ", pregledi=" + pregledi + ", klinika=" + klinika + ", krvna_grupa=" + krvna_grupa + "]";
+		return "Pacijent [visina=" + visina + ", tezina=" + tezina + ", dioptrija=" + dioptrija + ", alergije="
+				+ alergije + ", operacije=" + operacije + ", recepti=" + recepti + ", pregledi=" + pregledi + "]";
 	}
 
 }

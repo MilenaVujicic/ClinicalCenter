@@ -3,44 +3,40 @@
  */
 package com.example.demo.dto;
 
-import java.util.Calendar;
+import java.time.LocalDateTime;
 import java.util.Set;
 
 import com.example.demo.model.Doktor;
-import com.example.demo.model.Operacija;
 import com.example.demo.model.Sala;
-import com.example.demo.model.StatusOperacije;
+
+
+enum StatusOperacije {
+	ZAKAZAN, ZAVRSEN
+}
 
 public class OperacijaDTO {
 
 	private Long id;
 	private Sala sala;
 	private StatusOperacije status;
-	private Calendar datumIVremeOperacije;
+	private LocalDateTime datumIVremeOperacije;
 	private int trajanje;
 	private Set<Doktor> doktori;
-	private String opis;
 	
 	public OperacijaDTO() {
 		super();
 		// TODO Auto-generated constructor stub
 	}
 
-	public OperacijaDTO(Long id, Sala sala, StatusOperacije statusOperacije, Calendar datumIVremeOperacije, 
-			int trajanje, Set<Doktor> doktori, String opis) {
+	public OperacijaDTO(Long id, Sala sala, StatusOperacije status, LocalDateTime datumIVremeOperacije, int trajanje,
+			Set<Doktor> doktori) {
 		super();
 		this.id = id;
 		this.sala = sala;
-		this.status = statusOperacije;
+		this.status = status;
 		this.datumIVremeOperacije = datumIVremeOperacije;
 		this.trajanje = trajanje;
 		this.doktori = doktori;
-		this.opis = opis;
-	}
-	
-	public OperacijaDTO(Operacija operacija) {
-		this(operacija.getId(), operacija.getSala(), operacija.getStatus(), operacija.getDatumIVremeOperacije(),
-				operacija.getTrajanje(), operacija.getDoktori(), operacija.getOpis());
 	}
 
 	public Long getId() {
@@ -67,11 +63,11 @@ public class OperacijaDTO {
 		this.status = status;
 	}
 
-	public Calendar getDatumIVremeOperacije() {
+	public LocalDateTime getDatumIVremeOperacije() {
 		return datumIVremeOperacije;
 	}
 
-	public void setDatumIVremeOperacije(Calendar datumIVremeOperacije) {
+	public void setDatumIVremeOperacije(LocalDateTime datumIVremeOperacije) {
 		this.datumIVremeOperacije = datumIVremeOperacije;
 	}
 
@@ -90,21 +86,11 @@ public class OperacijaDTO {
 	public void setDoktori(Set<Doktor> doktori) {
 		this.doktori = doktori;
 	}
-	
-	
-
-	public String getOpis() {
-		return opis;
-	}
-
-	public void setOpis(String opis) {
-		this.opis = opis;
-	}
 
 	@Override
 	public String toString() {
 		return "OperacijaDTO [id=" + id + ", sala=" + sala + ", status=" + status + ", datumIVremeOperacije="
-				+ datumIVremeOperacije + ", trajanje=" + trajanje + ", doktori=" + doktori + ", opis=" + opis + "]";
+				+ datumIVremeOperacije + ", trajanje=" + trajanje + ", doktori=" + doktori + "]";
 	}
 	
 	

@@ -38,13 +38,6 @@ public class SalaService {
 		return salaRepository.findByOpis(opis);
 	}
 	
-	public Sala save(Sala s) {
-		return salaRepository.save(s);
-	}
-	
-	public List<Sala> findByKlinika(Klinika klinika) {
-		return salaRepository.findByKlinika(klinika);
-	}
 
 	public Sala findOne(Long id) {
 		Sala sala = new Sala();

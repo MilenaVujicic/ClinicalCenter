@@ -53,7 +53,7 @@ public class Korisnik {
 	private String adresa;
 	
 	@Column(name = "telefon")
-	private String telefon;
+	private int telefon;
 	
 	@Column(name = "datumRodjenja", nullable = true) 
 	private Date datumRodjenja;
@@ -92,7 +92,7 @@ public class Korisnik {
 	}
 
 	public Korisnik(Long id, String ime, String prezime, String email, String username, String password, String grad,
-			String drzava, Long jmbg, String adresa, String telefon, Date datumRodjenja, UlogaKorisnika uloga,
+			String drzava, Long jmbg, String adresa, int telefon, Date datumRodjenja, UlogaKorisnika uloga,
 			Set<Odsustvo> odsustva, boolean aktivan, boolean aktiviran) {
 		super();
 		this.id = id;
@@ -209,11 +209,11 @@ public class Korisnik {
 		this.username = username;
 	}
 
-	public String getTelefon() {
+	public int getTelefon() {
 		return telefon;
 	}
 
-	public void setTelefon(String telefon) {
+	public void setTelefon(int telefon) {
 		this.telefon = telefon;
 	}
 

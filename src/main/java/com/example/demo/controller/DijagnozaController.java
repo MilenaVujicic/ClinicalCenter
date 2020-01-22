@@ -8,16 +8,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.example.demo.dto.DijagnozaDTO;
-import com.example.demo.dto.LekDTO;
 import com.example.demo.dto.PregledDTO;
 import com.example.demo.model.Dijagnoza;
-import com.example.demo.model.Lek;
 import com.example.demo.model.Pregled;
 import com.example.demo.service.DijagnozaService;
 import com.example.demo.service.PregledService;
@@ -65,23 +61,6 @@ public class DijagnozaController {
 		}
 		Pregled p = pregledService.save(pregled);
 		return new ResponseEntity<PregledDTO>(new PregledDTO(p), HttpStatus.OK);
-	}
-	
-	@RequestMapping(value = "/obrisi/{id}", method = RequestMethod.DELETE)
-	public ResponseEntity<String> obrisiDijagnozu(@PathVariable("id") Long identifikacija) {
-		Dijagnoza dijagnoza = dijagnozaService.findOne(identifikacija);
-		dijagnozaService.delete(dijagnoza);
-		return new ResponseEntity<String>(HttpStatus.OK);
-	}
-	
-	@RequestMapping(value = "/izmeni", method = RequestMethod.PUT)
-	public ResponseEntity<DijagnozaDTO> izmeniDijagnozu(@RequestBody DijagnozaDTO dijagnozaDTO) {
-		Dijagnoza dijagnoza = dijagnozaService.findOne(dijagnozaDTO.getId());
-		dijagnoza.setIme(dijagnozaDTO.getIme());
-		dijagnoza.setSifra(dijagnozaDTO.getSifra());
-		dijagnoza.setOpis(dijagnozaDTO.getOpis());
-		Dijagnoza d = dijagnozaService.save(dijagnoza);
-		return new ResponseEntity<DijagnozaDTO>(new DijagnozaDTO(d), HttpStatus.OK);
 	}
 	
 }

@@ -71,7 +71,7 @@ public class AdministratorKlinickogCentraController {
 		korisnik.setAdresa(korisnikDTO.getAdresa());
 		korisnik.setGrad(korisnikDTO.getGrad());
 		korisnik.setDrzava(korisnikDTO.getDrzava());
-		korisnik.setTelefon("3625415");
+		korisnik.setTelefon(3625415);
 		korisnik.setJmbg(korisnikDTO.getJmbg());
 		korisnik.setPassword(UUID.randomUUID().toString());
 		korisnik.setDatumRodjenja(new Date());
@@ -135,7 +135,6 @@ public class AdministratorKlinickogCentraController {
 	
 	@RequestMapping(value = "/novi_admin_klinike/{id}", method = RequestMethod.POST)
 	public ResponseEntity<KlinikaDTO> noviAdminKlinike(@PathVariable("id") Long identifikacija, @RequestBody KorisnikDTO korisnikDTO) {
-		System.out.println("#######################");
 		Korisnik korisnik = new Korisnik();
 		korisnik.setIme(korisnikDTO.getIme());
 		korisnik.setPrezime(korisnikDTO.getPrezime());

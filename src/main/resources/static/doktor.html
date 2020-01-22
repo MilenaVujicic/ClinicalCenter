@@ -6,17 +6,10 @@
     <!-- This file has been downloaded from Bootsnipp.com. Enjoy! -->
     <title>Doctor</title>
     <link href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.0/css/bootstrap.min.css" rel="stylesheet">
-    <link href="css/bootstrap.min.css" rel="stylesheet">
+    
     <script src="http://code.jquery.com/jquery-1.11.1.min.js"></script>
-    <link href='https://fullcalendar.io/releases/fullcalendar/3.9.0/fullcalendar.min.css' rel='stylesheet' />
-	<link rel='stylesheet' href='https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css'>
-	<link href='https://fullcalendar.io/releases/fullcalendar/3.9.0/fullcalendar.print.min.css' rel='stylesheet' media='print' />
-	<script src='https://fullcalendar.io/releases/fullcalendar/3.9.0/lib/moment.min.js'></script>
-	<script src='https://fullcalendar.io/releases/fullcalendar/3.9.0/lib/jquery.min.js'></script>
-	<script src='https://fullcalendar.io/releases/fullcalendar/3.9.0/fullcalendar.min.js'></script>
     <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.0/js/bootstrap.min.js"></script>
     <script src = "/doktor.js" type = 'text/javascript'></script>
-    <script src = "/doktorData.js" type = 'text/javascript'></script>
 
 	<!-- Website CSS style -->
 	<link href="css/bootstrap.min.css" rel="stylesheet">
@@ -27,16 +20,6 @@
 	<!-- Google Fonts -->
 	<link href='https://fonts.googleapis.com/css?family=Passion+One' rel='stylesheet' type='text/css'>
 	<link href='https://fonts.googleapis.com/css?family=Oxygen' rel='stylesheet' type='text/css'>
-
-<!-- Data Table -->
-	<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.20/css/jquery.dataTables.css">
-	<script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.10.20/js/jquery.dataTables.js"></script>
-	
-	<!-- Data picker -->
-	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
-    <script src="https://unpkg.com/gijgo@1.9.13/js/gijgo.min.js" type="text/javascript"></script>
-    <link href="https://unpkg.com/gijgo@1.9.13/css/gijgo.min.css" rel="stylesheet" type="text/css" />
-	
 </head>
 <body>
 	<nav class="navbar navbar-inverse">
@@ -48,45 +31,17 @@
 	      <li><a onclick="return home();">Home</a></li>
 	      <li class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">Add <span class="caret"></span></a>
 	        <ul class="dropdown-menu">
-	          <li><a href="#" id = "aDayOff">New day off</a></li>
+	          <li><a href="#">New</a></li>
 	        </ul>
 	      </li>
 	      <li><a onclick="return scheduledPatients();">Scheduled patients</a></li>
-	      <li><a onclick="return allPatients();">All patients</a></li>
-	      <li><a onclick="return calendar();">Calendar</a></li>
-	      <li><a href="#" id = "aPersonalData">Personal data</a></li>
+	      <li><a href="#">Personal data</a></li>
 	    </ul>
 	    <ul class="nav navbar-nav navbar-right">
 	      <li><a href="#"><span class="glyphicon glyphicon-log-out"></span> Logout</a></li>
 	    </ul>
 	  </div>
-	</nav><h1 id="title"></h1>
-	
-	<h1 id="title"></h1>
-	
-	<table class="table" hidden="true" id="allPatients">
-	  <thead>
-	    <tr>
-	      <th scope="col">#</th>
-	      <th scope="col" id = "taName">First Name</th>
-	      <th scope="col">Last Name</th>
-	      <th scope="col">JMBG</th>
-	      <th scope="col" class = "no-sort">Medical record</th>
-	      <th scope="col" hidden="true">ID</th>
-	    </tr>
-	  </thead>
-	  <tbody>
-	    
-	  </tbody>
-		  <tfoot>
-            <tr>
-                <th>Name</th>
-                <th>Surname</th>
-                <th>Date of Birth</th>
-                <th>JMBG</th>
-            </tr>
-        </tfoot>
-	</table>
+	</nav>
 	
 	<table class="table" hidden="true" id="schPatTable">
 	  <thead>
@@ -114,9 +69,6 @@
 	        <label for="patientSurname">Surname</label>
 	        <input type="text" class="form-control" id="patientSurname" readonly="readonly"> 
 	      </div>
-	  </div>
-	  <div hidden="true">
-	  	<input type="text" id="examinationID">
 	  </div>
 	  <div class="form-row">
 		  <div class="form-group col-md-12">
@@ -226,376 +178,7 @@
 	        <input type="text" class="form-control" id="recipePatientID" readonly="readonly"> 
       	</div>
 	</form>
-
-	<div class="container emp-profile" hidden="true" id="aboutPatient">
-       <form method="post">
-       	  <div class="row">
-           <div class="col-md-6">
-               <div class="profile-head">
-                   <h1 id="profilePatientName"></h1>
-                   <ul class="nav nav-tabs" id="myTab" role="tablist">
-                       <li class="nav-item">
-                           <a class="nav-link" id="home-tab" data-toggle="tab" href="#aboutHome" role="tab" aria-controls="home" aria-selected="true">About</a>
-                       </li>
-                       <li class="nav-item">
-                           <a class="nav-link" id="examination-tab" data-toggle="tab" href="#examination" role="tab" aria-controls="examination" aria-selected="false">Examinations</a>
-                       </li>
-                       <li class="nav-item">
-                           <a class="nav-link" id="recipe-tab" data-toggle="tab" href="#recipe" role="tab" aria-controls="recipe" aria-selected="false">Recipes</a>
-                       </li>
-                       <li class="nav-item">
-                           <a class="nav-link" id="operation-tab" data-toggle="tab" href="#operation" role="tab" aria-controls="operation" aria-selected="false">Operations</a>
-                       </li>
-                       <li class="nav-item">
-                           <a class="nav-link" id="alergie-tab" data-toggle="tab" href="#alergie" role="tab" aria-controls="alergie" aria-selected="false">Allergies</a>
-                       </li>
-                   </ul>
-               </div>
-           </div>
-           </div>
-           
-           <div class="row">
-               <div class="col-md-8">
-                   <div class="tab-content profile-tab" id="myTabContent">
-                       <div class="tab-pane fade" id="aboutHome" role="tabpanel" aria-labelledby="home-tab">
-                          <div class="row">
-                              <div class="col-md-6">
-                                  <label>Name</label>
-                              </div>
-                              <div class="col-md-6">
-                                  <p id="aboutPatientName"></p>
-                              </div>
-                          </div>
-                          <div class="row">
-                              <div class="col-md-6">
-                                  <label>Email</label>
-                              </div>
-                              <div class="col-md-6">
-                                  <p id="aboutPatientEmail"></p>
-                              </div>
-                          </div>
-                          <div class="row">
-                              <div class="col-md-6">
-                                  <label>Phone</label>
-                              </div>
-                              <div class="col-md-6">
-                                  <p id="aboutPatientPhone"></p>
-                              </div>
-                          </div>
-                          <div class="row">
-                              <div class="col-md-6">
-                                  <label>JMBG</label>
-                              </div>
-                              <div class="col-md-6">
-                                  <p id="aboutPatientJMBG"></p>
-                              </div>
-                          </div>
-                          <div class="row">
-                              <div class="col-md-6">
-                                  <label>Date of birth</label>
-                              </div>
-                              <div class="col-md-6">
-                                  <p id="aboutPatientDateOfBirth"></p>
-                              </div>
-                          </div>
-                          <div class="row">
-                              <div class="col-md-6">
-                                  <label>Blood type</label>
-                              </div>
-                              <div class="col-md-6">
-                                  <p id="aboutPatientBloodType"></p>
-                              </div>
-                          </div>
-                          <div class="row">
-                              <div class="col-md-6">
-                                  <label>Height</label>
-                              </div>
-                              <div class="col-md-6">
-                                  <p id="aboutPatientHeight"></p>
-                              </div>
-                          </div>
-                          <div class="row">
-                              <div class="col-md-6">
-                                  <label>Weight</label>
-                              </div>
-                              <div class="col-md-6">
-                                  <p id="aboutPatientWeight"></p>
-                              </div>
-                          </div>
-                          <div class="row">
-                              <div class="col-md-6">
-                                  <label>Dioptre</label>
-                              </div>
-                              <div class="col-md-6">
-                                  <p id="aboutPatientDioptre"></p>
-                              </div>
-                          </div>
-                          <div class="row" hidden="true">
-                              <div class="col-md-6">
-                                  <label>ID</label>
-                              </div>
-                              <div class="col-md-6">
-                                  <p id="aboutPatientID"></p>
-                              </div>
-                          </div>
-                       	  <div class="col-md-4">
-			                <a class="btn btn-success" id="editPatient" onclick="return editPatient();">Edit Profile</a>
-			         	  </div>
-			         	  
-			         	  
-			         	  <div id="editAbout" hidden="true">
-	               			<table>
-	               				<tr>
-	               					<td>Height (cm)</td>
-	               					<td><input type="number" id="editHeigth"></td>
-	               				</tr>
-	               				<tr>
-	               					<td>Width (kg)</td>
-	               					<td><input type="number" id="editWidth"></td>
-	               				</tr>
-	               				<tr>
-	               					<td>Dioptre</td>
-	               					<td><input type="number" id="editDioptre"></td>
-	               				</tr>
-	               				<tr>
-	               					<td>Blood type</td>
-	               					<td><select id="editBloodType">
-	               						<option>O</option>
-	               						<option>A</option>
-	               						<option>B</option>
-	               						<option>AB</option>
-	               					</select></td>
-	               				</tr>
-	               			</table>
-	               			<div class="col-md-4">
-			                	<a class="btn btn-primary" onclick="return editAbout();">Edit patient</a>
-			         	  	</div>
-	               		 </div>
-                       </div>
-                       
-                       <div class="tab-pane fade" id="examination" role="tabpanel" aria-labelledby="examination-tab">
-                         	<div class="row">
-	                         	<table class="table" id="allExaminations">
-	                         		<thead>
-									    <tr>
-									      <th scope="col">Name</th>
-									      <th scope="col">Date</th>
-									      <th scope="col">Type</th>
-									      <th scope="col">Anamnesis</th>
-									      <th scope="col">Price</th>
-									    </tr>
-									  </thead>
-									  <tbody>
-									    
-									  </tbody>
-	                         	</table>
-                         	</div>
-                         	
-                         	<div id="editExamination" hidden="true">
-	               			<table>
-	               				<tr>
-	               					<td>Name</td>
-	               					<td><input type="text" id="editExaminationName"></td>
-	               				</tr>
-	               				<tr>
-	               					<td>Anamnesis</td>
-	               					<td><textarea id="editExaminationAnamnesis"></textarea></td>
-	               				</tr>
-	               				<tr>
-	               					<td>Type</td>
-	               					<td><input type="text" id="editExaminationType"></td>
-	               				</tr>
-	               				
-	               				<tr>
-	               					<td>Price</td>
-	               					<td><input type="number" id="editExaminationPrice"></td>
-	               				</tr>
-	               				<tr hidden="true">
-	               					<td>ID</td>
-	               					<td><input type="text" id="editExaminationID"></td>
-	               				</tr>
-	               			</table>
-	               			<div class="col-md-4">
-			                	<a class="btn btn-primary" onclick="return editExaminations();">Edit patient</a>
-			         	  	</div>
-	               			</div>
-                         	
-                         	<div id="examinationDiagnosis" hidden="true">
-		               			<table id="examinationDiagnosisTable" hidden="true" class="table">
-		               				<thead>
-		               					<tr>
-		               						<th>Code</th>
-		               						<th>Name</th>
-		               						<th>Describe</th>
-		               					</tr>
-		               				</thead>
-		               				<tbody>
-		               				</tbody>
-		               			</table>
-		               			<p id="examID" hidden="true"></p> 
-		               			<div class="col-md-4">
-				                	<a class="btn btn-success" onclick="return getDiagnosis();">Change diagnosis</a>
-				         	  	</div>
-				         	  	<div class="col-md-4">
-				                	<a class="btn btn-danger" onclick="return closeDiagnosis();">Close diagnosis</a>
-				         	  	</div>
-				         	  	<div class="col-md-4" hidden="true" id="buttonAddNewDiag">
-				                	<a class="btn btn-primary" onclick="return addDiag();">Add diagnosis</a>
-				         	  	</div>
-				         	  	<div class="form-row" id="diagnosisExam">
-			  	
-			  					</div>	
-		               		</div>
-                       </div>
-                       
-                       <div class="tab-pane fade" id="recipe" role="tabpanel" aria-labelledby="recipe-tab">
-                        	<table class="table" id="allRecipes">
-                        		<thead>
-							    <tr>
-							      <th scope="col">Name</th>
-							      <th scope="col">Describe</th>
-							      <th scope="col">Status</th>
-							      <th scope="col">Date</th>
-							      <th scope="col">Verify date</th>
-							      <th scope="col">Code</th>
-							      <th scope="col">Drug</th>
-							    </tr>
-							  </thead>
-							  <tbody>
-							    
-							  </tbody>
-                        	</table>
-                        	
-                        	<div id="editRecipe" hidden="true">
-	               			<table>
-	               				<tr>
-	               					<td>Name</td>
-	               					<td><input type="text" id="editRecipeName"></td>
-	               				</tr>
-	               				<tr>
-	               					<td>Describe</td>
-	               					<td><input type="text" id="editRecipeDescribe"></td>
-	               				</tr>
-	               				<tr>
-	               					<td>Drug</td>
-	               					<td>
-	               						<select class="browser-default custom-select" id="selectRecipeDrugs">
-	               							
-	               						</select>
-	               					</td>
-	               				</tr>
-	               				<tr hidden="true">
-	               					<td>ID</td>
-	               					<td><input type="text" id="editRecipeID"></td>
-	               				</tr>
-	               			</table>
-	               			<div class="col-md-4">
-			                	<a class="btn btn-primary" onclick="return editRecipes();">Edit patient</a>
-			         	  	</div>
-               			    </div>
-                       </div>
-                       
-                       <div class="tab-pane fade" id="operation" role="tabpanel" aria-labelledby="operation-tab">
-                         	<table class="table" id="allOperation">
-                         		<thead>
-								    <tr>
-								      <th scope="col">Describe</th>
-								      <th scope="col">Date</th>
-								    </tr>
-								  </thead>
-								  <tbody>
-								    
-								  </tbody>
-                         	</table>
-                         	<div id="editOperation" hidden="true">
-		               			<table class="table">
-		               				<tr>
-		               					<td>Describe</td>
-		               					<td><textarea id=editOperationDesc></textarea></td>
-		               				</tr>
-			               			<tr hidden="true">
-		               					<td>ID</td>
-		               					<td><input type="text" id="editOperationID"></td>
-		               				</tr>
-		               			</table>
-		               			<div class="col-md-4">
-				                	<a class="btn btn-primary" onclick="return editOperation();">Edit operation</a>
-				         	  	</div>
-		               		</div>
-                       </div>
-                       
-                       <div class="tab-pane fade" id="alergie" role="tabpanel" aria-labelledby="alergie-tab">
-                         	<table class="table" id="allAlergies">
-                         		<thead>
-							    <tr>
-							      <th scope="col">Name</th>
-							      <th scope="col">Describe</th>
-							    </tr>
-							  	</thead>
-								  <tbody>
-								    
-								  </tbody>
-                         	</table>
-                         	<div class="col-md-4">
-			                	<a class="btn btn-primary" id="addAllergies" onclick="return addAllergies();">Add allergies</a>
-			         	  	</div>
-			         	  	
-			         	  	<div id="addAllergy" hidden="true">
-		               			<table class="table">
-		               				<tr>
-		               					<td>Name</td>
-		               					<td><input type="text" id="addAllergieName"></td>
-		               				</tr>
-		               				<tr>
-		               					<td>Describe</td>
-		               					<td><input type="text" id="addAllergieDesc"></td>
-		               				</tr>
-		               				<tr hidden="true">
-		               					<td>ID</td>
-		               					<td><input type="text" id="addAllergiePatientID"></td>
-		               				</tr>
-		               			</table>
-		               			<div class="col-md-4">
-				                	<a class="btn btn-primary" onclick="return addAllergie();">Add allergy</a>
-				         	  	</div>
-		               		</div>
-		               		
-		               		<div id="editAllergie" hidden="true">
-		               			<table class="table">
-		               				<tr>
-		               					<td>Name</td>
-		               					<td><input type="text" id="editAllergieName"></td>
-		               				</tr>
-		               				<tr>
-		               					<td>Describe</td>
-		               					<td><input type="text" id="editAllergieDesc"></td>
-		               				</tr>
-		               				<tr hidden="true">
-		               					<td>ID</td>
-		               					<td><input type="text" id="editAllergieID"></td>
-		               				</tr>
-		               			</table>
-		               			<div class="col-md-4">
-				                	<a class="btn btn-primary" onclick="return editAllergie();">Edit allergy</a>
-				         	  	</div>
-		               		</div>
-		               		
-                       </div>
-                   </div>
-               	</div>
-           </div>
-           
-           <div class="row">
-               <div class="col-md-8">
-               	
-               		
-               </div>
-           </div>
-       </form>     
-    </div>
-    <div id="calendar" hidden="true">
-    
-    </div>
+	
 	<form id="examForm" hidden="true">
 		<div class="form-row">
 		  <div class="form-group col-md-8">
@@ -649,75 +232,5 @@
 	  	  </div>
 	    </div>
 	</form>	
-	 
-	<h4 id = "tPersonalDataH" hidden = "true">Personal data</h4>
-	<table class = "table" id = "tPersonalData" hidden = "true">
-	<tr id = "trUsername">
-	<td>Username: </td>
-	</tr>
-	<tr id = "trName">
-	<td>Name: </td>
-	</tr>
-	<tr id = "trSurname">
-	<td>Surname: </td>
-	</tr>
-	<tr id = "trEmail">
-	<td>Email: </td>
-	</tr>
-	<tr id = "trCity">
-	<td>City:</td>
-	</tr>
-	<tr id = "trCountry">
-	<td>Country: </td>
-	</tr>
-	<tr id = "trAddress">
-	<td>Address:</td>
-	</tr>
-	<tr id = "trPhone">
-	<td>Phone: </td>
-	</tr>
-	<tr>
-	<td colspan = "2"><a href = "#">Change personal data</a></td>
-	</tr>
-	</table>
-	
-	<form id = "absenceForm" hidden = "true">
-			<table id="restTable" class="table">
-			<tr>
-				<td>From:</td>
-				<td>
-					<input id="aFrom" width="270" />
-				    <script>
-				        $('#aFrom').datepicker({
-				        	minDate: new Date(),
-				            uiLibrary: 'bootstrap',
-				            format: 'dd.mm.yyyy'
-				        });
-				    </script>
-				</td>
-			</tr>
-			<tr>
-				<td>To:</td>
-				<td>
-					<input id="aTo" width="270" />
-				    <script>
-				        $('#aTo').datepicker({
-				        	minDate: new Date(),
-				            uiLibrary: 'bootstrap',
-				            format: 'dd.mm.yyyy'
-				        });
-				    </script>
-				</td>
-			</tr>
-			<tr>
-				<td>Type</td>
-				<td><select id="selectRest"><option>Vacation</option><option>Sick leave</option></select></td>
-			</tr>
-		</table>
-		<div class="form-group ">
-				<a target="_blank" type="button" id="bRequestHoliday" class="btn btn-primary btn-lg btn-block login-button" >Send request for holiday</a>
-		</div>
-	</form>
-	
 </body>
 </html>
