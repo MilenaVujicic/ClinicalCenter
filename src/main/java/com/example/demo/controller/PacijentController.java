@@ -8,6 +8,7 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -25,6 +26,7 @@ import com.example.demo.dto.DoktorDTO;
 import com.example.demo.dto.KlinikaDTO;
 import com.example.demo.dto.KorisnikDTO;
 import com.example.demo.dto.PacijentDTO;
+import com.example.demo.dto.PregledDTO;
 import com.example.demo.model.Doktor;
 import com.example.demo.model.Klinika;
 import com.example.demo.model.Korisnik;
@@ -60,6 +62,7 @@ public class PacijentController {
 	
 	@Autowired
 	EmailService emailService;
+	
 	
 	private List<Korisnik> foundUsers = new ArrayList<Korisnik>();
 
@@ -210,6 +213,33 @@ public class PacijentController {
 		}
 		return new ResponseEntity<>(doktoriDTO, HttpStatus.OK);	
 	}
+	
+	@RequestMapping(value = "/pregledi", method = RequestMethod.GET)
+	@ResponseStatus(value = HttpStatus.OK)
+	public ResponseEntity<List<PregledDTO>> getPregledi(@RequestParam(value="id") int id)	{
+		System.out.println(id);
+		Long id_l = Integer.toUnsignedLong(id);
+		Pacijent p = pacijentService.findByIdKorisnik(id_l);
+		List<Pregled> pregledi = pregledService.findByPatientId(p.getId());
+		List<PregledDTO> preglediDTO = new ArrayList<>();
+		
+		for(Pregled preg : pregledi) {
+			PregledDTO pregDTO = new PregledDTO(preg);
+			Optional<Korisnik> k = korisnikService.findById(preg.getDoktor().getId()); //id doktora
+			pregDTO.setImeDoktora(k.get().getIme());
+			pregDTO.setPrezimeDoktora(k.get().getPrezime());
+			preglediDTO.add(pregDTO);
+		}
+		
+		for(PregledDTO preg:preglediDTO) {
+			System.out.println(preg.getId());
+			System.out.println(preg.getImeDoktora() + ' ' + preg.getPrezimeDoktora());
+		}
+		
+		return new ResponseEntity<>(preglediDTO,HttpStatus.OK);
+	}
+	
+	
 	
 	@RequestMapping(value = "/search", method = RequestMethod.GET)
 	@ResponseStatus(value = HttpStatus.OK)
