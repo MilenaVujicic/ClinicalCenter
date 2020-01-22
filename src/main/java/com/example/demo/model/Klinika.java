@@ -41,11 +41,14 @@ public class Klinika {
 	@OneToMany(mappedBy = "klinika", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 	private Set<Usluga> usluge = new HashSet<Usluga>();
 	
-	//@Column(name = "Ocene",nullable = true)
-	//private Set<Integer> ocene;
-	
 	@Column(name = "ProsecnaOcena", nullable = false)
 	private double prosecnaOcena;
+	
+	@Column(name="BrojOcena", nullable = false)
+	private double brojOcena;
+
+	@Column(name = "SumaOcena", nullable = false)
+	private double sumaOcena;
 	
 	@JsonIgnore
 	@OneToMany(mappedBy = "klinika", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
@@ -63,6 +66,8 @@ public class Klinika {
 		super();
 		// TODO Auto-generated constructor stub
 		this.prosecnaOcena = 0;
+		this.brojOcena = 0;
+		this.sumaOcena = 0;
 	}
 	
 	
@@ -126,14 +131,6 @@ public class Klinika {
 		this.usluge = usluge;
 	}
 
-	/*public Set<Integer> getOcene() {
-		return ocene;
-	}
-
-	public void setOcene(Set<Integer> ocene) {
-		this.ocene = ocene;
-	}*/
-
 	public double getProsecnaOcena() {
 		return prosecnaOcena;
 	}
@@ -166,6 +163,22 @@ public class Klinika {
 	public String toString() {
 		return "Klinika [id=" + id + ", ime=" + ime + ", adresa=" + adresa + ", opis=" + opis + ", doktori=" + doktori + ", sale=" + sale + ", usluge=" + usluge
 				+ ", prosecnaOcena=" + prosecnaOcena + ", administratoriKlinike=" + administratoriKlinike + "]";
+	}
+	
+	public double getBrojOcena() {
+		return brojOcena;
+	}
+	
+	public void setBrojOcena(double brojOcena) {
+		this.brojOcena = brojOcena;
+	}
+	
+	public double getSumaOcena() {
+		return sumaOcena;
+	}
+	
+	public void setSumaOcena(double sumaOcena) {
+		this.sumaOcena = sumaOcena;
 	}
 	
 	

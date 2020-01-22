@@ -214,6 +214,25 @@ public class PacijentController {
 		return new ResponseEntity<>(doktoriDTO, HttpStatus.OK);	
 	}
 	
+	@RequestMapping(value = "/oceniDoktora", method = RequestMethod.PUT)
+	public ResponseEntity<String> oceniDoktora(@RequestParam(value="id_pregleda") int id,
+											   @RequestParam(value="ocena") int ocena) {
+		
+		
+		Long id_l = Integer.toUnsignedLong(id);
+		Pregled p = pregledService.findOne(id_l);
+		Doktor d = p.getDoktor();
+		double prethodnaProsecnaOcena = d.getProsenaOcena();
+		d.setBrojOcena(d.getBrojOcena()+1);
+		d.setSumaOcena(d.getSumaOcena()+ocena);
+		double prosecnaOcena =(double)d.getSumaOcena()/(double)d.getBrojOcena();
+		System.out.println("prethodna prosecna ocena je: "+prethodnaProsecnaOcena+" a ocena je: "+prosecnaOcena);
+		d.setProsenaOcena(prosecnaOcena);
+		
+		d = doktorService.save(d);
+		return new ResponseEntity<String>("",HttpStatus.OK);
+	}
+	
 	@RequestMapping(value = "/pregledi", method = RequestMethod.GET)
 	@ResponseStatus(value = HttpStatus.OK)
 	public ResponseEntity<List<PregledDTO>> getPregledi(@RequestParam(value="id") int id)	{

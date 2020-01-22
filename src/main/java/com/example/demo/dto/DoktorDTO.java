@@ -20,9 +20,9 @@ public class DoktorDTO {
 	private Set<Operacija> operacijeZavrsene = new HashSet<Operacija>();
 	private Set<Odsustvo> odsustva = new HashSet<Odsustvo>();
 	private ArrayList<Integer> ocene = new ArrayList<Integer>();
-	private double prosecnaOcena = 0;
-	private int brojOcena = 0;
-	private int sumaOcena = 0;
+	private double prosecnaOcena;
+	private int brojOcena;
+	private int sumaOcena;
 	private Set<Recept> ispisaniRecepti = new HashSet<Recept>();
 	private String specijalizacija;
 	private Long idKorisnik;
