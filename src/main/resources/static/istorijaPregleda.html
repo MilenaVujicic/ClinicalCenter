@@ -14,6 +14,7 @@
 	<!-- Website CSS style -->
 	<link href="css/bootstrap.min.css" rel="stylesheet">
 	<link rel="stylesheet" href="medicinskaSestra.css">
+	<link rel="stylesheet" type="text/css" href="rating.css">
 	
 	<!-- Website Font style -->
     <script src="https://kit.fontawesome.com/a065fea601.js" crossorigin="anonymous"></script>
@@ -21,6 +22,10 @@
 	<link href='https://fonts.googleapis.com/css?family=Passion+One' rel='stylesheet' type='text/css'>
 	<link href='https://fonts.googleapis.com/css?family=Oxygen' rel='stylesheet' type='text/css'>
 	<script>
+	
+	$(':radio').change(function() {
+		  console.log('New star rating: ' + this.value);
+	});
 	
 	function prikaziPregled(pregled) {
 		let tr = $('<tr></tr>');
@@ -30,13 +35,14 @@
 		let tdAnamneza = $('<td>'+pregled.anamneza+'</td>');
 		let tdCena = $('<td>'+pregled.cena+'</td>');
 		let tdImeIPrezimeDoktora = $('<td>'+pregled.imeDoktora+' '+pregled.prezimeDoktora+'</td>');
+		let tdOceniDoktora = $('<td>'+'<a id="'+tdId+'" onClick="funkcija(this.id)" >Oceni</a>'+ '</td>')
 		tr.append(tdId).append(tdNaziv).append(tdDatumIVreme).append(tdAnamneza).append(tdCena).append(tdImeIPrezimeDoktora);
 		$('#preglediTable tbody').append(tr);
 	}
 	
 	function home() {
 		$('#preglediTable').attr('hidden', true);
-		
+   		$('#oceniTable').attr('hidden',true);
 	}
 	
 	function istorijaPregleda() {
@@ -53,6 +59,7 @@
            			prikaziPregled(pregledi[i]);
            		}
            		$('#preglediTable').attr('hidden', false);
+           		$('#oceniTable').attr('hidden',false);
 			},
 			error: function() {
            		alert('Desila se greska');
@@ -88,11 +95,14 @@
 	      <th scope="col">Anamneza</th>
 	      <th scope="col">Cena</th>
 	      <th scope="col">Doktor</th>
+	      <th scope="col">Oceni Doktora</th>
 	    </tr>
 	  </thead>
 	  <tbody>
 	  	
 	  </tbody>
 	</table>
+
+	
 </body>
 </html>

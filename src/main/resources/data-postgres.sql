@@ -68,10 +68,10 @@ insert into termin(datum, slobodan, sala_id, trajanje, cena) values ('4-1-20 18:
 insert into termin(datum, slobodan, sala_id, trajanje, cena) values ('5-2-20 21:00:00', true, 3, 0, 0);
 insert into termin(datum, slobodan, sala_id, trajanje, cena) values ('6-2-20 21:00:00', true, 6, 0, 0);
 
-insert into doktor (id_korisnik, specijalizacija, prosecna_ocena, klinika_id) values (5, 'Lekar opste prakse', 0, 1);
-insert into doktor (id_korisnik, specijalizacija, prosecna_ocena, klinika_id) values (6, 'Hirurg', 5, 1);
-insert into doktor (id_korisnik, specijalizacija, prosecna_ocena, klinika_id) values (17, 'Hirurg', 5, 2);
-insert into doktor (id_korisnik, specijalizacija, prosecna_ocena, klinika_id) values (18, 'Lekar opste prakse', 0, 2);
+insert into doktor (id_korisnik, specijalizacija, prosecna_ocena, broj_ocena, suma_ocena, klinika_id) values (7, 'Lekar opste prakse', 0,0,0,1);
+insert into doktor (id_korisnik, specijalizacija, prosecna_ocena, broj_ocena, suma_ocena, klinika_id)values (8, 'Hirurg', 5,5,25,1);
+insert into doktor (id_korisnik, specijalizacija, prosecna_ocena, broj_ocena, suma_ocena, klinika_id) values (17, 'Hirurg', 5,2,10,2);
+insert into doktor (id_korisnik, specijalizacija, prosecna_ocena, broj_ocena, suma_ocena, klinika_id) values (18, 'Lekar opste prakse',3,2,6,2);
 
 insert into lek(sifra, ime, opis) values ('J01CA04', 'Amoksicilin', 'Lek na bazi penicilina');
 insert into lek(sifra, ime, opis) values ('J01CR02', 'Panklav', 'Lek na bayi amoksicilina i klavulinske kiseline');
@@ -95,13 +95,13 @@ insert into pregled (naziv, anamneza, datumivreme_pregleda, status, tip_pregleda
 insert into pregledi_dijagnoze(pregled_id, dijagnoza_id) values(1, 2);
 
 
-insert into operacija(pacijent_id, status, datumivreme_operacije, trajanje) values(1, 0, '25-1-2020 17:00', 0);
-insert into operacija(pacijent_id, status, datumivreme_operacije, trajanje) values(2, 0, '25-1-2020 17:00', 0);
-insert into operacija(pacijent_id, status, datumivreme_operacije, trajanje) values(2, 0, '25-2-2020 21:00', 0);
-insert into operacija(pacijent_id, status, datumivreme_operacije, trajanje) values(1, 0, '25-2-2020 20:00', 0);
-insert into operacija(pacijent_id, status, datumivreme_operacije, trajanje, sala_id) values(1, 1, '29-1-2020 18:00', 0, 1);
+insert into operacija(pacijent_id, status, datumivreme_operacije, trajanje) values(1, 0, '1-1-2020 17:00', 0);
+insert into operacija(pacijent_id, status, datumivreme_operacije, trajanje) values(2, 0, '2-1-2020 17:00', 0);
+insert into operacija(pacijent_id, status, datumivreme_operacije, trajanje) values(2, 0, '3-2-2020 21:00', 0);
+insert into operacija(pacijent_id, status, datumivreme_operacije, trajanje) values(1, 0, '4-2-2020 20:00', 0);
+insert into operacija(pacijent_id, status, datumivreme_operacije, trajanje, sala_id) values(1, 1, '5-1-2020 18:00', 0, 1);
 insert into operacija(pacijent_id, status, datumivreme_operacije, trajanje, opis, sala_id) values(1, 2, '5-1-2020 18:00', 0, 'Pacijentu je izvadjen umnjak', 1);
-insert into operacija(pacijent_id, status, datumivreme_operacije, trajanje, opis, sala_id) values(1, 2, '15-1-2020 18:00', 0, 'Pacijentu je izvadjen zub', 1);
+insert into operacija(pacijent_id, status, datumivreme_operacije, trajanje, opis, sala_id) values(1, 2, '6-1-2020 18:00', 0, 'Pacijentu je izvadjen zub', 1);
 
 insert into operacije_doktori(doktor_id, operacija_id) values (1, 5);
 insert into operacije_doktori(doktor_id, operacija_id) values (1, 6);
