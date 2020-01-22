@@ -32,15 +32,15 @@ public class Klinika {
 
 
 	@JsonIgnore
-	@OneToMany(mappedBy = "klinika", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+	@OneToMany(mappedBy = "klinika", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
 	private Set<Doktor> doktori = new HashSet<Doktor>();
 	
 	@JsonIgnore
-	@OneToMany(mappedBy = "klinika", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+	@OneToMany(mappedBy = "klinika", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
 	private Set<Sala> sale = new HashSet<Sala>();
 	
 	@JsonIgnore
-	@OneToMany(mappedBy = "klinika", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+	@OneToMany(mappedBy = "klinika", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
 	private Set<Usluga> usluge = new HashSet<Usluga>();
 	
 	//@Column(name = "Ocene",nullable = true)
@@ -50,15 +50,15 @@ public class Klinika {
 	private double prosecnaOcena;
 	
 	@JsonIgnore
-	@OneToMany(mappedBy = "klinika", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+	@OneToMany(mappedBy = "klinika", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
 	private Set<AdministratorKlinike> administratoriKlinike = new HashSet<AdministratorKlinike>();
 	
 	@JsonIgnore
-	@OneToMany(mappedBy = "klinika", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+	@OneToMany(mappedBy = "klinika", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
 	private Set<Pacijent> pacijenti = new HashSet<Pacijent>();
 	
 	@JsonIgnore
-	@OneToMany(mappedBy = "klinika", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+	@OneToMany(mappedBy = "klinika", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
 	private Set<MedicinskaSestra> mediniskeSestre = new HashSet<MedicinskaSestra>();
 	
 	public Klinika() {
@@ -164,11 +164,11 @@ public class Klinika {
 		this.usluge = usluge;
 	}
 
-	@Override
+	/*@Override
 	public String toString() {
 		return "Klinika [id=" + id + ", ime=" + ime + ", adresa=" + adresa + ", opis=" + opis + ", doktori=" + doktori + ", sale=" + sale + ", usluge=" + usluge
 				+ ", prosecnaOcena=" + prosecnaOcena + ", administratoriKlinike=" + administratoriKlinike + "]";
-	}
+	}*/
 	
 	
 	

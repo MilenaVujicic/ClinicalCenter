@@ -13,14 +13,16 @@
 	<version>0.0.1-SNAPSHOT</version>
 	<name>ClinicalCenter</name>
 	<description>Clinical Center Project</description>
+	
 
 	<properties>
 		<java.version>1.8</java.version>
 		<spring-security.version>5.0.6.RELEASE</spring-security.version>
 	    <spring.version>5.0.6.RELEASE</spring.version>
+	
+	
 	</properties>
 	
-
 
 	<dependencies>
 		<dependency>
@@ -93,5 +95,8 @@
 			</plugin>
 		</plugins>
 	</build>
+	
+
+
 
 </project>

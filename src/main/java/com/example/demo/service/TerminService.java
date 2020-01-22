@@ -27,7 +27,7 @@ public class TerminService {
 		return terminRepository.findAll();
 	}
 	
-	public List<Termin> findBySlobodan(Boolean slobodan){
+	public List<Termin> findBySlobodan(Boolean slobodan) {
 		return terminRepository.findBySlobodan(slobodan);
 	}
 	

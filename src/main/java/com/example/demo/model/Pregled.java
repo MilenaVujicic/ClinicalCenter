@@ -28,10 +28,10 @@ public class Pregled {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 	
-	@Column(name = "naziv", nullable = false)
+	@Column(name = "naziv", nullable = true)
 	private String naziv;
 	
-	@Column(name = "anamneza", nullable = false)
+	@Column(name = "anamneza", nullable = true)
 	private String anamneza;
 	
 	@Column(name = "datumIVremePregleda", nullable = true)
@@ -50,13 +50,13 @@ public class Pregled {
 	@Column(name = "status")
 	private StatusPregleda status;
 	
-	@ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.REFRESH, CascadeType.MERGE, CascadeType.DETACH}, fetch = FetchType.EAGER)
+	@ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.REFRESH, CascadeType.DETACH}, fetch = FetchType.EAGER)
 	private Pacijent pacijent;
 	
-	@ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.REFRESH, CascadeType.MERGE, CascadeType.DETACH}, fetch = FetchType.EAGER)
+	@ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.REFRESH, CascadeType.DETACH}, fetch = FetchType.EAGER)
 	private Doktor doktor;
 	
-	@ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.REFRESH, CascadeType.MERGE, CascadeType.DETACH}, fetch = FetchType.EAGER)
+	@ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.REFRESH, CascadeType.DETACH}, fetch = FetchType.EAGER)
 	private Sala sala;
 
 
