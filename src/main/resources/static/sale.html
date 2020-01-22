@@ -111,11 +111,7 @@
  			let tr = $('<tr></tr>');
  		 	let tdImeSale = $('<td>'+ sale[i].ime + '</td>');
  		 	let tdOpisSale = $('<td>' + sale[i].opis + '</td>');
- 		 	let imeSale = sale[i].ime.replace(/\s+/g,'_')
- 		 	let str = '<td><a href = \"/salaPage.html' + '+' + imeSale+ '\"\>' + "Pregled stranice sale" + '</a></td>';
- 		 	alert(str);
- 			let tdTermini = $('<td><a href = \"/salaPage.html' + '+' + imeSale+ '\"\>' + "Pregled stranice sale" + '</a></td>');
- 			
+ 			let tdTermini = $('<td><a href = \"/salaPage.html\">' + "Pregled stranice sale" + '</a></td>');
  			tr.append(tdImeSale).append(tdOpisSale).append(tdTermini);
  		 	$('#tSale tbody').append(tr);
 	
@@ -157,7 +153,7 @@
 		    		let tr = $('<tr></tr>');
 		    		let tdImeSale = $('<td id = \"tdIme\">'+ sale[i].ime + '</td>');
 		 		 	let tdOpisSale = $('<td id = \"tdOpis\">' + sale[i].opis + '</td>');
-		 		 	let tdTermini = $('<td><a id = "aPage" href = \"salaPage.html\">' + "Pregled stranice sale" + '</a></td>');
+		 		 	let tdTermini = $('<td><a href = \"salaPage.html\">' + "Pregled stranice sale" + '</a></td>');
 		 		 	tr.append(tdImeSale).append(tdOpisSale).append(tdTermini);
 		 		 	$('#tPSale tbody').append(tr);
 		    	}
@@ -194,10 +190,6 @@
 			$("[id=tdIme]").attr('hidden', false);
 			$("[id=tdOpis]").attr('hidden', false);
 		}
-	}
-	
-	function sendSalaInfo(){
-		alert("here");
 	}
 	
 

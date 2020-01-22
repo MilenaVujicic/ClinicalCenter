@@ -6,6 +6,7 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.example.demo.model.Dijagnoza;
 import com.example.demo.model.Korisnik;
 import com.example.demo.model.UlogaKorisnika;
 import com.example.demo.repository.KorisnikRepository;
@@ -48,9 +49,6 @@ public class KorisnikService {
 		return korisnikRepository.findById(id).orElse(null);
 	}
 	
-	public Optional<Korisnik> findById(Long id){
-		return korisnikRepository.findById(id);
-	}
 	
 	
 

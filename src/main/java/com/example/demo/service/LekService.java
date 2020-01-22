@@ -21,12 +21,4 @@ public class LekService {
 	public Lek save(Lek lek) {
 		return lekRepository.save(lek);
 	}
-	
-	public Lek findOne(Long id) {
-		return lekRepository.findById(id).orElse(null);
-	}
-	
-	public void delete(Lek lek) {
-		lekRepository.delete(lek);
-	}
 }

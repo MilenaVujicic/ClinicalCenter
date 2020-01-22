@@ -162,6 +162,5 @@ public class TerminController {
 		double cenaD = (double) dCena;
 		Termin t = new Termin(c, true, tip, trajanjeD, cenaD, nadjenaSala, d);
 		terminService.save(t);
-		
 	}
 }

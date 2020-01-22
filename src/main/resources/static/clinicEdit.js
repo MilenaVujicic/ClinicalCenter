@@ -13,14 +13,12 @@ $(document).ready(()=>{
 			data: JSON.stringify({naziv, adresa, opis}), 
 			cache: false,
 			timeout: 600000,
-			success: function(ret){
+			success: function(){
 				console.log("SUCCESS: ");
-				alert("Klinika je uspesno izmenjena");
 
 			},
 			error: function(e){
 				console.log("ERROR: ", e);
-				alert("Doslo je do greske");
 			}
 		})
 	});
