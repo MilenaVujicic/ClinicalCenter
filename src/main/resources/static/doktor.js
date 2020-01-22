@@ -5,7 +5,11 @@ $(document).ready(()=>{
 	document.getElementById ("btnCancelExam").addEventListener("click", cancelPregled, false);
 	document.getElementById ("btnSaveOp").addEventListener("click", saveOperation, false);
 	document.getElementById ("btnCancelOp").addEventListener("click", cancelOperation, false);
+	document.getElementById ("aPersonalData").addEventListener("click", showPersonalData, false);
+	document.getElementById ("aDayOff").addEventListener("click", newAbsence, false);
+	document.getElementById ("bRequestHoliday").addEventListener("click", requestHoliday, false);
 })
+
 
 function home() { 
 	$('#examinationForm').attr('hidden', true);
@@ -16,6 +20,101 @@ function home() {
 	$('#examinationDiagnosis').attr('hidden', true);
 	$('#aboutPatient').attr('hidden', true);
 	$('#calendar').attr('hidden', true);
+	$('#absenceForm').attr('hidden', true);
+	$('#tPersonalData').attr('hidden', true);
+	$('#tPersonalDataH').attr('hidden', true);
+	$('#allPatients').parents('div.dataTables_wrapper').first().hide();
+
+}
+
+
+function newAbsence(event){
+	event.preventDefault();
+	$('#absenceForm').attr('hidden', false);
+	
+
+}
+
+function requestHoliday(){
+	let type = $('#selectRest').val();
+	let to = $('#aTo').val();
+	let from = $('#aFrom').val();
+	let url = "/doktor/odmor/" + type + "~" + from + "~" + to;
+	$.ajax({
+		url : url,
+		type: "GET",
+		success: function(response){
+			alert(response);
+			$('#restFrom').val('');
+       		$('#restTo').val('');
+       		home();
+		},
+		error: function() {
+   		alert('Something went wrong');
+		}
+	})
+}
+function showPersonalData(event){
+	event.preventDefault();
+	var id = 5;
+	$('#tPersonalData').attr('hidden', false);
+	$('#tPersonalDataH').attr('hidden', false);
+	$('#examinationForm').attr('hidden', true);
+	$('#schPatTable').attr('hidden', true);
+	$('#examForm').attr('hidden', true);
+	$('#operationForm').attr('hidden', true);
+	$('#allPatients').attr('hidden', true);
+	$('#examinationDiagnosis').attr('hidden', true);
+	$('#aboutPatient').attr('hidden', true);
+	$('#calendar').attr('hidden', true);
+	$('#absenceForm').attr('hidden', true);
+	$('#allPatients').parents('div.dataTables_wrapper').first().hide();
+	
+	$.ajax({
+		url: "/doktor/doctor_data/" + id,
+		type: "GET",
+		success: function(doktor){
+			
+			let tdName = $('<td></td>');
+			tdName.append(doktor.ime);
+	
+			let tdSurname = $('<td></td>');
+			tdSurname.append(doktor.prezime);
+			
+			let tdUsername = $('<td></td>');
+			tdUsername.append(doktor.username);
+			
+			let tdEmail = $('<td></td>');
+			tdEmail.append(doktor.email);
+			
+			let tdCity = $('<td></td>');
+			tdCity.append(doktor.grad);
+			
+			let tdCountry = $('<td></td>');
+			tdCountry.append(doktor.drzava);
+			
+			let tdAddress = $('<td></td>');
+			tdAddress.append(doktor.adresa);
+			
+			let tdPhone = $('<td></td>');
+			tdPhone.append(doktor.telefon);
+			
+			
+			$('#trName').append(tdName);
+			$('#trSurname').append(tdSurname);
+			$('#trUsername').append(tdUsername);
+			$('#trEmail').append(tdEmail);
+			$('#trCity').append(tdCity);
+			$('#trCountry').append(tdCountry);
+			$('#trAddress').append(tdAddress);
+			$('#trPhone').append(tdPhone);
+			
+		},
+		error: function(){
+			alert('Something went wrong');
+		}
+	
+	})
 }
 
 function stExam(pacijent) {
@@ -32,6 +131,11 @@ function stExam(pacijent) {
 	$('#patientID').val(pacijent.id);
 	$('#examForm').attr('hidden', true);
 	$('#operationForm').attr('hidden', true);
+	$('#absenceForm').attr('hidden', true);
+	$('#allPatients').parents('div.dataTables_wrapper').first().hide();
+	$('#tPersonalData').attr('hidden', true);
+	$('#tPersonalDataH').attr('hidden', true);
+	dijagnoze();
 }
 
 function startExamination(pacijent) {
@@ -45,6 +149,7 @@ function startExamination(pacijent) {
 		$('#patientSurname').val(pacijent.prezime);
 		$('#patientJMBG').val(pacijent.jmbg);
 		$('#patientID').val(pacijent.id);
+		$('#examinationID').val(0);
 	}
 }
 
@@ -66,10 +171,11 @@ function cancelRecipe() {
 	$('#recipePatientName').val('');
 	$('#recipePatientSurname').val('');
 	$('#recipePatientJMBG').val('');
+	$('#recipeDescribe').val('');
+	$('#recipeName').val('');
 	$('#examinationDiagnosis').attr('hidden', true);
 	$('#aboutPatient').attr('hidden', true);
 	$('#calendar').attr('hidden', true);
-
 }
 
 function dodajPregled() {
@@ -188,6 +294,10 @@ function scheduledPatients() {
 	$('#allPatients').attr('hidden', true);
 	$('#calendar').attr('hidden', true);
 	$('#examinationDiagnosis').attr('hidden', true);
+	$('#allPatients').parents('div.dataTables_wrapper').first().hide();
+	$('#aboutPatient').attr('hidden', true);
+	$('#tPersonalData').attr('hidden', true);
+	$('#tPersonalDataH').attr('hidden', true);
 	dijagnoze();
 	lekovi();
 	$.ajax({
@@ -208,12 +318,14 @@ function scheduledPatients() {
 }
 
 function saveExamination() {
-	let id = $('#patientID').val();
+	let id_pac = $('#patientID').val();
 	let naziv = $('#examinationName').val();
 	let anamneza = $('#examinationAnamnesis').val();
 	let cena = $('#examinationPrice').val();
 	let tipPregleda = $('#examinationType').val();
-	let url = 'doktor/posalji_pregled/' + id;
+	let id = $('#examinationID').val();
+	let url = 'doktor/posalji_pregled/'+ id_pac;
+	
 	$.ajax({
         url:"/dijagnoza/sve_dijagnoze",
         type:"GET",
@@ -228,7 +340,7 @@ function saveExamination() {
    			$.ajax({
    		        url:url,
    		        type:"POST",
-   		        data: JSON.stringify({naziv, anamneza, cena, tipPregleda}),
+   		        data: JSON.stringify({naziv, anamneza, cena, tipPregleda, id}),
    		        contentType:'application/json',
    		       	success: function(pregled) {
    		       		alert('Pregled uspesno unesen');
@@ -265,7 +377,7 @@ function saveRecipe() {
        		cancelRecipe();
        	},
        	error: function() {
-       		alert('Desila se greska');
+       		alert('Desila se greska.\nProverite da li ste odabrali lek.');
        	}
  	});
 }
@@ -321,6 +433,7 @@ function deleteExamination(id) {
 		});
 	}
 }
+
 
 function showDiagnose(dijagnoza) {
 	let tr = $('<tr></tr>');
@@ -468,9 +581,81 @@ function examinations(id) {
         type:"GET",
         success: function(pregledi) {
         	$('#allExaminations tbody').html('');
-        	alert(pregledi.length);
         	for(let pregled of pregledi) {
         		prikaziPregled(pregled);
+        	}
+        },
+        error: function() {
+        	alert('Desila se greska ovde');
+        }
+	});
+}
+
+function editOperation() {
+	let opis = document.getElementById("editOperationDesc").value;
+	let id = $('#editOperationID').val();
+	$.ajax({
+		url: 'operacija/izmeni',
+		type: "PUT",
+		data: JSON.stringify({id, opis}),
+        contentType:'application/json',
+        success: function() {
+        	$('#editOperation').attr('hidden', true);
+        	pacijent_id = document.getElementById("aboutPatientID").innerHTML;
+        	operations(pacijent_id);
+        },
+        error: function() {
+        	alert('Desila se greska kod izmene');
+        }
+		
+	});
+}
+
+function editOperations(operacija) {
+	return function() {
+		$('#editOperation').attr('hidden', false);
+		document.getElementById("editOperationDesc").value = operacija.opis;
+		$('#editOperationID').val(operacija.id);
+	}
+}
+
+function deleteOperation(operacija) {
+	return function() {
+		$.ajax({
+			url: 'operacija/obrisi/' + operacija.id,
+			type: "DELETE",
+			success: function() {
+				operations(operacija.pacijent.id);
+			},
+			error: function() {
+				alert('Desila se greska prilikom brisanja operacije');
+			}
+		});
+	}
+}
+
+function prikaziOperaciju(operacija) {
+	let tr = $('<tr></tr>');
+	let tdDescribe = $('<td>'+operacija.opis+'</td>');
+	let datum = operacija.datumIVremeOperacije.toString().substr(0, 10);
+	let tdDate =$('<td>'+datum+'</td>'); 
+	let aEditOperation = $('<td><a class="btn btn-success">Edit operation</a></td>');
+	aEditOperation.click(editOperations(operacija));
+	let aDeleteOperation = $('<td><a class="btn btn-danger">Delete operation</a></td>');
+	aDeleteOperation.click(deleteOperation(operacija));
+	tr.append(tdDescribe).append(tdDate).append(aEditOperation).append(aDeleteOperation);
+	$('#allOperation tbody').append(tr);
+}
+
+function operations(id) {
+	let url = "/operacija/sveOperacije/" + id;
+	$.ajax({
+        url:url,
+        type:"GET",
+        success: function(operacije) {
+        	$('#allOperation tbody').html('');
+        	for(let operacija of operacije) {
+        		prikaziOperaciju(operacija);
         	}
         },
         error: function() {
@@ -683,12 +868,15 @@ function medicalRecord(korisnik) {
            		document.getElementById("aboutPatientWeight").innerHTML = pacijent.tezina + "kg";
            		document.getElementById("aboutPatientDioptre").innerHTML = pacijent.dioptrija;
            		document.getElementById("aboutPatientID").innerHTML = pacijent.id;
+           		document.getElementById("aboutPatientBloodType").innerHTML = pacijent.krvna_grupa;
            		$('#allPatients').attr('hidden', true);
            		$('#aboutPatient').attr('hidden', false);
+           		$('#allPatients').parents('div.dataTables_wrapper').first().hide();
            		document.getElementById("title").innerHTML = "";
            		examinations(pacijent.id);
            		alergies(pacijent.id);
            		recipes(pacijent.id);
+           		operations(pacijent.id);
 	        },
            	error: function() {
            		alert('Desila se greska');
@@ -712,26 +900,52 @@ function prikaziPacijenta(pacijent, i) {
 }
 
 function allPatients() {
+	
 	$('#examinationForm').attr('hidden', true);
 	$('#schPatTable').attr('hidden', true);
-	$('#allPatients').attr('hidden', false);
+	$('#examForm').attr('hidden', true);
+	$('#operationForm').attr('hidden', true);
+
 	$('#examinationDiagnosis').attr('hidden', true);
+	$('#aboutPatient').attr('hidden', true);
 	$('#calendar').attr('hidden', true);
+	$('#absenceForm').attr('hidden', true);
+	$('#tPersonalData').attr('hidden', true);
+	$('#tPersonalDataH').attr('hidden', true);
+	
+	$('#allPatients').parents('div.dataTables_wrapper').first().show();
+
 	$.ajax({
         url:"/doktor/svi_pacijenti",
         type:"GET",
        	success: function(pacijenti) {
-       		$('#allPatients tbody').html('');
+       		var table = $('#allPatients').DataTable();
+       		table.destroy();
+       	    $('#allPatients tbody').html('');
        		let i = 0;
        		for (let pacijent of pacijenti) {
        			i = i + 1;
        			prikaziPacijenta(pacijent, i);
        		}
+       		$('#allPatients').DataTable({
+       	        "columnDefs": [ {
+       	          "targets": 'no-sort',
+       	          "orderable": false,
+       	        }]
+       		});
        	},
        	error: function() {
        		alert('Desila se greska');
        	}
  	});
+	
+	$('#examinationForm').attr('hidden', true);
+	$('#schPatTable').attr('hidden', true);
+	$('#allPatients').attr('hidden', false);
+	//$('#allPatients').empty();
+	$('#examinationDiagnosis').attr('hidden', true);
+	$('#calendar').attr('hidden', true);
+	$('#absenceForm').attr('hidden', true);
 	
 }
 
@@ -753,16 +967,18 @@ function editAbout() {
 	let visina = $('#editHeigth').val();
 	let tezina = $('#editWidth').val();
 	let dioptrija = $('#editDioptre').val();
+	let krvna_grupa = $('#editBloodType').val();
 	$.ajax({
         url:url,
         type:"PUT",
-        data: JSON.stringify({id, visina, tezina, dioptrija}),
+        data: JSON.stringify({id, visina, tezina, dioptrija, krvna_grupa}),
         contentType:'application/json',
         success: function() {
         	$('#editAbout').attr('hidden', true);
         	document.getElementById("aboutPatientHeight").innerHTML = visina + "cm";
         	document.getElementById("aboutPatientWeight").innerHTML = tezina + "kg";
         	document.getElementById("aboutPatientDioptre").innerHTML = dioptrija;
+        	document.getElementById("aboutPatientBloodType").innerHTML = krvna_grupa;
         },
         error: function() {
         	alert('Desila se greska');
@@ -773,15 +989,26 @@ function editAbout() {
 function examinationFor(id) {
 	if (id != 0) {
 		$.ajax({
-			url:"/korisnik/preuzmi/" + id,
-		    type:"GET",
-		   	success: function(korisnik){
-		   		stExam(korisnik);
+			url: 'pregled/preuzmi/' + id,
+			type:"GET",
+			success: function(pregled) {
+				$.ajax({
+					url:"/korisnik/preuzmi/" + pregled.pacijent.idKorisnik,
+				    type:"GET",
+				   	success: function(korisnik){
+				   		stExam(korisnik);
+				   		$('#examinationID').val(id);
+					},
+				   	error: function() {
+				   		alert('Desila se greska ovde');
+				   	}
+				});
 			},
-		   	error: function() {
-		   		alert('Desila se greska ovde');
-		   	}
+			error: function() {
+				alert('Greska kod preuzimanja pregleda');
+			}
 		});
+		
 	}
 }
 
@@ -816,7 +1043,7 @@ function cancelPregled(){
 
 
 
-function showCalendar(odsustva, pregledi) {
+function showCalendar(odsustva, pregledi, operacije) {
 	$('#calendar').attr('hidden', false);
 	let today = new Date();
 	$('#calendar').fullCalendar({
@@ -848,7 +1075,7 @@ function showCalendar(odsustva, pregledi) {
    	        type:"GET",
    	       	success: function(korisnik){
 	   	       	let color = 'blue';
-	   	       	let id = korisnik.id;
+	   	       	let id = pregled.id;
 	   			if (pregled.status == "ZAVRSEN") {
 	   				color = 'purple';
 	   				id = 0;
@@ -856,7 +1083,7 @@ function showCalendar(odsustva, pregledi) {
 
 	   		    let end = new Date(pregled.datumIVremePregleda);
 	   		    let start = new Date(pregled.datumIVremePregleda);
-	   		    end.setMinutes(end.getMinutes() + 30);
+	   		    end.setMinutes(end.getMinutes() + 15);
 	   		    let title = "Pregled:" + korisnik.ime + " " + korisnik.prezime;
 	   			var event={title: title , start:start, end:end, color:color, id:id};
 	   			$('#calendar').fullCalendar('renderEvent', event, true);
@@ -865,7 +1092,28 @@ function showCalendar(odsustva, pregledi) {
    	       		alert('Desila se greska ovde');
    	       	}
    		});
-		
+	}
+	
+	for (let operacija of operacije) {
+		$.ajax({
+   			url:"/doktor/pacijent_korisnik/" + operacija.pacijent.id,
+   	        type:"GET",
+   	       	success: function(korisnik){
+	   	       	let color = '#0492C2';
+	   	       	if (operacija.status == "ZAVRSEN") {
+	   				color = '#6968EC';
+	   			}
+	   	       	let end = new Date(operacija.datumIVremeOperacije);
+	   		    let start = new Date(operacija.datumIVremeOperacije);
+	   		    end.setMinutes(end.getMinutes() + 30);
+	   		    let title = "Operacija:" + korisnik.ime + " " + korisnik.prezime;
+	   			var event={title: title , start:start, end:end, color:color, id:0};
+	   			$('#calendar').fullCalendar('renderEvent', event, true);
+   	       	},
+   	       	error: function() {
+   	       		alert('Desila se greska ovde');
+   	       	}
+   		});
 	}
 	
 }
@@ -875,8 +1123,10 @@ function calendar() {
 	$('#examinationForm').attr('hidden', true);
 	$('#schPatTable').attr('hidden', true);
 	$('#allPatients').attr('hidden', true);
+	$('#allPatients').parents('div.dataTables_wrapper').first().hide();
 	$('#examinationDiagnosis').attr('hidden', true);
 	$('#aboutPatient').attr('hidden', true);
+	$('#absenceForm').attr('hidden', true);
 	$.ajax({
 		url:"/doktor/odsustva",
         type:"GET",
@@ -885,8 +1135,17 @@ function calendar() {
        			url:"/doktor/zakazani_pregledi",
        	        type:"GET",
        	       	success: function(pregledi){
-       	       		$('#calendar').fullCalendar('removeEvents');
-       	       		showCalendar(odsustva, pregledi);
+       	       		$.ajax({
+       	       			url: "/doktor/zakazane_operacije",
+       	       			type: "GET",
+       	       			success: function(operacije) {
+	       	       			$('#calendar').fullCalendar('removeEvents');
+	           	       		showCalendar(odsustva, pregledi, operacije);
+       	       			},
+       	       			error: function() {
+       	       				alert('Desila se greska kod operacija');
+       	       			}
+       	       		});
        	       	},
        	       	error: function() {
        	       		alert('Desila se greska ovde');
@@ -906,4 +1165,5 @@ function cancelOperation(){
 	$('#dateOp').val('');
 	$('#timeOp').val('');
 }
+
 

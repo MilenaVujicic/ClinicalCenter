@@ -28,17 +28,17 @@ insert into korisnik (ime, prezime, email, username, password, grad, drzava, jmb
 insert into korisnik (ime, prezime, email, username, password, grad, drzava, jmbg, adresa, telefon, datum_rodjenja, uloga, aktivan, aktiviran) values ('Petar', 'Milosevic', 'petar.mil@gmail.com','mili', 'mili', 'Beograd', 'Srbija', '6325440158741', 'Njegoseva 38', 113652985, '1973-4-9', 2, TRUE, TRUE);
 insert into korisnik (ime, prezime, email, username, password, grad, drzava, jmbg, adresa, telefon, datum_rodjenja, uloga, aktivan, aktiviran) values ('Klinika', 'KLinikikic', 'klinika.kl@gmail.com','klinika', 'klinika', 'Beograd', 'Srbija', '6325440158741', 'Njegoseva 38', 113652985, '1973-4-9', 1, TRUE, TRUE);
 
-insert into pacijent (id_korisnik, visina, tezina, dioptrija, klinika_id) values (1, 168, 70, -4.0, 1);
-insert into pacijent (id_korisnik, visina, tezina, dioptrija, klinika_id) values (2, 174, 88, 0.5, 1);
-insert into pacijent (id_korisnik, visina, tezina, dioptrija, klinika_id) values (5, 174, 88, 0.5, 1);
-insert into pacijent (id_korisnik, visina, tezina, dioptrija, klinika_id) values (6, 174, 88, 0.5, 1);
-insert into pacijent (id_korisnik, visina, tezina, dioptrija, klinika_id) values (10, 174, 88, 0.5, 1);
-insert into pacijent (id_korisnik, visina, tezina, dioptrija, klinika_id) values (11, 174, 88, 0.5, 1);
-insert into pacijent (id_korisnik, visina, tezina, dioptrija, klinika_id) values (12, 174, 88, 0.5, 1);
-insert into pacijent (id_korisnik, visina, tezina, dioptrija, klinika_id) values (13, 174, 88, 0.5, 1);
-insert into pacijent (id_korisnik, visina, tezina, dioptrija, klinika_id) values (14, 174, 88, 0.5, 1);
-insert into pacijent (id_korisnik, visina, tezina, dioptrija, klinika_id) values (15, 174, 88, 0.5, 1);
-insert into pacijent (id_korisnik, visina, tezina, dioptrija, klinika_id) values (16, 174, 88, 0.5, 1);
+insert into pacijent (id_korisnik, visina, tezina, dioptrija, klinika_id, krvna_grupa) values (1, 168, 70, -4.0, 1, 0);
+insert into pacijent (id_korisnik, visina, tezina, dioptrija, klinika_id, krvna_grupa) values (2, 174, 88, 0.5, 1, 1);
+insert into pacijent (id_korisnik, visina, tezina, dioptrija, klinika_id, krvna_grupa) values (5, 174, 88, 0.5, 1, 1);
+insert into pacijent (id_korisnik, visina, tezina, dioptrija, klinika_id, krvna_grupa) values (6, 174, 88, 0.5, 1, 2);
+insert into pacijent (id_korisnik, visina, tezina, dioptrija, klinika_id, krvna_grupa) values (10, 174, 88, 0.5, 1, 3);
+insert into pacijent (id_korisnik, visina, tezina, dioptrija, klinika_id, krvna_grupa) values (11, 174, 88, 0.5, 1, 0);
+insert into pacijent (id_korisnik, visina, tezina, dioptrija, klinika_id, krvna_grupa) values (12, 174, 88, 0.5, 1, 0);
+insert into pacijent (id_korisnik, visina, tezina, dioptrija, klinika_id, krvna_grupa) values (13, 174, 88, 0.5, 1, 2);
+insert into pacijent (id_korisnik, visina, tezina, dioptrija, klinika_id, krvna_grupa) values (14, 174, 88, 0.5, 1, 3);
+insert into pacijent (id_korisnik, visina, tezina, dioptrija, klinika_id, krvna_grupa) values (15, 174, 88, 0.5, 1, 3);
+insert into pacijent (id_korisnik, visina, tezina, dioptrija, klinika_id, krvna_grupa) values (16, 174, 88, 0.5, 1, 1);
 insert into administrator_klinike(id_korisnik, klinika_id) values (4, 1);
 insert into administrator_klinike(id_korisnik, klinika_id) values (19, 2);
 
@@ -94,16 +94,23 @@ insert into pregled (naziv, anamneza, datumivreme_pregleda, status, tip_pregleda
 insert into pregled (naziv, anamneza, datumivreme_pregleda, status, tip_pregleda, cena, doktor_id, pacijent_id, sala_id) values ('', '', '2-2-20 19:00:00', 0, '', 50, 1, 1, 1);
 insert into pregledi_dijagnoze(pregled_id, dijagnoza_id) values(1, 2);
 
-insert into operacija(pacijent_id, status, datumivreme_operacije, trajanje) values(1, 0, '1-1-2020 17:00', 0);
-insert into operacija(pacijent_id, status, datumivreme_operacije, trajanje) values(2, 0, '2-1-2020 17:00', 0);
-insert into operacija(pacijent_id, status, datumivreme_operacije, trajanje) values(2, 0, '3-2-2020 21:00', 0);
-insert into operacija(pacijent_id, status, datumivreme_operacije, trajanje) values(1, 0, '4-2-2020 20:00', 0);
-insert into operacija(pacijent_id, status, datumivreme_operacije, trajanje) values(1, 1, '10-1-2020 18:00', 0);
+
+insert into operacija(pacijent_id, status, datumivreme_operacije, trajanje) values(1, 0, '25-1-2020 17:00', 0);
+insert into operacija(pacijent_id, status, datumivreme_operacije, trajanje) values(2, 0, '25-1-2020 17:00', 0);
+insert into operacija(pacijent_id, status, datumivreme_operacije, trajanje) values(2, 0, '25-2-2020 21:00', 0);
+insert into operacija(pacijent_id, status, datumivreme_operacije, trajanje) values(1, 0, '25-2-2020 20:00', 0);
+insert into operacija(pacijent_id, status, datumivreme_operacije, trajanje, sala_id) values(1, 1, '29-1-2020 18:00', 0, 1);
+insert into operacija(pacijent_id, status, datumivreme_operacije, trajanje, opis, sala_id) values(1, 2, '5-1-2020 18:00', 0, 'Pacijentu je izvadjen umnjak', 1);
+insert into operacija(pacijent_id, status, datumivreme_operacije, trajanje, opis, sala_id) values(1, 2, '15-1-2020 18:00', 0, 'Pacijentu je izvadjen zub', 1);
+
+insert into operacije_doktori(doktor_id, operacija_id) values (1, 5);
+insert into operacije_doktori(doktor_id, operacija_id) values (1, 6);
+insert into operacije_doktori(doktor_id, operacija_id) values (1, 7);
+
 
 insert into odsustvo (korisnik_id, vrsta_odsustva, pocetak_odsustva, zavrsetak_odsustva, odobren) values (9, 0, '2019-12-25', '2020-01-07', TRUE);
 insert into odsustvo (korisnik_id, vrsta_odsustva, pocetak_odsustva, zavrsetak_odsustva, odobren) values (9, 1, '2020-01-25', '2020-01-28', TRUE);
 insert into odsustvo (korisnik_id, vrsta_odsustva, pocetak_odsustva, zavrsetak_odsustva, odobren) values (9, 1, '2020-02-25', '2020-02-28', FALSE);
-
 
 insert into usluga(naziv, opis, cena, klinika_id) values ('Pregled','Obican pregled','2000',1);
 

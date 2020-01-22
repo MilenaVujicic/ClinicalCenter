@@ -26,4 +26,12 @@ public class OperacijaService {
 	public Operacija save(Operacija operacija) {
 		return operacijaRespository.save(operacija);
 	}
+	
+	public List<Operacija> findAll() {
+		return operacijaRespository.findAll();
+	}
+	
+	public void delete(Operacija operacija) {
+		operacijaRespository.delete(operacija);
+	}
 }

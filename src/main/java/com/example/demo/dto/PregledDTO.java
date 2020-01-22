@@ -32,7 +32,6 @@ public class PregledDTO {
 	private Set<Dijagnoza> dijagnoze = new HashSet<Dijagnoza>();
 	private Set<Lek> lekovi = new HashSet<Lek>();
 	private StatusPregleda status;
-
 	private String imeDoktora;
 	private String prezimeDoktora;
 	
