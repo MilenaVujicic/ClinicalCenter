@@ -25,4 +25,8 @@ public class DijagnozaService {
 	public Dijagnoza findOne(Long id) {
 		return dijagnozaRepository.findById(id).orElse(null);
 	}
+	
+	public void delete(Dijagnoza dijagnoza) {
+		dijagnozaRepository.delete(dijagnoza);
+	}
 }

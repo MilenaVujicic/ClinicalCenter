@@ -7,7 +7,8 @@ function detaljanPrikazPacijenta(pacijent) {
 	       		$('#patientsTable').parents('div.dataTables_wrapper').first().hide();
 	       		$('#patientName').val(pacijent.ime)
 	       		$('#patientSurname').val(pacijent.prezime)
-	       		$('#patientBirth').val(pacijent.datumRodjenja)
+	       		let datum = pacijent.datumRodjenja.toString().substr(0, 10);
+	       		$('#patientBirth').val(datum)
 	       		$('#patientHeight').val(pacijenti.visina)
 	       		$('#patientWidth').val(pacijenti.tezina)
 	       		$('#patientAllergies').val(pacijenti.alergije);
@@ -29,7 +30,8 @@ function prikaziPacijenta(pacijent) {
 	let tr = $('<tr></tr>');
 	let tdIme = $('<td>'+pacijent.ime+'</td>');
 	let tdPrezime = $('<td>'+pacijent.prezime+'</td>');
-	let tdDatumRodjenja = $('<td>'+pacijent.datumRodjenja+'</td>');
+	let datum = pacijent.datumRodjenja.toString().substr(0, 10);
+	let tdDatumRodjenja = $('<td>'+datum+'</td>');
 	let tdJMBG = $('<td>'+pacijent.jmbg+'</td>');
 	let tdMore = $('<td><a href="#'+pacijent.ime+'_'+pacijent.prezime+'">More</a></td>');
 	tdMore.click(detaljanPrikazPacijenta(pacijent));
@@ -43,6 +45,7 @@ function home() {
 	$('#patient').attr('hidden', true);
 	$('#recipesForm').attr('hidden', true);
 	$('#restForm').attr('hidden', true);
+	$('#calendar').attr('hidden', true);
 	$('#patientID').val('');
 	document.getElementById("title").innerHTML = "";
 }
@@ -89,6 +92,7 @@ function unverifiedReciped() {
        		}
        		$('#patientsTable').attr('hidden', true);
 			$('#patient').attr('hidden', true);
+			$('#calendar').attr('hidden', true);
        	},
        	error: function() {
        		alert('Desila se greska');
@@ -125,6 +129,7 @@ function allPatients() {
 	$('#patient').attr('hidden', true);
 	$('#recipesForm').attr('hidden', true);
 	$('#restForm').attr('hidden', true);
+	$('#calendar').attr('hidden', true);
 }
 
 function requestHoliday() {
@@ -154,7 +159,52 @@ function rest() {
 	$('#patient').attr('hidden', true);
 	$('#recipesForm').attr('hidden', true);
 	$('#restForm').attr('hidden', false);
+	$('#calendar').attr('hidden', true);
 	document.getElementById("title").innerHTML = "Holiday request";
+}
+
+function showCalendar(odsustva) {
+	$('#calendar').attr('hidden', false);
+	let today = new Date();
+	$('#calendar').fullCalendar({
+	    header: {
+	        left: 'prev,next today',
+	        center: 'title',
+	        right: 'month,agendaWeek,agendaDay,listWeek'
+	    },
+	    defaultDate: today,
+	    navLinks: true,
+	    eventLimit: true
+	});
+	
+	for (let odsustsvo of odsustva) {
+		let color = 'red';
+		if (odsustsvo.odobren) {
+			color = 'green';
+		}
+		var event={title: odsustsvo.vrstaOdsustva , start:odsustsvo.pocetakOdsustva, end:odsustsvo.zavrsetakOdsustva, color:color};
+		$('#calendar').fullCalendar( 'renderEvent', event, true);
+	}
+}
+
+function calendar() {
+	$('#patientsTable').parents('div.dataTables_wrapper').first().hide();
+	$('#patientsTable').attr('hidden', true);
+	$('#patient').attr('hidden', true);
+	$('#recipesForm').attr('hidden', true);
+	$('#restForm').attr('hidden', true);
+	document.getElementById("title").innerHTML = "";
+	$.ajax({
+		url:"/medicinska_sestra/kalendar",
+        type:"GET",
+       	success: function(odsustva){
+       		$('#calendar').fullCalendar('removeEvents');
+       		showCalendar(odsustva);
+       	},
+       	error: function() {
+       		alert('Desila se greska');
+       	}
+	});
 }
 
 function personalData() {

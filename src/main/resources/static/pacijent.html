@@ -25,7 +25,8 @@
 	$(document).ready(()=>{
 		document.getElementById ("bPretraga").addEventListener ("click", searchUser, false);
 		document.getElementById ("bFilter").addEventListener ("click", filterUser, false);
-
+		let tdHead = $('<th id = "tdIme"><b>Ime</b></th><th id = "tdPrezime"><b>Prezime</b></th><th id = "tdID"><b>Jedinstveni Broj</b></th><th id = "tdLink"><b>Karton</b></th>');
+		$('#patientsTable thead').append(tdHead);
 	})
 
 	function home(){
@@ -73,8 +74,7 @@
 					$('#lPrezime').attr('hidden', true);
 					$('#lBr').attr('hidden', true);
 				}
-				let tdHead = $('<th id = "tdIme"><b>Ime</b></th><th id = "tdPrezime"><b>Prezime</b></th><th id = "tdID"><b>Jedinstveni Broj</b></th><th id = "tdLink"><b>Karton</b></th>');
-				$('#patientsTable thead').append(tdHead);
+				
 				for (i = 0; i < korisnici.length; i++){
 					
 					let tr = $('<tr></tr>');
@@ -98,6 +98,7 @@
 	
 	
 	function searchUser(){
+		$('#patientsTable tbody').empty();
 		let type = $('#sSearch').val();
 		let value = $('#tfSearch').val();
 		searchKorisnikF(type, value);		

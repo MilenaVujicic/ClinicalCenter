@@ -38,6 +38,7 @@ public class Doktor {
 	@ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
 	private Klinika klinika;
 	
+	@JsonIgnore
 	@ManyToMany(mappedBy = "doktori")
 	private Set<Operacija> operacije = new HashSet<Operacija>();
 	

@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Profil osoblja</title>
+
+    <!-- This file has been downloaded from Bootsnipp.com. Enjoy! -->
+    <link href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.0/css/bootstrap.min.css" rel="stylesheet">
+    
+    <script src="http://code.jquery.com/jquery-1.11.1.min.js"></script>
+    <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.0/js/bootstrap.min.js"></script>
+	<!-- Website CSS style -->
+	<link href="css/bootstrap.min.css" rel="stylesheet">
+	<link rel="stylesheet" href="doktor.css">
+	
+	<!-- Website Font style -->
+    <script src="https://kit.fontawesome.com/a065fea601.js" crossorigin="anonymous"></script>
+	<!-- Google Fonts -->
+	<link href='https://fonts.googleapis.com/css?family=Passion+One' rel='stylesheet' type='text/css'>
+	<link href='https://fonts.googleapis.com/css?family=Oxygen' rel='stylesheet' type='text/css'>
+
+	<script>
+		$(document).ready(()=>{
+			document.getElementById('btnSaveData').addEventListener('click', saveData, false);
+			document.getElementById('uName').addEventListener('click', nameColor, false);
+			document.getElementById('uSurname').addEventListener('click', surnameColor, false);
+			document.getElementById('uEmail').addEventListener('click', emailColor, false);
+			document.getElementById('uPassword').addEventListener('click', passColor, false);
+			document.getElementById('uCity').addEventListener('click', cityColor, false);
+			document.getElementById('uCountry').addEventListener('click', countryColor, false);
+			document.getElementById('uAddress').addEventListener('click', addressColor, false);
+			document.getElementById('uPhone').addEventListener('click', phoneColor, false);
+			
+			
+			
+			let k;
+			var d = retData();
+			d.success(function(korisnik){
+				
+				k = korisnik;
+				$('#uName').val(k.ime);
+				$('#uSurname').val(k.prezime);
+				$('#uEmail').val(k.email);
+				$('#uPassword').val(k.password);
+				$('#uCity').val(k.grad);
+				$('#uCountry').val(k.drzava);
+				$('#uAddress').val(k.adresa);
+				$('#uPhone').val(k.telefon);
+			})
+			
+			
+			
+		});
+		
+		function nameColor(){
+			$('#uName').css('background-color', '#ffffff');
+		}
+		
+		function surnameColor(){
+			$('#uSurname').css('background-color', '#ffffff');
+		}
+		
+		function emailColor(){
+			$('#uEmail').css('background-color', '#ffffff');
+		}
+		
+		function passColor(){
+			$('#uPassword').css('background-color', '#ffffff');
+		}
+		
+		function cityColor(){
+			$('#uCity').css('background-color', '#ffffff');
+		}
+		
+		function countryColor(){
+			$('#uCountry').css('background-color', '#ffffff');
+		}
+		
+		function addressColor(){
+			$('#uAddress').css('background-color', '#ffffff');
+		}
+		
+		function phoneColor(){
+			$('#uPhone').css('background-color', '#ffffff');
+		}
+		function retData(){
+			id = 1;
+			return $.ajax({
+				url:'korisnik/podaci/' + id,
+				type: 'GET'
+			});
+		}
+		
+		
+		function saveData(){
+			let id = 1;
+			let ime = $('#uName').val();
+			let prezime = $('#uSurname').val();
+			let password = $('#uPassword').val();
+			let email = $('#uEmail').val();
+			let grad = $('#uCity').val();
+			let drzava = $('#uCountry').val();
+			let adresa = $('#uAddress').val();
+			let telefon = $('#uPhone').val();
+			
+			let err = false;
+			if(ime === ''){
+				$('#uName').css('background-color', '#ff0000');
+				err = true;
+			}
+			if(prezime === ''){
+				$('#uSurname').css('background-color', '#ff0000');
+				err = true;
+			}
+			if(password === ''){
+				$('#uPassword').css('background-color', '#ff0000');
+				err = true;
+			}
+			if(email === ''){
+				$('#uEmail').css('background-color', '#ff0000');
+				err = true;
+			}
+			if(grad === ''){
+				$('#uCity').css('background-color', '#ff0000');
+				err = true;
+			}
+			if(drzava === ''){
+				$('#uCountry').css('background-color', '#ff0000');
+				err = true;
+			}
+			if(adresa === ''){
+				$('#uAddress').css('background-color', '#ff0000');
+				err = true;
+			}
+			if(telefon === ''){
+				$('#uPhone').css('background-color', '#ff0000');
+				err = true;
+			}
+			
+			if(err){
+				alert('The fields must not be empty');
+				return;
+			}
+			$.ajax({
+				url: 'korisnik/izmena_podataka/' + id,
+				type: 'PUT',
+				data: JSON.stringify({ime, prezime, password, grad, drzava, adresa, telefon, email}),
+				contentType: 'application/json',
+				success: function(){
+					alert('Data successfully changed');
+				},
+				error: function(){
+					alert('Something went wrong');
+				}
+			})
+		}
+	</script>
+</head>
+<h3>Change your data</h3>
+<form id = "editForm">
+<div class="form-row">
+	<div class="form-group col-md-12">
+		<label for="name">Name:</label>
+		<input type="text" class="form-control" id="uName" >
+	</div>
+</div>
+
+<div class="form-row">
+	<div class="form-group col-md-12">
+		<label for="surname">Surname:</label>
+		<input type="text" class="form-control" id="uSurname" >
+	</div>
+</div>
+
+<div class="form-row">
+	<div class="form-group col-md-12">
+		<label for="email">Email:</label>
+		<input type="text" class="form-control" id="uEmail" >
+	</div>
+</div>
+
+<div class="form-row">
+	<div class="form-group col-md-12">
+		<label for="password">Password:</label>
+		<input type="password" class="form-control" id="uPassword" >
+	</div>
+</div>
+
+<div class="form-row">
+	<div class="form-group col-md-12">
+		<label for="name">City:</label>
+		<input type="text" class="form-control" id="uCity" >
+	</div>
+</div>
+
+<div class="form-row">
+	<div class="form-group col-md-12">
+		<label for="country">Country:</label>
+		<input type="text" class="form-control" id="uCountry" >
+	</div>
+</div>
+
+<div class="form-row">
+	<div class="form-group col-md-12">
+		<label for="address">Address:</label>
+		<input type="text" class="form-control" id="uAddress" >
+	</div>
+</div>
+
+<div class="form-row">
+	<div class="form-group col-md-12">
+		<label for="phone">Phone:</label>
+		<input type="text" class="form-control" id="uPhone" >
+	</div>
+</div>
+
+<div class="form-row">
+	<div class="form-group col-md-1">
+		<a class="btn btn-primary" id = "btnSaveData">Save new data</a>
+	</div>
+</div>
+</form>
+</body>
+</html>

@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -14,7 +15,12 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.example.demo.dto.PregledDTO;
 import com.example.demo.model.Pregled;
+import com.example.demo.model.StatusPregleda;
 import com.example.demo.service.PregledService;
+
+import net.minidev.json.JSONObject;
+import net.minidev.json.parser.JSONParser;
+import net.minidev.json.parser.ParseException;
 
 
 @RestController
@@ -29,10 +35,11 @@ public class PregledController {
 		List<Pregled> sviPregledi = pregledService.findAll();
 		List<Pregled> pregledi = new ArrayList<Pregled>();
 		for (Pregled pregled : sviPregledi) {
-			if (pregled.getPacijent().getId().equals(identifikacija)) {
+			if (pregled.getPacijent().getId().equals(identifikacija) && pregled.getStatus().equals(StatusPregleda.ZAVRSEN)) {
 				pregledi.add(pregled);
 			}
 		}
+		System.out.println("#############" + pregledi.size());
 		return new ResponseEntity<List<Pregled>>(pregledi, HttpStatus.OK);
 	}
 	
@@ -53,4 +60,11 @@ public class PregledController {
 		pregledService.delete(pregled);
 		return new ResponseEntity<String>("", HttpStatus.OK);
 	}
+	
+	@RequestMapping(value = "/preuzmi/{id}", method = RequestMethod.GET)
+	public ResponseEntity<Pregled> preuzmi(@PathVariable("id") Long identifikacija) {
+		Pregled pregled = pregledService.findOne(identifikacija);
+		return new ResponseEntity<Pregled>(pregled, HttpStatus.OK);
+	}
+
 }
