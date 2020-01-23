@@ -214,6 +214,24 @@ public class PacijentController {
 		return new ResponseEntity<>(doktoriDTO, HttpStatus.OK);	
 	}
 	
+	@RequestMapping(value = "/oceniKliniku", method = RequestMethod.PUT)
+	public ResponseEntity<String> oceniKliniku(@RequestParam(value="id_klinike") int id,
+											   @RequestParam(value="ocena") int ocena) {
+		
+		
+		Long id_l = Integer.toUnsignedLong(id);
+		Klinika k = klinikaService.findOne(id_l);
+		double prethodnaProsecnaOcena = k.getProsecnaOcena();
+		k.setBrojOcena(k.getBrojOcena()+1);
+		k.setSumaOcena(k.getSumaOcena()+ocena);
+		double prosecnaOcena =(double)k.getSumaOcena()/(double)k.getBrojOcena();
+		System.out.println("prethodna prosecna ocena je: "+prethodnaProsecnaOcena+" a ocena je: "+prosecnaOcena);
+		k.setProsecnaOcena(prosecnaOcena);
+		
+		k = klinikaService.save(k);
+		return new ResponseEntity<String>("",HttpStatus.OK);
+	}
+	
 	@RequestMapping(value = "/oceniDoktora", method = RequestMethod.PUT)
 	public ResponseEntity<String> oceniDoktora(@RequestParam(value="id_pregleda") int id,
 											   @RequestParam(value="ocena") int ocena) {
@@ -233,10 +251,30 @@ public class PacijentController {
 		return new ResponseEntity<String>("",HttpStatus.OK);
 	}
 	
+	@RequestMapping(value = "/poseceneKlinike", method = RequestMethod.GET)
+	public ResponseEntity<List<Klinika>> getKlinike(@RequestParam(value="id") int id) {
+		Long id_l = Integer.toUnsignedLong(id);
+		Pacijent p = pacijentService.findByIdKorisnik(id_l);
+		List<Pregled> pregledi = pregledService.findByPatientId(p.getId());
+		
+		List<Klinika> klinike = new ArrayList<Klinika>();
+		for(Pregled preg : pregledi) {
+			if(!klinike.contains(preg.getDoktor().getKlinika()))
+				klinike.add(preg.getDoktor().getKlinika());
+			
+		}
+		
+		for(Klinika kl : klinike) {
+			//System.out.println(kl.getIme());
+		}
+				
+		return new ResponseEntity<List<Klinika>>(klinike,HttpStatus.OK);
+	}
+	
 	@RequestMapping(value = "/pregledi", method = RequestMethod.GET)
 	@ResponseStatus(value = HttpStatus.OK)
 	public ResponseEntity<List<PregledDTO>> getPregledi(@RequestParam(value="id") int id)	{
-		System.out.println(id);
+		//System.out.println(id);
 		Long id_l = Integer.toUnsignedLong(id);
 		Pacijent p = pacijentService.findByIdKorisnik(id_l);
 		List<Pregled> pregledi = pregledService.findByPatientId(p.getId());
