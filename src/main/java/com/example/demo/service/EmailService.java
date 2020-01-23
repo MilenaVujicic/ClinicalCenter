@@ -1,5 +1,6 @@
 package com.example.demo.service;
 
+import java.util.Calendar;
 import java.util.Date;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,6 +14,7 @@ import org.springframework.stereotype.Service;
 import com.example.demo.model.Doktor;
 import com.example.demo.model.Klinika;
 import com.example.demo.model.Korisnik;
+import com.example.demo.model.Odsustvo;
 import com.example.demo.model.Operacija;
 import com.example.demo.model.Pregled;
 import com.example.demo.model.UlogaKorisnika;
@@ -198,6 +200,46 @@ public class EmailService {
 					+"\nUspesno je odradjena automatsko zakazivanje operacija za pacijenta: " + pacijent.getIme() + " " + pacijent.getPrezime() + "."
 					+"\nOperacija je zakazana za: " + operacija.getDatumIVremeOperacije().getTime() + " u sali: " + operacija.getSala().getIme());
 					
+		mail.setSentDate(new Date());
+		System.out.println(mail);
+		javaMailSender.send(mail);
+		System.out.println("Email poslat!");
+	}
+	
+	@Async
+	public void sendAbsenceAccept(Korisnik osoblje, Odsustvo o){
+		SimpleMailMessage mail = new SimpleMailMessage();
+		mail.setTo("isaps174@gmail.com");
+		mail.setFrom(env.getProperty("spring.mail.username"));
+		mail.setSubject("Odobreno odsustvo");
+		
+		String startDate = o.getPocetakOdsustva().get(Calendar.DATE) + "." +  o.getPocetakOdsustva().get(Calendar.MONTH) + "." +  o.getPocetakOdsustva().get(Calendar.YEAR) + ".";
+		String endDate = o.getZavrsetakOdsustva().get(Calendar.DATE) + "." +  o.getZavrsetakOdsustva().get(Calendar.MONTH) + "." +  o.getZavrsetakOdsustva().get(Calendar.YEAR) + ".";
+		mail.setText("Postovani/-a " + osoblje.getIme() + " " + osoblje.getPrezime() + ","
+				+"\nVas zahtev za odmor od dana: " + startDate + " do dana: " + endDate 
+				+"\nje ODOBREN");
+				
+		
+		mail.setSentDate(new Date());
+		System.out.println(mail);
+		javaMailSender.send(mail);
+		System.out.println("Email poslat!");
+	}
+	
+	@Async
+	public void senAbsenceDeny(Korisnik osoblje, Odsustvo o, String razlog) {
+		SimpleMailMessage mail = new SimpleMailMessage();
+		mail.setTo("isaps174@gmail.com");
+		mail.setFrom(env.getProperty("spring.mail.username"));
+		mail.setSubject("Odbijeno odsustvo");
+		
+		String startDate = o.getPocetakOdsustva().get(Calendar.DATE) + "." +  o.getPocetakOdsustva().get(Calendar.MONTH) + "." +  o.getPocetakOdsustva().get(Calendar.YEAR) + ".";
+		String endDate = o.getZavrsetakOdsustva().get(Calendar.DATE) + "." +  o.getZavrsetakOdsustva().get(Calendar.MONTH) + "." +  o.getZavrsetakOdsustva().get(Calendar.YEAR) + ".";
+		mail.setText("Postovani/-a " + osoblje.getIme() + " " + osoblje.getPrezime() + ","
+				+"\nVas zahtev za odmor od dana: " + startDate + " do dana: " + endDate 
+				+"\nje ODBIJEN iz razloga: " + razlog);
+				
+		
 		mail.setSentDate(new Date());
 		System.out.println(mail);
 		javaMailSender.send(mail);

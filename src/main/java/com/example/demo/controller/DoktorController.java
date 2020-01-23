@@ -322,7 +322,12 @@ public class DoktorController {
 			Korisnik kor = korisnikService.findOne(doktor.getIdKorisnik());
 			
 			for (Odsustvo od : kor.getOdsustva()) {
-				if (od.getPocetakOdsustva().compareTo(operacija.getDatumIVremeOperacije().getTime()) < 0 && od.getZavrsetakOdsustva().compareTo(operacija.getDatumIVremeOperacije().getTime()) > 0){
+				/*if (od.getPocetakOdsustva().compareTo(operacija.getDatumIVremeOperacije().getTime()) < 0 && od.getZavrsetakOdsustva().compareTo(operacija.getDatumIVremeOperacije().getTime()) > 0){
+					nasla = true;
+					continue;
+				}*/
+				
+				if(od.getPocetakOdsustva().compareTo(operacija.getDatumIVremeOperacije())<0 && od.getZavrsetakOdsustva().compareTo(operacija.getDatumIVremeOperacije())>0) {
 					nasla = true;
 					continue;
 				}
@@ -356,6 +361,7 @@ public class DoktorController {
 		return new ResponseEntity<KorisnikDTO>(retVal, HttpStatus.OK);
 	}
 	
+	@SuppressWarnings("deprecation")
 	@RequestMapping(value = "/odmor/{text}", method = RequestMethod.GET)
 	public ResponseEntity<String> odmor(@PathVariable("text") String text) throws java.text.ParseException, ParseException {
 		String[] splitter = text.split("~");
@@ -371,14 +377,19 @@ public class DoktorController {
 		}
 		DateFormat format = new SimpleDateFormat("dd.MM.yyyy", Locale.ENGLISH);
 		
-		Date today = new Date();
-		Date date1 = new Date(today.getTime() + (1000 * 60 * 60 * 24));
-		
-		date1 = format.parse(from);
+		//Date today = new Date();
+		//Date date1 = new Date(today.getTime() + (1000 * 60 * 60 * 24));
+		Calendar today = Calendar.getInstance();
+		Calendar date1 = Calendar.getInstance();
+		date1.add(Calendar.DATE, 1);
+		Date temp1 = format.parse(from);
+		date1.set(temp1.getYear(), temp1.getMonth(), temp1.getDate());
 		odsustvo.setPocetakOdsustva(date1);
 		
-		Date date2 = today;
-		date2 = format.parse(to);
+		//Date date2 = today;
+		Calendar date2 = Calendar.getInstance();
+		Date temp2 = format.parse(to);
+		date2.set(temp2.getYear(), temp2.getMonth(), temp2.getDate());
 		odsustvo.setZavrsetakOdsustva(date2);
 		
 		if (date1.compareTo(date2) > 0) {

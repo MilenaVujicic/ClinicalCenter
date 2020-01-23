@@ -90,6 +90,7 @@ public class MedicinskaSestraController {
 		return new ResponseEntity<String>("Uspesno su overeni recepti", HttpStatus.OK);
 	}
 	
+	@SuppressWarnings("deprecation")
 	@RequestMapping(value = "/odmor/{text}", method = RequestMethod.GET)
 	public ResponseEntity<String> odmor(@PathVariable("text") String text) {
 		String[] splitter = text.split("~");
@@ -105,20 +106,25 @@ public class MedicinskaSestraController {
 		}
 		DateFormat format = new SimpleDateFormat("dd.MM.yyyy", Locale.ENGLISH);
 		
-		Date today = new Date();
-		Date date1 = new Date(today.getTime() + (1000 * 60 * 60 * 24));
-		
+		//Date today = new Date();
+		Calendar today = Calendar.getInstance();
+		//Date date1 = new Date(today.getTime() + (1000 * 60 * 60 * 24));
+		Calendar date1 = today;
+		date1.add(Calendar.DATE, 1);
 		try {
-			date1 = format.parse(from);
+			Date temp = format.parse(from);
+			date1.set(temp.getYear(),temp.getMonth() ,temp.getDate());
 			odsustvo.setPocetakOdsustva(date1);
 		} catch (ParseException e) {
 			// TODO Auto-generated catch block
 			System.out.println(e);
 		}
 		
-		Date date2 = today;
+		Calendar date2 = Calendar.getInstance();
 		try {
-			date2 = format.parse(to);
+			Date temp = format.parse(to);
+			date2.set(temp.getYear(), temp.getMonth(), temp.getDate());
+	
 			odsustvo.setZavrsetakOdsustva(date2);
 		} catch (ParseException e) {
 			// TODO Auto-generated catch block

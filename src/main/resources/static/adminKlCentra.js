@@ -63,7 +63,9 @@ function newClinicAdministrator() {
 			$('#editDiagnosis').attr('hidden', true);
         }
     });
+	
 }
+
 
 function newAdministrator() {
 	let ime = $('#name').val();
