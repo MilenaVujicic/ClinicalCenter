@@ -11,6 +11,11 @@
     <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.0/js/bootstrap.min.js"></script>
     <script src="./js/medicinskaSestra.js" type="text/javascript"></script>
 
+	<!-- DATATABLES -->
+	<script src="https://cdn.datatables.net/1.10.20/js/dataTables.bootstrap.min.js"></script>
+	<script src="https://cdn.datatables.net/1.10.20/js/jquery.dataTables.min.js"></script>
+	<link rel="stylesheet" href="https://cdn.datatables.net/1.10.20/css/dataTables.bootstrap.min.css">
+
 	<!-- Website CSS style -->
 	<link href="css/bootstrap.min.css" rel="stylesheet">
 	<link rel="stylesheet" href="medicinskaSestra.css">
@@ -20,7 +25,12 @@
 	<!-- Google Fonts -->
 	<link href='https://fonts.googleapis.com/css?family=Passion+One' rel='stylesheet' type='text/css'>
 	<link href='https://fonts.googleapis.com/css?family=Oxygen' rel='stylesheet' type='text/css'>
-	<script>		
+	<script>
+	
+		/* $(document).ready(function () {
+			$('#clinicsTable').DataTable();
+		}); */
+	
 		function prikaziKliniku(klinika) {
 			let tr = $('<tr></tr>');
 			let tdIme = $('<td>'+klinika.ime+'</td>');
@@ -96,9 +106,8 @@
 	      <a class="navbar-brand">Clinical center</a>
 	    </div>
 	    <ul class="nav navbar-nav">
-	      <li><a onclick="return home();">Home</a></li>
+	      <li><a href="pacijentHomePage.html">Home</a></li>
 	      <li><a onclick="return allClinics()">All clinics</a></li>
-	      <li><a onclick="return personalData()">Personal data</a></li>
 	    </ul>
 	    <ul class="nav navbar-nav navbar-right">
 	      <li><a href="#"><span class="glyphicon glyphicon-log-out"></span> Logout</a></li>
