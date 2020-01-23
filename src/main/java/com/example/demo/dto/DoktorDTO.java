@@ -20,7 +20,9 @@ public class DoktorDTO {
 	private Set<Operacija> operacijeZavrsene = new HashSet<Operacija>();
 	private Set<Odsustvo> odsustva = new HashSet<Odsustvo>();
 	private ArrayList<Integer> ocene = new ArrayList<Integer>();
-	private double prosecnaOcena = 0;
+	private double prosecnaOcena;
+	private int brojOcena;
+	private int sumaOcena;
 	private Set<Recept> ispisaniRecepti = new HashSet<Recept>();
 	private String specijalizacija;
 	private Long idKorisnik;
@@ -34,7 +36,7 @@ public class DoktorDTO {
 	
 	public DoktorDTO(Long id, Set<Pregled> preglediZakazani, Set<Pregled> preglediZavrseni,
 			Set<Operacija> operacijeZakazane, Set<Operacija> operacijeZavrsene, Set<Odsustvo> odsustva,
-			ArrayList<Integer> ocene, double prosecnaOcena, Set<Recept> ispisaniRecepti,String specijalizacija, Set<Termin> termini) {
+			ArrayList<Integer> ocene, double prosecnaOcena, int brojOcena, int sumaOcena, Set<Recept> ispisaniRecepti,String specijalizacija, Set<Termin> termini) {
 		super();
 		this.id = id;
 		this.preglediZakazani = preglediZakazani;
@@ -44,6 +46,8 @@ public class DoktorDTO {
 		this.odsustva = odsustva;
 		this.ocene = ocene;
 		this.prosecnaOcena = prosecnaOcena;
+		this.brojOcena = brojOcena;
+		this.sumaOcena = sumaOcena;
 		this.ispisaniRecepti = ispisaniRecepti;
 		this.specijalizacija = specijalizacija;
 		this.termini = termini;
@@ -175,6 +179,24 @@ public class DoktorDTO {
 	public void setTermini(Set<Termin> termini) {
 		this.termini = termini;
 	}
+	
+	public int getBrojOcena() {
+		return brojOcena;
+	}
+	
+	public void setBrojOcena(int brojOcena) {
+		this.brojOcena = brojOcena;
+	}
+	
+	public int getSumaOcena() {
+		return sumaOcena;
+	}
+	
+	public void setSumaOcena(int sumaOcena) {
+		this.sumaOcena = sumaOcena;
+	}
+	
+	
 	
 	
 	

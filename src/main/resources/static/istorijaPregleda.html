@@ -14,6 +14,7 @@
 	<!-- Website CSS style -->
 	<link href="css/bootstrap.min.css" rel="stylesheet">
 	<link rel="stylesheet" href="medicinskaSestra.css">
+	<link rel="stylesheet" type="text/css" href="rating.css">
 	
 	<!-- Website Font style -->
     <script src="https://kit.fontawesome.com/a065fea601.js" crossorigin="anonymous"></script>
@@ -21,6 +22,8 @@
 	<link href='https://fonts.googleapis.com/css?family=Passion+One' rel='stylesheet' type='text/css'>
 	<link href='https://fonts.googleapis.com/css?family=Oxygen' rel='stylesheet' type='text/css'>
 	<script>
+	
+	
 	
 	function prikaziPregled(pregled) {
 		let tr = $('<tr></tr>');
@@ -30,13 +33,116 @@
 		let tdAnamneza = $('<td>'+pregled.anamneza+'</td>');
 		let tdCena = $('<td>'+pregled.cena+'</td>');
 		let tdImeIPrezimeDoktora = $('<td>'+pregled.imeDoktora+' '+pregled.prezimeDoktora+'</td>');
-		tr.append(tdId).append(tdNaziv).append(tdDatumIVreme).append(tdAnamneza).append(tdCena).append(tdImeIPrezimeDoktora);
+		let tdOceniDoktora = $('<td>'+'<a id="'+pregled.id+'" onClick="prikaziModal(this.id)">Oceni</a>'+ '</td>');
+		tr.append(tdId).append(tdNaziv).append(tdDatumIVreme).append(tdAnamneza).append(tdCena).append(tdImeIPrezimeDoktora).append(tdOceniDoktora);
 		$('#preglediTable tbody').append(tr);
+	}
+	
+	function prikaziKliniku(klinika) {
+		let tr = $('<tr></tr>');
+		let tdId = $('<td>'+klinika.id+'</td>');
+		let tdIme = $('<td>'+klinika.ime+'</td>');
+		let tdAdresa = $('<td>'+klinika.adresa+'</td>');
+		let tdOpis = $('<td>'+klinika.opis+'</td>');
+		let tdProsecnaOcena = $('<td>'+klinika.prosecnaOcena+'</td>');
+		let tdOceniKliniku = $('<td>'+'<a id="'+klinika.id+'" onClick="prikaziModal2(this.id)">Oceni</a>'+ '</td>');
+		tr.append(tdId).append(tdIme).append(tdAdresa).append(tdOpis).append(tdProsecnaOcena).append(tdOceniKliniku);
+		$('#klinikeTable tbody').append(tr);
+	}
+	
+	function prikaziModal(id_pregleda) {
+		// Get the modal
+		var modal = document.getElementById("myModal");
+
+
+		// Get the <span> element that closes the modal
+		var span = document.getElementsByClassName("close")[0];
+
+
+		// When the user clicks on <span> (x), close the modal
+		span.onclick = function() {
+		  modal.style.display = "none";
+		}
+
+		// When the user clicks anywhere outside of the modal, close it
+		window.onclick = function(event) {
+		  if (event.target == modal) {
+		    modal.style.display = "none";
+		  }
+		}
+		
+		modal.style.display = "block";
+		var x = document.getElementsByName("doktorStar");
+		$(x).change(function() {
+			  let ocena = this.value;
+			  
+			  $.ajax({
+					type: 'PUT',
+					url:'pacijent/oceniDoktora',
+					data: {
+						id_pregleda:id_pregleda,
+						ocena:ocena
+					},
+					success: function() {
+						modal.style.display = "none";
+						alert('Doktor uspesno ocenjen!');
+						location.reload();
+					},
+					error: function() {
+		           		alert('Desila se greska');
+		           	}
+				});
+		});
+	}
+	
+	function prikaziModal2(id_klinike) {
+		// Get the modal
+		var modal = document.getElementById("myModal2");
+
+
+		// Get the <span> element that closes the modal
+		var span = document.getElementsByClassName("close")[0];
+
+
+		// When the user clicks on <span> (x), close the modal
+		span.onclick = function() {
+		  modal.style.display = "none";
+		}
+
+		// When the user clicks anywhere outside of the modal, close it
+		window.onclick = function(event) {
+		  if (event.target == modal) {
+		    modal.style.display = "none";
+		  }
+		}
+		
+		modal.style.display = "block";
+		var x = document.getElementsByName("klinikaStar");
+		$(x).change(function() {
+			  let ocena = this.value;
+			  
+			  $.ajax({
+					type: 'PUT',
+					url:'pacijent/oceniKliniku',
+					data: {
+						id_klinike:id_klinike,
+						ocena:ocena
+					},
+					success: function() {
+						modal.style.display = "none";
+						alert('Klinika uspesno ocenjena!');
+						location.reload();
+					},
+					error: function() {
+		           		alert('Desila se greska');
+		           	}
+				});
+		});
 	}
 	
 	function home() {
 		$('#preglediTable').attr('hidden', true);
-		
+   		$('#klinikaTable').attr('hidden',true);
 	}
 	
 	function istorijaPregleda() {
@@ -58,6 +164,21 @@
            		alert('Desila se greska');
            	}
 		});
+		
+		$.ajax({
+   			type: 'GET',
+			url:'pacijent/poseceneKlinike',
+			data: {
+				id:id
+			},
+			success: function(klinike) {
+				$('#klinikeTable tbody').html('');
+				for (i = 0; i < klinike.length; i++) {
+           			prikaziKliniku(klinike[i]);
+           		}
+				$('#klinikeTable').attr('hidden', false);
+			}
+   		});
 	}
 
 	</script>
@@ -88,11 +209,116 @@
 	      <th scope="col">Anamneza</th>
 	      <th scope="col">Cena</th>
 	      <th scope="col">Doktor</th>
+	      <th scope="col">Oceni doktora</th>
 	    </tr>
 	  </thead>
 	  <tbody>
 	  	
 	  </tbody>
 	</table>
+	
+	
+	
+	<table class="table" id="klinikeTable" hidden="true">
+	  <thead>
+	    <tr>
+	      <th scope="col">Id klinike</th>
+	      <th scope="col">Ime klinike</th>
+	      <th scope="col">Adresa klinike</th>
+	      <th scope="col">Opis klinike</th>
+	      <th scope="col">Prosecna ocena</th>
+	      <th scope="col">Oceni kliniku</th>
+	    </tr>
+	  </thead>
+	  <tbody>
+	  	
+	  </tbody>
+	</table>
+	
+	
+		<!-- The Modal -->
+	<div id="myModal" class="modal">
+	
+			<!-- Modal content -->
+	  <div class="modal-content">
+	    <span class="close">&times;</span>
+	    <p style="font-size:30px;">Ocena Doktora</p>
+	    <form class="rating">
+		  <label>
+		    <input type="radio" name="doktorStar" value="1" />
+		    <span class="icon">★</span>
+		  </label>
+		  <label>
+		    <input type="radio" name="doktorStar" value="2" />
+		    <span class="icon">★</span>
+		    <span class="icon">★</span>
+		  </label>
+		  <label>
+		    <input type="radio" name="doktorStar" value="3" />
+		    <span class="icon">★</span>
+		    <span class="icon">★</span>
+		    <span class="icon">★</span>   
+		  </label>
+		  <label>
+		    <input type="radio" name="doktorStar" value="4" />
+		    <span class="icon">★</span>
+		    <span class="icon">★</span>
+		    <span class="icon">★</span>
+		    <span class="icon">★</span>
+		  </label>
+		  <label>
+		    <input type="radio" name="doktorStar" value="5" />
+		    <span class="icon">★</span>
+		    <span class="icon">★</span>
+		    <span class="icon">★</span>
+		    <span class="icon">★</span>
+		    <span class="icon">★</span>
+		  </label>
+		</form>
+	  </div>
+	</div>
+	
+	<!-- The Modal -->
+	<div id="myModal2" class="modal">
+	
+			<!-- Modal content -->
+	  <div class="modal-content">
+	    <span class="close">&times;</span>
+	    <p style="font-size:30px;">Ocena Klinike</p>
+	    <form class="rating">
+		  <label>
+		    <input type="radio" name="klinikaStar" value="1" />
+		    <span class="icon">★</span>
+		  </label>
+		  <label>
+		    <input type="radio" name="klinikaStar" value="2" />
+		    <span class="icon">★</span>
+		    <span class="icon">★</span>
+		  </label>
+		  <label>
+		    <input type="radio" name="klinikaStar" value="3" />
+		    <span class="icon">★</span>
+		    <span class="icon">★</span>
+		    <span class="icon">★</span>   
+		  </label>
+		  <label>
+		    <input type="radio" name="klinikaStar" value="4" />
+		    <span class="icon">★</span>
+		    <span class="icon">★</span>
+		    <span class="icon">★</span>
+		    <span class="icon">★</span>
+		  </label>
+		  <label>
+		    <input type="radio" name="klinikaStar" value="5" />
+		    <span class="icon">★</span>
+		    <span class="icon">★</span>
+		    <span class="icon">★</span>
+		    <span class="icon">★</span>
+		    <span class="icon">★</span>
+		  </label>
+		</form>
+	  </div>
+	</div>
+	
 </body>
 </html>
