@@ -1,5 +1,9 @@
 package com.example.demo.controller;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpStatus;
@@ -11,7 +15,10 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.example.demo.dto.KorisnikDTO;
 import com.example.demo.model.Korisnik;
+import com.example.demo.model.Odsustvo;
+import com.example.demo.service.EmailService;
 import com.example.demo.service.KorisnikService;
+import com.example.demo.service.OdsustvoService;
 
 import net.minidev.json.JSONObject;
 import net.minidev.json.parser.JSONParser;
@@ -23,6 +30,12 @@ public class AdministratorController {
 
 	@Autowired
 	KorisnikService korisnikService;
+	
+	@Autowired
+	OdsustvoService odsustvoService;
+	
+	@Autowired
+	EmailService emailService;
 	
 	@RequestMapping(value = "/trenutniAdmin/{id}", method = RequestMethod.GET)
 	public ResponseEntity<KorisnikDTO> trenutniAdmin(@PathVariable("id") Long adminID){
@@ -65,4 +78,51 @@ public class AdministratorController {
 		return new ResponseEntity<>("uspsena izmena", HttpStatus.OK);
 	}
 	
+	@RequestMapping(value = "/sva_odsustva", method = RequestMethod.GET)
+	public ResponseEntity<List<Odsustvo>> svaOdsustva(){
+		List<Odsustvo> retVal = new ArrayList<Odsustvo>();
+		List<Odsustvo> allOdsustvo = odsustvoService.findAll();
+		
+		for(Odsustvo o : allOdsustvo) {
+			if(!o.isOdobren()) {
+				retVal.add(o);
+			}
+		}
+		return new ResponseEntity<List<Odsustvo>>(retVal, HttpStatus.OK);
+	}
+	
+	@RequestMapping(value = "/odobreno_odsustvo/{id}")
+	public ResponseEntity<Object> odobrenoOdsustvo(@PathVariable("id") String id){
+		String[] parts = id.substring(1).split("-");
+		String idK = parts[0];
+		String idO = parts[1];
+		Long lIdK = Long.parseLong(idK);
+		Long lIdO = Long.parseLong(idO);
+		Optional<Korisnik> k = korisnikService.findById(lIdK);
+		Korisnik osoblje = k.get();
+		Optional<Odsustvo> oo = odsustvoService.findById(lIdO);
+		Odsustvo o = oo.get();
+		o.setOdobren(true);
+		odsustvoService.save(o);
+		emailService.sendAbsenceAccept(osoblje, o);
+		return new ResponseEntity<>(null, HttpStatus.OK);
+	}
+	
+	@RequestMapping(value = "/odbijeno_odsustvo/{id}")
+	public ResponseEntity<Object> odbijenoOdsustvo(@PathVariable("id") String id, String message){
+		String[] parts = id.substring(1).split("-");
+		String idK = parts[0];
+		String idO = parts[1];
+		Long lIdK = Long.parseLong(idK);
+		Long lIdO = Long.parseLong(idO);
+		Optional<Korisnik> k = korisnikService.findById(lIdK);
+		Korisnik osoblje = k.get();
+		Optional<Odsustvo> oo = odsustvoService.findById(lIdO);
+		Odsustvo o = oo.get();
+		
+		emailService.senAbsenceDeny(osoblje, o, message);
+		
+		odsustvoService.delete(o);
+		return new ResponseEntity<>(null, HttpStatus.OK);
+	}
 }

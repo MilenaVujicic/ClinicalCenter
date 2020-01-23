@@ -1,3 +1,7 @@
+$(document).ready(()=>{
+	document.getElementById('aVacation').addEventListener('click', listAbsence, false);
+})
+
 function home() {
 	$('#requestsTable').attr('hidden', true);
 	$('#freeRooms').attr('hidden', true);
@@ -170,4 +174,113 @@ function operationRequest() {
 		}
 	});
 	
+}
+
+function listAbsence(event){
+	event.preventDefault();
+	
+	$('#tAbsence').attr('hidden', false);
+	
+	$.ajax({
+		url: 'administrator/sva_odsustva',
+		success: function(odsustva){
+			
+			for(let o of odsustva){
+				let id = o.korisnik.id;
+				let ido = o.id;
+				let name = o.korisnik.ime;
+				let surname = o.korisnik.prezime;
+				let start = o.pocetakOdsustva;
+				start = start.substring(0,10);
+				let end = o.zavrsetakOdsustva;
+				end = end.substring(0,10);
+				let type = o.vrstaOdsustva;
+				type = type.toLowerCase();
+				
+				
+				let tdName = $('<td>' + name + ' ' + surname + '</td>');
+				let tdStart = $('<td>' + start + '</td>');
+				let tdEnd = $('<td>' + end + '</td>');
+				let tdType = $('<td>' + type + '</td>');
+				let btnAccept = $('<td><button class = \"aButton\" id = \"a' + id + '-' + ido + '\">Accept</button>');
+				
+				btnAccept.click(function(event){
+					//let id = btnAccept.attr('id');
+					
+					let urlId = 'a' + id + '-' + ido;
+					let disableIdMsg = 'msg' + id + '-' + ido;
+					let disableIdField =  'txt' + id + '-' + ido;
+					let disableIdD = 'd' + id + '-' + ido;
+					$.ajax({
+						url: 'administrator/odobreno_odsustvo/' + urlId,
+						type: 'POST',
+						success: function(){
+							alert('Successfully allowed the absence');
+						},
+						error: function(){
+							alert('Something went wrong');
+						}
+						
+					})
+					$('#' + urlId ).attr('disabled', true);
+					$('#' + disableIdMsg ).attr('disabled', true);
+					$('#' + disableIdField ).attr('disabled', true);
+					$('#' + disableIdD ).attr('disabled', true);
+				});
+				
+				let btnDeny = $('<td><button class = \"dButton\" id = \"d' + id + '-' + ido + '\">Deny</button>');
+				btnDeny.click(function(event){
+					let urlId = 'd' + id + '-' + ido;
+					let enableIdMsg = 'msg' + id + '-' + ido;
+					let enableIdField = 'txt' + id + '-' + ido;
+					let disableIdA = 'a' + id + '-' + ido;
+					$('#' + disableIdA).attr('disabled', true);
+					$('#' + enableIdMsg).attr('disabled', false);
+					$('#' + enableIdField).attr('disabled', false);
+				});
+				let txtExp = $('<input type = \"text\" class = \"tField\" disabled = \"true\" id = \"txt' + id +'-' + ido + '\">');
+				let btnAddMessage = $('<td><button disabled = \"true\" class = \"msgButton\" id = \"msg' + id + '-' + ido + '\">Add Message</button>');
+				btnAddMessage.click(function(event){
+					let urlId = 'd' + id + '-' + ido;
+					let aId = 'a' + id + '-' + ido;
+					let txtId = 'txt' + id + '-' + ido;
+					let message = $('#' + txtId).val();
+					if(message === ''){
+						alert('Message must not be empty');
+						return;
+					}else{
+						$.ajax({
+							url: 'administrator/odbijeno_odsustvo/' + urlId,
+							type: 'POST',
+							data: {message: message},
+							success: function(){
+								alert('Successfully denied the absence');
+							},
+							error: function(){
+								alert('Something went wrong');
+							}
+						})
+					}
+				})
+				
+				let tr = $('<tr></tr');
+				tr.append(tdName).append(tdStart).append(tdEnd).append(tdType).append(btnAccept).append(btnDeny).append(txtExp).append(btnAddMessage);
+				$('#tAbsence tbody').append(tr);
+				
+			}
+			
+		},
+		error: function(){
+			alert('Something went wrong');
+		}
+	})
+}
+
+
+function acceptAbsence(){
+	console.log(this.id);
+}
+
+
+function denyAbsence(){
 }
