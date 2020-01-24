@@ -27,11 +27,13 @@ import com.example.demo.dto.KlinikaDTO;
 import com.example.demo.dto.KorisnikDTO;
 import com.example.demo.dto.PacijentDTO;
 import com.example.demo.dto.PregledDTO;
+import com.example.demo.dto.TerminDTO;
 import com.example.demo.model.Doktor;
 import com.example.demo.model.Klinika;
 import com.example.demo.model.Korisnik;
 import com.example.demo.model.Pacijent;
 import com.example.demo.model.Pregled;
+import com.example.demo.model.Termin;
 import com.example.demo.model.UlogaKorisnika;
 import com.example.demo.service.DoktorService;
 import com.example.demo.service.EmailService;
@@ -39,6 +41,7 @@ import com.example.demo.service.KlinikaService;
 import com.example.demo.service.KorisnikService;
 import com.example.demo.service.PacijentService;
 import com.example.demo.service.PregledService;
+import com.example.demo.service.TerminService;
 
 
 @RestController
@@ -59,6 +62,9 @@ public class PacijentController {
 	
 	@Autowired
 	PregledService pregledService;
+	
+	@Autowired
+	TerminService terminService;
 	
 	@Autowired
 	EmailService emailService;
@@ -271,10 +277,28 @@ public class PacijentController {
 		return new ResponseEntity<List<Klinika>>(klinike,HttpStatus.OK);
 	}
 	
+	@RequestMapping(value = "/slobodniTermini", method = RequestMethod.GET)
+	public ResponseEntity<List<TerminDTO>> getSlobodniTermini() {
+
+		List<Termin> termini = terminService.findBySlobodan(true);
+		List<TerminDTO> terminiDTO = new ArrayList<TerminDTO>();
+		
+		for(Termin t : termini) {
+			Doktor d = t.getDoktor();
+			
+			Korisnik k = korisnikService.findOne(d.getIdKorisnik());
+			String imeIPrezimeDoktora = k.getIme() + " " + k.getPrezime();
+			TerminDTO tdto = new TerminDTO(t);
+			tdto.setImeIPrezimeDoktora(imeIPrezimeDoktora);
+			terminiDTO.add(tdto);
+		}
+		
+		return new ResponseEntity<List<TerminDTO>>(terminiDTO,HttpStatus.OK);
+	}
+	
 	@RequestMapping(value = "/pregledi", method = RequestMethod.GET)
 	@ResponseStatus(value = HttpStatus.OK)
 	public ResponseEntity<List<PregledDTO>> getPregledi(@RequestParam(value="id") int id)	{
-		//System.out.println(id);
 		Long id_l = Integer.toUnsignedLong(id);
 		Pacijent p = pacijentService.findByIdKorisnik(id_l);
 		List<Pregled> pregledi = pregledService.findByPatientId(p.getId());

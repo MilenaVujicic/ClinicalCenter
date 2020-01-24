@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<meta charset="utf-8">
+    <!-- This file has been downloaded from Bootsnipp.com. Enjoy! -->
+    <title>Lekari</title>
+    <link href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.0/css/bootstrap.min.css" rel="stylesheet">
+    
+    <script src="./js/lib/jquery-3.3.1.min.js" type="text/javascript"></script>
+    <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.0/js/bootstrap.min.js"></script>
+    <script src="./js/medicinskaSestra.js" type="text/javascript"></script>
+
+	<!-- Website CSS style -->
+	<link href="css/bootstrap.min.css" rel="stylesheet">
+	<link rel="stylesheet" href="medicinskaSestra.css">
+	
+	<!-- Website Font style -->
+    <script src="https://kit.fontawesome.com/a065fea601.js" crossorigin="anonymous"></script>
+	<!-- Google Fonts -->
+	<link href='https://fonts.googleapis.com/css?family=Passion+One' rel='stylesheet' type='text/css'>
+	<link href='https://fonts.googleapis.com/css?family=Oxygen' rel='stylesheet' type='text/css'>
+	<script>
+	
+	
+		function prikaziTermin(termin) {
+			let tr = $('<tr></tr>');
+			let tdDatum = $('<td>'+termin.datum+'</td>');
+			let tdTrajanje = $('<td>'+termin.trajanje+'</td>');
+			let tdTip = $('<td>'+termin.tip+'</td>');
+			let tdCena = $('<td>'+termin.cena+'</td>');
+			let tdPopust= $('<td>'+termin.popust+'</td>');
+			let tdSala = $('<td>'+termin.sala.ime+'</td>');			
+			let tdDoktor = $('<td>'+termin.imeIPrezimeDoktora+'</td>');
+			let tdZakazi = $('<td>'+'<a id="'+termin.id+'" onClick="zakazi(this.id)">Zakazi</a>'+ '</td>');
+			tr.append(tdDatum).append(tdTrajanje).append(tdTip).append(tdCena).append(tdPopust).append(tdSala).append(tdDoktor).append(tdZakazi);
+			$('#terminTable tbody').append(tr);
+		}
+		
+		function zakazi(id) {
+			let id_korisnika = 1;
+			$.ajax({
+	            url:"/pacijent/zakaziUnapredDef,
+	            type:"GET",
+	           	success: function(termini){
+	           		$('#terminTable tbody').html('');
+	           		for (i = 0; i < termini.length; i++) {
+	           			prikaziTermin(termini[i]);
+	           		}
+ 	           	},
+	           	error: function() {
+	           		alert('Desila se greska');
+	           	}
+         	});
+			$('#terminTable').attr('hidden', false);
+		}
+
+		function home() {
+			$('#terminTable').attr('hidden', true);
+		}
+		
+		function termini() {
+			$.ajax({
+	            url:"/pacijent/slobodniTermini",
+	            type:"GET",
+	           	success: function(termini){
+	           		$('#terminTable tbody').html('');
+	           		for (i = 0; i < termini.length; i++) {
+	           			prikaziTermin(termini[i]);
+	           		}
+ 	           	},
+	           	error: function() {
+	           		alert('Desila se greska');
+	           	}
+         	});
+			$('#terminTable').attr('hidden', false);
+		}
+	</script>
+</head>
+<body>
+	<nav class="navbar navbar-inverse">
+	  <div class="container-fluid">
+	    <div class="navbar-header">
+	      <a class="navbar-brand">Clinical center</a>
+	    </div>
+	    <ul class="nav navbar-nav">
+	      <li><a href="pacijentHomePage.html">Home</a></li>
+	      <li><a onclick="return termini()">Termini</a></li>
+	    </ul>
+	    <ul class="nav navbar-nav navbar-right">
+	      <li><a href="#"><span class="glyphicon glyphicon-log-out"></span> Logout</a></li>
+	    </ul>
+	  </div>
+	</nav>
+	
+	<table class="table" id="terminTable" hidden="true">
+	  <thead>
+	    <tr>
+	      <th scope="col">Datum</th>
+	      <th scope="col">Trajanje</th>
+	      <th scope="col">Tip</th>
+	      <th scope="col">Cena</th>
+	      <th scope="col">Popust</th>
+	      <th scope="col">Sala</th>
+	      <th scope="col">Doktor</th>
+	      <th scope="col">Zakazi Pregled</th>
+	    </tr>
+	  </thead>
+	  <tbody>
+	  
+	  </tbody>
+	</table>
+	
+
+</body>
+</html>
