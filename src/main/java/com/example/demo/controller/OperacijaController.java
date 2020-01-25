@@ -27,6 +27,7 @@ import com.example.demo.service.EmailService;
 import com.example.demo.service.KlinikaService;
 import com.example.demo.service.KorisnikService;
 import com.example.demo.service.OperacijaService;
+import com.example.demo.service.PregledService;
 import com.example.demo.service.SalaService;
 import com.example.demo.service.TerminService;
 
@@ -55,7 +56,7 @@ public class OperacijaController {
 	
 	@Autowired
 	private KlinikaService klinikaService;
-	
+
 	
 	@RequestMapping(value = "/zahtevi", method=RequestMethod.GET) 
 	public ResponseEntity<List<Operacija>> zahtevi() {
@@ -135,4 +136,5 @@ public class OperacijaController {
 		return new ResponseEntity<OperacijaDTO>(new OperacijaDTO(o), HttpStatus.OK);
 	}
 	
+
 }

@@ -39,6 +39,7 @@ import com.example.demo.service.KlinikaService;
 import com.example.demo.service.KorisnikService;
 import com.example.demo.service.PacijentService;
 import com.example.demo.service.PregledService;
+import com.example.demo.service.ZahtevService;
 
 
 @RestController
@@ -63,7 +64,9 @@ public class PacijentController {
 	@Autowired
 	EmailService emailService;
 	
-	
+	@Autowired
+	ZahtevService zahtevService;
+
 	private List<Korisnik> foundUsers = new ArrayList<Korisnik>();
 
 	@RequestMapping(value = "/sveKlinike", method=RequestMethod.GET)

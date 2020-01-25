@@ -6,7 +6,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.example.demo.model.Operacija;
+
+
 import com.example.demo.model.StatusOperacije;
+
 import com.example.demo.repository.OperacijaRespository;
 
 @Service
@@ -14,7 +17,7 @@ public class OperacijaService {
 
 	@Autowired
 	private OperacijaRespository operacijaRespository;
-	
+
 	public List<Operacija> findByStatus(StatusOperacije status){
 		return operacijaRespository.findByStatus(status);
 	}

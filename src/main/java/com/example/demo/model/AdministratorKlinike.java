@@ -1,6 +1,9 @@
 package com.example.demo.model;
 
 
+import java.util.HashSet;
+import java.util.Set;
+
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -9,6 +12,9 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 
 @Entity
@@ -23,6 +29,10 @@ public class AdministratorKlinike {
 	
 	@ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
 	private Klinika klinika;
+	
+	@JsonIgnore
+	@OneToMany(mappedBy = "administrator_klinike", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+	private Set<Zahtev> zahtevi = new HashSet<Zahtev>();
 
 	public AdministratorKlinike() {
 		super();
@@ -50,6 +60,15 @@ public class AdministratorKlinike {
 
 	public void setKlinika(Klinika klinika) {
 		this.klinika = klinika;
+	}
+
+
+	public Set<Zahtev> getZahtevi() {
+		return zahtevi;
+	}
+
+	public void setZahtevi(Set<Zahtev> zahtevi) {
+		this.zahtevi = zahtevi;
 	}
 
 	@Override
