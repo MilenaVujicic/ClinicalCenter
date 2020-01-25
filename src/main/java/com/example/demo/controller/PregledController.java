@@ -82,6 +82,7 @@ public class PregledController {
 		return new ResponseEntity<String>("", HttpStatus.OK);
 	}
 	
+
 	@RequestMapping(value = "/rezervisi/{sala}/{operacija}/{doktori}", method = RequestMethod.GET)
 	public ResponseEntity<String> rezervisi(@PathVariable("sala") Long sala_id, @PathVariable("operacija") Long operacija_id, @PathVariable("doktori") String text) {
 		System.out.println("sala" + sala_id + "operacija" + operacija_id + "doktori" + text);
@@ -119,6 +120,7 @@ public class PregledController {
 		return new ResponseEntity<String>("Uspesno rezervisana sala", HttpStatus.OK);
 	}
 	
+
 	@RequestMapping(value = "/preuzmi/{id}", method = RequestMethod.GET)
 	public ResponseEntity<Pregled> preuzmi(@PathVariable("id") Long identifikacija) {
 		Pregled pregled = pregledService.findOne(identifikacija);

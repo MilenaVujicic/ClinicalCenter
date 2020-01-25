@@ -31,7 +31,13 @@ public class PregledService {
 		pregledRespository.delete(pregled);
 	}
 	
+
 	public List<Pregled> findByStatus(StatusPregleda status){
 		return pregledRespository.findByStatus(status);
 	}
+
+	public List<Pregled> findByPatientId(Long id) {
+		return pregledRespository.findByPatientID();
+	}
+
 }

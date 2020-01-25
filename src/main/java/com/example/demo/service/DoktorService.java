@@ -33,7 +33,7 @@ public class DoktorService {
 	}
 
 	public Doktor save(Doktor doktor) {
-		// TODO Auto-generated method stub
+
 		return doktorRespository.save(doktor);
 	}
 }

@@ -1,22 +1,23 @@
 package com.example.demo.service;
 
+import java.util.Calendar;
 import java.util.Date;
-import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
+import org.springframework.mail.MailException;
+import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
 import com.example.demo.model.Doktor;
+import com.example.demo.model.Klinika;
 import com.example.demo.model.Korisnik;
+import com.example.demo.model.Odsustvo;
+import com.example.demo.model.Operacija;
 import com.example.demo.model.Pregled;
 import com.example.demo.model.UlogaKorisnika;
-
-import org.springframework.mail.MailException;
-import org.springframework.mail.SimpleMailMessage;
-
-import org.springframework.scheduling.annotation.Async;
 
 @Service
 public class EmailService {
@@ -133,6 +134,112 @@ public class EmailService {
 				+ "\nStigao vam je zahtev za nalazenje sale za operaciju od lekara " + doktor.getIme() + " " + doktor.getPrezime()
 				+"\nza pacijenta: " + pacijent.getIme() + " " + pacijent.getPrezime()
 				+ "\nza datum: "+ datum + " " + vreme);
+		mail.setSentDate(new Date());
+		System.out.println(mail);
+		javaMailSender.send(mail);
+		System.out.println("Email poslat!");
+	}
+	
+	@Async
+	public void sendSuccessfulReservationPatient(Korisnik pacijent, Operacija operacija, Klinika klinika) {
+		SimpleMailMessage mail = new SimpleMailMessage();
+		
+		mail.setTo("isaps174@gmail.com");
+		mail.setFrom(env.getProperty("spring.mail.username"));
+		mail.setSubject("Zakazana operacija");
+		mail.setText("Postovani/-a" + pacijent.getIme() + " " + pacijent.getPrezime() + ","
+					+"\nImate zakazanu operaciju za " + operacija.getDatumIVremeOperacije().getTime()
+					+"\nna klinici: " + klinika.getIme() + " (" + klinika.getAdresa() + ") u sali: " + operacija.getSala().getIme());
+		mail.setSentDate(new Date());
+		System.out.println(mail);
+		javaMailSender.send(mail);
+		System.out.println("Email poslat!");
+	}
+	
+	@Async
+	public void sendSuccessfulReservationDoctor(Korisnik pacijent, Operacija operacija, Korisnik doktor, Klinika klinika) {
+		SimpleMailMessage mail = new SimpleMailMessage();
+		
+		mail.setTo("isaps174@gmail.com");
+		mail.setFrom(env.getProperty("spring.mail.username"));
+		mail.setSubject("Zakazana operacija");
+		mail.setText("Postovani/-a" + doktor.getIme() + " " + doktor.getPrezime() + ","
+					+"\nImate zakazanu operaciju za " + operacija.getDatumIVremeOperacije().getTime()
+					+"\nna klinici: " + klinika.getIme() + " (" + klinika.getAdresa() + ") u sali: " + operacija.getSala().getIme()
+					+".\nPacijent je: " + pacijent.getIme() + " " + pacijent.getPrezime());
+		mail.setSentDate(new Date());
+		System.out.println(mail);
+		javaMailSender.send(mail);
+		System.out.println("Email poslat!");
+	}
+	
+	@Async
+	public void sendUnsuccessfulReservationPatient(Korisnik pacijent) {
+		SimpleMailMessage mail = new SimpleMailMessage();
+				
+		mail.setTo("isaps174@gmail.com");
+		mail.setFrom(env.getProperty("spring.mail.username"));
+		mail.setSubject("Neuspesno zakazivanje operacije");
+		mail.setText("Postovani/-a" + pacijent.getIme() + " " + pacijent.getPrezime() + ","
+					+"\nNazalost nismo mogli da Vam zakazemo operaciju, molimo da se obratite Vasem lekaru.");
+					
+		mail.setSentDate(new Date());
+		System.out.println(mail);
+		javaMailSender.send(mail);
+		System.out.println("Email poslat!");
+	}
+	
+	@Async
+	public void sendReservationToAdmin(Korisnik admin, Operacija operacija, Korisnik pacijent) {
+		SimpleMailMessage mail = new SimpleMailMessage();
+		
+		mail.setTo("isaps174@gmail.com");
+		mail.setFrom(env.getProperty("spring.mail.username"));
+		mail.setSubject("Zakazivanje operacije");
+		mail.setText("Postovani/-a" + admin.getIme() + " " + admin.getPrezime() + ","
+					+"\nUspesno je odradjena automatsko zakazivanje operacija za pacijenta: " + pacijent.getIme() + " " + pacijent.getPrezime() + "."
+					+"\nOperacija je zakazana za: " + operacija.getDatumIVremeOperacije().getTime() + " u sali: " + operacija.getSala().getIme());
+					
+		mail.setSentDate(new Date());
+		System.out.println(mail);
+		javaMailSender.send(mail);
+		System.out.println("Email poslat!");
+	}
+	
+	@Async
+	public void sendAbsenceAccept(Korisnik osoblje, Odsustvo o){
+		SimpleMailMessage mail = new SimpleMailMessage();
+		mail.setTo("isaps174@gmail.com");
+		mail.setFrom(env.getProperty("spring.mail.username"));
+		mail.setSubject("Odobreno odsustvo");
+		
+		String startDate = o.getPocetakOdsustva().get(Calendar.DATE) + "." +  o.getPocetakOdsustva().get(Calendar.MONTH) + "." +  o.getPocetakOdsustva().get(Calendar.YEAR) + ".";
+		String endDate = o.getZavrsetakOdsustva().get(Calendar.DATE) + "." +  o.getZavrsetakOdsustva().get(Calendar.MONTH) + "." +  o.getZavrsetakOdsustva().get(Calendar.YEAR) + ".";
+		mail.setText("Postovani/-a " + osoblje.getIme() + " " + osoblje.getPrezime() + ","
+				+"\nVas zahtev za odmor od dana: " + startDate + " do dana: " + endDate 
+				+"\nje ODOBREN");
+				
+		
+		mail.setSentDate(new Date());
+		System.out.println(mail);
+		javaMailSender.send(mail);
+		System.out.println("Email poslat!");
+	}
+	
+	@Async
+	public void senAbsenceDeny(Korisnik osoblje, Odsustvo o, String razlog) {
+		SimpleMailMessage mail = new SimpleMailMessage();
+		mail.setTo("isaps174@gmail.com");
+		mail.setFrom(env.getProperty("spring.mail.username"));
+		mail.setSubject("Odbijeno odsustvo");
+		
+		String startDate = o.getPocetakOdsustva().get(Calendar.DATE) + "." +  o.getPocetakOdsustva().get(Calendar.MONTH) + "." +  o.getPocetakOdsustva().get(Calendar.YEAR) + ".";
+		String endDate = o.getZavrsetakOdsustva().get(Calendar.DATE) + "." +  o.getZavrsetakOdsustva().get(Calendar.MONTH) + "." +  o.getZavrsetakOdsustva().get(Calendar.YEAR) + ".";
+		mail.setText("Postovani/-a " + osoblje.getIme() + " " + osoblje.getPrezime() + ","
+				+"\nVas zahtev za odmor od dana: " + startDate + " do dana: " + endDate 
+				+"\nje ODBIJEN iz razloga: " + razlog);
+				
+		
 		mail.setSentDate(new Date());
 		System.out.println(mail);
 		javaMailSender.send(mail);

@@ -32,15 +32,15 @@ public class Sala  {
 	private String opis;
 	
 	@JsonIgnore
-	@OneToMany(mappedBy = "sala", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+	@OneToMany(mappedBy = "sala", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
 	private Set<Pregled> pregledi = new HashSet<Pregled>();
 	
 	@JsonIgnore
-	@OneToMany(mappedBy = "sala", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+	@OneToMany(mappedBy = "sala", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
 	private Set<Operacija> operacije = new HashSet<Operacija>();
 	
 	@JsonIgnore
-	@OneToMany(mappedBy = "sala", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+	@OneToMany(mappedBy = "sala", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
 	private Set<Termin> slobodniTermini = new HashSet<Termin>();
 	
 	public Sala() {

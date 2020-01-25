@@ -2,6 +2,8 @@ package com.example.demo.dto;
 
 import java.util.HashSet;
 import java.util.Set;
+
+import com.example.demo.model.Lek;
 import com.example.demo.model.Pregled;
 
 public class LekDTO {
@@ -23,6 +25,10 @@ public class LekDTO {
 		this.sifra = sifra;
 		this.ime = ime;
 		this.opis = opis;
+	}
+	
+	public LekDTO(Lek lek) {
+		this(lek.getSifra(), lek.getIme(), lek.getOpis());
 	}
 
 	public String getSifra() {

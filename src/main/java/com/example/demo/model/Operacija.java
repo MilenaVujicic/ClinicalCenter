@@ -3,6 +3,7 @@
  */
 package com.example.demo.model;
 
+
 import java.util.Calendar;
 import java.util.HashSet;
 import java.util.Set;
@@ -19,9 +20,6 @@ import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 
-enum StatusOperacije {
-	ZAKAZAN, ZAVRSEN, OTKAZAN
-}
 
 @Entity
 public class Operacija {
@@ -30,10 +28,10 @@ public class Operacija {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 	
-	@ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+	@ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.REFRESH, CascadeType.DETACH}, fetch = FetchType.EAGER)
 	private Pacijent pacijent;
 	
-	@ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+	@ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.REFRESH, CascadeType.DETACH}, fetch = FetchType.EAGER)
 	private Sala sala;
 	
 	@Column(name = "status", nullable = false)
@@ -42,7 +40,10 @@ public class Operacija {
 	@Column(name = "datumIVremeOperacije", nullable = false)
 	private Calendar datumIVremeOperacije;
 	
-	@Column(name = "trajanje")
+	@Column(name = "opis")
+	private String opis = "";
+	
+	@Column(name = "trajanje", nullable = false)
 	private int trajanje;
 	
 	@ManyToMany
@@ -109,12 +110,22 @@ public class Operacija {
 	public void setDoktori(Set<Doktor> doktori) {
 		this.doktori = doktori;
 	}
+	
+	
+
+	public String getOpis() {
+		return opis;
+	}
+
+	public void setOpis(String opis) {
+		this.opis = opis;
+	}
 
 	@Override
 	public String toString() {
 		return "Operacija [id=" + id + ", pacijent=" + pacijent + ", sala=" + sala + ", status=" + status
-				+ ", datumIVremeOperacije=" + datumIVremeOperacije + ", trajanje=" + trajanje + ", doktori=" + doktori
-				+ "]";
+				+ ", datumIVremeOperacije=" + datumIVremeOperacije + ", opis=" + opis + ", trajanje=" + trajanje
+				+ ", doktori=" + doktori + "]";
 	}
 	
 	

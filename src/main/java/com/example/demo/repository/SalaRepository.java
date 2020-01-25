@@ -23,6 +23,10 @@ public interface SalaRepository extends JpaRepository<Sala, Long> {
 	
 	Sala save(Sala s);
 	
+
 	List<Sala> findByKlinika(Klinika k);
+
+	
+
 	
 }

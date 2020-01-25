@@ -44,7 +44,7 @@ public class Recept {
 	@Column(name = "lekIme")
 	private String lek;
 	
-	@ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.REFRESH, CascadeType.MERGE, CascadeType.DETACH}, fetch = FetchType.EAGER)
+	@ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.REFRESH, CascadeType.DETACH}, fetch = FetchType.EAGER)
 	private Pacijent pacijent;
 
 	public Recept() {

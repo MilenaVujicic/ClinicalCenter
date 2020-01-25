@@ -4,8 +4,11 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -23,13 +26,13 @@ import com.example.demo.dto.DoktorDTO;
 import com.example.demo.dto.KlinikaDTO;
 import com.example.demo.dto.KorisnikDTO;
 import com.example.demo.dto.PacijentDTO;
+import com.example.demo.dto.PregledDTO;
 import com.example.demo.model.Doktor;
 import com.example.demo.model.Klinika;
 import com.example.demo.model.Korisnik;
 import com.example.demo.model.Pacijent;
 import com.example.demo.model.Pregled;
 import com.example.demo.model.UlogaKorisnika;
-import com.example.demo.model.Zahtev;
 import com.example.demo.service.DoktorService;
 import com.example.demo.service.EmailService;
 import com.example.demo.service.KlinikaService;
@@ -63,6 +66,7 @@ public class PacijentController {
 	
 	@Autowired
 	ZahtevService zahtevService;
+
 	private List<Korisnik> foundUsers = new ArrayList<Korisnik>();
 
 	@RequestMapping(value = "/sveKlinike", method=RequestMethod.GET)
@@ -213,6 +217,90 @@ public class PacijentController {
 		return new ResponseEntity<>(doktoriDTO, HttpStatus.OK);	
 	}
 	
+	@RequestMapping(value = "/oceniKliniku", method = RequestMethod.PUT)
+	public ResponseEntity<String> oceniKliniku(@RequestParam(value="id_klinike") int id,
+											   @RequestParam(value="ocena") int ocena) {
+		
+		
+		Long id_l = Integer.toUnsignedLong(id);
+		Klinika k = klinikaService.findOne(id_l);
+		double prethodnaProsecnaOcena = k.getProsecnaOcena();
+		k.setBrojOcena(k.getBrojOcena()+1);
+		k.setSumaOcena(k.getSumaOcena()+ocena);
+		double prosecnaOcena =(double)k.getSumaOcena()/(double)k.getBrojOcena();
+		System.out.println("prethodna prosecna ocena je: "+prethodnaProsecnaOcena+" a ocena je: "+prosecnaOcena);
+		k.setProsecnaOcena(prosecnaOcena);
+		
+		k = klinikaService.save(k);
+		return new ResponseEntity<String>("",HttpStatus.OK);
+	}
+	
+	@RequestMapping(value = "/oceniDoktora", method = RequestMethod.PUT)
+	public ResponseEntity<String> oceniDoktora(@RequestParam(value="id_pregleda") int id,
+											   @RequestParam(value="ocena") int ocena) {
+		
+		
+		Long id_l = Integer.toUnsignedLong(id);
+		Pregled p = pregledService.findOne(id_l);
+		Doktor d = p.getDoktor();
+		double prethodnaProsecnaOcena = d.getProsenaOcena();
+		d.setBrojOcena(d.getBrojOcena()+1);
+		d.setSumaOcena(d.getSumaOcena()+ocena);
+		double prosecnaOcena =(double)d.getSumaOcena()/(double)d.getBrojOcena();
+		System.out.println("prethodna prosecna ocena je: "+prethodnaProsecnaOcena+" a ocena je: "+prosecnaOcena);
+		d.setProsenaOcena(prosecnaOcena);
+		
+		d = doktorService.save(d);
+		return new ResponseEntity<String>("",HttpStatus.OK);
+	}
+	
+	@RequestMapping(value = "/poseceneKlinike", method = RequestMethod.GET)
+	public ResponseEntity<List<Klinika>> getKlinike(@RequestParam(value="id") int id) {
+		Long id_l = Integer.toUnsignedLong(id);
+		Pacijent p = pacijentService.findByIdKorisnik(id_l);
+		List<Pregled> pregledi = pregledService.findByPatientId(p.getId());
+		
+		List<Klinika> klinike = new ArrayList<Klinika>();
+		for(Pregled preg : pregledi) {
+			if(!klinike.contains(preg.getDoktor().getKlinika()))
+				klinike.add(preg.getDoktor().getKlinika());
+			
+		}
+		
+		for(Klinika kl : klinike) {
+			//System.out.println(kl.getIme());
+		}
+				
+		return new ResponseEntity<List<Klinika>>(klinike,HttpStatus.OK);
+	}
+	
+	@RequestMapping(value = "/pregledi", method = RequestMethod.GET)
+	@ResponseStatus(value = HttpStatus.OK)
+	public ResponseEntity<List<PregledDTO>> getPregledi(@RequestParam(value="id") int id)	{
+		//System.out.println(id);
+		Long id_l = Integer.toUnsignedLong(id);
+		Pacijent p = pacijentService.findByIdKorisnik(id_l);
+		List<Pregled> pregledi = pregledService.findByPatientId(p.getId());
+		List<PregledDTO> preglediDTO = new ArrayList<>();
+		
+		for(Pregled preg : pregledi) {
+			PregledDTO pregDTO = new PregledDTO(preg);
+			Optional<Korisnik> k = korisnikService.findById(preg.getDoktor().getId()); //id doktora
+			pregDTO.setImeDoktora(k.get().getIme());
+			pregDTO.setPrezimeDoktora(k.get().getPrezime());
+			preglediDTO.add(pregDTO);
+		}
+		
+		for(PregledDTO preg:preglediDTO) {
+			System.out.println(preg.getId());
+			System.out.println(preg.getImeDoktora() + ' ' + preg.getPrezimeDoktora());
+		}
+		
+		return new ResponseEntity<>(preglediDTO,HttpStatus.OK);
+	}
+	
+	
+	
 	@RequestMapping(value = "/search", method = RequestMethod.GET)
 	@ResponseStatus(value = HttpStatus.OK)
 	public ResponseEntity<List<DoktorDTO>> getDoctorsSearch(@RequestParam(value="ime") String ime,
@@ -287,6 +375,8 @@ public class PacijentController {
 		pacijent.setVisina(pacijentDTO.getVisina());
 		pacijent.setTezina(pacijentDTO.getTezina());
 		pacijent.setDioptrija(pacijentDTO.getDioptrija());
+		if(pacijentDTO.getKrvna_grupa() != null)
+			pacijent.setKrvna_grupa(pacijentDTO.getKrvna_grupa());
 		Pacijent p = pacijentService.save(pacijent);
 		return new ResponseEntity<PacijentDTO>(new PacijentDTO(p), HttpStatus.OK);
 	}
@@ -327,6 +417,64 @@ public class PacijentController {
 		}
 		
 		return new ResponseEntity<String>("", HttpStatus.OK);
+		
+	}
+	
+	@RequestMapping(value = "sortiraniPacijenti/{tip}", method = RequestMethod.GET)
+	public ResponseEntity<List<KorisnikDTO>> sortiraniPacijenti(@PathVariable String tip){
+		List<KorisnikDTO> retVal = new ArrayList<KorisnikDTO>();
+		List<Pacijent> pacijenti = pacijentService.findAll();
+		
+		List<Korisnik> sviKorisnici = korisnikService.findAll();
+		List<Korisnik> kPacijenti = new ArrayList<Korisnik>();
+		
+		for(Pacijent p: pacijenti) {
+			for(Korisnik k : sviKorisnici) {
+				if(k.getId() == p.getId()) {
+					kPacijenti.add(k);
+					continue;
+				}
+			}
+		}
+		
+		if(tip.equals("ime")) {
+			Collections.sort(kPacijenti, new Comparator<Korisnik>(){
+
+				@Override
+				public int compare(Korisnik o1, Korisnik o2) {
+					// TODO Auto-generated method stub
+					return o1.getIme().compareTo(o2.getIme());
+				}
+				
+			});
+		}else if(tip.equals("prezime")) {
+			Collections.sort(kPacijenti, new Comparator<Korisnik>() {
+
+				@Override
+				public int compare(Korisnik o1, Korisnik o2) {
+					// TODO Auto-generated method stub
+					return o1.getPrezime().compareTo(o2.getPrezime());
+				}
+				
+			});
+			
+		}else if(tip.equals("id")) {
+			Collections.sort(kPacijenti, new Comparator<Korisnik>() {
+
+				@Override
+				public int compare(Korisnik o1, Korisnik o2) {
+					// TODO Auto-generated method stub
+					return o1.getJmbg().compareTo(o2.getJmbg());
+				}
+				
+			});
+		}
+	
+		for(Korisnik k : kPacijenti) {
+			retVal.add(new KorisnikDTO(k));
+		}
+		
+		return new ResponseEntity<List<KorisnikDTO>>(retVal, HttpStatus.OK);
 		
 	}
 }

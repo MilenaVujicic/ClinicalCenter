@@ -16,10 +16,12 @@ import org.springframework.web.bind.annotation.RestController;
 import com.example.demo.dto.SalaDTO;
 import com.example.demo.dto.TerminDTO;
 import com.example.demo.model.Klinika;
+import com.example.demo.model.Operacija;
 import com.example.demo.model.Pregled;
 import com.example.demo.model.Sala;
 import com.example.demo.model.Termin;
 import com.example.demo.service.KlinikaService;
+import com.example.demo.service.OperacijaService;
 import com.example.demo.service.PregledService;
 import com.example.demo.service.SalaService;
 
@@ -35,7 +37,9 @@ public class SalaController {
 	
 	@Autowired
 	PregledService pregledService;
-	
+
+	OperacijaService operacijaService;
+
 	@RequestMapping(value = "/sveSale/{val}", method=RequestMethod.GET)
 	public ResponseEntity<List<SalaDTO>> getSveSale(@PathVariable String val){
 		List<Sala> sala = salaService.findAll();
@@ -210,6 +214,73 @@ public class SalaController {
 		return new ResponseEntity<>(sale, HttpStatus.OK);
 	}
 	
+	@RequestMapping(value = "/slobodni_termini/{id}", method = RequestMethod.GET)
+	public ResponseEntity<List<Sala>> slobodniTermini(@PathVariable("id") Long identifikacija) {
+		Operacija operacija = operacijaService.findOne(identifikacija);
+		Klinika klinika = klinikaService.findOne((long) 2);
+		List<Sala> sveSale = salaService.findByKlinika(klinika);
+		System.out.println("##########sve_sale" + sveSale.size());
+		List<Sala> slobodneSale = new ArrayList<Sala>();
+		for (Sala sala : sveSale) {
+			for (Termin termin : sala.getSlobodniTermini()) {
+				if (termin.isSlobodan() && termin.getDatum().equals(operacija.getDatumIVremeOperacije())) {
+					slobodneSale.add(sala);
+				}
+			}
+		}
+		System.out.println("##########################" + slobodneSale.size());
+		return new ResponseEntity<List<Sala>>(slobodneSale, HttpStatus.OK);
+	}
+	
+	@RequestMapping(value = "/drugi_slobodni_termini/{id}")
+	public ResponseEntity<Sala> prviSlobodan(@PathVariable("id") Long identifikacija) {
+		System.out.println("##############drugi slobodni termini");
+		Operacija operacija = operacijaService.findOne(identifikacija);
+		Klinika klinika = klinikaService.findOne((long) 2);
+		List<Sala> sveSale = salaService.findByKlinika(klinika);
+		Sala rezervisanaSala = sveSale.get(0);
+		long min = new Long(Long.MAX_VALUE);
+		Termin slobodanTermin = new Termin();
+		System.out.println("############# sve sale size" + sveSale.size());
+		try {
+			for (Sala sala : sveSale) {
+				for (Termin termin : sala.getSlobodniTermini()) {
+					if (termin.isSlobodan()) {
+						slobodanTermin = termin;
+						break;
+					}
+				}
+			}
+	
+			for (Sala sala : sveSale) {
+				for (Termin termin : sala.getSlobodniTermini()) {
+					if (termin.isSlobodan()) {
+						long end = termin.getDatum().getTimeInMillis();
+					    long start = operacija.getDatumIVremeOperacije().getTimeInMillis();
+					    if (min > Math.abs(end - start)) {
+					    	min = Math.abs(end - start);
+					    	slobodanTermin = termin;
+					    }
+					}
+				}
+			}
+		
+		
+			for (Sala sala : sveSale) {
+				if (slobodanTermin.getSala().getId().equals(sala.getId())) {
+					rezervisanaSala = sala;
+				}
+			}
+		}
+		catch (Exception e) {
+			System.out.println("########" + e);
+			return new ResponseEntity<Sala>(HttpStatus.NOT_FOUND);
+		} 
+
+		operacija.setDatumIVremeOperacije(slobodanTermin.getDatum());
+		operacijaService.save(operacija);
+		return new ResponseEntity<Sala>(rezervisanaSala, HttpStatus.OK);
+	}
 	
 	@RequestMapping(value = "/termini_pregled/{id}", method = RequestMethod.GET)
 	public ResponseEntity<List<Sala>> slobodniTerminiPregled(@PathVariable("id") Long identifikacija){

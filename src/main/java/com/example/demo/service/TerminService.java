@@ -19,6 +19,7 @@ public class TerminService {
 		return terminRepository.save(t);
 	}
 	
+
 	public Optional<Termin> findById(Long id) {
 		return terminRepository.findById(id);
 	}
@@ -27,7 +28,9 @@ public class TerminService {
 		return terminRepository.findAll();
 	}
 	
-	public List<Termin> findBySlobodan(Boolean slobodan){
+	
+	public List<Termin> findBySlobodan(Boolean slobodan) {
+
 		return terminRepository.findBySlobodan(slobodan);
 	}
 	

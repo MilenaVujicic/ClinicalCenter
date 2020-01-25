@@ -69,7 +69,7 @@ public class KorisnikDTO {
 	
 	@NotNull
     @NotEmpty
-	private int telefon;
+	private String telefon;
 	
 	
 	
@@ -95,7 +95,7 @@ public class KorisnikDTO {
 	}
 	
 	public KorisnikDTO(Long id, String ime, String prezime, String email, String password, String matchingPassword, String grad, String drzava, Long jmbg,
-			String adresa, Date datumRodjenja, UlogaKorisnika ulogaKorisnika, int telefon) {
+			String adresa, Date datumRodjenja, UlogaKorisnika ulogaKorisnika, String telefon) {
 		super();
 		this.id = id;
 		this.ime = ime;
@@ -114,7 +114,7 @@ public class KorisnikDTO {
 	
 
 	public KorisnikDTO(Long id, String username, String ime, String prezime, String email, String password, String matchingPassword, String grad, String drzava, Long jmbg,
-			String adresa, Date datumRodjenja, UlogaKorisnika ulogaKorisnika, int telefon) {
+			String adresa, Date datumRodjenja, UlogaKorisnika ulogaKorisnika, String telefon) {
 		super();
 		this.id = id;
 		this.ime = ime;
@@ -185,11 +185,11 @@ public class KorisnikDTO {
 		return uloga;
 	}
 
-	public int getTelefon() {
+	public String getTelefon() {
 		return telefon;
 	}
 
-	public void setTelefon(int telefon) {
+	public void setTelefon(String telefon) {
 		this.telefon = telefon;
 	}
 
