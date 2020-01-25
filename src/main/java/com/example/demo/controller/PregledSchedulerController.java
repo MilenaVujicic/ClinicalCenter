@@ -47,9 +47,9 @@ public class PregledSchedulerController {
 	
 	
 	@SuppressWarnings("static-access")
-	@Scheduled(cron = "${greeting.cron}")
+	@Scheduled(cron = "${greeting2.cron}")
 	public void autoDodelaPregleda() {
-		System.out.println("Pocetak dodele sale");
+		System.out.println("Pocetak dodele za pregled");
 		List<Pregled> nerasporedjeni_pregledi = pregledService.findByStatus(StatusPregleda.NERASPOREDJEN);
 		List<Termin> slobodni_termini  = terminService.findBySlobodan(true);
 		List<Pregled> rasporedjeni_pregledi = new ArrayList<Pregled>();
@@ -73,10 +73,11 @@ public class PregledSchedulerController {
 					for(AdministratorKlinike administrator: administratoriKlinike) {
 						if(administrator.getKlinika().getId().equals(klinika.getId())) {
 							Korisnik admin = korisnikService.findOne(administrator.getIdKorisnik());
-							
+							emailService.sendReservationAptToAdmin(admin, pregled, pacijent);
 							
 						}
 					}
+					emailService.sendSuccessfulReservationAptPatient(pacijent, pregled, klinika);
 					System.out.println("####" + termin.getDatum().getTime() + " " + pregled.getPacijent().getIdKorisnik() + " " + termin.getSala().getIme());
 				}
 			}
@@ -115,11 +116,11 @@ public class PregledSchedulerController {
 					terminService.save(slobodanTermin);
 					slobodni_termini.remove(slobodanTermin);
 					Korisnik pacijent = korisnikService.findOne(pregled.getPacijent().getIdKorisnik());
-					
+					emailService.sendSuccessfulReservationAptPatient(pacijent, pregled, klinika);
 					for(AdministratorKlinike administrator : administratoriKlinike) {
 						if(administrator.getKlinika().getId().equals(klinika.getId())) {
 							Korisnik admin = korisnikService.findOne(administrator.getIdKorisnik());
-							
+							emailService.sendReservationAptToAdmin(admin, pregled, pacijent);
 						}
 					}
 					
@@ -127,7 +128,7 @@ public class PregledSchedulerController {
 				}else {
 					System.out.println("Nema slobodnih termina");
 					Korisnik pacijent = korisnikService.findOne(pregled.getPacijent().getIdKorisnik());
-					
+					emailService.sendUnsuccessfulReservationAptPatient(pacijent);
 				}
 			}
 		}
@@ -139,6 +140,6 @@ public class PregledSchedulerController {
 		System.out.println("Nerasporedjeni pregledi" + nerasporedjeni_pregledi.size());
 		System.out.println("Rasporedjeni pregledi" + rasporedjeni_pregledi.size());
 		
-		System.out.println("Kraj dodoele sala");
+		System.out.println("Kraj dodoele za pregled");
 	}
 }

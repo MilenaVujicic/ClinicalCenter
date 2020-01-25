@@ -445,6 +445,59 @@ public class DoktorController {
 		
 		return new ResponseEntity<List<Korisnik>>(doktori_klinike, HttpStatus.OK);
 	}
+	
+	
+	@RequestMapping(value="/svi_slobodni_sa_klinike_apt/{id}", method = RequestMethod.GET)
+	public ResponseEntity<List<Korisnik>> svi_sa_klinike_slobodni_apt(@PathVariable("id") Long identifikacija) {
+		Klinika k = klinikaService.findOne((long) 2);
+		List<Doktor> doktori = doktorService.findAllByKlinika(k);
+		List<Korisnik> lekari = korisnikService.findByUloga(UlogaKorisnika.LEKAR);
+		List<Korisnik> doktori_klinike = new ArrayList<Korisnik>();
+		List<Doktor> slobodni_doktori = new ArrayList<Doktor>();
+		
+		Pregled pregled = pregledService.findOne(identifikacija);
+		System.out.println("#####operacija_vreme" + pregled.getDatumIVremePregleda().getTimeInMillis());
+		for (Doktor doktor : doktori) {
+			Boolean nasla = false;
+			for (Pregled p : doktor.getPregledi()) {
+				if (pregled.getDatumIVremePregleda().getTimeInMillis() == p.getDatumIVremePregleda().getTimeInMillis()) {
+					nasla = true;
+					continue;
+				}
+			}
+			
+			for (Operacija o : doktor.getOperacije()) {
+				if (o.getDatumIVremeOperacije().getTimeInMillis() == pregled.getDatumIVremePregleda().getTimeInMillis()) {
+					nasla = true;
+					continue;
+				}
+			}
+			
+			Korisnik kor = korisnikService.findOne(doktor.getIdKorisnik());
+			
+			for (Odsustvo od : kor.getOdsustva()) {
+				if (od.getPocetakOdsustva().compareTo(pregled.getDatumIVremePregleda()) < 0 && od.getZavrsetakOdsustva().compareTo(pregled.getDatumIVremePregleda()) > 0){
+					nasla = true;
+					continue;
+				}
+			}
+			
+			if (!nasla)
+				slobodni_doktori.add(doktor);
+			
+		}
+		
+		for (Korisnik korisnik : lekari) {
+			for (Doktor doktor : slobodni_doktori) {
+				if (doktor.getIdKorisnik().equals(korisnik.getId())) {
+					doktori_klinike.add(korisnik);
+				}
+			} 
+		}
+		
+		
+		return new ResponseEntity<List<Korisnik>>(doktori_klinike, HttpStatus.OK);
+	}
 
 
 	@RequestMapping(value = "/doctor_data/{id}", method = RequestMethod.GET)

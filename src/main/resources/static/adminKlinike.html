@@ -39,6 +39,7 @@
 	        </ul>
 	      </li>
 	      <li><a href = "#" id = "aVacation">Staff vacations</a>
+	      <li><a href = "#" id = "aApt">Appointmen requests</a>
 	      <li><a onclick="return operationRequest();">Operation requests</a></li>
 	      <li><a href="#">Personal data</a></li>
 	    </ul>
@@ -47,6 +48,18 @@
 	    </ul>
 	  </div>
 	</nav>
+	
+	<table class = "table" id = "aptTable" hidden = "true">
+		<thead>
+			<tr>
+				<th scope  = "col">Patient</th>
+				<th scope = "col">Date and Time </th>
+				<th scope = "col">Unoccupied rooms</th>
+				</tr>
+		</thead>
+		<tbody>
+		</tbody>
+	</table>
 	
 	<table class="table" id="requestsTable" hidden="true">
 		<thead>
@@ -60,7 +73,51 @@
 		</tbody>
 	</table>
 	
+<table class="table" id="freeRooms" hidden="true">
+		<thead>
+			<tr>
+				<th scope="col">Room</th>
+				<th scope="col">Description</th>
+				<th scope="col">Date</th>
+				<th scope="col">Reservation</th>
+			</tr>
+		</thead>
+		<tbody>
+		</tbody>
+</table>
 
+<table class="table" id="freeRoomsApt" hidden="true">
+		<thead>
+			<tr>
+				<th scope="col">Room</th>
+				<th scope="col">Description</th>
+				<th scope="col">Date</th>
+				<th scope="col">Reservation</th>
+			</tr>
+		</thead>
+		<tbody>
+		</tbody>
+</table>
+	
+	
+	
+	
+	<table class = "table" id = "tAbsence" hidden = "true">
+	<thead>
+	<tr>
+	<th scope = "col">Staff Name</th>
+	<th scope = "col">Start</th>
+	<th scope = "col">End</th>
+	<th scope = "col">Type</th>
+	<th scope = "col">Accept</th>
+	<th scope = "col">Deny</th>
+	<th scope = "col">Additional message</th>
+	<th scope = "col">Add message</th>
+	</tr>
+	</thead>
+	<tbody>
+	</tbody>
+	</table>
 	
 	<div class="form-row" id="doctors" hidden="true">
 

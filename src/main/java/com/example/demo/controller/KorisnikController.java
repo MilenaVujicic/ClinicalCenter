@@ -54,6 +54,7 @@ public class KorisnikController {
 		return new ResponseEntity<Korisnik>(korisnik, HttpStatus.OK);
 	}
 	
+	
 	@RequestMapping(value = "/izmena_podataka/{id}", method = RequestMethod.PUT)
 	public ResponseEntity<Object> izmeni(@PathVariable("id") Long id,@RequestBody KorisnikDTO korisnik){
 		System.out.println(korisnik.getIme());

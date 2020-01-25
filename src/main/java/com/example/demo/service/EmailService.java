@@ -173,6 +173,8 @@ public class EmailService {
 		System.out.println("Email poslat!");
 	}
 	
+	
+	
 	@Async
 	public void sendUnsuccessfulReservationPatient(Korisnik pacijent) {
 		SimpleMailMessage mail = new SimpleMailMessage();
@@ -205,6 +207,74 @@ public class EmailService {
 		javaMailSender.send(mail);
 		System.out.println("Email poslat!");
 	}
+	
+	@Async
+	public void sendSuccessfulReservationAptPatient(Korisnik pacijent, Pregled pregled, Klinika klinika) {
+		SimpleMailMessage mail = new SimpleMailMessage();
+		
+		mail.setTo("isaps174@gmail.com");
+		mail.setFrom(env.getProperty("spring.mail.username"));
+		mail.setSubject("Zakazan pregled");
+		mail.setText("Postovani/-a " + pacijent.getIme() + " " + pacijent.getPrezime() + ","
+					+"\nImate zakazanu operaciju za " + pregled.getDatumIVremePregleda().getTime()
+					+"\nna klinici: " + klinika.getIme() + " (" + klinika.getAdresa() + ") u sali: " + pregled.getSala().getIme());
+		mail.setSentDate(new Date());
+		System.out.println(mail);
+		javaMailSender.send(mail);
+		System.out.println("Email poslat!");
+	}
+	
+	
+	@Async
+	public void sendSuccessfulReservationAptDoctor(Korisnik pacijent, Pregled pregled, Korisnik doktor, Klinika klinika) {
+		SimpleMailMessage mail = new SimpleMailMessage();
+		
+		mail.setTo("isaps174@gmail.com");
+		mail.setFrom(env.getProperty("spring.mail.username"));
+		mail.setSubject("Zakazan pregled");
+		mail.setText("Postovani/-a " + doktor.getIme() + " " + doktor.getPrezime() + ","
+					+"\nImate zakazan pregled za " + pregled.getDatumIVremePregleda().getTime()
+					+"\nna klinici: " + klinika.getIme() + " (" + klinika.getAdresa() + ") u sali: " + pregled.getSala().getIme()
+					+".\nPacijent je: " + pacijent.getIme() + " " + pacijent.getPrezime());
+		mail.setSentDate(new Date());
+		System.out.println(mail);
+		javaMailSender.send(mail);
+		System.out.println("Email poslat!");
+	}
+	
+	@Async
+	public void sendUnsuccessfulReservationAptPatient(Korisnik pacijent) {
+		SimpleMailMessage mail = new SimpleMailMessage();
+				
+		mail.setTo("isaps174@gmail.com");
+		mail.setFrom(env.getProperty("spring.mail.username"));
+		mail.setSubject("Neuspesno zakazivanje pregleda");
+		mail.setText("Postovani/-a " + pacijent.getIme() + " " + pacijent.getPrezime() + ","
+					+"\nNazalost nismo mogli da Vam zakazemo pregled, molimo da se obratite Vasem lekaru.");
+					
+		mail.setSentDate(new Date());
+		System.out.println(mail);
+		javaMailSender.send(mail);
+		System.out.println("Email poslat!");
+	}
+	
+	@Async
+	public void sendReservationAptToAdmin(Korisnik admin, Pregled pregled, Korisnik pacijent) {
+		SimpleMailMessage mail = new SimpleMailMessage();
+		
+		mail.setTo("isaps174@gmail.com");
+		mail.setFrom(env.getProperty("spring.mail.username"));
+		mail.setSubject("Zakazivanje pregleda");
+		mail.setText("Postovani/-a " + admin.getIme() + " " + admin.getPrezime() + ","
+					+"\nUspesno je odradjena automatsko zakazivanje operacija za pacijenta: " + pacijent.getIme() + " " + pacijent.getPrezime() + "."
+					+"\nOperacija je zakazana za: " + pregled.getDatumIVremePregleda().getTime() + " u sali: " + pregled.getSala().getIme());
+					
+		mail.setSentDate(new Date());
+		System.out.println(mail);
+		javaMailSender.send(mail);
+		System.out.println("Email poslat!");
+	}
+	
 	
 	@Async
 	public void sendAbsenceAccept(Korisnik osoblje, Odsustvo o){

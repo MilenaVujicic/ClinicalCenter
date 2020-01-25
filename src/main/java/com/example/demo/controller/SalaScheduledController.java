@@ -45,7 +45,7 @@ public class SalaScheduledController {
 	@Autowired
 	private AdministratorKlinikeService administratorKlinikeService;
 
-	@Scheduled(cron = "${greeting.cron}")
+	@Scheduled(cron = "${greeting1.cron}")
 	public void autoDodelaSala() {
 		System.out.println("Start of auto dodela sala");
 		List<Operacija> nerasporedjene_operacije = operacijaService.findByStatus(StatusOperacije.NERASPOREDJEN);
@@ -70,10 +70,10 @@ public class SalaScheduledController {
 					for (AdministratorKlinike admininstrator : administratoriKlinike) {
 						if (admininstrator.getKlinika().getId().equals(klinika.getId())) {
 							Korisnik admin = korisnikService.findOne(admininstrator.getIdKorisnik());
-							//emailService.sendReservationToAdmin(admin, operacija, pacijent);
+							emailService.sendReservationToAdmin(admin, operacija, pacijent);
 						}
 					}
-					//emailService.sendSuccessfulReservationPatient(pacijent, operacija, klinika);
+					emailService.sendSuccessfulReservationPatient(pacijent, operacija, klinika);
 					System.out.println("####" + termin.getDatum().getTime() + " " + operacija.getPacijent().getIdKorisnik() + " " + termin.getSala().getIme());
 					break;
 				}
@@ -113,11 +113,11 @@ public class SalaScheduledController {
 					terminService.save(slobodanTermin);
 					slobodni_termini.remove(slobodanTermin);
 					Korisnik pacijent = korisnikService.findOne(operacija.getPacijent().getIdKorisnik());
-					//emailService.sendSuccessfulReservationPatient(pacijent, operacija, klinika);
+					emailService.sendSuccessfulReservationPatient(pacijent, operacija, klinika);
 					for (AdministratorKlinike administrator : administratoriKlinike) {
 						if (administrator.getKlinika().getId().equals(klinika.getId())) {
 							Korisnik admin = korisnikService.findOne(administrator.getIdKorisnik());
-							//emailService.sendReservationToAdmin(admin, operacija, pacijent);
+							emailService.sendReservationToAdmin(admin, operacija, pacijent);
 						}
 					}
 					System.out.println("####" + slobodanTermin.getDatum().getTime() + " " + operacija.getPacijent().getIdKorisnik() + " " + slobodanTermin.getSala().getIme());
@@ -125,7 +125,7 @@ public class SalaScheduledController {
 				else {
 					System.out.println("Nema slobodnih termina");
 					Korisnik pacijent = korisnikService.findOne(operacija.getPacijent().getIdKorisnik());
-					//emailService.sendUnsuccessfulReservationPatient(pacijent);
+					emailService.sendUnsuccessfulReservationPatient(pacijent);
 				}
 			}
 		}
@@ -137,7 +137,7 @@ public class SalaScheduledController {
 		System.out.println("Nerasporedjene operacije" + nerasporedjene_operacije.size());
 		System.out.println("Rasporedjene operacije" + rasporedjene_operacije.size());
 		
-		System.out.println("End of suto dodela sala");
+		System.out.println("End of auto dodela sala");
 		
 	}
 	

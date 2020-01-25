@@ -19,9 +19,11 @@ import com.example.demo.model.Korisnik;
 import com.example.demo.model.Operacija;
 import com.example.demo.model.Pregled;
 import com.example.demo.model.Sala;
+import com.example.demo.model.StatusOperacije;
 import com.example.demo.model.StatusPregleda;
 import com.example.demo.model.Termin;
 import com.example.demo.service.DoktorService;
+import com.example.demo.service.EmailService;
 import com.example.demo.service.KlinikaService;
 import com.example.demo.service.KorisnikService;
 import com.example.demo.service.PregledService;
@@ -50,6 +52,9 @@ public class PregledController {
 	
 	@Autowired
 	private KlinikaService klinikaService;
+	
+	@Autowired
+	private EmailService emailService;
 	
 	@RequestMapping(value = "/sviPregledi/{id}", method = RequestMethod.GET)
 	public ResponseEntity<List<Pregled>> sviPregledi(@PathVariable("id") Long identifikacija) {
@@ -83,11 +88,12 @@ public class PregledController {
 	}
 	
 
-	@RequestMapping(value = "/rezervisi/{sala}/{operacija}/{doktori}", method = RequestMethod.GET)
-	public ResponseEntity<String> rezervisi(@PathVariable("sala") Long sala_id, @PathVariable("operacija") Long operacija_id, @PathVariable("doktori") String text) {
-		System.out.println("sala" + sala_id + "operacija" + operacija_id + "doktori" + text);
+	@RequestMapping(value = "/rezervisi/{sala}/{pregled}/{doktori}", method = RequestMethod.GET)
+	public ResponseEntity<String> rezervisiApt(@PathVariable("sala") Long sala_id, @PathVariable("pregled") Long pregled_id, @PathVariable("doktori") String text) {
+		System.out.println("#######################");
+		System.out.println("sala" + sala_id + "pregled" + pregled_id + "doktori" + text);
 		Sala sala = salaService.findOne(sala_id);
-		Pregled pregled = pregledService.findOne(operacija_id);
+		Pregled pregled = pregledService.findOne(pregled_id);
 		pregled.setStatus(StatusPregleda.ZAKAZAN);
 		pregled.setSala(sala);
 		String[] splitter = text.split("~");
@@ -96,7 +102,7 @@ public class PregledController {
 		Klinika klinika = klinikaService.findOne(pregled.getSala().getKlinika().getId());
 		
 		for (Termin termin : termini) {
-			if (termin.getSala().getId().equals(sala.getId()) && termin.getDatum().equals(pregled.getDatumIVremePregleda().getTimeInMillis())) {
+			if (termin.getSala().getId().equals(sala.getId()) && termin.getDatum().equals(pregled.getDatumIVremePregleda())) {
 				termin.setSlobodan(false);
 				terminService.save(termin);
 			}
@@ -108,15 +114,14 @@ public class PregledController {
 				System.out.println("###pre" + doktor.getOperacije().size());
 				doktor.getPregledi().add(pregled);
 				pregled.setDoktor(doktor);
-				System.out.println("###posle" + doktor.getOperacije().size());
 				Korisnik dok = korisnikService.findOne(doktor.getIdKorisnik());
-				//emailService.sendSuccessfulReservationDoctor(pacijent, operacija, dok, klinika);
+				emailService.sendSuccessfulReservationAptDoctor(pacijent, pregled, dok, klinika);
 				doktorService.save(doktor);
 			}
 		}
 		
 		pregledService.save(pregled);
-		//emailService.sendSuccessfulReservationPatient(pacijent, operacija, klinika);
+		emailService.sendSuccessfulReservationAptPatient(pacijent, pregled, klinika);
 		return new ResponseEntity<String>("Uspesno rezervisana sala", HttpStatus.OK);
 	}
 	
@@ -125,6 +130,12 @@ public class PregledController {
 	public ResponseEntity<Pregled> preuzmi(@PathVariable("id") Long identifikacija) {
 		Pregled pregled = pregledService.findOne(identifikacija);
 		return new ResponseEntity<Pregled>(pregled, HttpStatus.OK);
+	}
+	
+	@RequestMapping(value = "/zahtevi", method=RequestMethod.GET) 
+	public ResponseEntity<List<Pregled>> zahtevi() {
+		List<Pregled> pregledi = pregledService.findByStatus(StatusPregleda.NERASPOREDJEN);
+		return new ResponseEntity<List<Pregled>>(pregledi, HttpStatus.OK);
 	}
 
 }
