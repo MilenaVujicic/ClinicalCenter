@@ -16,6 +16,8 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 @Entity
 public class Korisnik {
 	
@@ -51,7 +53,7 @@ public class Korisnik {
 	private String adresa;
 	
 	@Column(name = "telefon")
-	private int telefon;
+	private String telefon;
 	
 	@Column(name = "datumRodjenja", nullable = true) 
 	private Date datumRodjenja;
@@ -59,6 +61,7 @@ public class Korisnik {
 	@Column(name = "uloga", nullable = true) 
 	private UlogaKorisnika uloga;		
 	
+	@JsonIgnore
 	@OneToMany(mappedBy = "korisnik", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 	private Set<Odsustvo> odsustva = new HashSet<Odsustvo>();
 	
@@ -89,7 +92,7 @@ public class Korisnik {
 	}
 
 	public Korisnik(Long id, String ime, String prezime, String email, String username, String password, String grad,
-			String drzava, Long jmbg, String adresa, int telefon, Date datumRodjenja, UlogaKorisnika uloga,
+			String drzava, Long jmbg, String adresa, String telefon, Date datumRodjenja, UlogaKorisnika uloga,
 			Set<Odsustvo> odsustva, boolean aktivan, boolean aktiviran) {
 		super();
 		this.id = id;
@@ -206,11 +209,11 @@ public class Korisnik {
 		this.username = username;
 	}
 
-	public int getTelefon() {
+	public String getTelefon() {
 		return telefon;
 	}
 
-	public void setTelefon(int telefon) {
+	public void setTelefon(String telefon) {
 		this.telefon = telefon;
 	}
 

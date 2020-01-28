@@ -19,6 +19,10 @@ public class KorisnikDTO {
 	private Long id;
 	
 	@NotNull
+	@NotEmpty
+	private String username;
+	
+	@NotNull
     @NotEmpty
 	private String ime;
 	
@@ -65,7 +69,7 @@ public class KorisnikDTO {
 	
 	@NotNull
     @NotEmpty
-	private int telefon;
+	private String telefon;
 	
 	
 	
@@ -91,7 +95,7 @@ public class KorisnikDTO {
 	}
 	
 	public KorisnikDTO(Long id, String ime, String prezime, String email, String password, String matchingPassword, String grad, String drzava, Long jmbg,
-			String adresa, Date datumRodjenja, UlogaKorisnika ulogaKorisnika, int telefon) {
+			String adresa, Date datumRodjenja, UlogaKorisnika ulogaKorisnika, String telefon) {
 		super();
 		this.id = id;
 		this.ime = ime;
@@ -107,9 +111,29 @@ public class KorisnikDTO {
 		this.uloga = ulogaKorisnika;
 		this.telefon = telefon;
 	}
+	
+
+	public KorisnikDTO(Long id, String username, String ime, String prezime, String email, String password, String matchingPassword, String grad, String drzava, Long jmbg,
+			String adresa, Date datumRodjenja, UlogaKorisnika ulogaKorisnika, String telefon) {
+		super();
+		this.id = id;
+		this.ime = ime;
+		this.prezime = prezime;
+		this.email = email;
+		this.password = password;
+		this.matchingPassword = matchingPassword;
+		this.grad = grad;
+		this.drzava = drzava;
+		this.jmbg = jmbg;
+		this.adresa = adresa;
+		this.datumRodjenja = datumRodjenja;
+		this.uloga = ulogaKorisnika;
+		this.telefon = telefon;
+		this.username = username;
+	}
 
 	public KorisnikDTO(Korisnik k) {
-		this(k.getId(), k.getIme(), k.getPrezime(),k.getEmail(), k.getPassword(), k.getPassword(), k.getGrad(),k.getDrzava(), k.getJmbg(),
+		this(k.getId(), k.getUsername(), k.getIme(), k.getPrezime(),k.getEmail(), k.getPassword(), k.getPassword(), k.getGrad(),k.getDrzava(), k.getJmbg(),
 				k.getAdresa(), k.getDatumRodjenja(), k.getUloga(), k.getTelefon());
 	}
 
@@ -161,13 +185,18 @@ public class KorisnikDTO {
 		return uloga;
 	}
 
-	public int getTelefon() {
+	public String getTelefon() {
 		return telefon;
 	}
 
-	public void setTelefon(int telefon) {
+	public void setTelefon(String telefon) {
 		this.telefon = telefon;
 	}
+
+	public String getUsername() {
+		return username;
+	}
+	
 	
 	
 	

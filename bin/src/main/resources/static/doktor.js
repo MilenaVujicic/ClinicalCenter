@@ -30,7 +30,7 @@ function cancelRecipe() {
 }
 
 function dodajPregled() {
-	alert('Work in progress');
+	$('#recipeForm').attr('hidden', false);
 }
 
 function dodajOperaciju() {

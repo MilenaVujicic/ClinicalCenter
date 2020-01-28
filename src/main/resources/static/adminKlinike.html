@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+	<meta charset="utf-8">
+    <!-- This file has been downloaded from Bootsnipp.com. Enjoy! -->
+    <title>Clinic administrator</title>
+    <link href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.0/css/bootstrap.min.css" rel="stylesheet">
+    
+    <script src="http://code.jquery.com/jquery-1.11.1.min.js"></script>
+    <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.0/js/bootstrap.min.js"></script>
+    <script src = "/adminKlinike.js" type = 'text/javascript'></script>
+
+	<!-- Website CSS style -->
+	<link href="css/bootstrap.min.css" rel="stylesheet">
+	<link rel="stylesheet" href="adminKlinike.css">
+	
+	<!-- Data Table -->
+	<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.20/css/jquery.dataTables.css">
+	<script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.10.20/js/jquery.dataTables.js"></script>
+	
+	<!-- Website Font style -->
+    <script src="https://kit.fontawesome.com/a065fea601.js" crossorigin="anonymous"></script>
+	<!-- Google Fonts -->
+	<link href='https://fonts.googleapis.com/css?family=Passion+One' rel='stylesheet' type='text/css'>
+	<link href='https://fonts.googleapis.com/css?family=Oxygen' rel='stylesheet' type='text/css'>
+</head>
+<body>
+	<nav class="navbar navbar-inverse">
+	  <div class="container-fluid">
+	    <div class="navbar-header">
+	      <a class="navbar-brand">Clinical centre</a>
+	    </div>
+	    <ul class="nav navbar-nav">
+	      <li><a onclick="return home();">Home</a></li>
+	      <li class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">Add <span class="caret"></span></a>
+	        <ul class="dropdown-menu">
+	          <li><a>New administrator of clinical centre</a></li>
+	        </ul>
+	      </li>
+	      <li><a href = "#" id = "aVacation">Staff vacations</a>
+	      <li><a href = "#" id = "aApt">Appointmen requests</a>
+	      <li><a onclick="return operationRequest();">Operation requests</a></li>
+	      <li><a href="#">Personal data</a></li>
+	    </ul>
+	    <ul class="nav navbar-nav navbar-right">
+	      <li><a href="#"><span class="glyphicon glyphicon-log-out"></span> Logout</a></li>
+	    </ul>
+	  </div>
+	</nav>
+	
+	<table class = "table" id = "aptTable" hidden = "true">
+		<thead>
+			<tr>
+				<th scope  = "col">Patient</th>
+				<th scope = "col">Date and Time </th>
+				<th scope = "col">Unoccupied rooms</th>
+				</tr>
+		</thead>
+		<tbody>
+		</tbody>
+	</table>
+	
+	<table class="table" id="requestsTable" hidden="true">
+		<thead>
+			<tr>
+				<th scope="col">Patient</th>
+				<th scope="col">Date and Time</th>
+				<th scope="col">Unoccupied operation rooms</th>
+			</tr>
+		</thead>
+		<tbody>
+		</tbody>
+	</table>
+	
+<table class="table" id="freeRooms" hidden="true">
+		<thead>
+			<tr>
+				<th scope="col">Room</th>
+				<th scope="col">Description</th>
+				<th scope="col">Date</th>
+				<th scope="col">Reservation</th>
+			</tr>
+		</thead>
+		<tbody>
+		</tbody>
+</table>
+
+<table class="table" id="freeRoomsApt" hidden="true">
+		<thead>
+			<tr>
+				<th scope="col">Room</th>
+				<th scope="col">Description</th>
+				<th scope="col">Date</th>
+				<th scope="col">Reservation</th>
+			</tr>
+		</thead>
+		<tbody>
+		</tbody>
+</table>
+	
+	
+	
+	
+	<table class = "table" id = "tAbsence" hidden = "true">
+	<thead>
+	<tr>
+	<th scope = "col">Staff Name</th>
+	<th scope = "col">Start</th>
+	<th scope = "col">End</th>
+	<th scope = "col">Type</th>
+	<th scope = "col">Accept</th>
+	<th scope = "col">Deny</th>
+	<th scope = "col">Additional message</th>
+	<th scope = "col">Add message</th>
+	</tr>
+	</thead>
+	<tbody>
+	</tbody>
+	</table>
+	
+	<div class="form-row" id="doctors" hidden="true">
+
+	</div>
+
+	
+</body>
+</html>

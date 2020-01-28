@@ -3,6 +3,7 @@
  */
 package com.example.demo.dto;
 
+import java.util.Calendar;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
@@ -22,7 +23,7 @@ public class PregledDTO {
 	private String naziv;
 	private String anamneza;
 	private Pacijent pacijent;
-	private Date datumIVremePregleda;
+	private Calendar datumIVremePregleda;
 	private String tipPregleda;
 	private int duzina;
 	private Sala sala;
@@ -31,13 +32,15 @@ public class PregledDTO {
 	private Set<Dijagnoza> dijagnoze = new HashSet<Dijagnoza>();
 	private Set<Lek> lekovi = new HashSet<Lek>();
 	private StatusPregleda status;
+	private String imeDoktora;
+	private String prezimeDoktora;
 	
 	public PregledDTO() {
 		super();
 		// TODO Auto-generated constructor stub
 	}
 
-	public PregledDTO(Long id, String naziv, String anamneza, Pacijent pacijent, Date datumIVremePregleda,
+	public PregledDTO(Long id, String naziv, String anamneza, Pacijent pacijent, Calendar datumIVremePregleda,
 			String tipPregleda, int duzina, Sala sala, Doktor doktori, double cena, Set<Dijagnoza> dijagnoze,
 			Set<Lek> lekovi, StatusPregleda status) {
 		super();
@@ -102,11 +105,11 @@ public class PregledDTO {
 		this.pacijent = pacijent;
 	}
 
-	public Date getDatumIVremePregleda() {
+	public Calendar getDatumIVremePregleda() {
 		return datumIVremePregleda;
 	}
 
-	public void setDatumIVremePregleda(Date datumIVremePregleda) {
+	public void setDatumIVremePregleda(Calendar datumIVremePregleda) {
 		this.datumIVremePregleda = datumIVremePregleda;
 	}
 
@@ -180,6 +183,22 @@ public class PregledDTO {
 				+ ", datumIVremePregleda=" + datumIVremePregleda + ", tipPregleda=" + tipPregleda + ", duzina=" + duzina
 				+ ", sala=" + sala + ", doktori=" + doktori + ", cena=" + cena + ", dijagnoze=" + dijagnoze
 				+ ", lekovi=" + lekovi + ", status=" + status + "]";
+	}
+
+	public String getImeDoktora() {
+		return imeDoktora;
+	}
+
+	public void setImeDoktora(String imeDoktora) {
+		this.imeDoktora = imeDoktora;
+	}
+
+	public String getPrezimeDoktora() {
+		return prezimeDoktora;
+	}
+
+	public void setPrezimeDoktora(String prezimeDoktora) {
+		this.prezimeDoktora = prezimeDoktora;
 	}
 	
 	

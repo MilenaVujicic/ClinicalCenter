@@ -35,9 +35,16 @@ public class Doktor {
 	@Column(name = "prosecnaOcena", nullable = false)
 	private double prosenaOcena;
 	
+	@Column(name = "brojOcena", nullable = false)
+	private int brojOcena;
+	
+	@Column(name = "sumaOcena", nullable = false)
+	private int sumaOcena;
+	
 	@ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
 	private Klinika klinika;
 	
+	@JsonIgnore
 	@ManyToMany(mappedBy = "doktori")
 	private Set<Operacija> operacije = new HashSet<Operacija>();
 	
@@ -100,6 +107,22 @@ public class Doktor {
 
 	public void setProsenaOcena(double prosenaOcena) {
 		this.prosenaOcena = prosenaOcena;
+	}
+	
+	public int getSumaOcena() {
+		return sumaOcena;
+	}
+	
+	public void setSumaOcena(int sumaOcena) {
+		this.sumaOcena = sumaOcena;
+	}
+	
+	public int getBrojOcena() {
+		return brojOcena;
+	}
+	
+	public void setBrojOcena(int brojOcena) {
+		this.brojOcena = brojOcena;
 	}
 
 	public Klinika getKlinika() {

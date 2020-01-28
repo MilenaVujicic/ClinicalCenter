@@ -6,12 +6,7 @@ import java.util.Optional;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 
-import com.example.demo.model.Sala;
-
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.jpa.repository.JpaRepository;
-
+import com.example.demo.model.Klinika;
 import com.example.demo.model.Sala;
 
 public interface SalaRepository extends JpaRepository<Sala, Long> {
@@ -26,6 +21,12 @@ public interface SalaRepository extends JpaRepository<Sala, Long> {
 	
 	Sala findByOpis(String opis);
 	
+	Sala save(Sala s);
 	
+
+	List<Sala> findByKlinika(Klinika k);
+
+	
+
 	
 }

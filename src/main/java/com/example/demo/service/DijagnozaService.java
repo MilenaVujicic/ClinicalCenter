@@ -12,7 +12,7 @@ import com.example.demo.repository.DijagnozaRepository;
 public class DijagnozaService {
 
 	@Autowired
-	DijagnozaRepository dijagnozaRepository;
+	private DijagnozaRepository dijagnozaRepository;
 	
 	public List<Dijagnoza> findAll() {
 		return dijagnozaRepository.findAll();
@@ -24,5 +24,9 @@ public class DijagnozaService {
 	
 	public Dijagnoza findOne(Long id) {
 		return dijagnozaRepository.findById(id).orElse(null);
+	}
+	
+	public void delete(Dijagnoza dijagnoza) {
+		dijagnozaRepository.delete(dijagnoza);
 	}
 }

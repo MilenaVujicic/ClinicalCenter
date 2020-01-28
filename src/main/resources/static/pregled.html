@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Pregled</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+	<meta charset="UTF-8">
+    <!-- This file has been downloaded from Bootsnipp.com. Enjoy! -->
+    <title>Doctor</title>
+    <link href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.0/css/bootstrap.min.css" rel="stylesheet">
+    
+    <script src="http://code.jquery.com/jquery-1.11.1.min.js"></script>
+    <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.0/js/bootstrap.min.js"></script>
+	<!-- Website CSS style -->
+	<link href="css/bootstrap.min.css" rel="stylesheet">
+	<link rel="stylesheet" href="doktor.css">
+	
+	<!-- Website Font style -->
+    <script src="https://kit.fontawesome.com/a065fea601.js" crossorigin="anonymous"></script>
+	<!-- Google Fonts -->
+	<link href='https://fonts.googleapis.com/css?family=Passion+One' rel='stylesheet' type='text/css'>
+	<link href='https://fonts.googleapis.com/css?family=Oxygen' rel='stylesheet' type='text/css'>
+	<script>
+		$(document).ready(()=>{
+			document.getElementById ("btnSaveExam").addEventListener("click", noviPregled, false);
+			
+			$.ajax({
+				url:'usluga/sve_usluge',
+				type: 'GET',
+				success: function(usluge){
+					let sNew =  $('<option>New Examination</option>');
+					$('#allExams').append(sNew);
+					for (i = 0; i < usluge.length; i++) {
+						let option =  $('<option>'+ usluge[i].id + '.' + usluge[i].naziv+'</option>');
+						$('#allExams').append(option)
+					}
+						
+
+				},
+				error:function(){
+					alert('Something went wrong');
+				}
+			})
+		})
+		
+		function noviPregled(){
+			
+			let eSel = $('#allExams').val();
+			let eName = $('#examName').val();
+			let ePrice = $('#examPrice').val();
+			let eDescription = $('#examDescription').val()
+			$.ajax({
+				url:'usluga/nova_usluga',
+				type:'POST',
+				data: {
+					eSel : eSel,
+					eName : eName, 
+					ePrice : ePrice,
+					eDescription, eDescription
+				},
+				success: function(){
+					alert('Succesfully saved the examination');
+					clearData();
+				},
+				error: function(){
+					alert('Something went wrong');
+				}
+			})
+		}
+		
+		function clearData(){
+			$('#examName').val('');
+			$('#examPrice').val('');
+			$('#examDescription').val('');
+			location.reload();
+		}
+	</script>
+</head>
+<body>
+<h3>Change examination data</h3>
+
+<form id="examForm" >
+<div class="form-row">
+		  <div class="form-group col-md-12">
+		  		<select class="browser-default custom-select" id="allExams">
+		  			
+		  		</select>
+		  </div>
+	  </div>
+	  <div class="form-row">
+		  <div class="form-group col-md-12">
+		    <label for="examName">Examination name:</label>
+		    <input type="text" class="form-control" id="examName" >
+		  </div>
+</div>
+<div class="form-row">
+		  <div class="form-group col-md-12">
+		    <label for="examDescription">Examination description:</label>
+		    <input type="text" class="form-control" id="examDescription" >
+		  </div>
+</div>
+ <div class="form-row">
+		  <div class="form-group col-md-12">
+		    <label for="examPrice">Examination price:</label>
+		    <input type="number" class="form-control" id="examPrice" >
+		  </div>
+	  </div>
+	  <div class="form-row">
+		  <div class="form-group col-md-1">
+		  	<a class="btn btn-primary" id = "btnSaveExam">Save examination</a>
+	  	  </div>
+	  </div>
+</form>
+</body>
+</html>

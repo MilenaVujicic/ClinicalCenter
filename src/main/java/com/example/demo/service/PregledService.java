@@ -1,9 +1,12 @@
 package com.example.demo.service;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.example.demo.model.Pregled;
+import com.example.demo.model.StatusPregleda;
 import com.example.demo.repository.PregledRespository;
 
 @Service
@@ -15,4 +18,26 @@ public class PregledService {
 	public Pregled save(Pregled pregled) {
 		return pregledRespository.save(pregled);
 	}
+
+	public List<Pregled> findAll() {
+		return pregledRespository.findAll();
+	}
+	
+	public Pregled findOne(Long id) {
+		return pregledRespository.findById(id).orElse(null);
+	}
+	
+	public void delete(Pregled pregled) {
+		pregledRespository.delete(pregled);
+	}
+	
+
+	public List<Pregled> findByStatus(StatusPregleda status){
+		return pregledRespository.findByStatus(status);
+	}
+
+	public List<Pregled> findByPatientId(Long id) {
+		return pregledRespository.findByPatientID();
+	}
+
 }

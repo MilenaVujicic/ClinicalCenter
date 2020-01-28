@@ -1,5 +1,6 @@
 package com.example.demo.model;
 
+import java.util.Calendar;
 import java.util.Date;
 
 import javax.persistence.CascadeType;
@@ -25,10 +26,10 @@ public class Odsustvo {
 	private VrstaOdsustva vrstaOdsustva;
 	
 	@Column(name = "pocetak_odsustva", nullable = false)
-	private Date pocetakOdsustva;
+	private Calendar pocetakOdsustva;
 	
 	@Column(name = "zavrsetak_odsustva", nullable = false)
-	private Date zavrsetakOdsustva;
+	private Calendar zavrsetakOdsustva;
 	
 	@Column(name = "odobren", nullable = false)
 	private boolean odobren;
@@ -62,19 +63,19 @@ public class Odsustvo {
 		this.vrstaOdsustva = vrstaOdsustva;
 	}
 
-	public Date getPocetakOdsustva() {
+	public Calendar getPocetakOdsustva() {
 		return pocetakOdsustva;
 	}
 
-	public void setPocetakOdsustva(Date pocetakOdsustva) {
+	public void setPocetakOdsustva(Calendar pocetakOdsustva) {
 		this.pocetakOdsustva = pocetakOdsustva;
 	}
 
-	public Date getZavrsetakOdsustva() {
+	public Calendar getZavrsetakOdsustva() {
 		return zavrsetakOdsustva;
 	}
 
-	public void setZavrsetakOdsustva(Date zavrsetakOdsustva) {
+	public void setZavrsetakOdsustva(Calendar zavrsetakOdsustva) {
 		this.zavrsetakOdsustva = zavrsetakOdsustva;
 	}
 

@@ -27,8 +27,6 @@ public class PacijentService {
 		return pacijentRepository.findByIdKorisnik(idKorisnik);
 	}
 	
-
-	
 	public Pacijent findByVisina(int visina) {
 		return pacijentRepository.findByVisina(visina);
 	}
@@ -36,11 +34,13 @@ public class PacijentService {
 	public Pacijent findByDioptrija(double dioptrija) {
 		return pacijentRepository.findByDioptrija(dioptrija);
 	}
-	
-
 
 	public Pacijent findOne(Long id) {
 		return pacijentRepository.findById(id).orElseGet(null);
+	}
+
+	public Pacijent save(Pacijent pacijent) {
+		return pacijentRepository.save(pacijent);
 	}
 	
 }

@@ -36,13 +36,16 @@ public class KorisnikService {
 		return korisnikRepository.findAll();
 	}
 	
-
 	public List<Korisnik> findByIme(String ime){
 		return korisnikRepository.findByIme(ime);
 	}
 	
 	public List<Korisnik> findByPrezime(String prezime){
 		return korisnikRepository.findByPrezime(prezime);
+	}
+	
+	public Korisnik findOne(Long id) {
+		return korisnikRepository.findById(id).orElse(null);
 	}
 	
 	public Optional<Korisnik> findById(Long id){
