@@ -34,9 +34,6 @@ public class Korisnik {
 	@Column(name = "email", nullable = false)
 	private String email;
 	
-	@Column(name = "username", nullable = false, unique = true)
-	private String username;
-	
 	@Column(name = "password", nullable = false)
 	private String password;
 	
@@ -99,7 +96,6 @@ public class Korisnik {
 		this.ime = ime;
 		this.prezime = prezime;
 		this.email = email;
-		this.username = username;
 		this.password = password;
 		this.grad = grad;
 		this.drzava = drzava;
@@ -201,14 +197,6 @@ public class Korisnik {
 		this.aktivan = aktivan;
 	}
 
-	public String getUsername() {
-		return username;
-	}
-
-	public void setUsername(String username) {
-		this.username = username;
-	}
-
 	public String getTelefon() {
 		return telefon;
 	}
@@ -243,8 +231,8 @@ public class Korisnik {
 
 	@Override
 	public String toString() {
-		return "Korisnik [id=" + id + ", ime=" + ime + ", prezime=" + prezime + ", email=" + email + ", username="
-				+ username + ", password=" + password + ", grad=" + grad + ", drzava=" + drzava + ", jmbg=" + jmbg
+		return "Korisnik [id=" + id + ", ime=" + ime + ", prezime=" + prezime + ", email=" + email +
+				", password=" + password + ", grad=" + grad + ", drzava=" + drzava + ", jmbg=" + jmbg
 				+ ", adresa=" + adresa + ", telefon=" + telefon + ", datumRodjenja=" + datumRodjenja + ", uloga="
 				+ uloga + ", odsustva=" + odsustva + ", aktivan=" + aktivan + ", aktiviran=" + aktiviran + "]";
 	}

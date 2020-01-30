@@ -33,5 +33,11 @@ public class TerminService {
 
 		return terminRepository.findBySlobodan(slobodan);
 	}
+
+
+	public Termin findOne(Long id) {
+		// TODO Auto-generated method stub
+		return terminRepository.findById(id).orElseGet(null);
+	}
 	
 }

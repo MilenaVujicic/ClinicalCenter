@@ -7,56 +7,73 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationEventPublisher;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.ui.Model;
 import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.example.demo.dto.KorisnikDTO;
+import com.example.demo.error.UserAlreadyExistException;
 import com.example.demo.model.Korisnik;
 import com.example.demo.service.IUserService;
+import com.example.demo.service.KorisnikService;
 
 import org.springframework.stereotype.Controller;
 
-@Controller
+@RestController
+@RequestMapping(value = "registration")
 public class RegistrationController {
 	
-	private final Logger LOGGER = LoggerFactory.getLogger(getClass());
-	
 	@Autowired
-    private IUserService userService;
+    private KorisnikService korisnikService;
 	
-	@Autowired
-    private ApplicationEventPublisher eventPublisher;
-
-	@RequestMapping(value = "/user/registration", method = RequestMethod.GET)
-	public String showRegistrationForm(WebRequest request, Model model) {
-	    KorisnikDTO userDto = new KorisnikDTO();
-	    model.addAttribute("user", userDto);
-	    return "registration";
-	}
-	
-	public ModelAndView registerUserAccount(@ModelAttribute("user") @Valid final KorisnikDTO userDto, 
-			final HttpServletRequest request, final Errors errors) {
-		LOGGER.debug("Registering user account with information: {}", userDto);
-
-        final Korisnik registered = userService.registerNewUserAccount(userDto);
-        if (registered == null) {
-            // result.rejectValue("email", "message.regError");
-            return new ModelAndView("registration", "user", userDto);
-        }
-        try {
-            final String appUrl = "http://" + request.getServerName() + ":" + request.getServerPort() + request.getContextPath();
-            eventPublisher.publishEvent(new OnRegistrationCompleteEvent(registered, request.getLocale(), appUrl));
-        } catch (final Exception ex) {
-            LOGGER.warn("Unable to register user", ex);
-            return new ModelAndView("emailError", "user", userDto);
-        }
-        return new ModelAndView("successRegister", "user", userDto);
+	@RequestMapping(value = "/register", method = RequestMethod.PUT)
+	public ResponseEntity<String> registracijaPacijenta(@RequestParam(value="ime") String ime,
+														@RequestParam(value="prz") String prezime,
+														@RequestParam(value="email") String email,
+														@RequestParam(value="address") String address,
+														@RequestParam(value="city") String city,
+														@RequestParam(value="state") String state,
+														@RequestParam(value="phone") String phone,
+														@RequestParam(value="id") String id,
+														@RequestParam(value="password") String password,
+														@RequestParam(value="confirm") String confirm) {
 		
+		if(!password.equals(confirm)) {
+			System.out.println("Passwords don't match!");
+			return new ResponseEntity<String>("Passwords don't match", HttpStatus.CONFLICT);
+			
+		}
+		Long id_l = null;
+		try {
+			id_l = Long.parseLong(id);
+		} catch (Exception e) {
+			System.out.println("Pogresan format za JMBG");
+			return new ResponseEntity<String>("Pogresan format za JMBG", HttpStatus.CONFLICT);
+		}
+		
+		KorisnikDTO korisnikDTO = new KorisnikDTO();
+		korisnikDTO.setIme(ime);
+		korisnikDTO.setPrezime(prezime);
+		korisnikDTO.setEmail(email);
+		korisnikDTO.setAdresa(address);
+		korisnikDTO.setGrad(city);
+		korisnikDTO.setDrzava(state);
+		korisnikDTO.setTelefon(phone);
+		korisnikDTO.setJmbg(id_l);
+		korisnikDTO.setPassword(password);
+		korisnikDTO.setMatchingPassword(confirm);
+		
+		Korisnik korisnik = korisnikService.registerNewUserAccount(korisnikDTO);
+		
+		return new ResponseEntity<String>("",HttpStatus.OK);
 	}
 	
 	

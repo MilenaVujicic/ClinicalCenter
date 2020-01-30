@@ -78,9 +78,8 @@ public class EmailService {
 		else {
 			mail.setText("Poštovani/-a " + korisnik.getIme() + " " + korisnik.getPrezime() + ",\n\nvaš nalog je "
 					+ "aktiviran." 
-					+ "\nVaš username: " + korisnik.getUsername()
+					+ "\nVaš username: " + korisnik.getEmail()
 					+ "\nVaš prvobitan password: " + korisnik.getPassword()
-					+ "\nVaš email: " + korisnik.getEmail()
 					+ "\n\nZa dalje korišćenje naše aplikacije idite na:\nhttp://localhost:8080/");
 		}
 		mail.setSentDate(new Date());

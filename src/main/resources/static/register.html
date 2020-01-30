@@ -21,12 +21,51 @@
 		<link href='https://fonts.googleapis.com/css?family=Oxygen' rel='stylesheet' type='text/css'>
 
 		<title>Register</title>
+		<script>
+		
+		function register() {
+			let ime = $('#name').val();
+			let prz = $('#surname').val();
+			let email = $('#email').val();
+			let address = $('#address').val();
+			let city = $('#city').val();
+			let state = $('#state').val();
+			let phone = $('#phone').val();
+			let id = $('#id').val();
+			let password = $('#password').val();
+			let confirm = $('#confirm').val();
+			
+			$.ajax({
+				type:'PUT',
+				url:'registration/register',
+				data:{
+					ime:ime,
+					prz:prz,
+					email:email,
+					address:address,
+					city:city,
+					state:state,
+					phone:phone,
+					id:id,
+					password:password,
+					confirm:confirm
+				},
+				success: function(){
+					window.location.href = "http://localhost:8080/s";
+				},
+				error: function(e){
+					alert(e.responseText);
+				}
+			});
+		}
+		
+		</script>
 	</head>
 	<body>
 		<div class="container">
 			<div class="row main">
 				<div class="main-login main-center">
-					<form class="" method="post" action="#">
+					<form>
 						
 						<div class="form-group">
 							<label for="name" class="cols-sm-2 control-label">Your Name</label>
@@ -129,7 +168,7 @@
 						</div>
 
 						<div class="form-group ">
-							<a target="_blank" type="button" id="button" class="btn btn-primary btn-lg btn-block login-button">Register</a>
+							<a onClick="register()" type="button" id="button" class="btn btn-primary btn-lg btn-block login-button">Register</a>
 						</div>
 						
 					</form>
@@ -142,9 +181,4 @@
     <!-- Include all compiled plugins (below), or include individual files as needed -->
     <script src="js/bootstrap.min.js"></script>
 	</body>
-</html>
-<script type="text/javascript">
-
-</script>
-</body>
 </html>
