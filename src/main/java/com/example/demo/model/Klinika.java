@@ -30,15 +30,15 @@ public class Klinika {
 	private String opis;
 
 	@JsonIgnore
-	@OneToMany(mappedBy = "klinika", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+	@OneToMany(mappedBy = "klinika", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
 	private Set<Doktor> doktori = new HashSet<Doktor>();
 	
 	@JsonIgnore
-	@OneToMany(mappedBy = "klinika", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+	@OneToMany(mappedBy = "klinika", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
 	private Set<Sala> sale = new HashSet<Sala>();
 	
 	@JsonIgnore
-	@OneToMany(mappedBy = "klinika", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+	@OneToMany(mappedBy = "klinika", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
 	private Set<Usluga> usluge = new HashSet<Usluga>();
 	
 	@Column(name = "ProsecnaOcena", nullable = false)
@@ -159,11 +159,11 @@ public class Klinika {
 		this.usluge = usluge;
 	}
 
-	@Override
+	/*@Override
 	public String toString() {
 		return "Klinika [id=" + id + ", ime=" + ime + ", adresa=" + adresa + ", opis=" + opis + ", doktori=" + doktori + ", sale=" + sale + ", usluge=" + usluge
 				+ ", prosecnaOcena=" + prosecnaOcena + ", administratoriKlinike=" + administratoriKlinike + "]";
-	}
+	}*/
 	
 	public double getBrojOcena() {
 		return brojOcena;

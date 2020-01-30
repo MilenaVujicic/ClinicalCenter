@@ -9,8 +9,6 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import com.example.demo.model.Operacija;
 import com.example.demo.model.StatusOperacije;
 
-
-
 public interface OperacijaRespository extends JpaRepository<Operacija, Long>{
 
 	List<Operacija> findByStatus(StatusOperacije status);

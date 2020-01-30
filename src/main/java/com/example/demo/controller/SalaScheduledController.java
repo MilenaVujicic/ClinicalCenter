@@ -45,7 +45,7 @@ public class SalaScheduledController {
 	@Autowired
 	private AdministratorKlinikeService administratorKlinikeService;
 
-	@Scheduled(cron = "${greeting.cron}")
+	@Scheduled(cron = "${greeting1.cron}")
 	public void autoDodelaSala() {
 		System.out.println("Start of auto dodela sala");
 		List<Operacija> nerasporedjene_operacije = operacijaService.findByStatus(StatusOperacije.NERASPOREDJEN);
@@ -137,7 +137,7 @@ public class SalaScheduledController {
 		System.out.println("Nerasporedjene operacije" + nerasporedjene_operacije.size());
 		System.out.println("Rasporedjene operacije" + rasporedjene_operacije.size());
 		
-		System.out.println("End of suto dodela sala");
+		System.out.println("End of auto dodela sala");
 		
 	}
 	

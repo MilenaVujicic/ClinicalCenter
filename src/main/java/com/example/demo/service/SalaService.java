@@ -53,5 +53,7 @@ public class SalaService {
 		sala.setKlinika(new Klinika("", "", ""));
 		return salaRepository.findById(id).orElse(null);
 	}
+	
+
 }
 
