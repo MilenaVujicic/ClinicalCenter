@@ -270,11 +270,38 @@ public class PacijentController {
 			
 		}
 		
-		for(Klinika kl : klinike) {
-			//System.out.println(kl.getIme());
-		}
 				
 		return new ResponseEntity<List<Klinika>>(klinike,HttpStatus.OK);
+	}
+	
+	@RequestMapping(value= "/zakaziUnapredDef", method = RequestMethod.PUT)
+	public ResponseEntity<String> zakaziUnapredDef(@RequestParam(value = "id_termina") int id_termina,
+												   @RequestParam(value= "id_korisnika") int id_korisnika) throws InterruptedException {
+		
+		System.out.println("id pregleda: " + id_termina+ " ,id korisnika: " + id_korisnika);
+		//posalji mejl adminu klinike
+		List<Korisnik> administratori = korisnikService.findByUloga(UlogaKorisnika.ADMIN_KLINIKE);
+		Korisnik admin = administratori.get(0);
+		
+		Long id_korisnika_l = Integer.toUnsignedLong(id_korisnika);
+		Long id_pregleda_l = Integer.toUnsignedLong(id_termina);
+		
+		Korisnik user = korisnikService.findOne(id_korisnika_l);
+		Termin termin = terminService.findOne(id_pregleda_l);
+		
+		Calendar cal = termin.getDatum();
+		cal.add(Calendar.HOUR_OF_DAY, -1);
+		System.out.println(cal.getTime());
+		
+		try {
+			emailService.sendNotificaitionTermin(user, admin, termin);
+		} catch (MailException e) {
+			// TODO Auto-generated catch block
+			System.out.println("##################### Desila se greska1" + e.getMessage());
+		}
+		
+		
+		return new ResponseEntity<String>("", HttpStatus.OK);
 	}
 	
 	@RequestMapping(value = "/slobodniTermini", method = RequestMethod.GET)

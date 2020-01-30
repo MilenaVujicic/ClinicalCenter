@@ -37,23 +37,26 @@
 			$('#terminTable tbody').append(tr);
 		}
 		
-		function zakazi(id) {
+		function zakazi(id_termina) {
 			let id_korisnika = 1;
 			$.ajax({
-	            url:"/pacijent/zakaziUnapredDef,
-	            type:"GET",
-	           	success: function(termini){
-	           		$('#terminTable tbody').html('');
-	           		for (i = 0; i < termini.length; i++) {
-	           			prikaziTermin(termini[i]);
-	           		}
- 	           	},
-	           	error: function() {
-	           		alert('Desila se greska');
-	           	}
-         	});
-			$('#terminTable').attr('hidden', false);
+				type:'PUT',
+				url:'pacijent/zakaziUnapredDef',
+				data: {
+					id_termina:id_termina,
+					id_korisnika:id_korisnika
+				},
+				success: function() {
+					alert('Uspesno poslat zahtev za pregled!');
+					$('#terminTable').attr('hidden', true);
+				},
+				error: function() {
+					alert('Doslo je do greske');
+				}
+			});
+			
 		}
+		
 
 		function home() {
 			$('#terminTable').attr('hidden', true);
