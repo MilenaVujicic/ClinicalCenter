@@ -27,11 +27,13 @@ import com.example.demo.dto.KlinikaDTO;
 import com.example.demo.dto.KorisnikDTO;
 import com.example.demo.dto.PacijentDTO;
 import com.example.demo.dto.PregledDTO;
+import com.example.demo.dto.TerminDTO;
 import com.example.demo.model.Doktor;
 import com.example.demo.model.Klinika;
 import com.example.demo.model.Korisnik;
 import com.example.demo.model.Pacijent;
 import com.example.demo.model.Pregled;
+import com.example.demo.model.Termin;
 import com.example.demo.model.UlogaKorisnika;
 import com.example.demo.service.DoktorService;
 import com.example.demo.service.EmailService;
@@ -39,6 +41,7 @@ import com.example.demo.service.KlinikaService;
 import com.example.demo.service.KorisnikService;
 import com.example.demo.service.PacijentService;
 import com.example.demo.service.PregledService;
+import com.example.demo.service.TerminService;
 import com.example.demo.service.ZahtevService;
 
 
@@ -60,6 +63,9 @@ public class PacijentController {
 	
 	@Autowired
 	PregledService pregledService;
+	
+	@Autowired
+	TerminService terminService;
 	
 	@Autowired
 	EmailService emailService;
@@ -267,17 +273,62 @@ public class PacijentController {
 			
 		}
 		
-		for(Klinika kl : klinike) {
-			//System.out.println(kl.getIme());
-		}
 				
 		return new ResponseEntity<List<Klinika>>(klinike,HttpStatus.OK);
+	}
+	
+	@RequestMapping(value= "/zakaziUnapredDef", method = RequestMethod.PUT)
+	public ResponseEntity<String> zakaziUnapredDef(@RequestParam(value = "id_termina") int id_termina,
+												   @RequestParam(value= "id_korisnika") int id_korisnika) throws InterruptedException {
+		
+		System.out.println("id pregleda: " + id_termina+ " ,id korisnika: " + id_korisnika);
+		//posalji mejl adminu klinike
+		List<Korisnik> administratori = korisnikService.findByUloga(UlogaKorisnika.ADMIN_KLINIKE);
+		Korisnik admin = administratori.get(0);
+		
+		Long id_korisnika_l = Integer.toUnsignedLong(id_korisnika);
+		Long id_pregleda_l = Integer.toUnsignedLong(id_termina);
+		
+		Korisnik user = korisnikService.findOne(id_korisnika_l);
+		Termin termin = terminService.findOne(id_pregleda_l);
+		
+		Calendar cal = termin.getDatum();
+		cal.add(Calendar.HOUR_OF_DAY, -1);
+		System.out.println(cal.getTime());
+		
+		try {
+			emailService.sendNotificaitionTermin(user, admin, termin);
+		} catch (MailException e) {
+			// TODO Auto-generated catch block
+			System.out.println("##################### Desila se greska1" + e.getMessage());
+		}
+		
+		
+		return new ResponseEntity<String>("", HttpStatus.OK);
+	}
+	
+	@RequestMapping(value = "/slobodniTermini", method = RequestMethod.GET)
+	public ResponseEntity<List<TerminDTO>> getSlobodniTermini() {
+
+		List<Termin> termini = terminService.findBySlobodan(true);
+		List<TerminDTO> terminiDTO = new ArrayList<TerminDTO>();
+		
+		for(Termin t : termini) {
+			Doktor d = t.getDoktor();
+			
+			Korisnik k = korisnikService.findOne(d.getIdKorisnik());
+			String imeIPrezimeDoktora = k.getIme() + " " + k.getPrezime();
+			TerminDTO tdto = new TerminDTO(t);
+			tdto.setImeIPrezimeDoktora(imeIPrezimeDoktora);
+			terminiDTO.add(tdto);
+		}
+		
+		return new ResponseEntity<List<TerminDTO>>(terminiDTO,HttpStatus.OK);
 	}
 	
 	@RequestMapping(value = "/pregledi", method = RequestMethod.GET)
 	@ResponseStatus(value = HttpStatus.OK)
 	public ResponseEntity<List<PregledDTO>> getPregledi(@RequestParam(value="id") int id)	{
-		//System.out.println(id);
 		Long id_l = Integer.toUnsignedLong(id);
 		Pacijent p = pacijentService.findByIdKorisnik(id_l);
 		List<Pregled> pregledi = pregledService.findByPatientId(p.getId());

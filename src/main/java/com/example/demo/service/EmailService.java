@@ -3,6 +3,7 @@ package com.example.demo.service;
 import java.util.Calendar;
 import java.util.Date;
 
+import org.joda.time.DateTime;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
 import org.springframework.mail.MailException;
@@ -17,6 +18,7 @@ import com.example.demo.model.Korisnik;
 import com.example.demo.model.Odsustvo;
 import com.example.demo.model.Operacija;
 import com.example.demo.model.Pregled;
+import com.example.demo.model.Termin;
 import com.example.demo.model.UlogaKorisnika;
 
 @Service
@@ -92,6 +94,7 @@ public class EmailService {
 		SimpleMailMessage mail = new SimpleMailMessage();
 		Doktor doktor = pregled.getDoktor();
 		Korisnik doktor_korisnik = korisnikService.findOne(doktor.getIdKorisnik());
+		DateTime dt = new DateTime(pregled.getDatumIVremePregleda());
 		
 		mail.setTo("filip.vozarevic@gmail.com");
 		mail.setFrom(env.getProperty("spring.mail.username"));
@@ -99,6 +102,27 @@ public class EmailService {
 		mail.setText("Postovani/-a " + admin.getIme() + " " + admin.getPrezime()
 				+ "\nStigao vam je zahtev za pregled od korisnika " + user.getIme() + " " + user.getPrezime()
 				+ "\n za datum: "+ pregled.getDatumIVremePregleda()
+				+ "\n kod lekara: "+ doktor_korisnik.getIme() + " " + doktor_korisnik.getPrezime());
+		mail.setSentDate(new Date());
+		System.out.println(mail);
+		javaMailSender.send(mail);
+		System.out.println("Email poslat!");
+	}
+	
+	@Async
+	public void sendNotificaitionTermin(Korisnik user, Korisnik admin, Termin termin) throws MailException, InterruptedException {
+		SimpleMailMessage mail = new SimpleMailMessage();
+		Doktor doktor = termin.getDoktor();
+		Korisnik doktor_korisnik = korisnikService.findOne(doktor.getIdKorisnik());
+		Calendar cal = termin.getDatum();
+		cal.add(Calendar.HOUR_OF_DAY, -1);
+		
+		mail.setTo("filip.vozarevic@gmail.com");
+		mail.setFrom(env.getProperty("spring.mail.username"));
+		mail.setSubject("Zahtev za pregled");
+		mail.setText("Postovani/-a " + admin.getIme() + " " + admin.getPrezime()
+				+ "\nStigao vam je zahtev za pregled od korisnika " + user.getIme() + " " + user.getPrezime()
+				+ "\n za datum: "+ cal.getTime()
 				+ "\n kod lekara: "+ doktor_korisnik.getIme() + " " + doktor_korisnik.getPrezime());
 		mail.setSentDate(new Date());
 		System.out.println(mail);

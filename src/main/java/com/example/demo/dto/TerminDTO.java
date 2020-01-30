@@ -24,6 +24,10 @@ public class TerminDTO {
 	
 	private double cena;
 	
+	private String popust;
+	
+	private String imeIPrezimeDoktora;
+	
 	public TerminDTO(Long id, Calendar datum, boolean slobodan, String tip, double trajanje, double cena, Sala sala, Doktor doktor) {
 		super();
 		this.id = id;
@@ -31,10 +35,14 @@ public class TerminDTO {
 		this.slobodan = slobodan;
 		this.sala = sala;
 		this.doktor = doktor;
+		this.tip = tip;
+		this.cena = cena;
+		this.popust = "Nema popusta";
 	}
 	
 	public TerminDTO(Termin t) {
 		this(t.getId(), t.getDatum(), t.isSlobodan(), t.getTip(), t.getTrajanje(), t.getCena(), t.getSala(), t.getDoktor());
+		this.popust = "Nema popusta";
 	}
 
 	public Long getId() {
@@ -99,6 +107,22 @@ public class TerminDTO {
 
 	public void setCena(double cena) {
 		this.cena = cena;
+	}
+
+	public String getPopust() {
+		return popust;
+	}
+
+	public void setPopust(String popust) {
+		this.popust = popust;
+	}
+
+	public String getImeIPrezimeDoktora() {
+		return imeIPrezimeDoktora;
+	}
+
+	public void setImeIPrezimeDoktora(String imeIPrezimeDoktora) {
+		this.imeIPrezimeDoktora = imeIPrezimeDoktora;
 	}
 	
 	
