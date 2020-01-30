@@ -1,5 +1,7 @@
 package com.example.demo.controller;
 
+import java.util.List;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 
@@ -21,7 +23,10 @@ import org.springframework.web.servlet.ModelAndView;
 
 import com.example.demo.dto.KorisnikDTO;
 import com.example.demo.error.UserAlreadyExistException;
+import com.example.demo.model.AdministratorKlinickogCentra;
 import com.example.demo.model.Korisnik;
+import com.example.demo.service.AdministratorKlinickogCentraService;
+import com.example.demo.service.EmailService;
 import com.example.demo.service.IUserService;
 import com.example.demo.service.KorisnikService;
 
@@ -33,6 +38,12 @@ public class RegistrationController {
 	
 	@Autowired
     private KorisnikService korisnikService;
+	
+	@Autowired
+	private EmailService emailService;
+	
+	@Autowired
+	private AdministratorKlinickogCentraService administratorKlinickogCentraService;
 	
 	@RequestMapping(value = "/register", method = RequestMethod.PUT)
 	public ResponseEntity<String> registracijaPacijenta(@RequestParam(value="ime") String ime,
@@ -72,6 +83,11 @@ public class RegistrationController {
 		korisnikDTO.setMatchingPassword(confirm);
 		
 		Korisnik korisnik = korisnikService.registerNewUserAccount(korisnikDTO);
+		
+		List<AdministratorKlinickogCentra> admini = administratorKlinickogCentraService.findAll();
+		AdministratorKlinickogCentra admin = admini.get(0);
+		Korisnik admin_k = korisnikService.findOne(admin.getIdKorisnik());
+		emailService.sendRegistrationRequest(korisnik, admin_k);
 		
 		return new ResponseEntity<String>("",HttpStatus.OK);
 	}

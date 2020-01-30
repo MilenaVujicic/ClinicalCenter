@@ -249,6 +249,27 @@ public class EmailService {
 	
 	
 	@Async
+	public void sendRegistrationRequest(Korisnik pacijent, Korisnik admin) {
+		SimpleMailMessage mail = new SimpleMailMessage();
+		mail.setTo("filip.vozarevic@gmail.com");
+		mail.setFrom(env.getProperty("spring.mail.username"));
+		mail.setSubject("Zahtev za registraciju");
+		mail.setText("Postovani/-a " + admin.getIme() + " " + admin.getPrezime() + ","
+				+"Dobili ste zahtev za registraciju od korisnika " + pacijent.getIme()
+				+ " " + pacijent.getPrezime() + "\n"
+				+ "Email: "+pacijent.getEmail() +"\n"
+				+ "Adresa: "+pacijent.getAdresa() +"\n"
+				+ "Grad: " +pacijent.getGrad() +"\n"
+				+ "Drzava: " +pacijent.getDrzava() +"\n"
+				+ "Telefon: "+pacijent.getTelefon() +"\n"
+				+ "JMBG: " +pacijent.getJmbg());
+	mail.setSentDate(new Date());
+	System.out.println(mail);
+	javaMailSender.send(mail);
+	System.out.println("Email poslat!");
+	}
+	
+	@Async
 	public void sendSuccessfulReservationAptDoctor(Korisnik pacijent, Pregled pregled, Korisnik doktor, Klinika klinika) {
 		SimpleMailMessage mail = new SimpleMailMessage();
 		
