@@ -1,13 +1,5 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    
-    
-    
-</head>
-<body>
-<!DOCTYPE html>
-<html lang="en">
     <head>
     	<meta name="viewport" content="width=device-width, initial-scale=1">
 		<meta charset="utf-8">
@@ -29,6 +21,32 @@
 		<link href='https://fonts.googleapis.com/css?family=Oxygen' rel='stylesheet' type='text/css'>
 
 		<title>Login</title>
+		<script>
+			function login(){
+				let user = $('#email').val();
+				let pass = $('#password').val();
+
+				let response = '';
+				$.ajax({
+					type:'GET',
+					url:'auth/login',
+					data: {
+						user:user,
+						pass:pass
+					},
+					success: function(e) {
+						response = e;
+						sessionStorage.setItem('id', response);
+						window.location.href = "http://localhost:8080/pacijentHomePage.html";
+					},
+					error: function(e) {
+						alert(e.responseText);
+					}
+				});
+				
+			}
+		
+		</script>
 	</head>
 	<body>
 		<div class="container">
@@ -57,7 +75,7 @@
 						</div>
 
 						<div class="form-group ">
-							<a target="_blank" type="button" id="button" class="btn btn-primary btn-lg btn-block login-button">Login</a>
+							<a onClick="login()" type="button" id="button" class="btn btn-primary btn-lg btn-block login-button">Login</a>
 						</div>
 						
 					</form>
@@ -70,9 +88,4 @@
     <!-- Include all compiled plugins (below), or include individual files as needed -->
     <script src="js/bootstrap.min.js"></script>
 	</body>
-</html>
-<script type="text/javascript">
-
-</script>
-</body>
 </html>

@@ -14,7 +14,9 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.example.demo.dto.KorisnikDTO;
+import com.example.demo.dto.PacijentDTO;
 import com.example.demo.model.Korisnik;
+import com.example.demo.model.Pacijent;
 import com.example.demo.service.EmailService;
 import com.example.demo.service.KorisnikService;
 
@@ -27,6 +29,13 @@ public class KorisnikController {
 	
 	@Autowired
 	EmailService emailService;
+	
+	
+	@RequestMapping(value = "/korisnik/{id}", method=RequestMethod.GET)
+	public Korisnik getKorisnik(@PathVariable Long id) {
+		Korisnik korisnik = korisnikService.findOne(id);
+		return korisnik;
+	}
 	
 	@RequestMapping(value = "/aktiviraj/{id}", method = RequestMethod.GET)
 	public ResponseEntity<KorisnikDTO> aktiviraj(@PathVariable("id") Long identifikacija) {
@@ -52,6 +61,16 @@ public class KorisnikController {
 	public ResponseEntity<Korisnik> preuzmi(@PathVariable("id") Long identifikacija) {
 		Korisnik korisnik = korisnikService.findOne(identifikacija);
 		return new ResponseEntity<Korisnik>(korisnik, HttpStatus.OK);
+	}
+	
+	@RequestMapping(value = "/izmeni", method = RequestMethod.PUT)
+	public ResponseEntity<KorisnikDTO> izmeni(@RequestBody KorisnikDTO korisnikDTO) {
+		Korisnik korisnik = korisnikService.findOne(korisnikDTO.getId());
+		korisnik.setIme(korisnikDTO.getIme());
+		korisnik.setPrezime(korisnikDTO.getPrezime());
+		korisnik.setTelefon(korisnikDTO.getTelefon());
+		Korisnik k = korisnikService.save(korisnik);
+		return new ResponseEntity<KorisnikDTO>(new KorisnikDTO(k), HttpStatus.OK);
 	}
 	
 	
@@ -86,7 +105,7 @@ public class KorisnikController {
 			if(!korisnik.getEmail().equals("")) {
 				k.setEmail(korisnik.getEmail());
 			}
-		}
+		} 
 		
 		korisnikService.save(k);
 		

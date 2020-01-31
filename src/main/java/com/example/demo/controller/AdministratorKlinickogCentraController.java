@@ -89,7 +89,7 @@ public class AdministratorKlinickogCentraController {
 		}
 		List<Korisnik> admini = korisnikService.findByUloga(UlogaKorisnika.ADMIN_CENTRA);
 		
-		korisnik.setUsername("admin" + admini.size());
+		//korisnik.setUsername("admin" + admini.size());
 		Korisnik k = korisnikService.save(korisnik);
 		
 		AdministratorKlinickogCentra admin = new AdministratorKlinickogCentra();
@@ -157,7 +157,7 @@ public class AdministratorKlinickogCentraController {
 		if (!korisnik.getEmail().contains("@")){
 			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 		}
-		korisnik.setUsername("admin_klinike" + admini.size());
+		//korisnik.setUsername("admin_klinike" + admini.size());
 		korisnik.setPassword(UUID.randomUUID().toString());
 		korisnik.setDatumRodjenja(new Date());
 		korisnik.setUloga(UlogaKorisnika.ADMIN_KLINIKE);
