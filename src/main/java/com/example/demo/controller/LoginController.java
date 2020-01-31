@@ -23,23 +23,37 @@ public class LoginController {
     PasswordEncoder passwordEncoder;
 	
 	@RequestMapping(value = "/login", method = RequestMethod.GET)
-	public ResponseEntity<Long> login(@RequestParam(value="user") String user,
+	public ResponseEntity<String> login(@RequestParam(value="user") String user,
 									  @RequestParam(value="pass") String pass) {
 		
 		Korisnik korisnik = korisnikService.findByEmail(user);
+		if(korisnik == null) {
+			return new ResponseEntity<String>("Email i Sifra se ne poklapaju.", HttpStatus.CONFLICT);
+		}
 		
 		String sifra_iz_baze = korisnik.getPassword();
-		String pass_encoded = passwordEncoder.encode(pass);
 		
-		if(passwordEncoder.matches(pass_encoded, sifra_iz_baze)) {
+		
+		
+		
+		if(passwordEncoder.matches(pass, sifra_iz_baze)) {
 			System.out.println("Dobra sifra");
-			System.out.println();
 		}else {
 
-			System.out.println(sifra_iz_baze+ "_______"+ pass_encoded);
 			System.out.println("Pogresna sifra");
+			return new ResponseEntity<String>("Email i Sifra se ne poklapaju.", HttpStatus.CONFLICT);
 		}
-		return new ResponseEntity<Long>(korisnik.getId(),HttpStatus.OK);
+		
+		if(!korisnik.isAktiviran()) {
+			System.out.println(korisnik.getId().toString());
+			String response = korisnik.getId().toString();
+			return new ResponseEntity<String>(response, HttpStatus.OK);
+		}else {
+			System.out.println(new ResponseEntity<String>("Nalog nije aktiviran.", HttpStatus.CONFLICT));
+			return new ResponseEntity<String>("Nalog nije aktiviran.", HttpStatus.CONFLICT);
+			
+		}
+		
 	}
 	
 }

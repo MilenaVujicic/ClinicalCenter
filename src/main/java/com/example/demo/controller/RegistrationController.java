@@ -24,11 +24,15 @@ import org.springframework.web.servlet.ModelAndView;
 import com.example.demo.dto.KorisnikDTO;
 import com.example.demo.error.UserAlreadyExistException;
 import com.example.demo.model.AdministratorKlinickogCentra;
+import com.example.demo.model.Klinika;
 import com.example.demo.model.Korisnik;
+import com.example.demo.model.Pacijent;
 import com.example.demo.service.AdministratorKlinickogCentraService;
 import com.example.demo.service.EmailService;
 import com.example.demo.service.IUserService;
+import com.example.demo.service.KlinikaService;
 import com.example.demo.service.KorisnikService;
+import com.example.demo.service.PacijentService;
 
 import org.springframework.stereotype.Controller;
 
@@ -40,7 +44,13 @@ public class RegistrationController {
     private KorisnikService korisnikService;
 	
 	@Autowired
+    private PacijentService pacijentService;
+	
+	@Autowired
 	private EmailService emailService;
+	
+	@Autowired
+	private KlinikaService klinikaService;
 	
 	@Autowired
 	private AdministratorKlinickogCentraService administratorKlinickogCentraService;
@@ -87,7 +97,18 @@ public class RegistrationController {
 		List<AdministratorKlinickogCentra> admini = administratorKlinickogCentraService.findAll();
 		AdministratorKlinickogCentra admin = admini.get(0);
 		Korisnik admin_k = korisnikService.findOne(admin.getIdKorisnik());
-		emailService.sendRegistrationRequest(korisnik, admin_k);
+		//emailService.sendRegistrationRequest(korisnik, admin_k);
+		
+		Pacijent noviPacijent = new Pacijent();
+		noviPacijent.setIdKorisnik(korisnik.getId());
+		noviPacijent.setDioptrija(0);
+		noviPacijent.setVisina(0);
+		noviPacijent.setTezina(0);
+		//Long id_kl = 1L;
+		//Klinika klinika = klinikaService.findOne(id_kl);
+		//noviPacijent.setKlinika(klinika);
+		
+		pacijentService.save(noviPacijent);
 		
 		return new ResponseEntity<String>("",HttpStatus.OK);
 	}

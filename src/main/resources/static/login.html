@@ -26,6 +26,7 @@
 				let user = $('#email').val();
 				let pass = $('#password').val();
 
+				let response = '';
 				$.ajax({
 					type:'GET',
 					url:'auth/login',
@@ -33,14 +34,16 @@
 						user:user,
 						pass:pass
 					},
-					success: function() {
-						
+					success: function(e) {
+						response = e;
+						sessionStorage.setItem('id', response);
+						window.location.href = "http://localhost:8080/pacijentHomePage.html";
 					},
-					error: function() {
-						
+					error: function(e) {
+						alert(e.responseText);
 					}
-						
 				});
+				
 			}
 		
 		</script>

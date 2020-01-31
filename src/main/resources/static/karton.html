@@ -24,6 +24,18 @@
 	<link href='https://fonts.googleapis.com/css?family=Passion+One' rel='stylesheet' type='text/css'>
 	<link href='https://fonts.googleapis.com/css?family=Oxygen' rel='stylesheet' type='text/css'>
 	<script>
+	
+		$(document).ready(function() {
+			if (sessionStorage.getItem("id") === null) {
+				window.location.href = "http://localhost:8080/login.html";
+				}
+		});
+		
+		function logout(){
+			sessionStorage.removeItem("id");
+			window.location.href = "http://localhost:8080/login.html";
+		}
+		
 		function editPatient() {
 			$('#editAbout').attr('hidden', false);
 			$('#examinationDiagnosis').attr('hidden', true);
@@ -34,6 +46,13 @@
 			$('#editHeigth').val(visina);
 			$('#editWidth').val(tezina);
 			$('#editDioptre').val(document.getElementById("aboutPatientDioptre").innerHTML);
+			
+			let ime = document.getElementById("aboutPatientName").innerHTML;
+			$('#editName').val(ime);
+			let prezime = document.getElementById("aboutPatientSurname").innerHTML;
+			$('#editSurname').val(prezime);
+			let telefon = document.getElementById("aboutPatientPhone").innerHTML;
+			$('#editPhone').val(telefon);
 		}
 		
 		function editAbout() {
@@ -48,10 +67,11 @@
 		        data: JSON.stringify({id, visina, tezina, dioptrija}),
 		        contentType:'application/json',
 		        success: function() {
-		        	$('#editAbout').attr('hidden', true);
+		        	editAboutKorisnik();
 		        	document.getElementById("aboutPatientHeight").innerHTML = visina + "cm";
 		        	document.getElementById("aboutPatientWeight").innerHTML = tezina + "kg";
 		        	document.getElementById("aboutPatientDioptre").innerHTML = dioptrija;
+		        	$('#editAbout').attr('hidden', true);
 		        },
 		        error: function() {
 		        	alert('Desila se greska');
@@ -59,12 +79,36 @@
 		    });
 		}
 		
-		function patientZero() {
+		function editAboutKorisnik() {
+			let id = sessionStorage.getItem("id");
+			let ime = $('#editName').val();
+			let prezime = $('#editSurname').val();
+			let telefon = $('#editPhone').val();
+			
 			$.ajax({
-		        url:"/doktor/svi_pacijenti",
+				url:'korisnik/izmeni',
+				type:'PUT',
+				data: JSON.stringify({id,ime,prezime,telefon}),
+				contentType:'application/json',
+				success: function() {
+					document.getElementById("aboutPatientName").innerHTML = ime;
+					document.getElementById("aboutPatientSurname").innerHTML = prezime;
+					document.getElementById("aboutPatientPhone").innerHTML = telefon;
+					document.getElementById("profilePatientName").innerHTML = ime + " " + prezime;
+				},
+				error: function() {
+		        	alert('Desila se greska');
+				}
+			});
+		}
+		
+		function patientZero() {
+			let id = sessionStorage.getItem("id");
+			$.ajax({
+		        url:"/korisnik/korisnik/"+id,
 		        type:"GET",
-		       	success: function(pacijenti) {
-		       		medicalRecord(pacijenti[0])
+		       	success: function(korisnik) {
+		       		medicalRecord(korisnik)
 		       	},
 		       	error: function() {
 		       		alert('Desila se greska');
@@ -80,20 +124,19 @@
 	            url:"/pacijent/pacijent/" + korisnik.id,
 	            type:"GET",
 	           	success: function(pacijent){
-	           		
 	           		document.getElementById("profilePatientName").innerHTML = korisnik.ime + " " + korisnik.prezime;
-	           		document.getElementById("aboutPatientName").innerHTML = korisnik.ime + " " + korisnik.prezime;
+	           		document.getElementById("aboutPatientName").innerHTML = korisnik.ime;
+	           		document.getElementById("aboutPatientSurname").innerHTML = korisnik.prezime;
 	           		document.getElementById("aboutPatientEmail").innerHTML = korisnik.email;
 	           		document.getElementById("aboutPatientPhone").innerHTML = "+381" + korisnik.telefon;
 	           		document.getElementById("aboutPatientJMBG").innerHTML = korisnik.jmbg;
-	           		document.getElementById("aboutPatientDateOfBirth").innerHTML = korisnik.datumRodjenja.toString().substr(0, 10);
+	           		//document.getElementById("aboutPatientDateOfBirth").innerHTML = korisnik.datumRodjenja.toString().substr(0, 10);
 	           		document.getElementById("aboutPatientHeight").innerHTML = pacijent.visina + "cm";
 	           		document.getElementById("aboutPatientWeight").innerHTML = pacijent.tezina + "kg";
 	           		document.getElementById("aboutPatientDioptre").innerHTML = pacijent.dioptrija;
 	           		document.getElementById("aboutPatientID").innerHTML = pacijent.id;
 	           		$('#aboutPatient').attr('hidden', false);
 	           		//document.getElementById("title").innerHTML = "";
-	           		alert(pacijent.id)
 	           		examinations(pacijent.id);
 	           		alergies(pacijent.id);
 	           		recipes(pacijent.id);
@@ -201,7 +244,7 @@
 	      <li><a onclick="return patientZero()">Personal data</a></li>
 	    </ul>
 	    <ul class="nav navbar-nav navbar-right">
-	      <li><a href="#"><span class="glyphicon glyphicon-log-out"></span> Logout</a></li>
+	      <li><a href="#" onClick="logout()"><span class="glyphicon glyphicon-log-out"></span> Logout</a></li>
 	    </ul>
 	  </div>
 	</nav>
@@ -244,6 +287,15 @@
                               </div>
                               <div class="col-md-6">
                                   <p id="aboutPatientName"></p>
+                              </div>
+                          </div>
+                          
+                          <div class="row">
+                              <div class="col-md-6">
+                                  <label>Surname</label>
+                              </div>
+                              <div class="col-md-6">
+                                  <p id="aboutPatientSurname"></p>
                               </div>
                           </div>
                           
@@ -325,6 +377,18 @@
                           <div id="editAbout" hidden="false">
                           	<table>
                           		<tr>
+                          			<td>Name </td>
+	               					<td><input id="editName"></td>
+                          		</tr>
+                          		<tr>
+                          			<td>Surname</td>
+	               					<td><input id="editSurname"></td>
+                          		</tr>
+                          		<tr>
+                          			<td>Phone</td>
+	               					<td><input id="editPhone"></td>
+                          		</tr>
+                          		<tr>
                           			<td>Height (cm)</td>
 	               					<td><input type="number" id="editHeigth"></td>
                           		</tr>
@@ -338,7 +402,7 @@
                           		</tr>
                           	</table>
                           	<div class="col-md-4">
-			                	<a class="btn btn-primary" onclick="return editAbout();">Edit patient</a>
+			                	<a class="btn btn-primary" onclick="return editAbout();">Save</a>
 			         	  	</div>
                           </div>
                         </div>
