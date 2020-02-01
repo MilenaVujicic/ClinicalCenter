@@ -45,7 +45,7 @@ public class AdministratorController {
 	
 		k = new KorisnikDTO(korisnik);
 		
-		System.out.println(korisnik.getUsername());
+		System.out.println(korisnik.getEmail());
 		return new ResponseEntity<>(k, HttpStatus.OK);
 	}
 	

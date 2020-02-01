@@ -21,7 +21,16 @@
 	<link href='https://fonts.googleapis.com/css?family=Passion+One' rel='stylesheet' type='text/css'>
 	<link href='https://fonts.googleapis.com/css?family=Oxygen' rel='stylesheet' type='text/css'>
 	<script>
-
+		$(document).ready(function() {
+			if (sessionStorage.getItem("id") === null) {
+				window.location.href = "http://localhost:8080/login.html";
+				}
+		});
+		
+		function logout(){
+			sessionStorage.removeItem("id");
+			window.location.href = "http://localhost:8080/login.html";
+		}
 	</script>
 </head>
 <body>
@@ -38,7 +47,7 @@
 	      <li><a href="unapredDefinisaniPregledi.html">Zakazivanje Pregleda</a></li>
 	    </ul>
 	    <ul class="nav navbar-nav navbar-right">
-	      <li><a href="#"><span class="glyphicon glyphicon-log-out"></span> Logout</a></li>
+	      <li><a href="#" onClick="logout()"><span class="glyphicon glyphicon-log-out"></span> Logout</a></li>
 	    </ul>
 	  </div>
 	</nav>

@@ -78,9 +78,8 @@ public class EmailService {
 		else {
 			mail.setText("Poštovani/-a " + korisnik.getIme() + " " + korisnik.getPrezime() + ",\n\nvaš nalog je "
 					+ "aktiviran." 
-					+ "\nVaš username: " + korisnik.getUsername()
+					+ "\nVaš username: " + korisnik.getEmail()
 					+ "\nVaš prvobitan password: " + korisnik.getPassword()
-					+ "\nVaš email: " + korisnik.getEmail()
 					+ "\n\nZa dalje korišćenje naše aplikacije idite na:\nhttp://localhost:8080/");
 		}
 		mail.setSentDate(new Date());
@@ -248,6 +247,27 @@ public class EmailService {
 		System.out.println("Email poslat!");
 	}
 	
+	
+	@Async
+	public void sendRegistrationRequest(Korisnik pacijent, Korisnik admin) {
+		SimpleMailMessage mail = new SimpleMailMessage();
+		mail.setTo("filip.vozarevic@gmail.com");
+		mail.setFrom(env.getProperty("spring.mail.username"));
+		mail.setSubject("Zahtev za registraciju");
+		mail.setText("Postovani/-a " + admin.getIme() + " " + admin.getPrezime() + ","
+				+"Dobili ste zahtev za registraciju od korisnika " + pacijent.getIme()
+				+ " " + pacijent.getPrezime() + "\n"
+				+ "Email: "+pacijent.getEmail() +"\n"
+				+ "Adresa: "+pacijent.getAdresa() +"\n"
+				+ "Grad: " +pacijent.getGrad() +"\n"
+				+ "Drzava: " +pacijent.getDrzava() +"\n"
+				+ "Telefon: "+pacijent.getTelefon() +"\n"
+				+ "JMBG: " +pacijent.getJmbg());
+	mail.setSentDate(new Date());
+	System.out.println(mail);
+	javaMailSender.send(mail);
+	System.out.println("Email poslat!");
+	}
 	
 	@Async
 	public void sendSuccessfulReservationAptDoctor(Korisnik pacijent, Pregled pregled, Korisnik doktor, Klinika klinika) {

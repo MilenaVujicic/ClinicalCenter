@@ -18,7 +18,7 @@ import com.example.demo.repository.KorisnikRepository;
 public class UserService implements IUserService{
 	
 	@Autowired
-    private KorisnikRepository repository;
+    private KorisnikRepository korisnikRepository;
 	
 	//@Autowired
     //private PasswordEncoder passwordEncoder;
@@ -39,11 +39,11 @@ public class UserService implements IUserService{
 		user.setDrzava(accountDto.getDrzava());
 		user.setJmbg(accountDto.getJmbg());
 		//fale jos datumRodjenja i uloga, ali datumRodjenja ni ne treba pri registraciji da se unosi, treba da se ukloni
-        return repository.save(user);
+        return korisnikRepository.save(user);
 	}
 	
 	private boolean emailExists(String email) {
-        Korisnik user = repository.findByEmail(email);
+        Korisnik user = korisnikRepository.findByEmail(email);
         if (user != null) {
             return true;
         }

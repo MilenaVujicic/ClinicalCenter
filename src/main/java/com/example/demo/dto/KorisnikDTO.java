@@ -19,10 +19,6 @@ public class KorisnikDTO {
 	private Long id;
 	
 	@NotNull
-	@NotEmpty
-	private String username;
-	
-	@NotNull
     @NotEmpty
 	private String ime;
 	
@@ -112,28 +108,8 @@ public class KorisnikDTO {
 		this.telefon = telefon;
 	}
 	
-
-	public KorisnikDTO(Long id, String username, String ime, String prezime, String email, String password, String matchingPassword, String grad, String drzava, Long jmbg,
-			String adresa, Date datumRodjenja, UlogaKorisnika ulogaKorisnika, String telefon) {
-		super();
-		this.id = id;
-		this.ime = ime;
-		this.prezime = prezime;
-		this.email = email;
-		this.password = password;
-		this.matchingPassword = matchingPassword;
-		this.grad = grad;
-		this.drzava = drzava;
-		this.jmbg = jmbg;
-		this.adresa = adresa;
-		this.datumRodjenja = datumRodjenja;
-		this.uloga = ulogaKorisnika;
-		this.telefon = telefon;
-		this.username = username;
-	}
-
 	public KorisnikDTO(Korisnik k) {
-		this(k.getId(), k.getUsername(), k.getIme(), k.getPrezime(),k.getEmail(), k.getPassword(), k.getPassword(), k.getGrad(),k.getDrzava(), k.getJmbg(),
+		this(k.getId(), k.getIme(), k.getPrezime(),k.getEmail(), k.getPassword(), k.getPassword(), k.getGrad(),k.getDrzava(), k.getJmbg(),
 				k.getAdresa(), k.getDatumRodjenja(), k.getUloga(), k.getTelefon());
 	}
 
@@ -193,10 +169,54 @@ public class KorisnikDTO {
 		this.telefon = telefon;
 	}
 
-	public String getUsername() {
-		return username;
+	
+	public void setIme(String ime) {
+		this.ime = ime;
 	}
 	
+	public void setPrezime(String prezime) {
+		this.prezime = prezime;
+	}
+	
+	public void setAdresa(String adresa) {
+		this.adresa = adresa;
+	}
+	
+	public void setDrzava(String drzava) {
+		this.drzava = drzava;
+	}
+	
+	public void setEmail(String email) {
+		this.email = email;
+	}
+	
+	public void setGrad(String grad) {
+		this.grad = grad;
+	}
+	
+	public void setJmbg(Long jmbg) {
+		this.jmbg = jmbg;
+	}
+	
+	public void setPassword(String password) {
+		this.password = password;
+	}
+	
+	public void setMatchingPassword(String matchingPassword) {
+		this.matchingPassword = matchingPassword;
+	}
+	
+	public void setUloga(UlogaKorisnika uloga) {
+		this.uloga = uloga;
+	}
+	
+	public void setId(Long id) {
+		this.id = id;
+	}
+	
+	public void setDatumRodjenja(Date datumRodjenja) {
+		this.datumRodjenja = datumRodjenja;
+	}
 	
 	
 	
