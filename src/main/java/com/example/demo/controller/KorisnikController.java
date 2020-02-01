@@ -76,7 +76,7 @@ public class KorisnikController {
 	
 	@RequestMapping(value = "/izmena_podataka/{id}", method = RequestMethod.PUT)
 	public ResponseEntity<Object> izmeni(@PathVariable("id") Long id,@RequestBody KorisnikDTO korisnik){
-		System.out.println(korisnik.getIme());
+		System.out.println("######" + korisnik.getIme());
 		Optional<Korisnik> ok = korisnikService.findById(id);
 		Korisnik k = ok.get();
 	
@@ -93,8 +93,10 @@ public class KorisnikController {
 			if(!korisnik.getGrad().equals("")) {
 				k.setGrad(korisnik.getGrad());
 			}
-			if(!korisnik.getPassword().equals("")) {
-				k.setPassword(korisnik.getPassword());
+			if (korisnik.getPassword() != null ) {
+				if(!korisnik.getPassword().equals("")) {
+					k.setPassword(korisnik.getPassword());
+				}
 			}
 			if(!korisnik.getAdresa().equals("")) {
 				k.setAdresa(korisnik.getAdresa());
