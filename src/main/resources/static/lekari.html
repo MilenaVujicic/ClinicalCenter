@@ -22,6 +22,16 @@
 	<link href='https://fonts.googleapis.com/css?family=Oxygen' rel='stylesheet' type='text/css'>
 	<script>
 	
+	$(document).ready(function() {
+		if (sessionStorage.getItem("id") === null) {
+			window.location.href = "http://localhost:8080/login.html";
+			}
+	});
+	
+	function logout(){
+		sessionStorage.removeItem("id");
+		window.location.href = "http://localhost:8080/login.html";
+	}
 	
 	function prikaziDoktora(doktor) {
 		let tr = $('<tr></tr>');
