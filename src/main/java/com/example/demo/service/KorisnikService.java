@@ -77,7 +77,8 @@ public class KorisnikService implements IUserService {
 		user.setIme(accountDto.getIme());
 		user.setPrezime(accountDto.getPrezime());
 		user.setEmail(accountDto.getEmail());
-		user.setPassword(passwordEncoder.encode(accountDto.getPassword())); //treba namestiti passwordEncoder
+		//user.setPassword(passwordEncoder.encode(accountDto.getPassword())); //treba namestiti passwordEncoder
+		user.setPassword(accountDto.getPassword());
 		user.setAdresa(accountDto.getAdresa());
 		user.setGrad(accountDto.getGrad());
 		user.setDrzava(accountDto.getDrzava());

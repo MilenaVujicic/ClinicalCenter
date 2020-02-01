@@ -33,10 +33,8 @@ public class LoginController {
 		
 		String sifra_iz_baze = korisnik.getPassword();
 		
-		
-		
-		
-		if(passwordEncoder.matches(pass, sifra_iz_baze)) {
+		System.out.println("##########" + pass + " " +  sifra_iz_baze);
+		if(pass.equals(sifra_iz_baze)) {
 			System.out.println("Dobra sifra");
 		}else {
 
@@ -44,7 +42,15 @@ public class LoginController {
 			return new ResponseEntity<String>("Email i Sifra se ne poklapaju.", HttpStatus.CONFLICT);
 		}
 		
-		if(!korisnik.isAktiviran()) {
+		/*if(passwordEncoder.matches(pass, sifra_iz_baze)) {
+			System.out.println("Dobra sifra");
+		}else {
+
+			System.out.println("Pogresna sifra");
+			return new ResponseEntity<String>("Email i Sifra se ne poklapaju.", HttpStatus.CONFLICT);
+		}*/
+		
+		if(korisnik.isAktiviran()) {
 			System.out.println(korisnik.getId().toString());
 			String response = korisnik.getId().toString();
 			return new ResponseEntity<String>(response, HttpStatus.OK);
