@@ -1,5 +1,7 @@
 package com.example.demo.service;
 
+import java.time.LocalDate;
+import java.util.Date;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -39,6 +41,10 @@ public class KlinikaService {
 	
 	public Klinika findOne(Long id) {
 		return klinikaRepository.findById(id).orElseGet(null);
+	}
+	
+	public List<Klinika> findByDatumPregleda(LocalDate date, String spec) {
+		return klinikaRepository.findByDatumPregleda(date,spec);
 	}
 
 }

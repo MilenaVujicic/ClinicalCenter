@@ -26,6 +26,12 @@
 		if (sessionStorage.getItem("id") === null) {
 			window.location.href = "http://localhost:8080/login.html";
 			}
+		
+		if (sessionStorage.getItem("doktor") !== null) {
+			sessionStorage.removeItem("doktor");
+			}
+		
+		search();
 	});
 	
 	function logout(){
@@ -39,8 +45,21 @@
 		let tdPrezime = $('<td>'+doktor.prezime+'</td>');
 		let tdSpec = $('<td>'+doktor.specijalizacija+'</td>');
 		let tdProsOc = $('<td>'+doktor.prosecnaOcena+'</td>');
-		tr.append(tdIme).append(tdPrezime).append(tdSpec).append(tdProsOc);
+		
+		let datum = sessionStorage.getItem("datum");
+		if(datum === '') {
+			tr.append(tdIme).append(tdPrezime).append(tdSpec).append(tdProsOc);
+		} else {
+			let tdZakazi = $('<td>'+ '<a id="'+doktor.id+'" onClick="izaberi(this.id)">Zakazi</a>' +'</td>')
+			tr.append(tdIme).append(tdPrezime).append(tdSpec).append(tdProsOc).append(tdZakazi);
+		}
+		
 		$('#doctorsTable tbody').append(tr);
+	}
+	
+	function izaberi(doktor_id) {
+		sessionStorage.setItem("doktor", doktor_id);
+		window.location.href = "http://localhost:8080/unapredDefinisaniPregledi.html";
 	}
 		
 	function search() {
@@ -48,6 +67,9 @@
 		let prezime = $('#prezime').val();
 		let specijalizacija = $('#specijalizacija').val();
 		let prosecnaOcena = $('#prosecnaOcena').val();
+		let datum = sessionStorage.getItem("datum");
+		let klinika_id = sessionStorage.getItem("id_klinike");
+		let spec = sessionStorage.getItem("spec");
 		
 		$.ajax({
 			type: 'GET',
@@ -56,7 +78,10 @@
 				ime:ime,
 				prezime:prezime,
 				specijalizacija:specijalizacija,
-				prosecnaOcena:prosecnaOcena
+				prosecnaOcena:prosecnaOcena,
+				datum:datum,
+				klinika_id:klinika_id,
+				spec:spec
 			},
 			success: function(doctors) {
 				$('#doctorsTable tbody').html('');
@@ -102,6 +127,10 @@
 		
 		
 		function allDoctors() {
+			let datum = sessionStorage.getItem("datum");
+			if(datum !== null) {
+				return;
+			}
 			$.ajax({
 	            url:"/pacijent/sviLekari",
 	            type:"GET",
@@ -143,6 +172,7 @@
 	      <th scope="col">Prezime</th>
 	      <th scope="col">Specijalizacija</th>
 	      <th scope="col">Prosecna Ocena</th>
+	      <th scope="col">Zakazi Pregled</th>
 	    </tr>
 	  </thead>
 	  <tbody>
