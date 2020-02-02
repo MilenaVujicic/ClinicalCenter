@@ -109,8 +109,13 @@ public class DoktorController {
 		return new ResponseEntity<List<Korisnik>>(pacijenti, HttpStatus.OK);
 	}
 	
-	@RequestMapping(value = "/posalji_pregled/{text}", method = RequestMethod.POST)
-	public ResponseEntity<PregledDTO> pregled(@PathVariable("text") String text, @RequestBody PregledDTO pregledDTO) {
+	@RequestMapping(value = "/posalji_pregled/{id}/{text}", method = RequestMethod.POST)
+	public ResponseEntity<PregledDTO> pregled(@PathVariable("text") String text, @RequestBody PregledDTO pregledDTO, 
+											  @PathVariable("id") Long doktor_id) {
+		Korisnik korisnik = korisnikService.findOne(doktor_id);
+		if (!korisnik.getUloga().equals(UlogaKorisnika.LEKAR)) {
+			return new ResponseEntity<PregledDTO>(HttpStatus.BAD_REQUEST);
+		}
 		String[] splitter = text.split("~");
 		Long identifikacija = Long.parseLong(splitter[0]);
 		Pregled pregled = new Pregled();
@@ -118,7 +123,7 @@ public class DoktorController {
 			pregled = pregledService.findOne(pregledDTO.getId());
 		}
 		
-		Doktor doktor = doktorService.findOne((long) 1);
+		Doktor doktor = doktorService.findByIdKorisnik(doktor_id);
 		Sala sala = salaService.findOne((long) 1);
 		Pacijent pacijent = pacijentService.findByIdKorisnik(identifikacija);
 		pregled.setNaziv(pregledDTO.getNaziv());
@@ -175,9 +180,12 @@ public class DoktorController {
 		return korisnik;
 	}
 	
-	@RequestMapping(value = "/odsustva", method = RequestMethod.GET)
-	public ResponseEntity<List<Odsustvo>> odsustva() {
-		Korisnik korisnik = korisnikService.findOne((long) 5);
+	@RequestMapping(value = "/odsustva/{id}", method = RequestMethod.GET)
+	public ResponseEntity<List<Odsustvo>> odsustva(@PathVariable("id") Long identifikacija) {
+		Korisnik korisnik = korisnikService.findOne(identifikacija);
+		if (!korisnik.getUloga().equals(UlogaKorisnika.LEKAR)) {
+			return new ResponseEntity<List<Odsustvo>>(HttpStatus.BAD_REQUEST);
+		}
 		List<Odsustvo> odsustva = new ArrayList<Odsustvo>();
 		for(Odsustvo o : korisnik.getOdsustva()) {
 			odsustva.add(o);
@@ -185,17 +193,22 @@ public class DoktorController {
 		return new ResponseEntity<List<Odsustvo>>(odsustva, HttpStatus.OK);
 	}
 	
-	@RequestMapping(value = "/zakazani_pregledi", method = RequestMethod.GET)
-	public ResponseEntity<List<Pregled>> pregledi() {
+	@RequestMapping(value = "/zakazani_pregledi/{id}", method = RequestMethod.GET)
+	public ResponseEntity<List<Pregled>> pregledi(@PathVariable("id") Long identifikacija) {
+		Korisnik korisnik = korisnikService.findOne(identifikacija);
+		if (!korisnik.getUloga().equals(UlogaKorisnika.LEKAR)) {
+			return new ResponseEntity<List<Pregled>>(HttpStatus.BAD_REQUEST);
+		}
 		List<Pregled> pregledi = pregledService.findAll();
 		List<Pregled> doktorevi_pregledi = new ArrayList<Pregled>();
-		Doktor doktor = doktorService.findOne((long) 1);
+		Doktor doktor = doktorService.findByIdKorisnik(identifikacija);
 		for (Pregled p : pregledi) {
 			if (p.getDoktor().getId().equals(doktor.getId())) {
 				doktorevi_pregledi.add(p);
 				System.out.println(p.getDatumIVremePregleda());
 			}
 		}
+		
 		return new ResponseEntity<List<Pregled>>(doktorevi_pregledi, HttpStatus.OK);
 	}
 
@@ -394,9 +407,15 @@ public class DoktorController {
 		return new ResponseEntity<List<Korisnik>>(doktori_klinike, HttpStatus.OK);
 	}
 	
-	@RequestMapping(value="/svi_slobodni_sa_klinike/{id}", method = RequestMethod.GET)
-	public ResponseEntity<List<Korisnik>> svi_sa_klinike_slobodni(@PathVariable("id") Long identifikacija) {
-		Klinika k = klinikaService.findOne((long) 2);
+	@RequestMapping(value="/svi_slobodni_sa_klinike/{id}/{session}", method = RequestMethod.GET)
+	public ResponseEntity<List<Korisnik>> svi_sa_klinike_slobodni(@PathVariable("id") Long identifikacija, @PathVariable("session") Long korisnik_id) {
+		System.out.println("########");
+		Korisnik kori = korisnikService.findOne(korisnik_id);
+		if (!kori.getUloga().equals(UlogaKorisnika.ADMIN_KLINIKE)) {
+			return new ResponseEntity<List<Korisnik>>(HttpStatus.BAD_REQUEST);
+		}
+		AdministratorKlinike admin = administratorService.findByIdKorisnika(korisnik_id);
+		Klinika k = klinikaService.findOne(admin.getKlinika().getId());
 		List<Doktor> doktori = doktorService.findAllByKlinika(k);
 		List<Korisnik> lekari = korisnikService.findByUloga(UlogaKorisnika.LEKAR);
 		List<Korisnik> doktori_klinike = new ArrayList<Korisnik>();
@@ -561,9 +580,13 @@ public class DoktorController {
 		return new ResponseEntity<String>(specijalizacija, HttpStatus.OK);
 	}
 	
-	@RequestMapping(value = "/zakazane_operacije", method = RequestMethod.GET)
-	public ResponseEntity<List<Operacija>> zakazane_operacije() {
-		Doktor doktor = doktorService.findOne((long) 1);
+	@RequestMapping(value = "/zakazane_operacije/{id}", method = RequestMethod.GET)
+	public ResponseEntity<List<Operacija>> zakazane_operacije(@PathVariable("id") Long identifikacija) {
+		Korisnik korisnik = korisnikService.findOne(identifikacija);
+		if (!korisnik.getUloga().equals(UlogaKorisnika.LEKAR)) {
+			return new ResponseEntity<List<Operacija>>(HttpStatus.BAD_REQUEST);
+		}
+		Doktor doktor = doktorService.findByIdKorisnik(identifikacija);
 		List<Operacija> operacije = operacijaService.findAll();
 		List<Operacija> operacije_doktora = new ArrayList<Operacija>();
 		for (Operacija operacija : operacije) {
