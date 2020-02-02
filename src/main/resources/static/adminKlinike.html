@@ -38,10 +38,19 @@
 	          <li><a>New administrator of clinical centre</a></li>
 	        </ul>
 	      </li>
+	      <li class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">Clinic<span class="caret"></span></a>
+	         <ul class="dropdown-menu">
+	          <li><a href = "#" id = "aEditClinic">Edit clinic data</a></li>
+	          <li><a>Rooms</a></li>  
+	          <li><a>Doctors</a></li>
+	          <li><a>Pricing</a></li>
+	        </ul>
+	      </li>
+	      <li><a href = "#" id = "aStats">Clinic stats</a>
 	      <li><a href = "#" id = "aVacation">Staff vacations</a>
 	      <li><a href = "#" id = "aApt">Appointmen requests</a>
 	      <li><a onclick="return operationRequest();">Operation requests</a></li>
-	      <li><a href="#">Personal data</a></li>
+	      <li><a href="#" id = "aPersonalData">Personal data</a></li>
 	    </ul>
 	    <ul class="nav navbar-nav navbar-right">
 	      <li><a href="#"><span class="glyphicon glyphicon-log-out"></span> Logout</a></li>
@@ -99,6 +108,23 @@
 		</tbody>
 </table>
 	
+	<table class = "table" id = "personalDataTable" hidden = "true">
+		<thead>
+			<tr>
+				<th scope = "col">Name: </th>
+				<th scope = "col">Surname: </th>
+				<th scope = "col">JMBG: </th>
+				<th scope = "col">City: </th>
+				<th scope = "col">Country: </th>
+				<th scope = "col">Address: </th>
+				<th scope = "col">DOB: </th>
+				<th scope = "col">Phone: </th>
+				<th scope = "col">Email: </th>
+			</tr>
+		</thead>
+		<tbody>
+		</tbody>
+	</table>
 	
 	
 	
@@ -117,6 +143,28 @@
 	</thead>
 	<tbody>
 	</tbody>
+	</table>
+	
+		<table class = "table" id = "personalDataTable" hidden = "true">
+		<thead>
+			<tr>
+				<th scope = "col">Name: </th>
+			</tr>
+			<tr>
+			<th scope = "col">Surname: </th>
+				<th scope = "col">JMBG: </th>
+				<th scope = "col">City: </th>
+				<th scope = "col">Country: </th>
+				<th scope = "col">Address: </th>
+				<th scope = "col">DOB: </th>
+				<th scope = "col">Phone: </th>
+				<th scope = "col">Email: </th>
+				<th scope = "col">Phone: </th>
+				<th scope = "col">Action: </th>
+			</tr>
+		</thead>
+		<tbody>
+		</tbody>
 	</table>
 	
 	<div class="form-row" id="doctors" hidden="true">

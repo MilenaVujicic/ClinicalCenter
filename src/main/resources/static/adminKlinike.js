@@ -1,6 +1,28 @@
+let session = null;
 $(document).ready(()=>{
 	document.getElementById('aVacation').addEventListener('click', listAbsence, false);
 	document.getElementById('aApt').addEventListener('click', newApt, false);
+	document.getElementById('aPersonalData').addEventListener('click', seeData, false);
+	document.getElementById('aEditClinic').addEventListener('click', editClinicData, false);
+	session = sessionStorage.getItem("id");
+	if(session == null){
+		alert('You must be logged in to view this page!');
+		window.location.href = "./index.html";
+	}
+	$.ajax({
+		type: "GET",
+		url: 'korisnik/preuzmi/' + session,
+		success: function(korisnik){
+			if(korisnik.uloga != 'ADMIN_KLINIKE'){
+				alert('You must be a clinic administrator to access this page');
+				window.location.href = "./index.html";
+			}
+		},
+		error: function(){
+			alert('Something went wrong')
+		}
+	})
+	
 })
 
 function home() {
@@ -434,6 +456,50 @@ function slTer(pregled) {
 	});
 }
 
+function seeData(event){
+	event.preventDefault();
+	$('#personalDataTable').attr('hidden', false);
+	
+	$.ajax({
+		url: 'korisnik/preuzmi/' + session,
+		type: 'GET',
+		success: function(korisnik){
+			let tr = $('<tr></tr>');
+			let tdName = $('<td>' + korisnik.ime + '</td>');
+
+			let tdSurname = $('<td>' + korisnik.prezime + '</td>');
+			
+			let tdJmbg = $('<td>' + korisnik.jmbg + '</td>');
+			
+			let tdCity = $('<td>' + korisnik.grad + '</td>');
+		
+			let tdCountry = $('<td>' + korisnik.drzava + '</td>');
+			
+			let tdAddress = $('<td>' + korisnik.adresa + '</td>');
+
+			let tdDob = $('<td>' + korisnik.datumRodjenja + '</td>');
+			
+			let tdPhone = $('<td>' + korisnik.telefon + '</td>');
+			
+			let tdEmail = $('<td>' + korisnik.email + '</td>');
+			
+			let tdAction = $('<td><a href = "#" id = "aEditPersonalData" >Edit data </a></td>');
+			
+			tdAction.on('click', function(event){
+				event.preventDefault();
+				window.location.href = './changePersonalData.html';
+			});
+			tr.append(tdName).append(tdSurname).append(tdJmbg).append(tdCity).append(tdCountry)
+			.append(tdAddress).append(tdDob).append(tdPhone).append(tdEmail).append(tdAction);
+			
+			$('#personalDataTable tbody').append(tr);
+		},
+		error: function(){
+			alert('Something went wrong');
+		}
+	})
+}
+
 function slobodniTerminiApt(pregled) {
 	return function() {
 		slTer(pregled);
@@ -444,4 +510,9 @@ function rezervisiProstoriju(sala, pregled) {
 	return function() {
 		rezSalaApt(sala, pregled);
 	}
+}
+
+function editClinicData(event){
+	event.preventDefault();
+	window.location = './clinicEdit.html';
 }
