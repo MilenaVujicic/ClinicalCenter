@@ -123,4 +123,34 @@ public class KorisnikController {
 		
 		return new ResponseEntity<KorisnikDTO>(k, HttpStatus.OK);
 	}
+	
+	@RequestMapping(value = "promeni_lozinku/{id}/{op}/{np}/{cp}", method = RequestMethod.GET)
+	public ResponseEntity<String> change_password(@PathVariable("id") Long identifikacija,
+												  @PathVariable("op") String oldPassword,
+												  @PathVariable("np") String newPassword,
+												  @PathVariable("cp") String confirmPassword) {
+		
+		if (!newPassword.equals(confirmPassword)) {
+			System.out.println("####1");
+			return new ResponseEntity<String>("Nova i potvrdjena lozinka se ne poklapaju", HttpStatus.BAD_REQUEST);
+		}
+		
+		Korisnik korisnik = korisnikService.findOne(identifikacija);
+		
+		if (!korisnik.getPassword().equals(oldPassword)) {
+			System.out.println("####2");
+			return new ResponseEntity<String>("Stara lozinka nije ova", HttpStatus.BAD_REQUEST);
+		}
+		
+		if (newPassword.equals(oldPassword)) {
+			System.out.println("####3");
+			return new ResponseEntity<String>("Nova i stara lozinka ne smeju biti isti", HttpStatus.BAD_REQUEST);
+		}
+		
+		korisnik.setPassword(newPassword);
+		
+		Korisnik k = korisnikService.save(korisnik);
+		
+		return new ResponseEntity<String>("Uspesno promenjena lozinka", HttpStatus.OK);
+	}
 }

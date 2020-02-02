@@ -78,6 +78,7 @@ public class AdministratorKlinickogCentraController {
 		korisnik.setUloga(UlogaKorisnika.ADMIN_CENTRA);
 		korisnik.setAktivan(true);
 		korisnik.setAktiviran(true);
+		korisnik.setBrojPrijava(0);
 		if (korisnik.getIme() == "" || korisnik.getIme() == null){
 			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 		}
@@ -156,6 +157,7 @@ public class AdministratorKlinickogCentraController {
 		korisnik.setJmbg((long) 3625415);
 		korisnik.setAktivan(true);
 		korisnik.setAktiviran(true);
+		korisnik.setBrojPrijava(0);
 		List<Korisnik> admini = korisnikService.findByUloga(UlogaKorisnika.ADMIN_KLINIKE);
 		if (korisnik.getIme() == "" || korisnik.getIme() == null){
 			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);

@@ -64,7 +64,8 @@ function prikaziRecept(recept) {
 
 function verifyAll() {
 	let id = $('#patientID').val();
-	let url = "/medicinska_sestra/overi/" + id;
+	let session = sessionStorage.getItem("id");
+	let url = "/medicinska_sestra/overi/" + session + '/' +id;
 	$.ajax({
         url: url,
         type:"GET",
@@ -275,7 +276,19 @@ $(document).ready(function() {
 		alert('Nemate prava pristupa ovoj stranici');
 		window.location.href = "http://localhost:8080/index.html";
 	}
-
+	$.ajax({
+		type: "GET",
+		url: 'korisnik/preuzmi/' + session,
+		success: function(korisnik) {
+			if (korisnik.uloga != 'MEDICINSKA_SESTRA') {
+				alert('Nemate prava pristupa ovoj stranici');
+				window.location.href = "http://localhost:8080/medicinskaSestra.html";
+			}
+		},
+		error: function() {
+			alert('Nema ulogovanog korisnika');
+		}
+	});
 });
 
 function logout() {

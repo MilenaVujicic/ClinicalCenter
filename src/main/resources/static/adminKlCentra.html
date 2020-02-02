@@ -24,6 +24,7 @@
   	
 </head>
 <body>
+	<div id="main" hidden="true">
 	<nav class="navbar navbar-inverse">
 	  <div class="container-fluid">
 	    <div class="navbar-header">
@@ -491,6 +492,25 @@
 		<div class="col-sm-5 col-xs-6 tital " ><a class="btn btn-success" onclick="return changeData();">Izmeni podatke</a></div>
 		
     </div>
-
+    </div>
+	<div id="con" hidden="true">
+		<div class="row">
+			<div class="col-sm-4">
+			    <label>Current Password</label>
+			    <div class="form-group pass_show"> 
+	                <input type="password" class="form-control" placeholder="Current Password" id="currentPass"> 
+	            </div> 
+			       <label>New Password</label>
+	            <div class="form-group pass_show"> 
+	                <input type="password" class="form-control" placeholder="New Password" id="newPass"> 
+	            </div> 
+			       <label>Confirm Password</label>
+	            <div class="form-group pass_show"> 
+	                <input type="password" class="form-control" placeholder="Confirm Password" id="confirmPass"> 
+	            </div> 
+	            <a onclick="return changePassword();" class="btn btn-warning">Change password</a>
+			</div>  
+		</div>
+	</div>
 </body>
 </html>

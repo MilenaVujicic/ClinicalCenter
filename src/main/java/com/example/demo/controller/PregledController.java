@@ -69,9 +69,12 @@ public class PregledController {
 		return new ResponseEntity<List<Pregled>>(pregledi, HttpStatus.OK);
 	}
 	
-	@RequestMapping(value = "/izmeni", method = RequestMethod.PUT)
-	public ResponseEntity<PregledDTO> izmeni(@RequestBody PregledDTO pregledDTO) {
+	@RequestMapping(value = "/izmeni/{id}", method = RequestMethod.PUT)
+	public ResponseEntity<PregledDTO> izmeni(@RequestBody PregledDTO pregledDTO, @PathVariable("id") Long identifikacija) {
 		Pregled pregled = pregledService.findOne(pregledDTO.getId());
+		if (!pregled.getDoktor().getIdKorisnik().equals(identifikacija)) {
+			return new ResponseEntity<PregledDTO>(HttpStatus.BAD_REQUEST);
+		}
 		pregled.setNaziv(pregledDTO.getNaziv());
 		pregled.setAnamneza(pregledDTO.getAnamneza());
 		pregled.setTipPregleda(pregledDTO.getTipPregleda());
@@ -80,9 +83,12 @@ public class PregledController {
 		return new ResponseEntity<PregledDTO>(new PregledDTO(p), HttpStatus.OK);
 	}
 	
-	@RequestMapping(value = "/obrisi/{id}", method = RequestMethod.DELETE)
-	public ResponseEntity<String> obrisi(@PathVariable("id") Long identifikacija) {
+	@RequestMapping(value = "/obrisi/{id}/{doktor_id}", method = RequestMethod.DELETE)
+	public ResponseEntity<String> obrisi(@PathVariable("id") Long identifikacija, @PathVariable("doktor_id") Long doktor_id) {
 		Pregled pregled = pregledService.findOne(identifikacija);
+		if (!pregled.getDoktor().getIdKorisnik().equals(doktor_id)) {
+			return new ResponseEntity<String>(HttpStatus.BAD_REQUEST);
+		}
 		pregledService.delete(pregled);
 		return new ResponseEntity<String>("", HttpStatus.OK);
 	}

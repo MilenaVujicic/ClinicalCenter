@@ -52,11 +52,14 @@ public class DijagnozaController {
 		return new ResponseEntity<List<Dijagnoza>>(dijagnoze, HttpStatus.OK);
 	}
 	
-	@RequestMapping(value = "/izmeni_pregled/{text}", method = RequestMethod.GET)
-	public ResponseEntity<PregledDTO> izmeni_pregled(@PathVariable("text") String text) {
+	@RequestMapping(value = "/izmeni_pregled/{text}/{id}", method = RequestMethod.GET)
+	public ResponseEntity<PregledDTO> izmeni_pregled(@PathVariable("text") String text, @PathVariable("id") Long doktor_id) {
 		String[] splitter = text.split("~");
 		Long identifikacija = Long.parseLong(splitter[0]);
 		Pregled pregled = pregledService.findOne(identifikacija);
+		if (!pregled.getDoktor().getIdKorisnik().equals(doktor_id)) {
+			return new ResponseEntity<PregledDTO>(HttpStatus.BAD_REQUEST);
+		}
 		pregled.setDijagnoze(new HashSet<Dijagnoza>());
 		for (int i = 1; i < splitter.length; i++) {
 			Dijagnoza dijagnoza = dijagnozaService.findOne(Long.parseLong(splitter[i]));

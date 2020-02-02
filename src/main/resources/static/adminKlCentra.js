@@ -4,7 +4,37 @@ $(document).ready(function() {
 		alert('Nemate prava pristupa ovoj stranici');
 		window.location.href = "http://localhost:8080/index.html";
 	}
+	$.ajax({
+		type: "GET",
+		url: 'korisnik/preuzmi/' + session,
+		success: function(korisnik) {
+			if (korisnik.uloga != 'ADMIN_CENTRA') {
+				alert('Nemate prava pristupa ovoj stranici');
+				window.location.href = "http://localhost:8080/adminKlCentra.html";
+			}
+			alert(korisnik.brojPrijava);
+			if (korisnik.brojPrijava < 2) {
+				$('#con').attr('hidden', false);
+			}
+			else {
+				$('#main').attr('hidden', false);
+			}
+		},
+		error: function() {
+			alert('Nema ulogovanog korisnika');
+		}
+	});
+	$('.pass_show').append('<span class="ptxt">Show</span>');  
+	
 });
+
+$(document).on('click','.pass_show .ptxt', function(){ 
+
+	$(this).text($(this).text() == "Show" ? "Hide" : "Show"); 
+
+	$(this).prev().attr('type', function(index, attr){return attr == 'password' ? 'text' : 'password'; }); 
+
+});  
 
 function newClinicAdministrator() {
 	let ime = $('#nameClicnicAdmin').val();
@@ -775,6 +805,27 @@ function changeData() {
         error: function() {
         	alert('Desila se greska');
         }
+	});
+}
+
+function changePassword() {
+	let id = sessionStorage.getItem("id");
+	let currentPassord = $('#currentPass').val();
+	let newPassword = $('#newPass').val();
+	let confirmPassword = $('#confirmPass').val();
+	let url = 'korisnik/promeni_lozinku/' + id + '/' + currentPassord + '/' + newPassword + '/' + confirmPassword;
+	$.ajax({
+		type: "GET",
+		url: url,
+		success: function(odgovor) {
+			alert(odgovor);
+			$('#con').attr('hidden', true);
+			$('#main').attr('hidden', false);
+			home();
+		},
+		error : function(odgovor) {
+			alert('Greska kod promene lozinke');
+		}
 	});
 }
 

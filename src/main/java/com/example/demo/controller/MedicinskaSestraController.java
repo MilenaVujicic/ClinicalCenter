@@ -85,14 +85,15 @@ public class MedicinskaSestraController {
 		return new ResponseEntity<List<Recept>>(neovereni, HttpStatus.OK);
 	}
 	
-	@RequestMapping(value = "/overi/{id}", method = RequestMethod.GET)
-	public ResponseEntity<String> overa(@PathVariable("id") Long identifikacija) {
+	@RequestMapping(value = "/overi/{med_sestra_id}/{id}", method = RequestMethod.GET)
+	public ResponseEntity<String> overa(@PathVariable("id") Long identifikacija, @PathVariable("med_sestra_id") Long med_sestra_id) {
 		System.out.println("########################");
 		List<Recept> recepti = receptService.findAll();
 		for (Recept r : recepti) {
 			if (r.getPacijent().getId().equals(identifikacija) && r.getStatus().equals(StatusRecepta.NEOVEREN)) {
 				r.setStatus(StatusRecepta.OVEREN);
 				r.setDatumOvere(new Date());
+				r.setMedicinskaSestraId(med_sestra_id);
 				Recept rec = receptService.save(r);
 			}
 		}
@@ -113,6 +114,7 @@ public class MedicinskaSestraController {
 		else {
 			odsustvo.setVrstaOdsustva(VrstaOdsustva.BOLOVANJE);
 		}
+		System.out.println(from);
 		DateFormat format = new SimpleDateFormat("dd.MM.yyyy", Locale.ENGLISH);
 		
 		//Date today = new Date();
@@ -122,7 +124,9 @@ public class MedicinskaSestraController {
 		date1.add(Calendar.DATE, 1);
 		try {
 			Date temp = format.parse(from);
-			date1.set(temp.getYear(),temp.getMonth() ,temp.getDate());
+			System.out.println(temp);
+			date1.setTime(temp);
+			System.out.println(date1.getTime());
 			odsustvo.setPocetakOdsustva(date1);
 		} catch (ParseException e) {
 			// TODO Auto-generated catch block
@@ -131,9 +135,9 @@ public class MedicinskaSestraController {
 		
 		Calendar date2 = Calendar.getInstance();
 		try {
-			Date temp = format.parse(to);
-			date2.set(temp.getYear(), temp.getMonth(), temp.getDate());
-	
+			Date temp1 = format.parse(to);
+			date2.setTime(temp1);
+			System.out.println(date2.getTime());
 			odsustvo.setZavrsetakOdsustva(date2);
 		} catch (ParseException e) {
 			// TODO Auto-generated catch block
@@ -148,7 +152,7 @@ public class MedicinskaSestraController {
 		odsustvo.setKorisnik(korisnik);
 		odsustvo.setOdobren(false);
 		Odsustvo od = odsustvoService.save(odsustvo);
-		
+		System.out.println(odsustvo.getPocetakOdsustva().getTime());
 		return new ResponseEntity<String>("Zahtev je poslat", HttpStatus.OK);
 	}
 	

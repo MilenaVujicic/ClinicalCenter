@@ -68,6 +68,9 @@ public class Korisnik {
 	@Column(name = "aktiviran", nullable = false)
 	private boolean aktiviran = false;
 	
+	@Column(name="broj_prijava", nullable = false)
+	private int brojPrijava = 1;
+	
 	public Korisnik() {
 		super();
 		// TODO Auto-generated constructor stub
@@ -229,12 +232,20 @@ public class Korisnik {
 		this.aktiviran = aktiviran;
 	}
 
+	public int getBrojPrijava() {
+		return brojPrijava;
+	}
+
+	public void setBrojPrijava(int brojPrijava) {
+		this.brojPrijava = brojPrijava;
+	}
+
 	@Override
 	public String toString() {
-		return "Korisnik [id=" + id + ", ime=" + ime + ", prezime=" + prezime + ", email=" + email +
-				", password=" + password + ", grad=" + grad + ", drzava=" + drzava + ", jmbg=" + jmbg
-				+ ", adresa=" + adresa + ", telefon=" + telefon + ", datumRodjenja=" + datumRodjenja + ", uloga="
-				+ uloga + ", odsustva=" + odsustva + ", aktivan=" + aktivan + ", aktiviran=" + aktiviran + "]";
+		return "Korisnik [id=" + id + ", ime=" + ime + ", prezime=" + prezime + ", email=" + email + ", password="
+				+ password + ", grad=" + grad + ", drzava=" + drzava + ", jmbg=" + jmbg + ", adresa=" + adresa
+				+ ", telefon=" + telefon + ", datumRodjenja=" + datumRodjenja + ", uloga=" + uloga + ", odsustva="
+				+ odsustva + ", aktivan=" + aktivan + ", aktiviran=" + aktiviran + ", brojPrijava=" + brojPrijava + "]";
 	}
 	
 	
