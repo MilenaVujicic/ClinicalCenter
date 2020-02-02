@@ -189,7 +189,6 @@ function showCalendar(odsustva) {
 		if (odsustsvo.odobren) {
 			color = 'green';
 		}
-		alert(odsustsvo.vrstaOdsustva + " " + odsustsvo.pocetakOdsustva + " " + odsustsvo.zavrsetakOdsustva + " " + color);
 		var event={title: odsustsvo.vrstaOdsustva , start:odsustsvo.pocetakOdsustva, end:odsustsvo.zavrsetakOdsustva, color:color};
 		$('#calendar').fullCalendar( 'renderEvent', event, true);
 	}

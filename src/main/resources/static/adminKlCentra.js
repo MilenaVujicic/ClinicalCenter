@@ -12,7 +12,7 @@ $(document).ready(function() {
 				alert('Nemate prava pristupa ovoj stranici');
 				window.location.href = "http://localhost:8080/adminKlCentra.html";
 			}
-			alert(korisnik.brojPrijava);
+
 			if (korisnik.brojPrijava < 2) {
 				$('#con').attr('hidden', false);
 			}
