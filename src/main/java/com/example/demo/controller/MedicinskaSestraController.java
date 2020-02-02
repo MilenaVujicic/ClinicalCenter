@@ -54,6 +54,10 @@ public class MedicinskaSestraController {
 	@RequestMapping(value = "/sviPacijenti/{id}", method=RequestMethod.GET)
 	public ResponseEntity<List<KorisnikDTO>> getAllPatients(@PathVariable("id") Long identifikacija) {
 		System.out.println("###########");
+		Korisnik korisnik = korisnikService.findOne(identifikacija);
+		if(!korisnik.getUloga().equals(UlogaKorisnika.MEDICINSKA_SESTRA)) {
+			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+		}
 		MedicinskaSestra sestra = medicinskaSestraService.findByIdKorisnika(identifikacija);
 		List<Korisnik> patients = korisnikService.findByUloga(UlogaKorisnika.PACIJENT);
 		List<KorisnikDTO> pacijentDTO = new ArrayList<>();
@@ -87,6 +91,10 @@ public class MedicinskaSestraController {
 	
 	@RequestMapping(value = "/overi/{med_sestra_id}/{id}", method = RequestMethod.GET)
 	public ResponseEntity<String> overa(@PathVariable("id") Long identifikacija, @PathVariable("med_sestra_id") Long med_sestra_id) {
+		Korisnik korisnik = korisnikService.findOne(med_sestra_id);
+		if(!korisnik.getUloga().equals(UlogaKorisnika.MEDICINSKA_SESTRA)) {
+			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+		}
 		System.out.println("########################");
 		List<Recept> recepti = receptService.findAll();
 		for (Recept r : recepti) {
@@ -103,6 +111,10 @@ public class MedicinskaSestraController {
 	@SuppressWarnings("deprecation")
 	@RequestMapping(value = "/odmor/{text}/{id}", method = RequestMethod.GET)
 	public ResponseEntity<String> odmor(@PathVariable("text") String text, @PathVariable("id") Long identifikacija) {
+		Korisnik kori = korisnikService.findOne(identifikacija);
+		if(!kori.getUloga().equals(UlogaKorisnika.MEDICINSKA_SESTRA)) {
+			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+		}
 		String[] splitter = text.split("~");
 		String type = splitter[0];
 		String from = splitter[1];

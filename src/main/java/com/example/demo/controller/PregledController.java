@@ -22,6 +22,7 @@ import com.example.demo.model.Sala;
 import com.example.demo.model.StatusOperacije;
 import com.example.demo.model.StatusPregleda;
 import com.example.demo.model.Termin;
+import com.example.demo.model.UlogaKorisnika;
 import com.example.demo.service.DoktorService;
 import com.example.demo.service.EmailService;
 import com.example.demo.service.KlinikaService;
@@ -71,6 +72,10 @@ public class PregledController {
 	
 	@RequestMapping(value = "/izmeni/{id}", method = RequestMethod.PUT)
 	public ResponseEntity<PregledDTO> izmeni(@RequestBody PregledDTO pregledDTO, @PathVariable("id") Long identifikacija) {
+		Korisnik kori = korisnikService.findOne(identifikacija);
+		if(!kori.getUloga().equals(UlogaKorisnika.LEKAR)) {
+			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+		}
 		Pregled pregled = pregledService.findOne(pregledDTO.getId());
 		if (!pregled.getDoktor().getIdKorisnik().equals(identifikacija)) {
 			return new ResponseEntity<PregledDTO>(HttpStatus.BAD_REQUEST);
@@ -85,6 +90,10 @@ public class PregledController {
 	
 	@RequestMapping(value = "/obrisi/{id}/{doktor_id}", method = RequestMethod.DELETE)
 	public ResponseEntity<String> obrisi(@PathVariable("id") Long identifikacija, @PathVariable("doktor_id") Long doktor_id) {
+		Korisnik kori = korisnikService.findOne(doktor_id);
+		if(!kori.getUloga().equals(UlogaKorisnika.LEKAR)) {
+			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+		}
 		Pregled pregled = pregledService.findOne(identifikacija);
 		if (!pregled.getDoktor().getIdKorisnik().equals(doktor_id)) {
 			return new ResponseEntity<String>(HttpStatus.BAD_REQUEST);

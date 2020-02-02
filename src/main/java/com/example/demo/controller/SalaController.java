@@ -17,12 +17,15 @@ import com.example.demo.dto.SalaDTO;
 import com.example.demo.dto.TerminDTO;
 import com.example.demo.model.AdministratorKlinike;
 import com.example.demo.model.Klinika;
+import com.example.demo.model.Korisnik;
 import com.example.demo.model.Operacija;
 import com.example.demo.model.Pregled;
 import com.example.demo.model.Sala;
 import com.example.demo.model.Termin;
+import com.example.demo.model.UlogaKorisnika;
 import com.example.demo.service.AdministratorKlinikeService;
 import com.example.demo.service.KlinikaService;
+import com.example.demo.service.KorisnikService;
 import com.example.demo.service.OperacijaService;
 import com.example.demo.service.PregledService;
 import com.example.demo.service.SalaService;
@@ -45,6 +48,9 @@ public class SalaController {
 	
 	@Autowired
 	AdministratorKlinikeService adminKlinikeService;
+	
+	@Autowired
+	KorisnikService korisnikService;
 
 	@RequestMapping(value = "/sveSale/{val}", method=RequestMethod.GET)
 	public ResponseEntity<List<SalaDTO>> getSveSale(@PathVariable String val){
@@ -223,6 +229,10 @@ public class SalaController {
 	@RequestMapping(value = "/slobodni_termini/{id}/{korisnik_id}", method = RequestMethod.GET)
 	public ResponseEntity<List<Sala>> slobodniTermini(@PathVariable("id") Long identifikacija, 
 													 @PathVariable("korisnik_id") Long korisnik_id) {
+		Korisnik kori = korisnikService.findOne(korisnik_id);
+		if(!kori.getUloga().equals(UlogaKorisnika.ADMIN_KLINIKE)) {
+			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+		}
 		Operacija operacija = operacijaService.findOne(identifikacija);
 		AdministratorKlinike admin = adminKlinikeService.findByIdKorisnika(korisnik_id);
 		Klinika klinika = klinikaService.findOne(admin.getKlinika().getId());
@@ -242,6 +252,10 @@ public class SalaController {
 	
 	@RequestMapping(value = "/drugi_slobodni_termini/{id}/{korisnik_id}")
 	public ResponseEntity<Sala> prviSlobodan(@PathVariable("id") Long identifikacija,  @PathVariable("korisnik_id") Long korisnik_id) {
+		Korisnik kori = korisnikService.findOne(korisnik_id);
+		if(!kori.getUloga().equals(UlogaKorisnika.ADMIN_KLINIKE)) {
+			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+		}
 		System.out.println("##############drugi slobodni termini");
 		Operacija operacija = operacijaService.findOne(identifikacija);
 		AdministratorKlinike admin = adminKlinikeService.findByIdKorisnika(korisnik_id);

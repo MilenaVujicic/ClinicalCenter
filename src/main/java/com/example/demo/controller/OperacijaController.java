@@ -17,12 +17,14 @@ import com.example.demo.model.AdministratorKlinike;
 import com.example.demo.model.Doktor;
 import com.example.demo.model.Klinika;
 import com.example.demo.model.Korisnik;
+import com.example.demo.model.Odsustvo;
 import com.example.demo.model.Operacija;
 import com.example.demo.model.Pregled;
 import com.example.demo.model.Sala;
 import com.example.demo.model.StatusOperacije;
 import com.example.demo.model.StatusPregleda;
 import com.example.demo.model.Termin;
+import com.example.demo.model.UlogaKorisnika;
 import com.example.demo.service.AdministratorKlinikeService;
 import com.example.demo.service.DoktorService;
 import com.example.demo.service.EmailService;
@@ -65,6 +67,10 @@ public class OperacijaController {
 	
 	@RequestMapping(value = "/zahtevi/{id}", method=RequestMethod.GET) 
 	public ResponseEntity<List<Operacija>> zahtevi(@PathVariable("id") Long identifikacija) {
+		Korisnik korisnik = korisnikService.findOne(identifikacija);
+		if (!korisnik.getUloga().equals(UlogaKorisnika.ADMIN_KLINIKE)) {
+			return new ResponseEntity<List<Operacija>>(HttpStatus.BAD_REQUEST);
+		}
 		AdministratorKlinike admin = adminKlinikeService.findByIdKorisnika(identifikacija);
 		List<Operacija> operacije = operacijaService.findByStatus(StatusOperacije.NERASPOREDJEN);
 		List<Operacija> operacijeKlinike = new ArrayList<Operacija>();
@@ -134,6 +140,10 @@ public class OperacijaController {
 	
 	@RequestMapping(value = "/obrisi/{id}/{doktor_id}", method = RequestMethod.DELETE)
 	public ResponseEntity<String> obrisi(@PathVariable("id") Long identifikacija, @PathVariable("doktor_id") Long doktor_id) {
+		Korisnik korisnik = korisnikService.findOne(doktor_id);
+		if (!korisnik.getUloga().equals(UlogaKorisnika.LEKAR)) {
+			return new ResponseEntity<String>(HttpStatus.BAD_REQUEST);
+		}
 		Operacija operacija = operacijaService.findOne(identifikacija);
 		Doktor doktor = doktorService.findByIdKorisnik(doktor_id);
 		if (!operacija.getDoktori().contains(doktor)) {
@@ -145,6 +155,10 @@ public class OperacijaController {
 	
 	@RequestMapping(value = "/izmeni/{id}", method = RequestMethod.PUT)
 	public ResponseEntity<OperacijaDTO> izmeni(@RequestBody OperacijaDTO operacijaDTO, @PathVariable("id") Long identifikacija) {
+		Korisnik korisnik = korisnikService.findOne(identifikacija);
+		if (!korisnik.getUloga().equals(UlogaKorisnika.LEKAR)) {
+			return new ResponseEntity<OperacijaDTO>(HttpStatus.BAD_REQUEST);
+		}
 		Operacija operacija = operacijaService.findOne(operacijaDTO.getId());
 		Doktor doktor = doktorService.findByIdKorisnik(identifikacija);
 		if (!operacija.getDoktori().contains(doktor)) {
