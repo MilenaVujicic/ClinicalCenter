@@ -28,6 +28,7 @@ import com.example.demo.model.Dijagnoza;
 import com.example.demo.model.Doktor;
 import com.example.demo.model.Klinika;
 import com.example.demo.model.Korisnik;
+import com.example.demo.model.LogedUser;
 import com.example.demo.model.Odsustvo;
 import com.example.demo.model.Operacija;
 import com.example.demo.model.Pacijent;
@@ -109,13 +110,11 @@ public class DoktorController {
 		return new ResponseEntity<List<Korisnik>>(pacijenti, HttpStatus.OK);
 	}
 	
-	@RequestMapping(value = "/posalji_pregled/{id}/{text}", method = RequestMethod.POST)
-	public ResponseEntity<PregledDTO> pregled(@PathVariable("text") String text, @RequestBody PregledDTO pregledDTO, 
-											  @PathVariable("id") Long doktor_id) {
-		Korisnik korisnik = korisnikService.findOne(doktor_id);
-		if (!korisnik.getUloga().equals(UlogaKorisnika.LEKAR)) {
+	@RequestMapping(value = "/posalji_pregled/{text}", method = RequestMethod.POST)
+	public ResponseEntity<PregledDTO> pregled(@PathVariable("text") String text, @RequestBody PregledDTO pregledDTO) {
+		if(!LogedUser.getInstance().getUserRole().equals(UlogaKorisnika.LEKAR))
 			return new ResponseEntity<PregledDTO>(HttpStatus.BAD_REQUEST);
-		}
+		
 		String[] splitter = text.split("~");
 		Long identifikacija = Long.parseLong(splitter[0]);
 		Pregled pregled = new Pregled();
@@ -123,7 +122,7 @@ public class DoktorController {
 			pregled = pregledService.findOne(pregledDTO.getId());
 		}
 		
-		Doktor doktor = doktorService.findByIdKorisnik(doktor_id);
+		Doktor doktor = doktorService.findByIdKorisnik(LogedUser.getInstance().getUserId());
 		Sala sala = salaService.findOne((long) 1);
 		Pacijent pacijent = pacijentService.findByIdKorisnik(identifikacija);
 		pregled.setNaziv(pregledDTO.getNaziv());

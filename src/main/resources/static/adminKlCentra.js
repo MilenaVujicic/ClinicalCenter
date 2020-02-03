@@ -9,8 +9,8 @@ $(document).ready(function() {
 		url: 'korisnik/preuzmi/' + session,
 		success: function(korisnik) {
 			if (korisnik.uloga != 'ADMIN_CENTRA') {
-				alert('Nemate prava pristupa ovoj stranici');
-				window.location.href = "http://localhost:8080/adminKlCentra.html";
+				alert('Nemate prava pristupa ovoj stranici!\nSistem Vas je logoutovao');
+				logout();
 			}
 
 			if (korisnik.brojPrijava < 2) {
@@ -753,11 +753,20 @@ function allDiagnosis() {
 }
 
 function logout() {
-	sessionStorage.removeItem("id");
-	let session = sessionStorage.getItem("id");
-	if (session == null) {
-		window.location.href = "http://localhost:8080/index.html";
-	}
+	$.ajax({
+		url: 'auth/logout',
+		type: "GET",
+		success: function(){
+			sessionStorage.removeItem("id");
+			let session = sessionStorage.getItem("id");
+			if (session == null) {
+				window.location.href = "http://localhost:8080/index.html";
+			}
+		},
+		error: function() {
+			alert('Desila se greska kog logouta');
+		}
+	});
 }
 
 function personalData() {

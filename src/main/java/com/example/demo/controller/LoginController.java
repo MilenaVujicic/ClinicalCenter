@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.example.demo.model.Korisnik;
+import com.example.demo.model.LogedUser;
 import com.example.demo.model.UlogaKorisnika;
 import com.example.demo.service.KorisnikService;
 
@@ -57,13 +58,23 @@ public class LoginController {
 			String response = korisnik.getId().toString();
 			korisnik.setBrojPrijava(korisnik.getBrojPrijava() + 1);
 			Korisnik k = korisnikService.save(korisnik);
+			LogedUser logedUser = LogedUser.getInstance();
+			logedUser.setUserId(korisnik.getId());
+			logedUser.setUserRole(korisnik.getUloga());
 			return new ResponseEntity<String>(response, HttpStatus.OK);
 		}else {
 			System.out.println(new ResponseEntity<String>("Nalog nije aktiviran.", HttpStatus.CONFLICT));
 			return new ResponseEntity<String>("Nalog nije aktiviran.", HttpStatus.CONFLICT);
-			
 		}
 		
+	}
+	
+	@RequestMapping(value = "/logout", method = RequestMethod.GET)
+	public ResponseEntity<String> logout() {
+		LogedUser logedUser = LogedUser.getInstance();
+		logedUser.setUserId(null);
+		logedUser.setUserRole(null);
+		return new ResponseEntity<String>(HttpStatus.OK);
 	}
 	
 }
