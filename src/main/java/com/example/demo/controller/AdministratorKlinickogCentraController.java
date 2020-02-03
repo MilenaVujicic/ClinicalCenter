@@ -76,8 +76,9 @@ public class AdministratorKlinickogCentraController {
 		korisnik.setPassword(UUID.randomUUID().toString());
 		korisnik.setDatumRodjenja(new Date());
 		korisnik.setUloga(UlogaKorisnika.ADMIN_CENTRA);
-		korisnik.setAktivan(false);
-		korisnik.setAktiviran(false);
+		korisnik.setAktivan(true);
+		korisnik.setAktiviran(true);
+		korisnik.setBrojPrijava(0);
 		if (korisnik.getIme() == "" || korisnik.getIme() == null){
 			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 		}
@@ -99,6 +100,15 @@ public class AdministratorKlinickogCentraController {
 		
 		Map<AdministratorKlinickogCentraDTO, KorisnikDTO> map = new HashMap<AdministratorKlinickogCentraDTO, KorisnikDTO>();
 		map.put(new AdministratorKlinickogCentraDTO(a), new KorisnikDTO(k));
+		try {
+			emailService.sendNotificationActivation(korisnik);
+		} catch (MailException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		return new ResponseEntity<>(map, HttpStatus.CREATED);
 	}
 	
@@ -145,8 +155,9 @@ public class AdministratorKlinickogCentraController {
 		korisnik.setDrzava(korisnikDTO.getDrzava());
 		korisnik.setTelefon(korisnikDTO.getTelefon());
 		korisnik.setJmbg((long) 3625415);
-		korisnik.setAktivan(false);
-		korisnik.setAktiviran(false);
+		korisnik.setAktivan(true);
+		korisnik.setAktiviran(true);
+		korisnik.setBrojPrijava(0);
 		List<Korisnik> admini = korisnikService.findByUloga(UlogaKorisnika.ADMIN_KLINIKE);
 		if (korisnik.getIme() == "" || korisnik.getIme() == null){
 			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
@@ -172,6 +183,15 @@ public class AdministratorKlinickogCentraController {
 		klinika.getAdministratoriKlinike().add(administratorKlinike);
 		AdministratorKlinike a = administratorKlinikeService.save(administratorKlinike);
 		Klinika kl = klinikaService.save(klinika);
+		try {
+			emailService.sendNotificationActivation(korisnik);
+		} catch (MailException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		return new ResponseEntity<>(new KlinikaDTO(kl), HttpStatus.OK);
 	}
 	

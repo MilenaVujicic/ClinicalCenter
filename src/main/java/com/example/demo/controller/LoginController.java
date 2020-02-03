@@ -38,7 +38,6 @@ public class LoginController {
 			if(passwordEncoder.matches(pass, sifra_iz_baze)) {
 				System.out.println("Dobra sifra");
 			}else {
-
 				System.out.println("Pogresna sifra");
 				return new ResponseEntity<String>("Email i Sifra se ne poklapaju.", HttpStatus.CONFLICT);
 			}
@@ -53,10 +52,11 @@ public class LoginController {
 		}
 		
 		
-		
-		if(!korisnik.isAktiviran()) {
+		if(korisnik.isAktiviran()) {
 			System.out.println(korisnik.getId().toString());
 			String response = korisnik.getId().toString();
+			korisnik.setBrojPrijava(korisnik.getBrojPrijava() + 1);
+			Korisnik k = korisnikService.save(korisnik);
 			return new ResponseEntity<String>(response, HttpStatus.OK);
 		}else {
 			System.out.println(new ResponseEntity<String>("Nalog nije aktiviran.", HttpStatus.CONFLICT));

@@ -21,4 +21,30 @@ public class MedicinskaSestra {
 	
 	@ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
 	private Klinika klinika;
+
+	public Long getId() {
+		return id;
+	}
+
+	public void setId(Long id) {
+		this.id = id;
+	}
+
+	public Long getIdKorisnika() {
+		return idKorisnika;
+	}
+
+	public void setIdKorisnika(Long idKorisnika) {
+		this.idKorisnika = idKorisnika;
+	}
+
+	public Klinika getKlinika() {
+		return klinika;
+	}
+
+	public void setKlinika(Klinika klinika) {
+		this.klinika = klinika;
+	}
+	
+	
 }
