@@ -61,6 +61,10 @@
 				success: function() {
 					alert('Uspesno poslat zahtev za pregled!');
 					$('#terminTable').attr('hidden', true);
+					sessionStorage.removeItem("datum");
+					sessionStorage.removeItem("doktor");
+					sessionStorage.removeItem("id_klinike");
+					sessionStorage.removeItem("spec");
 				},
 				error: function() {
 					alert('Doslo je do greske');
