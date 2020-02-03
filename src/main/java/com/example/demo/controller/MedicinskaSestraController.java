@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.example.demo.dto.KorisnikDTO;
 import com.example.demo.model.Korisnik;
+import com.example.demo.model.LogedUser;
 import com.example.demo.model.MedicinskaSestra;
 import com.example.demo.model.Odsustvo;
 import com.example.demo.model.Pacijent;
@@ -51,14 +52,12 @@ public class MedicinskaSestraController {
 	@Autowired
 	MedicinskaSestraService medicinskaSestraService;
 	
-	@RequestMapping(value = "/sviPacijenti/{id}", method=RequestMethod.GET)
-	public ResponseEntity<List<KorisnikDTO>> getAllPatients(@PathVariable("id") Long identifikacija) {
-		System.out.println("###########");
-		Korisnik korisnik = korisnikService.findOne(identifikacija);
-		if(!korisnik.getUloga().equals(UlogaKorisnika.MEDICINSKA_SESTRA)) {
+	@RequestMapping(value = "/sviPacijenti", method=RequestMethod.GET)
+	public ResponseEntity<List<KorisnikDTO>> getAllPatients() {
+		if(!LogedUser.getInstance().getUserRole().equals(UlogaKorisnika.MEDICINSKA_SESTRA)) {
 			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 		}
-		MedicinskaSestra sestra = medicinskaSestraService.findByIdKorisnika(identifikacija);
+		MedicinskaSestra sestra = medicinskaSestraService.findByIdKorisnika(LogedUser.getInstance().getUserId());
 		List<Korisnik> patients = korisnikService.findByUloga(UlogaKorisnika.PACIJENT);
 		List<KorisnikDTO> pacijentDTO = new ArrayList<>();
 		
@@ -89,10 +88,9 @@ public class MedicinskaSestraController {
 		return new ResponseEntity<List<Recept>>(neovereni, HttpStatus.OK);
 	}
 	
-	@RequestMapping(value = "/overi/{med_sestra_id}/{id}", method = RequestMethod.GET)
-	public ResponseEntity<String> overa(@PathVariable("id") Long identifikacija, @PathVariable("med_sestra_id") Long med_sestra_id) {
-		Korisnik korisnik = korisnikService.findOne(med_sestra_id);
-		if(!korisnik.getUloga().equals(UlogaKorisnika.MEDICINSKA_SESTRA)) {
+	@RequestMapping(value = "/overi/{id}", method = RequestMethod.GET)
+	public ResponseEntity<String> overa(@PathVariable("id") Long identifikacija) {
+		if(!LogedUser.getInstance().getUserRole().equals(UlogaKorisnika.MEDICINSKA_SESTRA)) {
 			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 		}
 		System.out.println("########################");
@@ -101,7 +99,7 @@ public class MedicinskaSestraController {
 			if (r.getPacijent().getId().equals(identifikacija) && r.getStatus().equals(StatusRecepta.NEOVEREN)) {
 				r.setStatus(StatusRecepta.OVEREN);
 				r.setDatumOvere(new Date());
-				r.setMedicinskaSestraId(med_sestra_id);
+				r.setMedicinskaSestraId(LogedUser.getInstance().getUserId());
 				Recept rec = receptService.save(r);
 			}
 		}
@@ -109,10 +107,9 @@ public class MedicinskaSestraController {
 	}
 	
 	@SuppressWarnings("deprecation")
-	@RequestMapping(value = "/odmor/{text}/{id}", method = RequestMethod.GET)
-	public ResponseEntity<String> odmor(@PathVariable("text") String text, @PathVariable("id") Long identifikacija) {
-		Korisnik kori = korisnikService.findOne(identifikacija);
-		if(!kori.getUloga().equals(UlogaKorisnika.MEDICINSKA_SESTRA)) {
+	@RequestMapping(value = "/odmor/{text}", method = RequestMethod.GET)
+	public ResponseEntity<String> odmor(@PathVariable("text") String text) {
+		if(!LogedUser.getInstance().getUserRole().equals(UlogaKorisnika.MEDICINSKA_SESTRA)) {
 			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 		}
 		String[] splitter = text.split("~");
@@ -160,7 +157,7 @@ public class MedicinskaSestraController {
 			return new ResponseEntity<String>("Datum greska", HttpStatus.BAD_REQUEST);
 		}
 		
-		Korisnik korisnik = korisnikService.findOne(identifikacija);
+		Korisnik korisnik = korisnikService.findOne(LogedUser.getInstance().getUserId());
 		odsustvo.setKorisnik(korisnik);
 		odsustvo.setOdobren(false);
 		Odsustvo od = odsustvoService.save(odsustvo);

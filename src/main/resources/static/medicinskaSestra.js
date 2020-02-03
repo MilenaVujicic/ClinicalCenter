@@ -64,8 +64,7 @@ function prikaziRecept(recept) {
 
 function verifyAll() {
 	let id = $('#patientID').val();
-	let session = sessionStorage.getItem("id");
-	let url = "/medicinska_sestra/overi/" + session + '/' +id;
+	let url = "/medicinska_sestra/overi/" + id;
 	$.ajax({
         url: url,
         type:"GET",
@@ -105,9 +104,8 @@ function unverifiedReciped() {
 
 function allPatients() {
 	$('#patientsTable').parents('div.dataTables_wrapper').first().show();
-	let session = sessionStorage.getItem("id");
 	$.ajax({
-        url:"/medicinska_sestra/sviPacijenti/" + session,
+        url:"/medicinska_sestra/sviPacijenti",
         type:"GET",
        	success: function(pacijenti){
        		document.getElementById("title").innerHTML = "All patients";
@@ -141,8 +139,7 @@ function requestHoliday() {
 	let type = $('#selectRest').val();
 	let to = $('#restTo').val();
 	let from = $('#restFrom').val();
-	let session = sessionStorage.getItem("id");
-	let url = "/medicinska_sestra/odmor/" + type + "~" + from + "~" + to +"/" + session;
+	let url = "/medicinska_sestra/odmor/" + type + "~" + from + "~" + to;
 	$.ajax({
         url:url,
         type:"GET",
@@ -222,6 +219,7 @@ function personalData() {
 	$('#patient').attr('hidden', true);
 	$('#recipesForm').attr('hidden', true);
 	$('#restForm').attr('hidden', true);
+	$('#calendar').attr('hidden', true);
 	document.getElementById("title").innerHTML = "";
 	$('#personalData').attr('hidden', false);
 	let session = sessionStorage.getItem("id");

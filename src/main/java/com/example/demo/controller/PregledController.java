@@ -16,6 +16,7 @@ import com.example.demo.dto.PregledDTO;
 import com.example.demo.model.Doktor;
 import com.example.demo.model.Klinika;
 import com.example.demo.model.Korisnik;
+import com.example.demo.model.LogedUser;
 import com.example.demo.model.Operacija;
 import com.example.demo.model.Pregled;
 import com.example.demo.model.Sala;
@@ -70,14 +71,13 @@ public class PregledController {
 		return new ResponseEntity<List<Pregled>>(pregledi, HttpStatus.OK);
 	}
 	
-	@RequestMapping(value = "/izmeni/{id}", method = RequestMethod.PUT)
-	public ResponseEntity<PregledDTO> izmeni(@RequestBody PregledDTO pregledDTO, @PathVariable("id") Long identifikacija) {
-		Korisnik kori = korisnikService.findOne(identifikacija);
-		if(!kori.getUloga().equals(UlogaKorisnika.LEKAR)) {
+	@RequestMapping(value = "/izmeni", method = RequestMethod.PUT)
+	public ResponseEntity<PregledDTO> izmeni(@RequestBody PregledDTO pregledDTO) {
+		if(!LogedUser.getInstance().getUserRole().equals(UlogaKorisnika.LEKAR)) {
 			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 		}
 		Pregled pregled = pregledService.findOne(pregledDTO.getId());
-		if (!pregled.getDoktor().getIdKorisnik().equals(identifikacija)) {
+		if (!pregled.getDoktor().getIdKorisnik().equals(LogedUser.getInstance().getUserId())) {
 			return new ResponseEntity<PregledDTO>(HttpStatus.BAD_REQUEST);
 		}
 		pregled.setNaziv(pregledDTO.getNaziv());
@@ -88,14 +88,13 @@ public class PregledController {
 		return new ResponseEntity<PregledDTO>(new PregledDTO(p), HttpStatus.OK);
 	}
 	
-	@RequestMapping(value = "/obrisi/{id}/{doktor_id}", method = RequestMethod.DELETE)
-	public ResponseEntity<String> obrisi(@PathVariable("id") Long identifikacija, @PathVariable("doktor_id") Long doktor_id) {
-		Korisnik kori = korisnikService.findOne(doktor_id);
-		if(!kori.getUloga().equals(UlogaKorisnika.LEKAR)) {
+	@RequestMapping(value = "/obrisi/{id}", method = RequestMethod.DELETE)
+	public ResponseEntity<String> obrisi(@PathVariable("id") Long identifikacija) {
+		if(!LogedUser.getInstance().getUserRole().equals(UlogaKorisnika.LEKAR)) {
 			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 		}
 		Pregled pregled = pregledService.findOne(identifikacija);
-		if (!pregled.getDoktor().getIdKorisnik().equals(doktor_id)) {
+		if (!pregled.getDoktor().getIdKorisnik().equals(LogedUser.getInstance().getUserId())) {
 			return new ResponseEntity<String>(HttpStatus.BAD_REQUEST);
 		}
 		pregledService.delete(pregled);

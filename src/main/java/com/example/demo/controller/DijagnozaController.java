@@ -17,6 +17,7 @@ import com.example.demo.dto.DijagnozaDTO;
 import com.example.demo.dto.PregledDTO;
 import com.example.demo.model.Dijagnoza;
 import com.example.demo.model.Korisnik;
+import com.example.demo.model.LogedUser;
 import com.example.demo.model.Pregled;
 import com.example.demo.model.UlogaKorisnika;
 import com.example.demo.service.DijagnozaService;
@@ -56,17 +57,16 @@ public class DijagnozaController {
 		return new ResponseEntity<List<Dijagnoza>>(dijagnoze, HttpStatus.OK);
 	}
 	
-	@RequestMapping(value = "/izmeni_pregled/{text}/{id}", method = RequestMethod.GET)
-	public ResponseEntity<PregledDTO> izmeni_pregled(@PathVariable("text") String text, @PathVariable("id") Long doktor_id) {
-		Korisnik korisnik = korisnikService.findOne(doktor_id);
-		if(!korisnik.getUloga().equals(UlogaKorisnika.LEKAR)) {
+	@RequestMapping(value = "/izmeni_pregled/{text}", method = RequestMethod.GET)
+	public ResponseEntity<PregledDTO> izmeni_pregled(@PathVariable("text") String text) {
+		if(!LogedUser.getInstance().getUserRole().equals(UlogaKorisnika.LEKAR))
 			return new ResponseEntity<PregledDTO>(HttpStatus.BAD_REQUEST);
-		}
+		
 		String[] splitter = text.split("~");
 		Long identifikacija = Long.parseLong(splitter[0]);
 		Pregled pregled = pregledService.findOne(identifikacija);
 		
-		if (!pregled.getDoktor().getIdKorisnik().equals(doktor_id)) {
+		if (!pregled.getDoktor().getIdKorisnik().equals(LogedUser.getInstance().getUserId())) {
 			return new ResponseEntity<PregledDTO>(HttpStatus.BAD_REQUEST);
 		}
 		pregled.setDijagnoze(new HashSet<Dijagnoza>());

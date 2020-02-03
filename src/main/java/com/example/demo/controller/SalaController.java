@@ -18,6 +18,7 @@ import com.example.demo.dto.TerminDTO;
 import com.example.demo.model.AdministratorKlinike;
 import com.example.demo.model.Klinika;
 import com.example.demo.model.Korisnik;
+import com.example.demo.model.LogedUser;
 import com.example.demo.model.Operacija;
 import com.example.demo.model.Pregled;
 import com.example.demo.model.Sala;
@@ -226,15 +227,13 @@ public class SalaController {
 		return new ResponseEntity<>(sale, HttpStatus.OK);
 	}
 	
-	@RequestMapping(value = "/slobodni_termini/{id}/{korisnik_id}", method = RequestMethod.GET)
-	public ResponseEntity<List<Sala>> slobodniTermini(@PathVariable("id") Long identifikacija, 
-													 @PathVariable("korisnik_id") Long korisnik_id) {
-		Korisnik kori = korisnikService.findOne(korisnik_id);
-		if(!kori.getUloga().equals(UlogaKorisnika.ADMIN_KLINIKE)) {
+	@RequestMapping(value = "/slobodni_termini/{id}", method = RequestMethod.GET)
+	public ResponseEntity<List<Sala>> slobodniTermini(@PathVariable("id") Long identifikacija) {
+		if(!LogedUser.getInstance().getUserRole().equals(UlogaKorisnika.ADMIN_KLINIKE)) {
 			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 		}
 		Operacija operacija = operacijaService.findOne(identifikacija);
-		AdministratorKlinike admin = adminKlinikeService.findByIdKorisnika(korisnik_id);
+		AdministratorKlinike admin = adminKlinikeService.findByIdKorisnika(LogedUser.getInstance().getUserId());
 		Klinika klinika = klinikaService.findOne(admin.getKlinika().getId());
 		List<Sala> sveSale = salaService.findByKlinika(klinika);
 		System.out.println("##########sve_sale" + sveSale.size());
@@ -250,15 +249,14 @@ public class SalaController {
 		return new ResponseEntity<List<Sala>>(slobodneSale, HttpStatus.OK);
 	}
 	
-	@RequestMapping(value = "/drugi_slobodni_termini/{id}/{korisnik_id}")
-	public ResponseEntity<Sala> prviSlobodan(@PathVariable("id") Long identifikacija,  @PathVariable("korisnik_id") Long korisnik_id) {
-		Korisnik kori = korisnikService.findOne(korisnik_id);
-		if(!kori.getUloga().equals(UlogaKorisnika.ADMIN_KLINIKE)) {
+	@RequestMapping(value = "/drugi_slobodni_termini/{id}")
+	public ResponseEntity<Sala> prviSlobodan(@PathVariable("id") Long identifikacija) {
+		if(!LogedUser.getInstance().getUserRole().equals(UlogaKorisnika.ADMIN_KLINIKE)) {
 			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 		}
 		System.out.println("##############drugi slobodni termini");
 		Operacija operacija = operacijaService.findOne(identifikacija);
-		AdministratorKlinike admin = adminKlinikeService.findByIdKorisnika(korisnik_id);
+		AdministratorKlinike admin = adminKlinikeService.findByIdKorisnika(LogedUser.getInstance().getUserId());
 		Klinika klinika = klinikaService.findOne(admin.getKlinika().getId());
 		List<Sala> sveSale = salaService.findByKlinika(klinika);
 		Sala rezervisanaSala = sveSale.get(0);

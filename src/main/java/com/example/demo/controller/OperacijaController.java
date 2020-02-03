@@ -17,6 +17,7 @@ import com.example.demo.model.AdministratorKlinike;
 import com.example.demo.model.Doktor;
 import com.example.demo.model.Klinika;
 import com.example.demo.model.Korisnik;
+import com.example.demo.model.LogedUser;
 import com.example.demo.model.Odsustvo;
 import com.example.demo.model.Operacija;
 import com.example.demo.model.Pregled;
@@ -65,13 +66,12 @@ public class OperacijaController {
 	private AdministratorKlinikeService adminKlinikeService;
 
 	
-	@RequestMapping(value = "/zahtevi/{id}", method=RequestMethod.GET) 
-	public ResponseEntity<List<Operacija>> zahtevi(@PathVariable("id") Long identifikacija) {
-		Korisnik korisnik = korisnikService.findOne(identifikacija);
-		if (!korisnik.getUloga().equals(UlogaKorisnika.ADMIN_KLINIKE)) {
+	@RequestMapping(value = "/zahtevi", method=RequestMethod.GET) 
+	public ResponseEntity<List<Operacija>> zahtevi() {
+		if (!LogedUser.getInstance().getUserRole().equals(UlogaKorisnika.ADMIN_KLINIKE)) {
 			return new ResponseEntity<List<Operacija>>(HttpStatus.BAD_REQUEST);
 		}
-		AdministratorKlinike admin = adminKlinikeService.findByIdKorisnika(identifikacija);
+		AdministratorKlinike admin = adminKlinikeService.findByIdKorisnika(LogedUser.getInstance().getUserId());
 		List<Operacija> operacije = operacijaService.findByStatus(StatusOperacije.NERASPOREDJEN);
 		List<Operacija> operacijeKlinike = new ArrayList<Operacija>();
 		for (Operacija o : operacije) {
@@ -138,14 +138,13 @@ public class OperacijaController {
 		return new ResponseEntity<List<Operacija>>(operacije, HttpStatus.OK);
 	}
 	
-	@RequestMapping(value = "/obrisi/{id}/{doktor_id}", method = RequestMethod.DELETE)
-	public ResponseEntity<String> obrisi(@PathVariable("id") Long identifikacija, @PathVariable("doktor_id") Long doktor_id) {
-		Korisnik korisnik = korisnikService.findOne(doktor_id);
-		if (!korisnik.getUloga().equals(UlogaKorisnika.LEKAR)) {
+	@RequestMapping(value = "/obrisi/{id}", method = RequestMethod.DELETE)
+	public ResponseEntity<String> obrisi(@PathVariable("id") Long identifikacija) {
+		if (!LogedUser.getInstance().getUserRole().equals(UlogaKorisnika.LEKAR)) {
 			return new ResponseEntity<String>(HttpStatus.BAD_REQUEST);
 		}
 		Operacija operacija = operacijaService.findOne(identifikacija);
-		Doktor doktor = doktorService.findByIdKorisnik(doktor_id);
+		Doktor doktor = doktorService.findByIdKorisnik(LogedUser.getInstance().getUserId());
 		if (!operacija.getDoktori().contains(doktor)) {
 			return new ResponseEntity<String>(HttpStatus.BAD_REQUEST);
 		}
@@ -153,14 +152,13 @@ public class OperacijaController {
 		return new ResponseEntity<String>(HttpStatus.OK);
 	}
 	
-	@RequestMapping(value = "/izmeni/{id}", method = RequestMethod.PUT)
-	public ResponseEntity<OperacijaDTO> izmeni(@RequestBody OperacijaDTO operacijaDTO, @PathVariable("id") Long identifikacija) {
-		Korisnik korisnik = korisnikService.findOne(identifikacija);
-		if (!korisnik.getUloga().equals(UlogaKorisnika.LEKAR)) {
+	@RequestMapping(value = "/izmeni", method = RequestMethod.PUT)
+	public ResponseEntity<OperacijaDTO> izmeni(@RequestBody OperacijaDTO operacijaDTO) {
+		if (!LogedUser.getInstance().getUserRole().equals(UlogaKorisnika.LEKAR)) {
 			return new ResponseEntity<OperacijaDTO>(HttpStatus.BAD_REQUEST);
 		}
 		Operacija operacija = operacijaService.findOne(operacijaDTO.getId());
-		Doktor doktor = doktorService.findByIdKorisnik(identifikacija);
+		Doktor doktor = doktorService.findByIdKorisnik(LogedUser.getInstance().getUserId());
 		if (!operacija.getDoktori().contains(doktor)) {
 			return new ResponseEntity<OperacijaDTO>(HttpStatus.BAD_REQUEST);
 		}

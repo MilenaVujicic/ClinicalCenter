@@ -102,7 +102,7 @@ function slTer1(operacija) {
 	$('#freeRooms').attr('hidden', false);
 	let session = sessionStorage.getItem("id");
 	$.ajax({
-		url: '/sala/slobodni_termini/' + operacija.id + '/' + session,
+		url: '/sala/slobodni_termini/' + operacija.id,
 		type: "GET",
 		success: function(sale) {
 			$('#freeRooms tbody').html('');
@@ -113,7 +113,7 @@ function slTer1(operacija) {
 				allDoctors(operacija.id);
 			} else {
 				$.ajax({
-					url: '/sala/drugi_slobodni_termini/' + operacija.id + '/' + session,
+					url: '/sala/drugi_slobodni_termini/' + operacija.id,
 					type: "GET",
 					success: function(sala) {
 						$.ajax({
@@ -165,7 +165,7 @@ function operationRequest() {
 	$('#doctors').attr('hidden', true);
 	let session = sessionStorage.getItem("id");
 	$.ajax({
-		url: 'operacija/zahtevi/' + session,
+		url: 'operacija/zahtevi',
 		type: "GET",
 		success: function(operacije) {
 			$('#requestsTable tbody').html('');

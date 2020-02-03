@@ -342,8 +342,7 @@ function saveExamination() {
 	let cena = $('#examinationPrice').val();
 	let tipPregleda = $('#examinationType').val();
 	let id = $('#examinationID').val();
-	let session = sessionStorage.getItem("id");
-	let url = 'doktor/posalji_pregled/'+ session + '/' +id_pac;
+	let url = 'doktor/posalji_pregled/' + id_pac;
 	$.ajax({
         url:"/dijagnoza/sve_dijagnoze",
         type:"GET",
@@ -408,7 +407,7 @@ function editExaminations() {
 	let id = $('#editExaminationID').val();
 	let session = sessionStorage.getItem("id");
 	$.ajax({
-		url: 'pregled/izmeni/' + session,
+		url: 'pregled/izmeni',
 		type:"PUT",
         data: JSON.stringify({id, naziv, anamneza, tipPregleda, cena}),
         contentType:'application/json',
@@ -442,7 +441,7 @@ function deleteExamination(id) {
 	return function() {
 		let session = sessionStorage.getItem("id");
 		$.ajax({
-			url: 'pregled/obrisi/' + id + '/' + session,
+			url: 'pregled/obrisi/' + id,
 			type:"DELETE",
 			success: function() {
 				pacijent_id = document.getElementById("aboutPatientID").innerHTML;
@@ -467,8 +466,7 @@ function showDiagnose(dijagnoza) {
 
 function addDiag() {
 	let id = document.getElementById("examID").innerHTML;
-	let session = sessionStorage.getItem("id");
-	let url = 'dijagnoza/izmeni_pregled/' + id + '/' + session;
+	let url = 'dijagnoza/izmeni_pregled/' + id;
 	$.ajax({
 		url:"dijagnoza/sve_dijagnoze",
         type:"GET",
@@ -616,9 +614,8 @@ function examinations(id) {
 function editOperation() {
 	let opis = document.getElementById("editOperationDesc").value;
 	let id = $('#editOperationID').val();
-	let session = sessionStorage.getItem("id");
 	$.ajax({
-		url: 'operacija/izmeni/' + session,
+		url: 'operacija/izmeni',
 		type: "PUT",
 		data: JSON.stringify({id, opis}),
         contentType:'application/json',
@@ -645,9 +642,8 @@ function editOperations(operacija) {
 
 function deleteOperation(operacija) {
 	return function() {
-		let session = sessionStorage.getItem("id");
 		$.ajax({
-			url: 'operacija/obrisi/' + operacija.id + '/' + session,
+			url: 'operacija/obrisi/' + operacija.id,
 			type: "DELETE",
 			success: function() {
 				operations(operacija.pacijent.id);
