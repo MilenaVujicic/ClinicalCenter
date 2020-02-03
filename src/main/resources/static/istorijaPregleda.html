@@ -155,7 +155,7 @@
 	}
 	
 	function istorijaPregleda() {
-		let id = 1; //ovo ce biti id trenutno ulogovanog korisnika
+		let id = sessionStorage.getItem("id"); //ovo ce biti id trenutno ulogovanog korisnika
 		$.ajax({
 			type: 'GET',
 			url:'pacijent/pregledi',

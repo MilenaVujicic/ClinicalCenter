@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.example.demo.model.Korisnik;
+import com.example.demo.model.UlogaKorisnika;
 import com.example.demo.service.KorisnikService;
 
 @RestController
@@ -33,22 +34,23 @@ public class LoginController {
 		
 		String sifra_iz_baze = korisnik.getPassword();
 		
-		System.out.println("##########" + pass + " " +  sifra_iz_baze);
-		if(pass.equals(sifra_iz_baze)) {
-			System.out.println("Dobra sifra");
-		}else {
+		if(korisnik.getUloga() == UlogaKorisnika.PACIJENT) {
+			if(passwordEncoder.matches(pass, sifra_iz_baze)) {
+				System.out.println("Dobra sifra");
+			}else {
+				System.out.println("Pogresna sifra");
+				return new ResponseEntity<String>("Email i Sifra se ne poklapaju.", HttpStatus.CONFLICT);
+			}
+		} else {
+			if(pass.equals(sifra_iz_baze)) {
+				System.out.println("Dobra sifra");
+			}else {
 
-			System.out.println("Pogresna sifra");
-			return new ResponseEntity<String>("Email i Sifra se ne poklapaju.", HttpStatus.CONFLICT);
+				System.out.println("Pogresna sifra");
+				return new ResponseEntity<String>("Email i Sifra se ne poklapaju.", HttpStatus.CONFLICT);
+			}
 		}
 		
-		/*if(passwordEncoder.matches(pass, sifra_iz_baze)) {
-			System.out.println("Dobra sifra");
-		}else {
-
-			System.out.println("Pogresna sifra");
-			return new ResponseEntity<String>("Email i Sifra se ne poklapaju.", HttpStatus.CONFLICT);
-		}*/
 		
 		if(korisnik.isAktiviran()) {
 			System.out.println(korisnik.getId().toString());

@@ -1,5 +1,6 @@
 package com.example.demo.service;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
@@ -38,6 +39,10 @@ public class TerminService {
 	public Termin findOne(Long id) {
 		// TODO Auto-generated method stub
 		return terminRepository.findById(id).orElseGet(null);
+	}
+	
+	public List<Termin> findByDatumIDoktor(LocalDate datum, Long doktor_id) {
+		return terminRepository.findByDatumIDoktor(datum, doktor_id);
 	}
 	
 }
