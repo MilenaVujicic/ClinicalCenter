@@ -278,8 +278,8 @@ $(document).ready(function() {
 		url: 'korisnik/preuzmi/' + session,
 		success: function(korisnik) {
 			if (korisnik.uloga != 'MEDICINSKA_SESTRA') {
-				alert('Nemate prava pristupa ovoj stranici');
-				window.location.href = "http://localhost:8080/medicinskaSestra.html";
+				alert('Nemate prava pristupa ovoj stranici!\nSistem Vas je logoutovao');
+				logout();
 			}
 		},
 		error: function() {
@@ -289,11 +289,21 @@ $(document).ready(function() {
 });
 
 function logout() {
-	sessionStorage.removeItem("id");
-	let session = sessionStorage.getItem("id");
-	if (session == null) {
-		window.location.href = "http://localhost:8080/index.html";
-	}
+	$.ajax({
+		url: 'auth/logout',
+		type: "GET",
+		success: function(){
+			sessionStorage.removeItem("id");
+			let session = sessionStorage.getItem("id");
+			if (session == null) {
+				window.location.href = "http://localhost:8080/index.html";
+			}
+		},
+		error: function() {
+			alert('Desila se greska kog logouta');
+		}
+	});
+	
 }
 
 

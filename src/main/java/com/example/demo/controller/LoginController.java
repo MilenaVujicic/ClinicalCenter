@@ -69,4 +69,12 @@ public class LoginController {
 		
 	}
 	
+	@RequestMapping(value = "/logout", method = RequestMethod.GET)
+	public ResponseEntity<String> logout() {
+		LogedUser logedUser = LogedUser.getInstance();
+		logedUser.setUserId(null);
+		logedUser.setUserRole(null);
+		return new ResponseEntity<String>(HttpStatus.OK);
+	}
+	
 }
