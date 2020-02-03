@@ -36,7 +36,7 @@ public class LoginController {
 		String sifra_iz_baze = korisnik.getPassword();
 		
 		if(korisnik.getUloga() == UlogaKorisnika.PACIJENT) {
-			if(passwordEncoder.matches(pass, sifra_iz_baze)) {
+			if(pass.equals(sifra_iz_baze)) { //passwordEncoder.matches(pass, sifra_iz_baze
 				System.out.println("Dobra sifra");
 			}else {
 				System.out.println("Pogresna sifra");

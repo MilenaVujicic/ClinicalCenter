@@ -462,8 +462,7 @@ public class PacijentController {
 															 @RequestParam(value="datum") String datum,
 															 @RequestParam(value="spec") String spec) {
 		
-		
-		System.out.println(name+" " + address +  " " + desc + " " + rating);
+		System.out.println(name + " " + address + " " + desc + " " + rating);
 		List<Klinika> clinics = klinikaService.findAll();
 		List<KlinikaDTO> klinikaDTO = new ArrayList<>();
 		
