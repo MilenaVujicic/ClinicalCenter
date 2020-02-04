@@ -156,4 +156,49 @@ public class KlinikaControllerTest {
 			       .andExpect(jsonPath("$.[*].adresa").value(hasItem(KLINIKA_ADRESA)))
 			       .andExpect(jsonPath("$.[*].opis").value(hasItem(KLINIKA_OPIS)));
 	}
+	
+	@Test
+	public void slobodniTermini() throws Exception {
+		String datum = DATUM_PREGLEDA_STRING; 
+	    String doktor = "1";   
+	    mockMvc.perform(get("/pacijent/slobodniTermini")
+	    	   .param("datum", datum)
+	    	   .param("doktor", doktor))
+	     	   .andExpect(status().isOk())
+	           .andExpect(content().contentType("application/json"))
+	           .andExpect(jsonPath("$.*", hasSize(2)));
+	    
+	    mockMvc.perform(get("/pacijent/slobodniTermini")
+		    	   .param("datum", datum)
+		    	   .param("doktor", "2"))
+		     	   .andExpect(status().isOk())
+		           .andExpect(content().contentType("application/json"))
+		           .andExpect(jsonPath("$.*", hasSize(1)));
+	}
+	
+	@Test
+	public void sviLekari() throws Exception {
+		mockMvc.perform(get("/pacijent/sviLekari"))
+	   		   .andExpect(status().isOk())
+		       .andExpect(content().contentType("application/json"))
+		       .andExpect(jsonPath("$.*", hasSize(4)))
+		       .andExpect(jsonPath("$.[*].ime").value(hasItem("Borisav")))
+		       .andExpect(jsonPath("$.[*].specijalizacija").value(hasItem(SPECIJALIZACIJA)));
+	}
+	
+	@Test
+	public void filtriranjeLekara() throws Exception {
+		mockMvc.perform(get("/pacijent/search")
+			   .param("ime", "Borisav")
+		       .param("prezime", "")
+		       .param("specijalizacija", SPECIJALIZACIJA)
+			   .param("prosecnaOcena", "")
+		 	   .param("spec", "")
+		 	   .param("datum", "")
+		 	   .param("klinika_id", ""))
+	     	   .andExpect(status().isOk())
+	           .andExpect(content().contentType("application/json"))
+	           .andExpect(jsonPath("$.*", hasSize(1)))
+	           .andExpect(jsonPath("$.[*].prezime").value(hasItem("Petkovic")));
+	}
 }
