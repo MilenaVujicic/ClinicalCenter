@@ -15,6 +15,7 @@ public class KlinikaConstants {
 	
 	public static final LocalDate DATUM_PREGLEDA = LocalDate.of(2019, 12, 1);
 	public static final String DATUM_PREGLEDA_STRING = "12/01/2019";
+	public static final String DATUM_PRETRAGA_1_STRING = "02/04/2019";
 	public static final String SPECIJALIZACIJA = "Lekar opste prakse";
 	public static final String SPECIJALIZACIJA1 = "Ortoped";
 	
