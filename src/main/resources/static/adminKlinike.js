@@ -7,6 +7,8 @@ $(document).ready(()=>{
 	document.getElementById('aDefineApt').addEventListener('click', defineNewApt, false);
 	document.getElementById('aShowPrices').addEventListener('click', showPrices, false);
 	document.getElementById('aShowRooms').addEventListener('click', showRooms, false);
+	document.getElementById('aStats').addEventListener('click', showStats, false);
+	
 	session = sessionStorage.getItem("id");
 	if(session == null){
 		alert('You must be logged in to view this page!');
@@ -37,6 +39,7 @@ function home() {
 	$('#personalDataTable').attr('hidden', true);
 	$('#tAbsence').attr('hidden', true);
 	$('#pricingTable').attr('hidden', true);
+	$('#divStats').attr('hidden', true);
 	
 }
 
@@ -634,4 +637,10 @@ function showPrices(event){
 function showRooms(event){
 	event.preventDefault();
 	window.location = './sale.html';
+}
+
+function showStats(event){
+	event.preventDefault();
+	home();
+	$('#divStats').attr('hidden', false);
 }
