@@ -5,13 +5,12 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-import javax.websocket.server.PathParam;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -89,10 +88,11 @@ public class KlinikaController {
 	}
 	
 	@RequestMapping(value = "editClinic/{id}", method = RequestMethod.POST)
-	public ResponseEntity<Object>uredjivanjeKlinikeAdmin(@PathParam("id") Long id, HttpEntity<String> json) throws ParseException{
+	public ResponseEntity<Object>uredjivanjeKlinikeAdmin(@PathVariable("id") Long id, HttpEntity<String> json) throws ParseException{
 		
 		Optional<AdministratorKlinike> ak = administratorService.findByIdKorisnik(id);
 		
+	
 		Optional<Klinika> k = klinikaService.findById(ak.get().getKlinika().getId());
 		Klinika kl = k.get();
 		String jString = json.getBody();

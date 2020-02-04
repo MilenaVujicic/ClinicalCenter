@@ -2,6 +2,8 @@ package com.example.demo.controller;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
+import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -13,15 +15,15 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.example.demo.dto.PregledDTO;
+import com.example.demo.model.AdministratorKlinike;
 import com.example.demo.model.Doktor;
 import com.example.demo.model.Klinika;
 import com.example.demo.model.Korisnik;
-import com.example.demo.model.Operacija;
 import com.example.demo.model.Pregled;
 import com.example.demo.model.Sala;
-import com.example.demo.model.StatusOperacije;
 import com.example.demo.model.StatusPregleda;
 import com.example.demo.model.Termin;
+import com.example.demo.service.AdministratorKlinikeService;
 import com.example.demo.service.DoktorService;
 import com.example.demo.service.EmailService;
 import com.example.demo.service.KlinikaService;
@@ -55,6 +57,10 @@ public class PregledController {
 	
 	@Autowired
 	private EmailService emailService;
+	
+	@Autowired
+	private AdministratorKlinikeService administratorService;
+	
 	
 	@RequestMapping(value = "/sviPregledi/{id}", method = RequestMethod.GET)
 	public ResponseEntity<List<Pregled>> sviPregledi(@PathVariable("id") Long identifikacija) {
@@ -130,6 +136,30 @@ public class PregledController {
 	public ResponseEntity<Pregled> preuzmi(@PathVariable("id") Long identifikacija) {
 		Pregled pregled = pregledService.findOne(identifikacija);
 		return new ResponseEntity<Pregled>(pregled, HttpStatus.OK);
+	}
+	
+	@RequestMapping(value = "/cenePregleda/{id}", method = RequestMethod.GET)
+	public ResponseEntity<List<PregledDTO>> cenePregleda(@PathVariable("id") Long id){
+		Optional<AdministratorKlinike> oak = administratorService.findByIdKorisnik(id);
+		AdministratorKlinike ak = oak.get();
+		
+		Optional<Klinika> ok = klinikaService.findById(ak.getKlinika().getId());
+		Klinika k = ok.get();
+		
+		Set<Doktor> doktori = k.getDoktori();
+		List<Pregled> pregledi = new ArrayList<Pregled>();
+		for(Doktor d : doktori) {
+			for(Pregled p : d.getPregledi()) {
+				pregledi.add(p);
+			}
+		}
+		
+		List<PregledDTO> retVal = new ArrayList<PregledDTO>();
+		for(Pregled p : pregledi) {
+			retVal.add(new PregledDTO(p));
+		}
+		
+		return new ResponseEntity<List<PregledDTO>>(retVal, HttpStatus.OK);
 	}
 	
 	@RequestMapping(value = "/zahtevi", method=RequestMethod.GET) 

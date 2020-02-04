@@ -4,6 +4,9 @@ $(document).ready(()=>{
 	document.getElementById('aApt').addEventListener('click', newApt, false);
 	document.getElementById('aPersonalData').addEventListener('click', seeData, false);
 	document.getElementById('aEditClinic').addEventListener('click', editClinicData, false);
+	document.getElementById('aDefineApt').addEventListener('click', defineNewApt, false);
+	document.getElementById('aShowPrices').addEventListener('click', showPrices, false);
+	document.getElementById('aShowRooms').addEventListener('click', showRooms, false);
 	session = sessionStorage.getItem("id");
 	if(session == null){
 		alert('You must be logged in to view this page!');
@@ -29,6 +32,12 @@ function home() {
 	$('#requestsTable').attr('hidden', true);
 	$('#freeRooms').attr('hidden', true);
 	$('#doctors').attr('hidden', true);
+	$('#aptTable').attr('hidden', true);
+	$('#freeRoomsApt').attr('hidden', true);
+	$('#personalDataTable').attr('hidden', true);
+	$('#tAbsence').attr('hidden', true);
+	$('#pricingTable').attr('hidden', true);
+	
 }
 
 function prikaziDoktora(doktor, specijalizacija) {
@@ -118,6 +127,7 @@ function slobodnaSala(sala, operacija) {
 }
 
 function slTer(operacija) {
+	home();
 	$('#requestsTable').attr('hidden', true);
 	$('#freeRooms').attr('hidden', false);
 	
@@ -180,6 +190,7 @@ function dodajZahtev(operacija, pacijent) {
 }
 
 function operationRequest() {
+	home();
 	$('#requestsTable').attr('hidden', false);
 	$('#freeRooms').attr('hidden', true);
 	$('#doctors').attr('hidden', true);
@@ -211,7 +222,8 @@ function operationRequest() {
 
 function listAbsence(event){
 	event.preventDefault();
-	
+	home();
+	$('#tAbsence tbody').empty();
 	$('#tAbsence').attr('hidden', false);
 	
 	$.ajax({
@@ -319,6 +331,7 @@ function listAbsence(event){
 
 function newApt(event){
 	event.preventDefault();
+	home();
 	$('#aptTable').attr('hidden', false);
 	aptRequest();
 }
@@ -369,6 +382,7 @@ function slobodnaProstorija(sala, pregled) {
 }
 
 function aptRequest() {
+	home();
 	$('#aptTable').attr('hidden', false);
 	$('#freeRoomsApt').attr('hidden', true);
 	$('#doctors').attr('hidden', true);
@@ -413,6 +427,7 @@ function dodajZahtevApt(pregled, pacijent) {
 
 
 function slTer(pregled) {
+	home();
 	$('#aptTable').attr('hidden', true);
 	$('#freeRoomsApt').attr('hidden', false);
 	
@@ -458,8 +473,9 @@ function slTer(pregled) {
 
 function seeData(event){
 	event.preventDefault();
+	home();
 	$('#personalDataTable').attr('hidden', false);
-	
+	$('#personalDataTable tbody').empty();
 	$.ajax({
 		url: 'korisnik/preuzmi/' + session,
 		type: 'GET',
@@ -515,4 +531,107 @@ function rezervisiProstoriju(sala, pregled) {
 function editClinicData(event){
 	event.preventDefault();
 	window.location = './clinicEdit.html';
+}
+
+function defineNewApt(event){
+	event.preventDefault();
+	window.location = './noviTermin.html'
+}
+
+function formatDoctor(doctor){
+	let tr = $('<tr></tr>');
+	let tdName = $('<td>' + doctor.ime + '</td>');
+	let tdSurname = $('<td>' + doctor.prezime + '</td>');
+	
+	
+	tr.append(tdName).append(tdSurname);
+	$.ajax({
+		url: '/doktor/korisnik_doktor/' + doctor.id,
+		type:'GET',
+		success: function(drData){
+			let tdSpecialization = $('<td>' + drData.specijalizacija + '</td>');
+			let tdRating = $('<td>' + drData.prosecnaOcena + '</td>');
+			let tdActions = $('<td></td>');
+
+			let aDelete = $('<a href = "#">Delete</a>');
+			aDelete.on('click', function(event){
+				event.preventDefault();
+				
+				$.ajax({
+					url: 'doktor/obrisiLekara/' + doctor.id,
+					type: 'DELETE',
+					success: function(dr){
+						if(dr == null){
+							alert("You cannot delete a doctor with appointments");
+						}else{
+							alert("The doctor has been deleted");
+							location.reload();
+						}
+					},
+					error: function(){
+						alert('Something went wrong');
+					}
+				});
+			});
+			tdActions.append(aDelete);
+			tr.append(tdSpecialization).append(tdRating).append(tdActions);
+		},
+		error: function(){
+			alert("Something went wrong");
+		}
+	});
+
+	$('#doctorsTable tbody').append(tr);
+}
+
+function showDoctors(event){
+	event.preventDefault();
+	home();
+	$('#doctorsTable').attr('hidden', false);
+	$('#doctorsTable tbody').empty();
+	
+	$.ajax({
+		url: 'doktor/svi_sa_klinike/' + sessionStorage.getItem("id"),
+		type: 'GET',
+		success: function(doktori){
+			for(var i = 0; i < doktori.length; i++)
+				formatDoctor(doktori[i]);
+		},
+		error: function(){
+			alert('Something went wrong');
+		}
+		
+	});
+	
+	
+}
+
+function showPrices(event){
+	event.preventDefault();
+	home();
+	$('#pricingTable').attr('hidden', false);
+	$('#pricingTable tbody').empty();
+	
+	$.ajax({
+		url:'usluga/cenaUsluge/' + sessionStorage.getItem("id"),
+		type:'GET',
+		success: function(examinations){
+			for(let ex of examinations){
+				let tr = $('<tr></tr>');
+				let tdName = $('<td>' + ex.naziv + '</td>');
+				let tdPrice = $('<td>' + ex.cena + '</td>');
+				tr.append(tdName).append(tdPrice);
+				$('#pricingTable tbody').append(tr);
+			}
+		},
+		error: function(){
+			alert('Something went wrong');
+		}
+	});
+	
+}	
+
+function showRooms(event){
+	event.preventDefault();
+	window.location = './sale.html';
 }

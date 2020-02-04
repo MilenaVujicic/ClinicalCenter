@@ -35,15 +35,16 @@
 	      <li><a onclick="return home();">Home</a></li>
 	      <li class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">Add <span class="caret"></span></a>
 	        <ul class="dropdown-menu">
-	          <li><a>New administrator of clinical centre</a></li>
+	          <li><a href = "#" id = "aDefineApt">New Appointment</a></li>
+	          <li><a href = "#" id = "aNewDoctor">New Doctor</a></li>
 	        </ul>
 	      </li>
 	      <li class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">Clinic<span class="caret"></span></a>
 	         <ul class="dropdown-menu">
 	          <li><a href = "#" id = "aEditClinic">Edit clinic data</a></li>
-	          <li><a>Rooms</a></li>  
-	          <li><a>Doctors</a></li>
-	          <li><a>Pricing</a></li>
+	          <li><a href = "#" id = "aShowRooms">Rooms</a></li>  
+	          <li><a href = "#" id = "aShowDoctors">Doctors</a></li>
+	          <li><a href = "#" id = "aShowPrices">Pricing</a></li>
 	        </ul>
 	      </li>
 	      <li><a href = "#" id = "aStats">Clinic stats</a>
@@ -108,25 +109,7 @@
 		</tbody>
 </table>
 	
-	<table class = "table" id = "personalDataTable" hidden = "true">
-		<thead>
-			<tr>
-				<th scope = "col">Name: </th>
-				<th scope = "col">Surname: </th>
-				<th scope = "col">JMBG: </th>
-				<th scope = "col">City: </th>
-				<th scope = "col">Country: </th>
-				<th scope = "col">Address: </th>
-				<th scope = "col">DOB: </th>
-				<th scope = "col">Phone: </th>
-				<th scope = "col">Email: </th>
-			</tr>
-		</thead>
-		<tbody>
-		</tbody>
-	</table>
-	
-	
+
 	
 	<table class = "table" id = "tAbsence" hidden = "true">
 	<thead>
@@ -148,9 +131,7 @@
 		<table class = "table" id = "personalDataTable" hidden = "true">
 		<thead>
 			<tr>
-				<th scope = "col">Name: </th>
-			</tr>
-			<tr>
+			<th scope = "col">Name: </th>
 			<th scope = "col">Surname: </th>
 				<th scope = "col">JMBG: </th>
 				<th scope = "col">City: </th>
@@ -171,6 +152,28 @@
 
 	</div>
 
+	<table class = "table" id = "pricingTable" hidden = "true">
+	<thead>
+	<tr>
+	<th>Service name: </th>
+	<th>Price: </th>
+	</tr>
+	<tbody>
+	</tbody>
+	</table>
+	<!-- <table class = "table" id = "doctorsTable" hidden = "true">
+	<thead>
+	<tr>
+	<th scope = "col">Name: </th>
+	<th scope = "col">Surname: </th>
+	<th scope = "col">Specialization: </th>
+	<th scope = "col">Rating: </th>
+	<th scope = "col">Actions: </th>
+	</tr>
+	</thead>
+	<tbody>
+	</tbody>
+	</table> -->
 	
 </body>
 </html>

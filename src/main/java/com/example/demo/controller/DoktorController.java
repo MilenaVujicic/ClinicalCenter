@@ -7,6 +7,7 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpEntity;
@@ -394,6 +395,33 @@ public class DoktorController {
 		return new ResponseEntity<List<Korisnik>>(doktori_klinike, HttpStatus.OK);
 	}
 	
+	
+	@RequestMapping(value="/svi_sa_klinike/{id}", method = RequestMethod.GET)
+	public ResponseEntity<List<Korisnik>> svi_sa_klinike_id(@PathVariable("id") Long id) {
+		/*Optional<Korisnik> oKorisnik = korisnikService.findById(id);
+		Korisnik korisnik = oKorisnik.get();*/
+		Optional<AdministratorKlinike> oak = administratorService.findByIdKorisnik(id);
+		AdministratorKlinike ak = oak.get();
+		
+		Optional<Klinika> ok = klinikaService.findById(ak.getKlinika().getId());
+		Klinika k = ok.get();
+		List<Doktor> doktori = doktorService.findAllByKlinika(k);
+		List<Korisnik> lekari = korisnikService.findByUloga(UlogaKorisnika.LEKAR);
+		List<Korisnik> doktori_klinike = new ArrayList<Korisnik>();
+		
+		for (Korisnik korisnik : lekari) {
+			for (Doktor doktor : doktori) {
+				if (doktor.getIdKorisnik().equals(korisnik.getId())) {
+					doktori_klinike.add(korisnik);
+				}
+			} 
+		}
+		
+		
+		return new ResponseEntity<List<Korisnik>>(doktori_klinike, HttpStatus.OK);
+	}
+	
+	
 	@RequestMapping(value="/svi_slobodni_sa_klinike/{id}", method = RequestMethod.GET)
 	public ResponseEntity<List<Korisnik>> svi_sa_klinike_slobodni(@PathVariable("id") Long identifikacija) {
 		Klinika k = klinikaService.findOne((long) 2);
@@ -577,5 +605,35 @@ public class DoktorController {
 		return new ResponseEntity<List<Operacija>>(operacije_doktora, HttpStatus.OK);
 	}
 	
+	@RequestMapping(value = "/korisnik_doktor/{id}", method = RequestMethod.GET)
+	public ResponseEntity<DoktorDTO> korisnikDoktor(@PathVariable("id") Long id){
+		Doktor d = doktorService.findByIdKorisnik(id);
+		DoktorDTO doktor = new DoktorDTO(d);
+		return new ResponseEntity<DoktorDTO>(doktor, HttpStatus.OK);
+		
+	}
+	
+	@RequestMapping(value = "/obrisiLekara/{id}", method = RequestMethod.DELETE)
+	public ResponseEntity<DoktorDTO> obrisiLekara(@PathVariable("id") Long id){
+		Doktor d = doktorService.findByIdKorisnik(id);
+		DoktorDTO doktor = null;
+		for(Pregled p : d.getPregledi()) {
+			if(p.getStatus() == StatusPregleda.ZAKAZAN) {
+				return new ResponseEntity<DoktorDTO>(doktor, HttpStatus.OK);
+			}
+		}
+		
+		doktor = new DoktorDTO(d);
+		Optional<Klinika> ok = klinikaService.findById(d.getKlinika().getId());
+		Klinika k = ok.get();
+		if(k.getDoktori().contains(d)) {
+			d.setKlinika(null);
+			k.getDoktori().remove(d);
+			System.out.println("OBRISAN DOKTOR");
+		}
+		klinikaService.save(k);
+		doktorService.save(d);
+		return new ResponseEntity<DoktorDTO>(doktor, HttpStatus.OK);
+	}
 }
 

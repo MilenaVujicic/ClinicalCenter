@@ -115,7 +115,8 @@ insert into odsustvo (korisnik_id, vrsta_odsustva, pocetak_odsustva, zavrsetak_o
 insert into odsustvo (korisnik_id, vrsta_odsustva, pocetak_odsustva, zavrsetak_odsustva, odobren) values (9, 1, '2020-02-25', '2020-02-28', FALSE);
 
 insert into usluga(naziv, opis, cena, klinika_id) values ('Pregled','Obican pregled','2000',1);
-
+insert into usluga(naziv, opis, cena, klinika_id) values ('Pregled','Obican pregled','2000',2);
+insert into usluga(naziv, opis, cena, klinika_id) values ('Pregled specijaliste','Specijalisticki','4000',2);
 insert into odsustvo (korisnik_id, vrsta_odsustva, pocetak_odsustva, zavrsetak_odsustva, odobren) values (5, 1, '2020-01-25', '2020-01-28', TRUE);
 insert into odsustvo (korisnik_id, vrsta_odsustva, pocetak_odsustva, zavrsetak_odsustva, odobren) values (5, 1, '2020-02-25', '2020-02-28', FALSE);
 

@@ -5,21 +5,29 @@ package com.example.demo.controller;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
+import java.util.Optional;
+import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.example.demo.dto.PregledDTO;
+import com.example.demo.model.AdministratorKlinike;
 import com.example.demo.model.Doktor;
 import com.example.demo.model.Klinika;
 import com.example.demo.model.Korisnik;
+import com.example.demo.model.Pregled;
 import com.example.demo.model.Sala;
 import com.example.demo.model.Termin;
+import com.example.demo.service.AdministratorKlinikeService;
 import com.example.demo.service.DoktorService;
 import com.example.demo.service.KlinikaService;
 import com.example.demo.service.KorisnikService;
@@ -48,6 +56,9 @@ public class TerminController {
 	
 	@Autowired
 	KorisnikService korisnikService;
+	
+	@Autowired
+	AdministratorKlinikeService administratorService;
 
 	@RequestMapping(value = "/noviTermin", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE)
 	@ResponseStatus(value = HttpStatus.OK)
@@ -164,4 +175,6 @@ public class TerminController {
 		terminService.save(t);
 		
 	}
+	
+	
 }

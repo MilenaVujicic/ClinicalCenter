@@ -41,11 +41,10 @@ $(document).ready(()=>{
 		let naziv = $('#f_naziv').val();
 		let adresa = $('#f_adresa').val();
 		let opis = $('#f_opis').val();
-	
 		$.ajax({
 			type: "POST",
 			contentType: "application/json",
-			url: "klinika/editClinic/" + session,
+			url: "klinika/editClinic/" + sessionStorage.getItem("id"),
 			data: JSON.stringify({naziv, adresa, opis}), 
 			success: function(ret){
 				console.log("SUCCESS: ");
