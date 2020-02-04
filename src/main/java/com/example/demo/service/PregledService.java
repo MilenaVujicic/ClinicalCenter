@@ -27,16 +27,16 @@ public class PregledService {
 		return pregledRespository.findById(id).orElse(null);
 	}
 	
-	public void remove(Pregled pregled) {
-		pregledRespository.delete(pregled);;
-	}
-	
 	public List<Pregled> findByStatus(StatusPregleda status){
 		return pregledRespository.findByStatus(status);
 	}
 
 	public List<Pregled> findByPatientId(Long id) {
 		return pregledRespository.findByPatientID(id);
+	}
+	
+	public void delete(Pregled pregled) {
+		pregledRespository.delete(pregled);
 	}
 
 }

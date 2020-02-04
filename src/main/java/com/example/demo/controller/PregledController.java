@@ -97,7 +97,9 @@ public class PregledController {
 		if (!pregled.getDoktor().getIdKorisnik().equals(LogedUser.getInstance().getUserId())) {
 			return new ResponseEntity<String>(HttpStatus.BAD_REQUEST);
 		}
-		pregledService.remove(pregled);
+		//pregledService.delete(pregled);
+		pregled.setStatus(StatusPregleda.OBRISAN);
+		Pregled p = pregledService.save(pregled);
 		return new ResponseEntity<String>(HttpStatus.OK);
 	}
 	
