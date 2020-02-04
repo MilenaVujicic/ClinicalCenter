@@ -1,6 +1,7 @@
 package com.example.demo.controller;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
@@ -166,6 +167,89 @@ public class PregledController {
 	public ResponseEntity<List<Pregled>> zahtevi() {
 		List<Pregled> pregledi = pregledService.findByStatus(StatusPregleda.NERASPOREDJEN);
 		return new ResponseEntity<List<Pregled>>(pregledi, HttpStatus.OK);
+	}
+	
+	@RequestMapping(value = "/pregledi_klinika/{id}", method = RequestMethod.GET)
+	public ResponseEntity<List<Integer>> preglediKlinika(@PathVariable("id") Long id){
+		List<Integer> retVal = new ArrayList<Integer>();
+		
+		Optional<AdministratorKlinike> oak = administratorService.findByIdKorisnik(id);
+		AdministratorKlinike ak = oak.get();
+		
+		Optional<Klinika> ok = klinikaService.findById(ak.getKlinika().getId());
+		Klinika k = ok.get();
+		
+		List<Doktor> doktori = doktorService.findAllByKlinika(k);
+		int day = 0;
+		int week = 0;
+		int month = 0;
+		Calendar today = Calendar.getInstance();
+		Calendar weekBegin = Calendar.getInstance();
+		Calendar weekEnd = Calendar.getInstance();
+		Calendar monthBegin = Calendar.getInstance();
+		Calendar monthEnd = Calendar.getInstance();
+		
+		weekBegin.set(Calendar.HOUR_OF_DAY,0);
+		weekBegin.clear(Calendar.MINUTE);
+		weekBegin.clear(Calendar.SECOND);
+		weekBegin.clear(Calendar.MILLISECOND);
+		
+		weekEnd.set(Calendar.HOUR_OF_DAY,0);
+		weekEnd.clear(Calendar.MINUTE);
+		weekEnd.clear(Calendar.SECOND);
+		weekEnd.clear(Calendar.MILLISECOND);
+		
+		monthBegin.set(Calendar.HOUR_OF_DAY,0);
+		monthBegin.clear(Calendar.MINUTE);
+		monthBegin.clear(Calendar.SECOND);
+		monthBegin.clear(Calendar.MILLISECOND);
+		
+		monthEnd.set(Calendar.HOUR_OF_DAY,0);
+		monthEnd.clear(Calendar.MINUTE);
+		monthEnd.clear(Calendar.SECOND);
+		monthEnd.clear(Calendar.MILLISECOND);
+		
+		
+		weekBegin.set(Calendar.DAY_OF_WEEK, weekBegin.getFirstDayOfWeek());
+		weekEnd.set(Calendar.DAY_OF_WEEK, weekBegin.getFirstDayOfWeek());
+		weekEnd.add(Calendar.WEEK_OF_YEAR, 1);
+		
+		monthBegin.set(Calendar.DAY_OF_MONTH, 1);
+		monthEnd.set(Calendar.DAY_OF_MONTH, monthEnd.getActualMaximum(Calendar.DAY_OF_MONTH));
+		
+		System.out.println("TODAY: " + today.get(Calendar.DATE) + " " + today.get(Calendar.MONTH));
+		System.out.println("WEEKB: " + weekBegin.get(Calendar.DATE) + " " + weekBegin.get(Calendar.MONTH));
+		System.out.println("WEEKE: " + weekEnd.get(Calendar.DATE) + " " + weekEnd.get(Calendar.MONTH));
+		System.out.println("MONTHB: " + monthBegin.get(Calendar.DATE) + " " + monthBegin.get(Calendar.MONTH));
+		System.out.println("MONTHE: " + monthEnd.get(Calendar.DATE) + " " + monthEnd.get(Calendar.MONTH));
+		for(Doktor d : doktori) {
+			for(Pregled p : d.getPregledi()) {
+				if(p.getStatus() == StatusPregleda.ZAVRSEN) {
+					Calendar pDate = p.getDatumIVremePregleda();
+					if(pDate.get(Calendar.DATE) == today.get(Calendar.DATE)) {
+						day++;
+					}
+					
+					if(pDate.getTimeInMillis() > weekBegin.getTimeInMillis() && pDate.getTimeInMillis() < weekEnd.getTimeInMillis()) {
+						week++;
+					}
+					
+					if(pDate.getTimeInMillis() > monthBegin.getTimeInMillis() && pDate.getTimeInMillis() < monthEnd.getTimeInMillis()) {
+						month++;
+					}
+					
+				}
+			}
+		}
+		Integer iDay = new Integer(day);
+		Integer iWeek = new Integer(week);
+		Integer iMonth = new Integer(month);
+		System.out.println("#####" + day +" " + week + " " + month);
+		retVal.add(iDay);
+		retVal.add(iWeek);
+		retVal.add(iMonth);
+		return new ResponseEntity<List<Integer>>(retVal, HttpStatus.OK);
+		
 	}
 
 }

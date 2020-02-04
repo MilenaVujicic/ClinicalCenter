@@ -176,7 +176,31 @@
 	</table> -->
 	
 	<div id = "divStats" hidden = "true">
-	<h4>Clinic Rating: </h4>
+	<h4 id = "pClRating">Clinic Rating: </h4>
+	<br/>
+	<h4>Doctor Ratings: </h4>
+	<table class = "table" id ="doctorsRatingTable">
+	<thead>
+	<tr>
+	<th scope = "col">Name: </th>
+	<th scope = "col">Surname: </th>
+	<th scope = "col">Rating: </th>
+	</tr>
+	</thead>
+	<tbody>
+	</tbody>
+	</table>
+	<br/>
+	<h4>Number of examinations</h4>
+	<p id = "pTemp"></p>
+	<canvas id = "cGraph" width = "250"></canvas>
+	<br/>
+	<label>Enter date range</label>
+	<input type = "date" id = "dBegin">
+	<input type = "date" id = "dEnd">
+	<button id = "btnSubmit">Submit</button>
+	<h4 id = "hEarnings"></h4>
+	
 	</div>
 	
 </body>

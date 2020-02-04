@@ -97,6 +97,12 @@ insert into pregled (naziv, anamneza, datumivreme_pregleda, status, tip_pregleda
 insert into pregledi_dijagnoze(pregled_id, dijagnoza_id) values(1, 2);
 
 
+insert into pregled (naziv, anamneza, datumivreme_pregleda, status, tip_pregleda, cena, doktor_id, pacijent_id, sala_id) values ('', '', '2-1-20 16:00:00', 2, '', 150, 4, 1, 1);
+insert into pregled (naziv, anamneza, datumivreme_pregleda, status, tip_pregleda, cena, doktor_id, pacijent_id, sala_id) values ('', '', '2-3-20 14:00:00', 2, '', 250, 4, 1, 1);
+insert into pregled (naziv, anamneza, datumivreme_pregleda, status, tip_pregleda, cena, doktor_id, pacijent_id, sala_id) values ('', '', '2-3-20 15:00:00', 2, '', 200, 4, 1, 1);
+insert into pregled (naziv, anamneza, datumivreme_pregleda, status, tip_pregleda, cena, doktor_id, pacijent_id, sala_id) values ('', '', '2-3-20 14:00:00', 2, '', 200, 4, 1, 1);
+insert into pregled (naziv, anamneza, datumivreme_pregleda, status, tip_pregleda, cena, doktor_id, pacijent_id, sala_id) values ('', '', '2-4-20 13:00:00', 2, '', 200, 4, 1, 1);
+
 insert into operacija(pacijent_id, status, datumivreme_operacije, trajanje) values(1, 0, '1-1-2020 17:00', 0);
 insert into operacija(pacijent_id, status, datumivreme_operacije, trajanje) values(2, 0, '2-1-2020 17:00', 0);
 insert into operacija(pacijent_id, status, datumivreme_operacije, trajanje) values(2, 0, '3-2-2020 21:00', 0);

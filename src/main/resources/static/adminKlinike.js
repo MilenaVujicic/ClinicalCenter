@@ -8,7 +8,7 @@ $(document).ready(()=>{
 	document.getElementById('aShowPrices').addEventListener('click', showPrices, false);
 	document.getElementById('aShowRooms').addEventListener('click', showRooms, false);
 	document.getElementById('aStats').addEventListener('click', showStats, false);
-	
+	document.getElementById('btnSubmit').addEventListener('click', submitDate, false);
 	session = sessionStorage.getItem("id");
 	if(session == null){
 		alert('You must be logged in to view this page!');
@@ -587,6 +587,7 @@ function formatDoctor(doctor){
 	$('#doctorsTable tbody').append(tr);
 }
 
+
 function showDoctors(event){
 	event.preventDefault();
 	home();
@@ -639,8 +640,125 @@ function showRooms(event){
 	window.location = './sale.html';
 }
 
+function formatDoctor2(doctor){
+	let tr = $('<tr></tr>');
+	let tdName = $('<td>' + doctor.ime + '</td>');
+	let tdSurname = $('<td>' + doctor.prezime + '</td>');
+	
+	
+	tr.append(tdName).append(tdSurname);
+
+	$.ajax({
+		url: '/doktor/korisnik_doktor/' + doctor.id,
+		type:'GET',
+		success: function(drData){
+			let tdRating = $('<td>' + drData.prosecnaOcena + '</td>');
+			tr.append(tdRating);
+			
+			
+		},
+		error: function(){
+			alert("Something went wrong");
+		}
+	});
+	
+	$('#doctorsRatingTable tbody').append(tr);
+}
+
 function showStats(event){
 	event.preventDefault();
 	home();
 	$('#divStats').attr('hidden', false);
+	$('#pClRating').empty();
+
+	$.ajax({
+		url:'klinika/klinikaAdmin/' + sessionStorage.getItem("id"),
+		type: 'GET',
+		success: function(klinika){
+			$('#pClRating').append('Clinic Rating: ' + klinika.prosecnaOcena);
+		},
+		error: function(){
+			alert('Something went wrong');
+		}
+	});
+	
+	$.ajax({
+		url: 'pregled/pregledi_klinika/'+ sessionStorage.getItem("id"),
+		type: 'GET',
+		success: function(brojevi){
+			canvasReset();
+			var canvas = document.getElementById("cGraph");
+			var ctx = canvas.getContext("2d");
+			var X = 0;
+			var width = 50;
+			
+			var Y = 0;
+			var height = 100;
+			ctx.fillStyle = "#fff1c4";
+			
+			for(var i = 0; i < 3; i++){
+				var h = brojevi[i];
+				ctx.fillRect(X, canvas.height-h, width, h);
+				
+				X += width+50;
+				
+				if(i==0){
+					ctx.fillText("Day: " + brojevi[i],0,h+20);
+				}else if(i==1){
+					ctx.fillText("Week: " + brojevi[i],100,h+20);
+				}else if(i==2){
+					ctx.fillText("Month: " + brojevi[i],200,h+20);
+				}
+				
+			}
+			/*ctx.fillText("Day",0,h+20  );
+			ctx.fillText("Week",100,h+20 );
+			ctx.fillText("Month",200,h+20 );*/
+		},
+		error: function(){
+			alert('Something went wrong');
+		}
+	});
+	$('#doctorsRatingTable tbody').empty();
+	$.ajax({
+		url:'doktor/svi_sa_klinike/' + sessionStorage.getItem("id"),
+		type: 'GET',
+		success: function(doktori){
+			for(let doktor of doktori){
+				formatDoctor2(doktor);
+			}
+		},
+		error: function(){
+			alert('Something went wrong');
+		}
+	});
+}
+
+function canvasReset(){
+	var canvas = document.getElementById("cGraph");
+	var ctx = canvas.getContext("2d");
+	ctx.clearRect(0,0, canvas.width, canvas.height);
+}
+function submitDate(event){
+	event.preventDefault();
+	
+	let beginDate = $('#dBegin').val();
+	let endDate = $('#dEnd').val();
+	if(beginDate == '' || endDate == ''){
+		alert('Dates must not be empty');
+		return;
+	}
+	$('#hEarnings').empty();
+	$.ajax({
+		url: 'klinika/getZarada/' + sessionStorage.getItem("id"),
+		type: 'POST',
+		data: JSON.stringify({beginDate : beginDate, endDate : endDate}),
+		contentType: 'application/json',
+		success: function(zarada){
+			$('#hEarnings').append("Total earnings: " + zarada);
+		},
+		error: function(){
+			alert('Something went wrong');
+		}
+	})
 }
