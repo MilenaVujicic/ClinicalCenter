@@ -6,4 +6,5 @@ import com.example.demo.model.MedicinskaSestra;
 
 public interface MedicinskaSestraRepository extends JpaRepository<MedicinskaSestra, Long> {
 
+	MedicinskaSestra findByIdKorisnika(Long id);
 }

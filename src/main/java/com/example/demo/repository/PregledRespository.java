@@ -22,9 +22,8 @@ public interface PregledRespository extends JpaRepository<Pregled, Long>{
 
 	List<Pregled> findByStatus(StatusPregleda status);
 
-
-	@Query("select p from Pregled p where p.pacijent.id = 1")
-	List<Pregled> findByPatientID();//?#{[0]}
+	@Query("select p from Pregled p where p.pacijent.id = ?1")
+	List<Pregled> findByPatientID(Long id);//?#{[0]}
 	
 }
 

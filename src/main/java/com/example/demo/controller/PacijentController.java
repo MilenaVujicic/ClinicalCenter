@@ -2,6 +2,8 @@ package com.example.demo.controller;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collections;
@@ -84,6 +86,34 @@ public class PacijentController {
 			klinikaDTO.add(new KlinikaDTO(k));
 		}
 		return new ResponseEntity<>(klinikaDTO, HttpStatus.OK);
+	}
+	
+	@RequestMapping(value = "/klinikePoTerminu", method=RequestMethod.GET)
+	public ResponseEntity<List<KlinikaDTO>> getClinicsByTermin(@RequestParam(value="datum") String datum,
+															   @RequestParam(value="spec") String spec) throws ParseException {
+		
+		if(datum == "" || datum == null || spec == "" || spec == null) {
+			return null;
+		}
+		
+		DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("MM/dd/yyyy");
+		LocalDate date = LocalDate.parse(datum,dateTimeFormatter);
+		
+		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("YYYY-dd-MM");
+		formatter.format(date);
+		System.out.println(date);
+		
+		List<Klinika> klinike = klinikaService.findByDatumPregleda(date, spec);
+		
+		List<KlinikaDTO> klinikeDTO = new ArrayList<KlinikaDTO>();
+		
+		for(Klinika kl:klinike) {
+			System.out.println(kl.getIme());
+			KlinikaDTO klDTO = new KlinikaDTO(kl);
+			klinikeDTO.add(klDTO);
+		}
+		
+		return new ResponseEntity<List<KlinikaDTO>>(klinikeDTO,HttpStatus.OK);
 	}
 	
 
@@ -291,6 +321,8 @@ public class PacijentController {
 		
 		Korisnik user = korisnikService.findOne(id_korisnika_l);
 		Termin termin = terminService.findOne(id_pregleda_l);
+		termin.setSlobodan(false);
+		termin = terminService.save(termin);
 		
 		Calendar cal = termin.getDatum();
 		cal.add(Calendar.HOUR_OF_DAY, -1);
@@ -308,9 +340,24 @@ public class PacijentController {
 	}
 	
 	@RequestMapping(value = "/slobodniTermini", method = RequestMethod.GET)
-	public ResponseEntity<List<TerminDTO>> getSlobodniTermini() {
+	public ResponseEntity<List<TerminDTO>> getSlobodniTermini(@RequestParam(value="datum") String datum,
+															  @RequestParam(value="doktor") String doktor ) {
 
-		List<Termin> termini = terminService.findBySlobodan(true);
+		List<Termin> termini;
+		if(datum != "" && doktor != "") {
+			DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("MM/dd/yyyy");
+			LocalDate date = LocalDate.parse(datum,dateTimeFormatter);
+			
+			DateTimeFormatter formatter = DateTimeFormatter.ofPattern("YYYY-dd-MM");
+			formatter.format(date);
+			
+			Long id_dr = Long.parseLong(doktor);
+			termini = terminService.findByDatumIDoktor(date, id_dr);
+		} else {
+			termini = terminService.findBySlobodan(true);
+		}
+		
+		
 		List<TerminDTO> terminiDTO = new ArrayList<TerminDTO>();
 		
 		for(Termin t : termini) {
@@ -357,10 +404,28 @@ public class PacijentController {
 	public ResponseEntity<List<DoktorDTO>> getDoctorsSearch(@RequestParam(value="ime") String ime,
 															@RequestParam(value="prezime") String prezime,
 															@RequestParam(value="specijalizacija") String specijalizacija,
-															@RequestParam(value="prosecnaOcena") String prosecnaOcena) {
+															@RequestParam(value="prosecnaOcena") String prosecnaOcena,
+															@RequestParam(value="spec") String spec,
+															@RequestParam(value="datum") String datum,
+															@RequestParam(value="klinika_id") String klinika_id){
+		
+		List<Doktor> doctors;
+		if(spec != "" && datum != "" && klinika_id != "") {
+			DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("MM/dd/yyyy");
+			LocalDate date = LocalDate.parse(datum,dateTimeFormatter);
+			
+			DateTimeFormatter formatter = DateTimeFormatter.ofPattern("YYYY-dd-MM");
+			formatter.format(date);
+			
+			Long id_kl = Long.parseLong(klinika_id);
+			doctors= doktorService.findByDatumPregledaISpecIKlinika(date, spec, id_kl);
+			
+		} else {
+			doctors= doktorService.findAll();
+		}
 		
 		System.out.println(ime+" " + prezime +  " " + specijalizacija + " " + prosecnaOcena);
-		List<Doktor> doctors = doktorService.findAll();
+		
 		List<Korisnik> users = korisnikService.findByUloga(UlogaKorisnika.LEKAR);
 		List<DoktorDTO> doktoriDTO = new ArrayList<>();
 		
@@ -371,16 +436,14 @@ public class PacijentController {
 			{
 				doktoriDTO.add(new DoktorDTO(d));
 			}
-				
 		}
 
 		for(Korisnik k : users) {
 			for(DoktorDTO d: doktoriDTO) {
 				if (k.getId() == d.getIdKorisnik()) {
-					d.setId(k.getId());
 					d.setIme(k.getIme());
 					d.setPrezime(k.getPrezime());
-					System.out.println(d.getIme()+" " + d.getPrezime() +  " " + d.getSpecijalizacija() + " " + d.getProsecnaOcena());
+					System.out.println(d.getIme()+" " + d.getPrezime() +  " " + d.getSpecijalizacija() + " " + d.getProsecnaOcena() + " " + d.getId());
 				}
 			}
 		}
@@ -395,7 +458,10 @@ public class PacijentController {
 	public ResponseEntity<List<KlinikaDTO>> getClinicsSearch(@RequestParam(value="name") String name,
 															 @RequestParam(value="address") String address,
 															 @RequestParam(value="desc") String desc,
-															 @RequestParam(value="rating") String rating) {
+															 @RequestParam(value="rating") String rating,
+															 @RequestParam(value="datum") String datum,
+															 @RequestParam(value="spec") String spec) {
+		
 		
 		System.out.println(name+" " + address +  " " + desc + " " + rating);
 		List<Klinika> clinics = klinikaService.findAll();
@@ -407,11 +473,31 @@ public class PacijentController {
 			{
 				klinikaDTO.add(new KlinikaDTO(k));
 			}
-			
 		}
 		
-		return new ResponseEntity<>(klinikaDTO, HttpStatus.OK);	
+		if(datum != null && datum != "" && spec != null && spec != "") {
+			DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("MM/dd/yyyy");
+			LocalDate date = LocalDate.parse(datum,dateTimeFormatter);
+			
+			DateTimeFormatter formatter = DateTimeFormatter.ofPattern("YYYY-dd-MM");
+			formatter.format(date);
+			List<Klinika> klinikeDatum = klinikaService.findByDatumPregleda(date, spec);
+			
+			List<KlinikaDTO> klinikeDatumDTO = new ArrayList<>();
+			
+			for (Klinika k : klinikeDatum) {
+				if(k.getIme().contains(name) && k.getAdresa().contains(address)
+						&& k.getOpis().contains(desc) && Double.toString(k.getProsecnaOcena()).contains(rating))
+				{
+					klinikeDatumDTO.add(new KlinikaDTO(k));
+				}
+			}
+			return new ResponseEntity<>(klinikeDatumDTO, HttpStatus.OK);
+		}
+		
+		return new ResponseEntity<>(klinikaDTO, HttpStatus.OK);
 	}
+		
 	
 	@RequestMapping(value = "/lekar/{id}", method=RequestMethod.GET)
 	public Doktor getDoctor(@PathVariable Long id) {
@@ -443,6 +529,7 @@ public class PacijentController {
 		Doktor doktor = doktori.get(0);
 		System.out.println("dr spec: "+doktor.getSpecijalizacija());
 		
+		//korisnik id
 		List<Korisnik> korisnici = korisnikService.findByIme("Petar");
 		Korisnik user = korisnici.get(0);
 		Pacijent pacijent = pacijentService.findByIdKorisnik(user.getId());

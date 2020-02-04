@@ -15,12 +15,18 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.example.demo.dto.SalaDTO;
 import com.example.demo.dto.TerminDTO;
+import com.example.demo.model.AdministratorKlinike;
 import com.example.demo.model.Klinika;
+import com.example.demo.model.Korisnik;
+import com.example.demo.model.LogedUser;
 import com.example.demo.model.Operacija;
 import com.example.demo.model.Pregled;
 import com.example.demo.model.Sala;
 import com.example.demo.model.Termin;
+import com.example.demo.model.UlogaKorisnika;
+import com.example.demo.service.AdministratorKlinikeService;
 import com.example.demo.service.KlinikaService;
+import com.example.demo.service.KorisnikService;
 import com.example.demo.service.OperacijaService;
 import com.example.demo.service.PregledService;
 import com.example.demo.service.SalaService;
@@ -38,7 +44,14 @@ public class SalaController {
 	@Autowired
 	PregledService pregledService;
 
+	@Autowired
 	OperacijaService operacijaService;
+	
+	@Autowired
+	AdministratorKlinikeService adminKlinikeService;
+	
+	@Autowired
+	KorisnikService korisnikService;
 
 	@RequestMapping(value = "/sveSale/{val}", method=RequestMethod.GET)
 	public ResponseEntity<List<SalaDTO>> getSveSale(@PathVariable String val){
@@ -216,8 +229,13 @@ public class SalaController {
 	
 	@RequestMapping(value = "/slobodni_termini/{id}", method = RequestMethod.GET)
 	public ResponseEntity<List<Sala>> slobodniTermini(@PathVariable("id") Long identifikacija) {
+		if(!LogedUser.getInstance().getUserRole().equals(UlogaKorisnika.ADMIN_KLINIKE)) {
+			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+		}
 		Operacija operacija = operacijaService.findOne(identifikacija);
-		Klinika klinika = klinikaService.findOne((long) 2);
+		Optional<AdministratorKlinike> oak = adminKlinikeService.findById(LogedUser.getInstance().getUserId());
+		AdministratorKlinike admin = oak.get();
+		Klinika klinika = klinikaService.findOne(admin.getKlinika().getId());
 		List<Sala> sveSale = salaService.findByKlinika(klinika);
 		System.out.println("##########sve_sale" + sveSale.size());
 		List<Sala> slobodneSale = new ArrayList<Sala>();
@@ -234,9 +252,14 @@ public class SalaController {
 	
 	@RequestMapping(value = "/drugi_slobodni_termini/{id}")
 	public ResponseEntity<Sala> prviSlobodan(@PathVariable("id") Long identifikacija) {
+		if(!LogedUser.getInstance().getUserRole().equals(UlogaKorisnika.ADMIN_KLINIKE)) {
+			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+		}
 		System.out.println("##############drugi slobodni termini");
 		Operacija operacija = operacijaService.findOne(identifikacija);
-		Klinika klinika = klinikaService.findOne((long) 2);
+		Optional<AdministratorKlinike> oak = adminKlinikeService.findById(LogedUser.getInstance().getUserId());
+		AdministratorKlinike admin = oak.get();
+		Klinika klinika = klinikaService.findOne(admin.getKlinika().getId());
 		List<Sala> sveSale = salaService.findByKlinika(klinika);
 		Sala rezervisanaSala = sveSale.get(0);
 		long min = new Long(Long.MAX_VALUE);

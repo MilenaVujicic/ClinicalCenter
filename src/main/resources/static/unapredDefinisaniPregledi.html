@@ -24,7 +24,34 @@
 		$(document).ready(function() {
 			if (sessionStorage.getItem("id") === null) {
 				window.location.href = "http://localhost:8080/login.html";
+				} else {
+					let id = sessionStorage.getItem("id");
+					$.ajax({
+						type: "GET",
+						url: 'korisnik/preuzmi/' + response,
+						success: function(korisnik) {
+							if (korisnik.uloga == 'ADMIN_CENTRA') {
+								window.location.href = "http://localhost:8080/adminKlCentra.html";
+							}
+							else if (korisnik.uloga == 'ADMIN_KLINIKE') {
+								window.location.href = "http://localhost:8080/adminKlinike.html";
+							}
+							else if (korisnik.uloga == 'LEKAR') {
+								window.location.href = "http://localhost:8080/doktor.html";
+							}
+							else if (korisnik.uloga == 'MEDICINSKA_SESTRA') {
+								window.location.href = "http://localhost:8080/medicinskaSestra.html";
+							}
+						},
+						error: function() {
+							alert('Nema ulogovanog korisnika');
+							window.location.href = "http://localhost:8080/login.html";
+						}
+					});
 				}
+			
+			termini();
+			
 		});
 		
 		function logout(){
@@ -47,7 +74,7 @@
 		}
 		
 		function zakazi(id_termina) {
-			let id_korisnika = 1;
+			let id_korisnika = sessionStorage.getItem("id");
 			$.ajax({
 				type:'PUT',
 				url:'pacijent/zakaziUnapredDef',
@@ -58,6 +85,10 @@
 				success: function() {
 					alert('Uspesno poslat zahtev za pregled!');
 					$('#terminTable').attr('hidden', true);
+					sessionStorage.removeItem("datum");
+					sessionStorage.removeItem("doktor");
+					sessionStorage.removeItem("id_klinike");
+					sessionStorage.removeItem("spec");
 				},
 				error: function() {
 					alert('Doslo je do greske');
@@ -72,9 +103,16 @@
 		}
 		
 		function termini() {
+			let datum = sessionStorage.getItem("datum");
+			let doktor = sessionStorage.getItem("doktor");
+			
 			$.ajax({
 	            url:"/pacijent/slobodniTermini",
 	            type:"GET",
+	            data:{
+	            	datum:datum,
+	            	doktor:doktor
+	            },
 	           	success: function(termini){
 	           		$('#terminTable tbody').html('');
 	           		for (i = 0; i < termini.length; i++) {

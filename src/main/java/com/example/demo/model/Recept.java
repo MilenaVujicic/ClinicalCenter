@@ -38,6 +38,9 @@ public class Recept {
 	@Column(name="datumOvere")
 	private Date datumOvere;
 	
+	@Column(name="medicinskaSestraId")
+	private Long medicinskaSestraId;
+	
 	@Column(name = "sifraLek", nullable = false)
 	private String sifraLek;
 	
@@ -53,7 +56,7 @@ public class Recept {
 	}
 
 	public Recept(Long id, String naziv, String opis, StatusRecepta status, Date datumIspisa,
-			Date datumOvere, String sifraLek, String lek) {
+			Date datumOvere, String sifraLek, String lek, Long medSestra) {
 		super();
 		this.id = id;
 		this.naziv = naziv;
@@ -63,6 +66,7 @@ public class Recept {
 		this.datumOvere = datumOvere;
 		this.sifraLek = sifraLek;
 		this.lek = lek;
+		this.medicinskaSestraId = medSestra;
 	}
 
 	public Long getId() {
@@ -137,13 +141,20 @@ public class Recept {
 		this.pacijent = pacijent;
 	}
 	
-	
+
+	public Long getMedicinskaSestraId() {
+		return medicinskaSestraId;
+	}
+
+	public void setMedicinskaSestraId(Long medicinskaSestraId) {
+		this.medicinskaSestraId = medicinskaSestraId;
+	}
 
 	@Override
 	public String toString() {
 		return "Recept [id=" + id + ", naziv=" + naziv + ", opis=" + opis + ", status=" + status + ", datumIspisa="
-				+ datumIspisa + ", datumOvere=" + datumOvere + ", sifraLek=" + sifraLek + ", lek=" + lek + ", pacijent="
-				+ pacijent + "]";
+				+ datumIspisa + ", datumOvere=" + datumOvere + ", medicinskaSestraId=" + medicinskaSestraId
+				+ ", sifraLek=" + sifraLek + ", lek=" + lek + ", pacijent=" + pacijent + "]";
 	}
 	
 	

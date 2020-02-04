@@ -2,6 +2,7 @@ package com.example.demo.controller;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -13,21 +14,22 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.example.demo.dto.OperacijaDTO;
+import com.example.demo.model.AdministratorKlinike;
 import com.example.demo.model.Doktor;
 import com.example.demo.model.Klinika;
 import com.example.demo.model.Korisnik;
+import com.example.demo.model.LogedUser;
 import com.example.demo.model.Operacija;
-import com.example.demo.model.Pregled;
 import com.example.demo.model.Sala;
 import com.example.demo.model.StatusOperacije;
-import com.example.demo.model.StatusPregleda;
 import com.example.demo.model.Termin;
+import com.example.demo.model.UlogaKorisnika;
+import com.example.demo.service.AdministratorKlinikeService;
 import com.example.demo.service.DoktorService;
 import com.example.demo.service.EmailService;
 import com.example.demo.service.KlinikaService;
 import com.example.demo.service.KorisnikService;
 import com.example.demo.service.OperacijaService;
-import com.example.demo.service.PregledService;
 import com.example.demo.service.SalaService;
 import com.example.demo.service.TerminService;
 
@@ -56,17 +58,30 @@ public class OperacijaController {
 	
 	@Autowired
 	private KlinikaService klinikaService;
+	
+	@Autowired
+	private AdministratorKlinikeService adminKlinikeService;
 
 	
 	@RequestMapping(value = "/zahtevi", method=RequestMethod.GET) 
 	public ResponseEntity<List<Operacija>> zahtevi() {
+		if (!LogedUser.getInstance().getUserRole().equals(UlogaKorisnika.ADMIN_KLINIKE)) {
+			return new ResponseEntity<List<Operacija>>(HttpStatus.BAD_REQUEST);
+		}
+		Optional<AdministratorKlinike> oak = adminKlinikeService.findByIdKorisnik(LogedUser.getInstance().getUserId());
+		AdministratorKlinike admin = oak.get();
 		List<Operacija> operacije = operacijaService.findByStatus(StatusOperacije.NERASPOREDJEN);
-		return new ResponseEntity<List<Operacija>>(operacije, HttpStatus.OK);
+		List<Operacija> operacijeKlinike = new ArrayList<Operacija>();
+		for (Operacija o : operacije) {
+			if(o.getPacijent().getKlinika().getId().equals(admin.getKlinika().getId())) {
+				operacijeKlinike.add(o);
+			}
+		}
+		return new ResponseEntity<List<Operacija>>(operacijeKlinike, HttpStatus.OK);
 	}
 	
 	@RequestMapping(value = "/rezervisi/{sala}/{operacija}/{doktori}", method = RequestMethod.GET)
 	public ResponseEntity<String> rezervisi(@PathVariable("sala") Long sala_id, @PathVariable("operacija") Long operacija_id, @PathVariable("doktori") String text) {
-		System.out.println("#######################");
 		System.out.println("sala" + sala_id + "operacija" + operacija_id + "doktori" + text);
 		Sala sala = salaService.findOne(sala_id);
 		Operacija operacija = operacijaService.findOne(operacija_id);
@@ -123,14 +138,28 @@ public class OperacijaController {
 	
 	@RequestMapping(value = "/obrisi/{id}", method = RequestMethod.DELETE)
 	public ResponseEntity<String> obrisi(@PathVariable("id") Long identifikacija) {
+		if (!LogedUser.getInstance().getUserRole().equals(UlogaKorisnika.LEKAR)) {
+			return new ResponseEntity<String>(HttpStatus.BAD_REQUEST);
+		}
 		Operacija operacija = operacijaService.findOne(identifikacija);
+		Doktor doktor = doktorService.findByIdKorisnik(LogedUser.getInstance().getUserId());
+		if (!operacija.getDoktori().contains(doktor)) {
+			return new ResponseEntity<String>(HttpStatus.BAD_REQUEST);
+		}
 		operacijaService.delete(operacija);
 		return new ResponseEntity<String>(HttpStatus.OK);
 	}
 	
 	@RequestMapping(value = "/izmeni", method = RequestMethod.PUT)
 	public ResponseEntity<OperacijaDTO> izmeni(@RequestBody OperacijaDTO operacijaDTO) {
+		if (!LogedUser.getInstance().getUserRole().equals(UlogaKorisnika.LEKAR)) {
+			return new ResponseEntity<OperacijaDTO>(HttpStatus.BAD_REQUEST);
+		}
 		Operacija operacija = operacijaService.findOne(operacijaDTO.getId());
+		Doktor doktor = doktorService.findByIdKorisnik(LogedUser.getInstance().getUserId());
+		if (!operacija.getDoktori().contains(doktor)) {
+			return new ResponseEntity<OperacijaDTO>(HttpStatus.BAD_REQUEST);
+		}
 		operacija.setOpis(operacijaDTO.getOpis());
 		Operacija o = operacijaService.save(operacija);
 		return new ResponseEntity<OperacijaDTO>(new OperacijaDTO(o), HttpStatus.OK);

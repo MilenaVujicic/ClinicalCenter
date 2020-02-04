@@ -12,5 +12,9 @@ public interface AdministratorKlinikeRespository extends JpaRepository<Administr
 
 	Page<AdministratorKlinike> findAll(Pageable pageable); 
 	Optional<AdministratorKlinike> findById(Long id);
+
 	Optional<AdministratorKlinike> findByIdKorisnik(Long id);
+
+	//AdministratorKlinike findByIdKorisnika(Long id);
+
 }

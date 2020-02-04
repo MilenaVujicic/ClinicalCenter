@@ -1,5 +1,6 @@
 package com.example.demo.service;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
@@ -39,5 +40,9 @@ public class DoktorService {
 	public Doktor save(Doktor doktor) {
 
 		return doktorRespository.save(doktor);
+	}
+	
+	public List<Doktor> findByDatumPregledaISpecIKlinika(LocalDate datum, String specijalizacija, Long id_klinika) {
+		return doktorRespository.findByDatumPregledaISpecIKlinika(datum, specijalizacija, id_klinika);
 	}
 }

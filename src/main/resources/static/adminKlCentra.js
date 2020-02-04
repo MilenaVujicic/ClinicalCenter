@@ -1,3 +1,41 @@
+$(document).ready(function() {
+	let session = sessionStorage.getItem("id");
+	if (session == null) {
+		alert('Nemate prava pristupa ovoj stranici');
+		window.location.href = "http://localhost:8080/index.html";
+	}
+	$.ajax({
+		type: "GET",
+		url: 'korisnik/preuzmi/' + session,
+		success: function(korisnik) {
+			if (korisnik.uloga != 'ADMIN_CENTRA') {
+				alert('Nemate prava pristupa ovoj stranici!\nSistem Vas je logoutovao');
+				logout();
+			}
+
+			if (korisnik.brojPrijava < 2) {
+				$('#con').attr('hidden', false);
+			}
+			else {
+				$('#main').attr('hidden', false);
+			}
+		},
+		error: function() {
+			alert('Nema ulogovanog korisnika');
+		}
+	});
+	$('.pass_show').append('<span class="ptxt">Show</span>');  
+	
+});
+
+$(document).on('click','.pass_show .ptxt', function(){ 
+
+	$(this).text($(this).text() == "Show" ? "Hide" : "Show"); 
+
+	$(this).prev().attr('type', function(index, attr){return attr == 'password' ? 'text' : 'password'; }); 
+
+});  
+
 function newClinicAdministrator() {
 	let ime = $('#nameClicnicAdmin').val();
 	let prezime = $('#surnameClicnicAdmin').val();
@@ -38,6 +76,7 @@ function newClinicAdministrator() {
 			$('#diagnosis').attr('hidden', true);
 			$('#allDiagnosis').attr('hidden', true);
 			$('#editDiagnosis').attr('hidden', true);
+			$('#personalData').attr('hidden', true);
         },
         error: function() {
         	$('#nameClicnicAdmin').val('');
@@ -61,6 +100,7 @@ function newClinicAdministrator() {
 			$('#diagnosis').attr('hidden', true);
 			$('#allDiagnosis').attr('hidden', true);
 			$('#editDiagnosis').attr('hidden', true);
+			$('#personalData').attr('hidden', true);
         }
     });
 	
@@ -101,6 +141,7 @@ function newAdministrator() {
 	  		$('#diagnosis').attr('hidden', true);
 	  		$('#allDiagnosis').attr('hidden', true);
 	  		$('#editDiagnosis').attr('hidden', true);
+	  		$('#personalData').attr('hidden', true);
        	},
        	error: function() {
        		$('#name').val('');
@@ -122,6 +163,7 @@ function newAdministrator() {
 	  		$('#diagnosis').attr('hidden', true);
 	  		$('#allDiagnosis').attr('hidden', true);
 	  		$('#editDiagnosis').attr('hidden', true);
+	  		$('#personalData').attr('hidden', true);
        	}
  	});
 }
@@ -158,12 +200,14 @@ function allAdmin(klinika) {
     	  		$('#diagnosis').attr('hidden', true);
     	  		$('#allDiagnosis').attr('hidden', true);
     	  		$('#editDiagnosis').attr('hidden', true);
+    	  		$('#personalData').attr('hidden', true);
     	  	},
            	error: function() {
            		$('#clinicAdminTable').attr('hidden', true);
            		$('#newClinicAdmin').attr('hidden', true);
   				$('#clinicTable').attr('hidden', true);
             	$('#newAdmin').attr('hidden', true);
+            	$('#personalData').attr('hidden', true);
     	  		$('#newClinic').attr('hidden', true);
     	  		$('#adminSuccessAlert').attr('hidden', true);
     	  		$('#adminErrorAlert').attr('hidden', false);
@@ -192,6 +236,7 @@ function newClinicAdmin(klinika) {
   		$('#diagnosis').attr('hidden', true);
   		$('#allDiagnosis').attr('hidden', true);
   		$('#editDiagnosis').attr('hidden', true);
+  		$('#personalData').attr('hidden', true);
   		$('#idClinic').val(klinika.id);
   		document.getElementById("title").innerHTML = "New administrator of: " + klinika.ime;
 	}
@@ -237,6 +282,7 @@ function newClinicAndAdmin() {
 	  		$('#requestsTable').attr('hidden', true);
 	  		$('#drugs').attr('hidden', true);
 	  		$('#diagnosis').attr('hidden', true);
+	  		$('#personalData').attr('hidden', true);
 	  		$('#allDiagnosis').attr('hidden', true);
 	  		$('#editDiagnosis').attr('hidden', true);
 	  		document.getElementById("title").innerHTML = "";
@@ -302,6 +348,7 @@ function newAdmin() {
 	$('#diagnosis').attr('hidden', true);
 	$('#allDiagnosis').attr('hidden', true);
 	$('#editDiagnosis').attr('hidden', true);
+	$('#personalData').attr('hidden', true);
 	document.getElementById("title").innerHTML = "New clinic administrator";
 }
 
@@ -320,6 +367,7 @@ function newClinic() {
 	$('#diagnosis').attr('hidden', true);
 	$('#allDiagnosis').attr('hidden', true);
 	$('#editDiagnosis').attr('hidden', true);
+	$('#personalData').attr('hidden', true);
 	document.getElementById("title").innerHTML = "New clinic";
 }
 function newDiagnose() {
@@ -337,6 +385,7 @@ function newDiagnose() {
 	$('#allDiagnosis').attr('hidden', true);
 	$('#editDiagnosis').attr('hidden', true);
 	$('#requestsTable').attr('hidden', true);
+	$('#personalData').attr('hidden', true);
 	document.getElementById("title").innerHTML = "New diagnose";
 }
 function newDrug() {
@@ -354,6 +403,7 @@ function newDrug() {
 	$('#diagnosis').attr('hidden', true);
 	$('#allDiagnosis').attr('hidden', true);
 	$('#editDiagnosis').attr('hidden', true);
+	$('#personalData').attr('hidden', true);
 	document.getElementById("title").innerHTML = "New drug";
 }
 function home() {
@@ -373,7 +423,7 @@ function home() {
 	$('#editDiagnosis').attr('hidden', true);
 	$('#editDrugs').attr('hidden', true);
 	$('#requestsTable').attr('hidden', true);
-	
+	$('#personalData').attr('hidden', true);
 	document.getElementById("title").innerHTML = "";
 }
 
@@ -390,6 +440,7 @@ function allClinics() {
 	$('#diagnosis').attr('hidden', true);
 	$('#allDiagnosis').attr('hidden', true);
 	$('#editDiagnosis').attr('hidden', true);
+	$('#personalData').attr('hidden', true);
 	$.ajax({
         url:"/admin_klinickog_centra/sve_klinike",
         type:"GET",
@@ -414,6 +465,7 @@ function allClinics() {
 	  		$('#diagnosis').attr('hidden', true);
 	  		$('#allDiagnosis').attr('hidden', true);
 	  		$('#editDiagnosis').attr('hidden', true);
+	  		$('#personalData').attr('hidden', true);
 	  		document.getElementById("title").innerHTML = "";
        	}
  	});
@@ -441,6 +493,7 @@ function allCenterAdmins() {
 	  		$('#diagnosis').attr('hidden', true);
 	  		$('#allDiagnosis').attr('hidden', true);
 	  		$('#editDiagnosis').attr('hidden', true);
+	  		$('#personalData').attr('hidden', true);
        	},
        	error: function() {
        		$('#adminErrorAlert').attr('hidden', false);
@@ -455,6 +508,7 @@ function allCenterAdmins() {
 	  		$('#diagnosis').attr('hidden', true);
 	  		$('#allDiagnosis').attr('hidden', true);
 	  		$('#editDiagnosis').attr('hidden', true);
+	  		$('#personalData').attr('hidden', true);
 	  		document.getElementById("title").innerHTML = "";
        	}
  	});
@@ -538,6 +592,7 @@ function requests() {
 	  		$('#diagnosis').attr('hidden', true);
 	  		$('#allDiagnosis').attr('hidden', true);
 	  		$('#editDiagnosis').attr('hidden', true);
+	  		$('#personalData').attr('hidden', true);
 		},
 		error: function() {
 			alert('Desila se greska');
@@ -693,6 +748,92 @@ function allDiagnosis() {
 		},
 		error: function() {
 			alert('Desila se greska kod izlistavanja dijagnoza');
+		}
+	});
+}
+
+function logout() {
+	$.ajax({
+		url: 'auth/logout',
+		type: "GET",
+		success: function(){
+			sessionStorage.removeItem("id");
+			let session = sessionStorage.getItem("id");
+			if (session == null) {
+				window.location.href = "http://localhost:8080/index.html";
+			}
+		},
+		error: function() {
+			alert('Desila se greska kog logouta');
+		}
+	});
+}
+
+function personalData() {
+	home();
+	$('#personalData').attr('hidden', false);
+	let session = sessionStorage.getItem("id");
+	$.ajax({
+		type:"GET",
+		url:'korisnik/preuzmi/' + session,
+		success: function(korisnik) {
+			$('#lblFirstName').val(korisnik.ime);
+			$('#lblLastName').val(korisnik.prezime);
+			$('#lblDateOfBirth').val(korisnik.datumRodjenja.toString().substr(0, 10));
+			$('#lblCity').val(korisnik.grad);
+			$('#lblCounty').val(korisnik.drzava);
+			$('#lblAddress').val(korisnik.adresa);
+			$('#lblEmail').val(korisnik.email);
+			$('#lblPhone').val(korisnik.telefon);
+		},
+		error: function() {
+			alert('Desila se greska');
+		}
+	});
+}
+
+function changeData() {
+	let ime = $('#lblFirstName').val();
+	let prezime =$('#lblLastName').val();
+	let datumRodjenja = $('#lblDateOfBirth').val();
+	let grad = $('#lblCity').val();
+	let drzava =$('#lblCounty').val();
+	let adresa = $('#lblAddress').val();
+	let email = $('#lblEmail').val();
+	let telefon = $('#lblPhone').val();
+	let id = sessionStorage.getItem("id");
+	$.ajax({
+		type: "PUT",
+		url: 'korisnik/izmena_podataka/' + id,
+		data: JSON.stringify({ime, prezime, email, adresa, grad, drzava, telefon, datumRodjenja}),
+        contentType:'application/json',
+        success: function() {
+        	alert('Uspesno promenjeni podaci');
+        	personalData();
+        },
+        error: function() {
+        	alert('Desila se greska');
+        }
+	});
+}
+
+function changePassword() {
+	let id = sessionStorage.getItem("id");
+	let currentPassord = $('#currentPass').val();
+	let newPassword = $('#newPass').val();
+	let confirmPassword = $('#confirmPass').val();
+	let url = 'korisnik/promeni_lozinku/' + id + '/' + currentPassord + '/' + newPassword + '/' + confirmPassword;
+	$.ajax({
+		type: "GET",
+		url: url,
+		success: function(odgovor) {
+			alert(odgovor);
+			$('#con').attr('hidden', true);
+			$('#main').attr('hidden', false);
+			home();
+		},
+		error : function(odgovor) {
+			alert('Greska kod promene lozinke');
 		}
 	});
 }

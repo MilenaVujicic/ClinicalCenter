@@ -37,7 +37,7 @@ public class PregledService {
 	}
 
 	public List<Pregled> findByPatientId(Long id) {
-		return pregledRespository.findByPatientID();
+		return pregledRespository.findByPatientID(id);
 	}
 
 }
