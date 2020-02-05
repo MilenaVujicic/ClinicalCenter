@@ -496,7 +496,7 @@ function seeData(event){
 			
 			let tdAddress = $('<td>' + korisnik.adresa + '</td>');
 
-			let tdDob = $('<td>' + korisnik.datumRodjenja + '</td>');
+			let tdDob = $('<td>' + korisnik.datumRodjenja.substring(0,10) + '</td>');
 			
 			let tdPhone = $('<td>' + korisnik.telefon + '</td>');
 			
@@ -506,7 +506,7 @@ function seeData(event){
 			
 			tdAction.on('click', function(event){
 				event.preventDefault();
-				window.location.href = './changePersonalData.html';
+				window.location.href = './changePresonalData.html';
 			});
 			tr.append(tdName).append(tdSurname).append(tdJmbg).append(tdCity).append(tdCountry)
 			.append(tdAddress).append(tdDob).append(tdPhone).append(tdEmail).append(tdAction);

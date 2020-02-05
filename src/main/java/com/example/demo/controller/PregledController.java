@@ -183,11 +183,24 @@ public class PregledController {
 		int day = 0;
 		int week = 0;
 		int month = 0;
-		Calendar today = Calendar.getInstance();
+		Calendar todayBegin = Calendar.getInstance();
+		Calendar todayEnd = Calendar.getInstance();
 		Calendar weekBegin = Calendar.getInstance();
 		Calendar weekEnd = Calendar.getInstance();
 		Calendar monthBegin = Calendar.getInstance();
 		Calendar monthEnd = Calendar.getInstance();
+		
+		todayBegin.set(Calendar.HOUR_OF_DAY,0);
+		todayBegin.clear(Calendar.MINUTE);
+		todayBegin.clear(Calendar.SECOND);
+		todayBegin.clear(Calendar.MILLISECOND);
+		
+		
+		todayEnd.set(Calendar.HOUR_OF_DAY,0);
+		todayEnd.clear(Calendar.MINUTE);
+		todayEnd.clear(Calendar.SECOND);
+		todayEnd.clear(Calendar.MILLISECOND);
+		
 		
 		weekBegin.set(Calendar.HOUR_OF_DAY,0);
 		weekBegin.clear(Calendar.MINUTE);
@@ -216,8 +229,8 @@ public class PregledController {
 		
 		monthBegin.set(Calendar.DAY_OF_MONTH, 1);
 		monthEnd.set(Calendar.DAY_OF_MONTH, monthEnd.getActualMaximum(Calendar.DAY_OF_MONTH));
-		
-		System.out.println("TODAY: " + today.get(Calendar.DATE) + " " + today.get(Calendar.MONTH));
+		todayEnd.add(Calendar.DATE, 1);
+		System.out.println("TODAY: " + todayBegin.get(Calendar.DATE) + " " + todayBegin.get(Calendar.MONTH));
 		System.out.println("WEEKB: " + weekBegin.get(Calendar.DATE) + " " + weekBegin.get(Calendar.MONTH));
 		System.out.println("WEEKE: " + weekEnd.get(Calendar.DATE) + " " + weekEnd.get(Calendar.MONTH));
 		System.out.println("MONTHB: " + monthBegin.get(Calendar.DATE) + " " + monthBegin.get(Calendar.MONTH));
@@ -226,7 +239,7 @@ public class PregledController {
 			for(Pregled p : d.getPregledi()) {
 				if(p.getStatus() == StatusPregleda.ZAVRSEN) {
 					Calendar pDate = p.getDatumIVremePregleda();
-					if(pDate.get(Calendar.DATE) == today.get(Calendar.DATE)) {
+					if(pDate.getTimeInMillis() > todayBegin.getTimeInMillis() && pDate.getTimeInMillis() < todayEnd.getTimeInMillis()) {
 						day++;
 					}
 					
