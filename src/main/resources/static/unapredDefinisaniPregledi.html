@@ -23,7 +23,7 @@
 	<script>
 		$(document).ready(function() {
 			if (sessionStorage.getItem("id") === null) {
-				window.location.href = "http://localhost:8080/login.html";
+				 window.location.href = "http://localhost:8080/login.html";
 				}
 			
 			termini();
@@ -114,7 +114,7 @@
 	      <li><a onclick="return termini()">Termini</a></li>
 	    </ul>
 	    <ul class="nav navbar-nav navbar-right">
-	      <li><a href="#" onClick="logout()"><span class="glyphicon glyphicon-log-out"></span> Logout</a></li>
+	      <li><a href="#" onClick="logout()" id="logout_dugme"><span class="glyphicon glyphicon-log-out"></span> Logout</a></li>
 	    </ul>
 	  </div>
 	</nav>

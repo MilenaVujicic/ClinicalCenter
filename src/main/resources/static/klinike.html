@@ -209,11 +209,12 @@
 	    </div>
 	</div>
 	</br>
-	<input type="button" value="Search Clinics by Available Date" onclick="PrikaziKlinikePoDatumuTermina()">
 	<select name="spec" id="spec">
 	  <option value="Hirurg">Hirurgija</option>
 	  <option value="Lekar opste prakse">Opsti pregled</option>
 	</select>
+	<input type="button" value="Search Clinics by Available Date" onclick="PrikaziKlinikePoDatumuTermina()" id="button_search_available">
+	<input type="button" value="Filter Clinics" onclick="search()" id="filter_klinika_dugme">
 	<form id='form' >
 	  <fieldset>
 	    <legend>Filter:</legend>
@@ -236,7 +237,7 @@
 	    	</tr>
 	    </table>
 	    
-	    <input type="button" value="Filter Clinics" onclick="search()">
+	    
 	  </fieldset>
 	</form>
 
