@@ -439,7 +439,6 @@ function editExamination(pregled) {
 
 function deleteExamination(id) {
 	return function() {
-		let session = sessionStorage.getItem("id");
 		$.ajax({
 			url: 'pregled/obrisi/' + id,
 			type:"DELETE",
