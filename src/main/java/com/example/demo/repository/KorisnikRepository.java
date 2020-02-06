@@ -26,6 +26,8 @@ public interface KorisnikRepository extends JpaRepository<Korisnik, Long> {
 	
 	Optional<Korisnik> findById(Long id);
 	
+	Optional<Korisnik> findByJmbg(Long jmbg);
+	
 	Korisnik save(Korisnik k);
 	
 }

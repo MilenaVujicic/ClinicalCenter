@@ -217,6 +217,126 @@ public class DoktorController {
 
 	}
 	
+	@RequestMapping(value = "/pregled/{id}", method = RequestMethod.POST)
+	public ResponseEntity<String> newExaminationId(HttpEntity<String> json, @PathVariable Long id) throws ParseException, MailException, InterruptedException{
+		String jString = json.getBody();
+		JSONParser parser = new JSONParser();
+		JSONObject jObj = (JSONObject)parser.parse(jString);
+		String datum = (String)jObj.get("examDate");
+		String vreme = (String)jObj.get("examTime");
+		String jmbg = (String)jObj.get("jmbg");
+		
+		Optional<Korisnik> oDoktor = korisnikService.findById(id);
+		Korisnik kDoktor = oDoktor.get();
+		Doktor doktor = doktorService.findByIdKorisnik(kDoktor.getId());
+		
+		Optional<Korisnik> oPacijent = korisnikService.findByJmbg(Long.parseLong(jmbg));
+		Korisnik kPacijent = oPacijent.get();
+		Pacijent pacijent = pacijentService.findByIdKorisnik(kPacijent.getId());
+		
+		Long idAdmin = null;
+		
+		for(AdministratorKlinike k : doktor.getKlinika().getAdministratoriKlinike()) {
+			idAdmin = k.getId();
+		}
+		System.out.println(idAdmin);
+		
+		Optional<AdministratorKlinike> oAdmin = administratorService.findById(idAdmin);
+		AdministratorKlinike admin = oAdmin.get();
+		Optional<Korisnik> okAdmin = korisnikService.findById(admin.getIdKorisnik());
+		Korisnik kAdmin = okAdmin.get();
+		
+		String[] timeParts = vreme.split(":");
+		String hour = timeParts[0];
+		String minute = timeParts[1];
+		
+		String[] dateParts = datum.split("-");
+		String day = dateParts[2];
+		String month = dateParts[1];
+		String year = dateParts[0];
+		
+		System.out.println(datum + " " + day + " " + month + " " + year);
+		
+		Pregled p = new Pregled();
+		Calendar c = Calendar.getInstance();
+		c.set(Integer.parseInt(year), Integer.parseInt(month), Integer.parseInt(day), Integer.parseInt(hour), Integer.parseInt(minute));
+		
+		p.setDatumIVremePregleda(c);
+		p.setStatus(StatusPregleda.NERASPOREDJEN);
+		p.setPacijent(pacijent);
+		p.setDoktor(doktor);
+		p.setAnamneza("");
+		p.setNaziv("");
+		p.setCena(0);
+		doktor.getPregledi().add(p);
+		pacijent.getPregledi().add(p);
+
+		pregledService.save(p);
+		doktorService.save(doktor);
+		pacijentService.save(pacijent);
+		
+		emailService.sendNotificationExam(kAdmin, kDoktor, kPacijent, datum, vreme);
+		return new ResponseEntity<String>("The examination has been successfully added", HttpStatus.OK);
+	}
+	
+	@RequestMapping(value = "/operacija/{id}", method = RequestMethod.POST)
+	public ResponseEntity<String> newSurgeryId(HttpEntity<String> json, @PathVariable("id") Long id) throws MailException, InterruptedException, ParseException{
+		
+		String jString = json.getBody();
+		JSONParser parser = new JSONParser();
+		JSONObject jObj = (JSONObject)parser.parse(jString);
+		String datum = (String)jObj.get("opDate");
+		String vreme = (String)jObj.get("opTime");
+		String jmbg = (String)jObj.get("jmbg");
+		
+		Optional<Korisnik> oDoktor = korisnikService.findById(id);
+		Korisnik kDoktor = oDoktor.get();
+		Doktor doktor = doktorService.findByIdKorisnik(kDoktor.getId());
+		
+		Optional<Korisnik> oPacijent = korisnikService.findByJmbg(Long.parseLong(jmbg));
+		Korisnik kPacijent = oPacijent.get();
+		Pacijent pacijent = pacijentService.findByIdKorisnik(kPacijent.getId());
+		
+		Long idAdmin = null;
+		
+		for(AdministratorKlinike k : doktor.getKlinika().getAdministratoriKlinike()) {
+			idAdmin = k.getId();
+		}
+		System.out.println(idAdmin);
+		
+		Optional<AdministratorKlinike> oAdmin = administratorService.findById(idAdmin);
+		AdministratorKlinike admin = oAdmin.get();
+		Optional<Korisnik> okAdmin = korisnikService.findById(admin.getIdKorisnik());
+		Korisnik kAdmin = okAdmin.get();
+		
+		String[] timeParts = vreme.split(":");
+		String hour = timeParts[0];
+		String minute = timeParts[1];
+		
+		String[] dateParts = datum.split("-");
+		String day = dateParts[2];
+		String month = dateParts[1];
+		String year = dateParts[0];
+		Calendar c = Calendar.getInstance();
+		c.set(Integer.parseInt(year), Integer.parseInt(month), Integer.parseInt(day), Integer.parseInt(hour), Integer.parseInt(minute));
+		
+		Operacija o = new Operacija();
+		o.setDatumIVremeOperacije(c);
+		o.getDoktori().add(doktor);
+		o.setOpis("");
+		o.setPacijent(pacijent);
+		o.setSala(null);
+		o.setStatus(StatusOperacije.NERASPOREDJEN);
+		o.setTrajanje(0);
+		
+		operacijaService.save(o);
+		doktorService.save(doktor);
+		pacijentService.save(pacijent);
+		
+		emailService.sendNotificationRoom(kAdmin, kDoktor, kPacijent, datum, vreme);
+		return new ResponseEntity<String>("The surgery has been successfully added", HttpStatus.OK);
+	}
+	
 	@RequestMapping(value = "/pregled/{pName}/{dID}", method = RequestMethod.POST)
 	public ResponseEntity<String> dodavanjePregleda(HttpEntity<String> json, @PathVariable String pName, @PathVariable Long dID) throws ParseException, MailException, InterruptedException{
 		String jString = json.getBody();
@@ -260,6 +380,9 @@ public class DoktorController {
 		}*/
 		return new ResponseEntity<String>("Uspesno rezervisan pregled", HttpStatus.OK);
 	}	
+	
+	
+	
 	
 	@RequestMapping(value = "/operacija/{pName}/{dID}", method = RequestMethod.POST)
 	public ResponseEntity<String> dodavanjeOperacije(HttpEntity<String> json, @PathVariable String pName, @PathVariable Long dID) throws ParseException, MailException, InterruptedException{
