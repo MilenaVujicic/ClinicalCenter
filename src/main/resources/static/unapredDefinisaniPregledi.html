@@ -50,6 +50,13 @@
 					});
 				}
 			
+			var oldURL = document.referrer;
+			if(oldURL !== "http://localhost:8080/lekari.html")	{
+				sessionStorage.removeItem("datum");
+				sessionStorage.removeItem("doktor");
+				sessionStorage.removeItem("id_klinike");
+				sessionStorage.removeItem("spec");
+			}
 			termini();
 			
 		});
@@ -138,7 +145,7 @@
 	      <li><a onclick="return termini()">Termini</a></li>
 	    </ul>
 	    <ul class="nav navbar-nav navbar-right">
-	      <li><a href="#" onClick="logout()" id="logout_dugme"><span class="glyphicon glyphicon-log-out"></span> Logout</a></li>
+	      <li><a onClick="logout()" id="logout_dugme"><span class="glyphicon glyphicon-log-out"></span> Logout</a></li>
 	    </ul>
 	  </div>
 	</nav>

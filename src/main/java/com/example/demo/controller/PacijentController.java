@@ -12,6 +12,8 @@ import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
+import javax.transaction.Transactional;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -307,6 +309,7 @@ public class PacijentController {
 		return new ResponseEntity<List<Klinika>>(klinike,HttpStatus.OK);
 	}
 	
+	@Transactional
 	@RequestMapping(value= "/zakaziUnapredDef", method = RequestMethod.PUT)
 	public ResponseEntity<String> zakaziUnapredDef(@RequestParam(value = "id_termina") int id_termina,
 												   @RequestParam(value= "id_korisnika") int id_korisnika) throws InterruptedException {

@@ -55,6 +55,13 @@
 			sessionStorage.removeItem("doktor");
 		}
 		
+		var oldURL = document.referrer;
+		if(oldURL !== "http://localhost:8080/klinike.html")	{
+			sessionStorage.removeItem("doktor");
+			sessionStorage.removeItem("datum");
+			sessionStorage.removeItem("spec");
+		}
+		
 		search();
 	});
 	
@@ -122,29 +129,6 @@
 		
 	}
 		
-		/*$(document).ready(function () {
-			$('form').submit(function(event) {
-				let ime = $('#ime').val();
-				let prezime = $('#prezime').val();
-				let specijalizacija = $('#specijalizacija').val();
-				let prosecnaOcena = $('#prosecnaOcena').val();
-				
-				$.ajax({
-					type: 'GET',
-					url:'/pacijent/search'+ime+prezime+specijalizacija+prosecnaOcena,
-					success: function(doctors) {
-						$('#doctorsTable tbody').html('');
-		           		for (i = 0; i < doctors.length; i++) {
-		           			prikaziDoktora(doctors[i]);
-		           		}
-					},
-					error: function() {
-		           		alert('Desila se greska');
-		           	}
-				});
-			});
-		});*/
-		
 		function home() {
 			$('#doctorsTable').attr('hidden', true);
 		}
@@ -181,11 +165,10 @@
 	    </div>
 	    <ul class="nav navbar-nav">
 	      <li><a href="pacijentHomePage.html">Home</a></li>
-	      <li><a onclick="return personalData()">Personal data</a></li>
 	      <li><a onclick="return allDoctors()">All doctors</a></li>
 	    </ul>
 	    <ul class="nav navbar-nav navbar-right">
-	      <li><a href="#"><span class="glyphicon glyphicon-log-out"></span> Logout</a></li>
+	      <li><a onClick="return logout()"><span class="glyphicon glyphicon-log-out"></span> Logout</a></li>
 	    </ul>
 	  </div>
 	</nav>

@@ -32,7 +32,7 @@
 					let id = sessionStorage.getItem("id");
 					$.ajax({
 						type: "GET",
-						url: 'korisnik/preuzmi/' + response,
+						url: 'korisnik/preuzmi/' + id,
 						success: function(korisnik) {
 							if (korisnik.uloga == 'ADMIN_CENTRA') {
 								window.location.href = "http://localhost:8080/adminKlCentra.html";
