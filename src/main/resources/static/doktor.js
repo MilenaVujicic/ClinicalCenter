@@ -30,6 +30,7 @@ function home() {
 
 function newAbsence(event){
 	event.preventDefault();
+	home();
 	$('#absenceForm').attr('hidden', false);
 	
 
@@ -298,6 +299,7 @@ function scheduledPatients() {
 	$('#aboutPatient').attr('hidden', true);
 	$('#tPersonalData').attr('hidden', true);
 	$('#tPersonalDataH').attr('hidden', true);
+	$('#absenceForm').attr('hidden', true);
 	dijagnoze();
 	lekovi();
 	$.ajax({
@@ -1164,6 +1166,10 @@ function cancelOperation(){
 	$('#operationForm').attr('hidden', true);
 	$('#dateOp').val('');
 	$('#timeOp').val('');
+}
+
+function editData(){
+	window.location.href = './changePresonalData.html';
 }
 
 

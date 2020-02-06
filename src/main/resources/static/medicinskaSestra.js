@@ -214,6 +214,12 @@ function personalData() {
 	$('#recipesForm').attr('hidden', true);
 	$('#restForm').attr('hidden', true);
 	document.getElementById("title").innerHTML = "";
+	
+	
+}
+
+function editData(){	
+	window.loaction = './changeUserData.html';
 }
 
 

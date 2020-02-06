@@ -49,6 +49,7 @@
 					$('#uAddress').val(user.adresa);
 					$('#uCountry').val(user.drzava);
 					$('#uPhone').val(user.telefon);
+					$('#uEmail').val(user.email);
 					
 				},
 				error: function(){
@@ -59,6 +60,31 @@
 		
 		function changeData(event){
 			event.preventDefault();
+			
+			let name = 	$('#uName').val();
+			let surname = $('#uSurname').val();
+			let password = $('#uPassword').val();
+			let city = $('#uCity').val();
+			let address = $('#uAddress').val();
+			let country = $('#uCountry').val();
+			let phone = $('#uPhone').val();
+			let email = $('#uEmail').val();
+			
+			$.ajax({
+				url: 'korisnik/izmena_podataka/' + sessionStorage.getItem("id"),
+				type: 'PUT',
+				data: JSON.stringify({ime:name, prezime:surname, password:password, grad:city, adresa: address,
+					drzava: country, telefon:phone, email:email}),
+				contentType: 'application/json',
+				success: function(){
+					alert('Data has been changed');
+					location.reload();
+				},
+				error: function(){
+					alert('Something went wrong');
+				}
+				
+			});
 		}
 	</script>
 <title>Change personal data</title>
@@ -83,6 +109,12 @@
 <div class="form-group col-md-8">
 <label for="patientName">Password: </label>
 <input type="password" class="form-control" id="uPassword">
+</div>
+</div>
+<div class="form-row">
+<div class="form-group col-md-8">
+<label for="patientName">Email: </label>
+<input type="text" class="form-control" id="uEmail">
 </div>
 </div>
 <div class="form-row">
