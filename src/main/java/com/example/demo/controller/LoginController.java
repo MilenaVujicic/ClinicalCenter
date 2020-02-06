@@ -35,6 +35,8 @@ public class LoginController {
 		
 		String sifra_iz_baze = korisnik.getPassword();
 		
+		System.out.println(sifra_iz_baze);
+
 		if(korisnik.getUloga() == UlogaKorisnika.PACIJENT) {
 			if(passwordEncoder.matches(pass, sifra_iz_baze)) {
 				System.out.println("Dobra sifra");
@@ -53,7 +55,7 @@ public class LoginController {
 		}
 		
 		
-		if(korisnik.isAktiviran()) {
+		if(!korisnik.isAktiviran()) {
 			System.out.println(korisnik.getId().toString());
 			String response = korisnik.getId().toString();
 			korisnik.setBrojPrijava(korisnik.getBrojPrijava() + 1);

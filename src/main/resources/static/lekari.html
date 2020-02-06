@@ -29,7 +29,7 @@
 				let id = sessionStorage.getItem("id");
 				$.ajax({
 					type: "GET",
-					url: 'korisnik/preuzmi/' + response,
+					url: 'korisnik/preuzmi/' + id,
 					success: function(korisnik) {
 						if (korisnik.uloga == 'ADMIN_CENTRA') {
 							window.location.href = "http://localhost:8080/adminKlCentra.html";
@@ -50,18 +50,15 @@
 					}
 				});
 			}
+			search();
 		
-		if (sessionStorage.getItem("doktor") !== null) {
-			sessionStorage.removeItem("doktor");
-			}
-		
-		search();
 	});
 	
-	function logout(){
+	function logout() {
 		sessionStorage.removeItem("id");
 		window.location.href = "http://localhost:8080/login.html";
 	}
+	
 	
 	function prikaziDoktora(doktor) {
 		let tr = $('<tr></tr>');
@@ -95,6 +92,7 @@
 		let klinika_id = sessionStorage.getItem("id_klinike");
 		let spec = sessionStorage.getItem("spec");
 		
+		
 		$.ajax({
 			type: 'GET',
 			url:'pacijent/search',
@@ -120,56 +118,34 @@
 		});
 		
 	}
+	
 		
-		/*$(document).ready(function () {
-			$('form').submit(function(event) {
-				let ime = $('#ime').val();
-				let prezime = $('#prezime').val();
-				let specijalizacija = $('#specijalizacija').val();
-				let prosecnaOcena = $('#prosecnaOcena').val();
-				
-				$.ajax({
-					type: 'GET',
-					url:'/pacijent/search'+ime+prezime+specijalizacija+prosecnaOcena,
-					success: function(doctors) {
-						$('#doctorsTable tbody').html('');
-		           		for (i = 0; i < doctors.length; i++) {
-		           			prikaziDoktora(doctors[i]);
-		           		}
-					},
-					error: function() {
-		           		alert('Desila se greska');
-		           	}
-				});
-			});
-		});*/
+	function home() {
+		$('#doctorsTable').attr('hidden', true);
+	}
 		
-		function home() {
-			$('#doctorsTable').attr('hidden', true);
+		
+		
+	function allDoctors() {
+		let datum = sessionStorage.getItem("datum");
+		if(datum !== null) {
+			return;
 		}
-		
-		
-		
-		function allDoctors() {
-			let datum = sessionStorage.getItem("datum");
-			if(datum !== null) {
-				return;
-			}
-			$.ajax({
-	            url:"/pacijent/sviLekari",
-	            type:"GET",
-	           	success: function(doctors){
-	           		$('#doctorsTable tbody').html('');
-	           		for (i = 0; i < doctors.length; i++) {
-	           			prikaziDoktora(doctors[i]);
-	           		}
- 	           	},
-	           	error: function() {
-	           		alert('Desila se greska');
-	           	}
-         	});
-			$('#doctorsTable').attr('hidden', false);
-		}
+		$.ajax({
+            url:"/pacijent/sviLekari",
+            type:"GET",
+           	success: function(doctors){
+           		$('#doctorsTable tbody').html('');
+           		for (i = 0; i < doctors.length; i++) {
+           			prikaziDoktora(doctors[i]);
+           		}
+	           	},
+           	error: function() {
+           		alert('Desila se greska');
+           	}
+        	});
+		$('#doctorsTable').attr('hidden', false);
+	}
 	</script>
 </head>
 <body>
@@ -180,11 +156,10 @@
 	    </div>
 	    <ul class="nav navbar-nav">
 	      <li><a href="pacijentHomePage.html">Home</a></li>
-	      <li><a onclick="return personalData()">Personal data</a></li>
 	      <li><a onclick="return allDoctors()">All doctors</a></li>
 	    </ul>
 	    <ul class="nav navbar-nav navbar-right">
-	      <li><a href="#"><span class="glyphicon glyphicon-log-out"></span> Logout</a></li>
+	      <li><a onClick="return logout()"><span class="glyphicon glyphicon-log-out"></span> Logout</a></li>
 	    </ul>
 	  </div>
 	</nav>

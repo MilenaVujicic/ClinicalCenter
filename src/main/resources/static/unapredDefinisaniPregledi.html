@@ -28,7 +28,7 @@
 					let id = sessionStorage.getItem("id");
 					$.ajax({
 						type: "GET",
-						url: 'korisnik/preuzmi/' + response,
+						url: 'korisnik/preuzmi/' + id,
 						success: function(korisnik) {
 							if (korisnik.uloga == 'ADMIN_CENTRA') {
 								window.location.href = "http://localhost:8080/adminKlCentra.html";
@@ -49,6 +49,14 @@
 						}
 					});
 				}
+			
+			var oldURL = document.referrer;
+			if(oldURL != "http://localhost:8080/lekari.html") {
+				sessionStorage.removeItem("datum");
+				sessionStorage.removeItem("doktor");
+				sessionStorage.removeItem("id_klinike");
+				sessionStorage.removeItem("spec");
+			}
 			
 			termini();
 			
