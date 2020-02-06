@@ -50,7 +50,15 @@
 					}
 				});
 			}
-			search();
+		
+		var oldURL = document.referrer;
+		if(oldURL != "http://localhost:8080/klinike.html") {
+			sessionStorage.removeItem("datum");
+			sessionStorage.removeItem("doktor");
+			sessionStorage.removeItem("id_klinike");
+			sessionStorage.removeItem("spec");
+		}
+		search();
 		
 	});
 	
