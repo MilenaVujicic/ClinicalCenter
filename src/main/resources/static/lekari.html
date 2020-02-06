@@ -25,31 +25,31 @@
 	$(document).ready(function() {
 		if (sessionStorage.getItem("id") === null) {
 			window.location.href = "http://localhost:8080/login.html";
-			} else {
-				let id = sessionStorage.getItem("id");
-				$.ajax({
-					type: "GET",
-					url: 'korisnik/preuzmi/' + id,
-					success: function(korisnik) {
-						if (korisnik.uloga == 'ADMIN_CENTRA') {
-							window.location.href = "http://localhost:8080/adminKlCentra.html";
-						}
-						else if (korisnik.uloga == 'ADMIN_KLINIKE') {
-							window.location.href = "http://localhost:8080/adminKlinike.html";
-						}
-						else if (korisnik.uloga == 'LEKAR') {
-							window.location.href = "http://localhost:8080/doktor.html";
-						}
-						else if (korisnik.uloga == 'MEDICINSKA_SESTRA') {
-							window.location.href = "http://localhost:8080/medicinskaSestra.html";
-						}
-					},
-					error: function() {
-						alert('Nema ulogovanog korisnika');
-						window.location.href = "http://localhost:8080/login.html";
+		} else {
+			let id = sessionStorage.getItem("id");
+			$.ajax({
+				type: "GET",
+				url: 'korisnik/preuzmi/' + id,
+				success: function(korisnik) {
+					if (korisnik.uloga == 'ADMIN_CENTRA') {
+						window.location.href = "http://localhost:8080/adminKlCentra.html";
 					}
-				});
-			}
+					else if (korisnik.uloga == 'ADMIN_KLINIKE') {
+						window.location.href = "http://localhost:8080/adminKlinike.html";
+					}
+					else if (korisnik.uloga == 'LEKAR') {
+						window.location.href = "http://localhost:8080/doktor.html";
+					}
+					else if (korisnik.uloga == 'MEDICINSKA_SESTRA') {
+						window.location.href = "http://localhost:8080/medicinskaSestra.html";
+					}
+				},
+				error: function() {
+					alert('Nema ulogovanog korisnika');
+					window.location.href = "http://localhost:8080/login.html";
+				}
+			});
+		}
 		
 		var oldURL = document.referrer;
 		if(oldURL != "http://localhost:8080/klinike.html") {
@@ -99,6 +99,7 @@
 		let datum = sessionStorage.getItem("datum");
 		let klinika_id = sessionStorage.getItem("id_klinike");
 		let spec = sessionStorage.getItem("spec");
+
 		
 		
 		$.ajax({

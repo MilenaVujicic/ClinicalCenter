@@ -148,7 +148,9 @@ public class OperacijaController {
 		if (!operacija.getDoktori().contains(doktor)) {
 			return new ResponseEntity<String>(HttpStatus.BAD_REQUEST);
 		}
-		operacijaService.delete(operacija);
+		//operacijaService.delete(operacija);
+		operacija.setStatus(StatusOperacije.OBRISAN);
+		Operacija o = operacijaService.save(operacija);
 		return new ResponseEntity<String>(HttpStatus.OK);
 	}
 	

@@ -35,6 +35,6 @@ public class OperacijaService {
 	}
 	
 	public void delete(Operacija operacija) {
-		operacijaRespository.delete(operacija);
+		operacijaRespository.deleteById(operacija.getId());
 	}
 }

@@ -78,6 +78,8 @@ public class Klinika {
 		this.adresa = adresa;
 		this.opis = opis;
 		this.prosecnaOcena = 0;
+		this.brojOcena = 0;
+		this.sumaOcena = 0;
 	}
 
 

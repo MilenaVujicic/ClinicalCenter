@@ -460,7 +460,7 @@ public class DoktorController {
 			} 
 		}
 		
-		
+		System.out.println("###################" + doktori_klinike.size());
 		return new ResponseEntity<List<Korisnik>>(doktori_klinike, HttpStatus.OK);
 	}
 	
