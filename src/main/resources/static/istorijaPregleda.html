@@ -29,7 +29,7 @@
 				let id = sessionStorage.getItem("id");
 				$.ajax({
 					type: "GET",
-					url: 'korisnik/preuzmi/' + response,
+					url: 'korisnik/preuzmi/' + id,
 					success: function(korisnik) {
 						if (korisnik.uloga == 'ADMIN_CENTRA') {
 							window.location.href = "http://localhost:8080/adminKlCentra.html";
@@ -50,6 +50,7 @@
 					}
 				});
 			}
+		istorijaPregleda();
 	});
 	
 	function logout(){
@@ -224,7 +225,6 @@
 	    </div>
 	    <ul class="nav navbar-nav">
 	      <li><a href="pacijentHomePage.html">Home</a></li>
-	      <li><a onclick="return personalData()">Personal data</a></li>
 	      <li><a onclick="istorijaPregleda()">Istorija Pregleda</a></li>
 	    </ul>
 	    <ul class="nav navbar-nav navbar-right">
