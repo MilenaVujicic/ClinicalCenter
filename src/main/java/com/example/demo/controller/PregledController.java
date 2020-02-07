@@ -20,11 +20,20 @@ import com.example.demo.model.AdministratorKlinike;
 import com.example.demo.model.Doktor;
 import com.example.demo.model.Klinika;
 import com.example.demo.model.Korisnik;
+
+import com.example.demo.model.LogedUser;
+import com.example.demo.model.Operacija;
+
 import com.example.demo.model.Pregled;
 import com.example.demo.model.Sala;
 import com.example.demo.model.StatusPregleda;
 import com.example.demo.model.Termin;
+
 import com.example.demo.service.AdministratorKlinikeService;
+
+import com.example.demo.model.TipPregleda;
+import com.example.demo.model.UlogaKorisnika;
+
 import com.example.demo.service.DoktorService;
 import com.example.demo.service.EmailService;
 import com.example.demo.service.KlinikaService;
@@ -32,6 +41,7 @@ import com.example.demo.service.KorisnikService;
 import com.example.demo.service.PregledService;
 import com.example.demo.service.SalaService;
 import com.example.demo.service.TerminService;
+import com.example.demo.service.TipPregledaService;
 
 
 @RestController
@@ -61,7 +71,9 @@ public class PregledController {
 	
 	@Autowired
 	private AdministratorKlinikeService administratorService;
-	
+
+	private TipPregledaService tipPregledaService;
+
 	
 	@RequestMapping(value = "/sviPregledi/{id}", method = RequestMethod.GET)
 	public ResponseEntity<List<Pregled>> sviPregledi(@PathVariable("id") Long identifikacija) {
@@ -78,20 +90,32 @@ public class PregledController {
 	
 	@RequestMapping(value = "/izmeni", method = RequestMethod.PUT)
 	public ResponseEntity<PregledDTO> izmeni(@RequestBody PregledDTO pregledDTO) {
+		if(!LogedUser.getInstance().getUserRole().equals(UlogaKorisnika.LEKAR)) {
+			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+		}
 		Pregled pregled = pregledService.findOne(pregledDTO.getId());
+		if (!pregled.getDoktor().getIdKorisnik().equals(LogedUser.getInstance().getUserId())) {
+			return new ResponseEntity<PregledDTO>(HttpStatus.BAD_REQUEST);
+		}
 		pregled.setNaziv(pregledDTO.getNaziv());
 		pregled.setAnamneza(pregledDTO.getAnamneza());
-		pregled.setTipPregleda(pregledDTO.getTipPregleda());
-		pregled.setCena(pregledDTO.getCena());
 		Pregled p = pregledService.save(pregled);
 		return new ResponseEntity<PregledDTO>(new PregledDTO(p), HttpStatus.OK);
 	}
 	
 	@RequestMapping(value = "/obrisi/{id}", method = RequestMethod.DELETE)
 	public ResponseEntity<String> obrisi(@PathVariable("id") Long identifikacija) {
+		if(!LogedUser.getInstance().getUserRole().equals(UlogaKorisnika.LEKAR)) {
+			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+		}
 		Pregled pregled = pregledService.findOne(identifikacija);
-		pregledService.delete(pregled);
-		return new ResponseEntity<String>("", HttpStatus.OK);
+		if (!pregled.getDoktor().getIdKorisnik().equals(LogedUser.getInstance().getUserId())) {
+			return new ResponseEntity<String>(HttpStatus.BAD_REQUEST);
+		}
+		//pregledService.delete(pregled);
+		pregled.setStatus(StatusPregleda.OBRISAN);
+		Pregled p = pregledService.save(pregled);
+		return new ResponseEntity<String>(HttpStatus.OK);
 	}
 	
 
@@ -169,6 +193,7 @@ public class PregledController {
 		return new ResponseEntity<List<Pregled>>(pregledi, HttpStatus.OK);
 	}
 	
+
 	@RequestMapping(value = "/pregledi_klinika/{id}", method = RequestMethod.GET)
 	public ResponseEntity<List<Integer>> preglediKlinika(@PathVariable("id") Long id){
 		List<Integer> retVal = new ArrayList<Integer>();
@@ -262,7 +287,13 @@ public class PregledController {
 		retVal.add(iWeek);
 		retVal.add(iMonth);
 		return new ResponseEntity<List<Integer>>(retVal, HttpStatus.OK);
-		
+}
+
+	@RequestMapping(value = "/svi_tipovi", method=RequestMethod.GET)
+	public ResponseEntity<List<TipPregleda>> sviTipoviPregleda() {
+		List<TipPregleda> sviTipovi = tipPregledaService.findAll();
+		return new ResponseEntity<List<TipPregleda>>(sviTipovi, HttpStatus.OK);
+
 	}
 
 }

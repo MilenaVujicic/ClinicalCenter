@@ -21,11 +21,36 @@
 	<link href='https://fonts.googleapis.com/css?family=Passion+One' rel='stylesheet' type='text/css'>
 	<link href='https://fonts.googleapis.com/css?family=Oxygen' rel='stylesheet' type='text/css'>
 	<script>
-		$(document).ready(function() {
-			if (sessionStorage.getItem("id") === null) {
-				window.location.href = "http://localhost:8080/login.html";
-				}
-		});
+
+	$(document).ready(function() {
+		if (sessionStorage.getItem("id") === null) {
+			window.location.href = "http://localhost:8080/login.html";
+			} else {
+				let id = sessionStorage.getItem("id");
+				$.ajax({
+					type: "GET",
+					url: 'korisnik/preuzmi/' + response,
+					success: function(korisnik) {
+						if (korisnik.uloga == 'ADMIN_CENTRA') {
+							window.location.href = "http://localhost:8080/adminKlCentra.html";
+						}
+						else if (korisnik.uloga == 'ADMIN_KLINIKE') {
+							window.location.href = "http://localhost:8080/adminKlinike.html";
+						}
+						else if (korisnik.uloga == 'LEKAR') {
+							window.location.href = "http://localhost:8080/doktor.html";
+						}
+						else if (korisnik.uloga == 'MEDICINSKA_SESTRA') {
+							window.location.href = "http://localhost:8080/medicinskaSestra.html";
+						}
+					},
+					error: function() {
+						alert('Nema ulogovanog korisnika');
+						window.location.href = "http://localhost:8080/login.html";
+					}
+				});
+			}
+	});
 		
 		function logout(){
 			sessionStorage.removeItem("id");
@@ -42,7 +67,7 @@
 	    <ul class="nav navbar-nav">
 	      <li><a href="pacijentHomePage.html">Home</a></li>
 	      <li><a href="karton.html">Zdravstveni Karton</a></li>
-	      <li><a href="klinike.html">Lista Klinika</a></li>
+	      <li><a href="klinike.html" id="klinika_dugme">Lista Klinika</a></li>
 	      <li><a href="istorijaPregleda.html">Istorija Pregleda</a></li>
 	      <li><a href="unapredDefinisaniPregledi.html">Zakazivanje Pregleda</a></li>
 	    </ul>

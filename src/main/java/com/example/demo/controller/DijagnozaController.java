@@ -14,12 +14,14 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.example.demo.dto.DijagnozaDTO;
-import com.example.demo.dto.LekDTO;
 import com.example.demo.dto.PregledDTO;
 import com.example.demo.model.Dijagnoza;
-import com.example.demo.model.Lek;
+import com.example.demo.model.Korisnik;
+import com.example.demo.model.LogedUser;
 import com.example.demo.model.Pregled;
+import com.example.demo.model.UlogaKorisnika;
 import com.example.demo.service.DijagnozaService;
+import com.example.demo.service.KorisnikService;
 import com.example.demo.service.PregledService;
 
 @RestController
@@ -31,6 +33,9 @@ public class DijagnozaController {
 	
 	@Autowired
 	public PregledService pregledService;
+	
+	@Autowired
+	public KorisnikService korisnikService;
 	
 	@RequestMapping(value = "/sve_dijagnoze", method = RequestMethod.GET)
 	public ResponseEntity<List<Dijagnoza>> sveDijagnoze() {
@@ -54,9 +59,16 @@ public class DijagnozaController {
 	
 	@RequestMapping(value = "/izmeni_pregled/{text}", method = RequestMethod.GET)
 	public ResponseEntity<PregledDTO> izmeni_pregled(@PathVariable("text") String text) {
+		if(!LogedUser.getInstance().getUserRole().equals(UlogaKorisnika.LEKAR))
+			return new ResponseEntity<PregledDTO>(HttpStatus.BAD_REQUEST);
+		
 		String[] splitter = text.split("~");
 		Long identifikacija = Long.parseLong(splitter[0]);
 		Pregled pregled = pregledService.findOne(identifikacija);
+		
+		if (!pregled.getDoktor().getIdKorisnik().equals(LogedUser.getInstance().getUserId())) {
+			return new ResponseEntity<PregledDTO>(HttpStatus.BAD_REQUEST);
+		}
 		pregled.setDijagnoze(new HashSet<Dijagnoza>());
 		for (int i = 1; i < splitter.length; i++) {
 			Dijagnoza dijagnoza = dijagnozaService.findOne(Long.parseLong(splitter[i]));

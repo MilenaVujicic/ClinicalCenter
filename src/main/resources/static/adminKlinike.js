@@ -60,8 +60,9 @@ function prikaziDoktora(doktor, specijalizacija) {
 }
 
 function allDoctors(id) {
+	let session = sessionStorage.getItem("id");
 	$.ajax({
-		url: 'doktor/svi_slobodni_sa_klinike/' + id,
+		url: 'doktor/svi_slobodni_sa_klinike/' + id + '/' + session,
 		type: "GET",
 		success: function(doktori) {
 			$('#doctors').html('');
@@ -88,8 +89,9 @@ function allDoctors(id) {
 
 function rezSala(sala, operacija) {
 	let url = 'operacija/rezervisi/' + sala.id + '/' + operacija.id + '/';
+	let session = sessionStorage.getItem("id");
 	$.ajax({
-		url: 'doktor/svi_slobodni_sa_klinike/' + operacija.id,
+		url: 'doktor/svi_slobodni_sa_klinike/' + operacija.id + '/' + session,
 		type: "GET",
 		success: function(doktori) {
 			for (let doktor of doktori) {
@@ -137,11 +139,12 @@ function slobodnaSala(sala, operacija) {
 	$('#freeRooms tbody').append(tr);
 }
 
-function slTer(operacija) {
+
+function slTer1(operacija) {
 	home();
 	$('#requestsTable').attr('hidden', true);
 	$('#freeRooms').attr('hidden', false);
-	
+	let session = sessionStorage.getItem("id");
 	$.ajax({
 		url: '/sala/slobodni_termini/' + operacija.id,
 		type: "GET",
@@ -184,7 +187,7 @@ function slTer(operacija) {
 
 function slobodniTermini(operacija) {
 	return function() {
-		slTer(operacija);
+		slTer1(operacija);
 	}
 }
 
@@ -205,8 +208,9 @@ function operationRequest() {
 	$('#requestsTable').attr('hidden', false);
 	$('#freeRooms').attr('hidden', true);
 	$('#doctors').attr('hidden', true);
+	let session = sessionStorage.getItem("id");
 	$.ajax({
-		url: '/operacija/zahtevi',
+		url: 'operacija/zahtevi',
 		type: "GET",
 		success: function(operacije) {
 			$('#requestsTable tbody').html('');
@@ -218,7 +222,7 @@ function operationRequest() {
 						dodajZahtev(operacija, pacijent);
 					},
 					error: function() {
-						alert('Desila se greska');
+						alert('Desila se greska ovde');
 					}
 				});
 			}

@@ -46,6 +46,7 @@ function home() {
 	$('#recipesForm').attr('hidden', true);
 	$('#restForm').attr('hidden', true);
 	$('#calendar').attr('hidden', true);
+	$('#personalData').attr('hidden', true);
 	$('#patientID').val('');
 	document.getElementById("title").innerHTML = "";
 }
@@ -93,6 +94,7 @@ function unverifiedReciped() {
        		$('#patientsTable').attr('hidden', true);
 			$('#patient').attr('hidden', true);
 			$('#calendar').attr('hidden', true);
+			$('#personalData').attr('hidden', true);
        	},
        	error: function() {
        		alert('Desila se greska');
@@ -130,6 +132,7 @@ function allPatients() {
 	$('#recipesForm').attr('hidden', true);
 	$('#restForm').attr('hidden', true);
 	$('#calendar').attr('hidden', true);
+	$('#personalData').attr('hidden', true);
 }
 
 function requestHoliday() {
@@ -160,6 +163,7 @@ function rest() {
 	$('#recipesForm').attr('hidden', true);
 	$('#restForm').attr('hidden', false);
 	$('#calendar').attr('hidden', true);
+	$('#personalData').attr('hidden', true);
 	document.getElementById("title").innerHTML = "Holiday request";
 }
 
@@ -193,9 +197,11 @@ function calendar() {
 	$('#patient').attr('hidden', true);
 	$('#recipesForm').attr('hidden', true);
 	$('#restForm').attr('hidden', true);
+	$('#personalData').attr('hidden', true);
 	document.getElementById("title").innerHTML = "";
+	let session = sessionStorage.getItem("id");
 	$.ajax({
-		url:"/medicinska_sestra/kalendar",
+		url:"/medicinska_sestra/kalendar/" + session,
         type:"GET",
        	success: function(odsustva){
        		$('#calendar').fullCalendar('removeEvents');
@@ -213,13 +219,96 @@ function personalData() {
 	$('#patient').attr('hidden', true);
 	$('#recipesForm').attr('hidden', true);
 	$('#restForm').attr('hidden', true);
+	$('#calendar').attr('hidden', true);
 	document.getElementById("title").innerHTML = "";
-	
 	
 }
 
 function editData(){	
 	window.loaction = './changeUserData.html';
+	$('#personalData').attr('hidden', false);
+	let session = sessionStorage.getItem("id");
+	$.ajax({
+		type:"GET",
+		url:'korisnik/preuzmi/' + session,
+		success: function(korisnik) {
+			$('#lblFirstName').val(korisnik.ime);
+			$('#lblLastName').val(korisnik.prezime);
+			$('#lblDateOfBirth').val(korisnik.datumRodjenja.toString().substr(0, 10));
+			$('#lblCity').val(korisnik.grad);
+			$('#lblCounty').val(korisnik.drzava);
+			$('#lblAddress').val(korisnik.adresa);
+			$('#lblEmail').val(korisnik.email);
+			$('#lblPhone').val(korisnik.telefon);
+		},
+		error: function() {
+			alert('Desila se greska');
+		}
+	});
+}
+
+function changeData() {
+	let ime = $('#lblFirstName').val();
+	let prezime =$('#lblLastName').val();
+	let datumRodjenja = $('#lblDateOfBirth').val();
+	let grad = $('#lblCity').val();
+	let drzava =$('#lblCounty').val();
+	let adresa = $('#lblAddress').val();
+	let email = $('#lblEmail').val();
+	let telefon = $('#lblPhone').val();
+	let id = sessionStorage.getItem("id");
+	$.ajax({
+		type: "PUT",
+		url: 'korisnik/izmena_podataka/' + id,
+		data: JSON.stringify({ime, prezime, email, adresa, grad, drzava, telefon, datumRodjenja}),
+        contentType:'application/json',
+        success: function() {
+        	alert('Uspesno promenjeni podaci');
+        	personalData();
+        },
+        error: function() {
+        	alert('Desila se greska');
+        }
+	});
+}
+
+$(document).ready(function() {
+	let session = sessionStorage.getItem("id");
+	if (session == null) {
+		alert('Nemate prava pristupa ovoj stranici');
+		window.location.href = "http://localhost:8080/index.html";
+	}
+	$.ajax({
+		type: "GET",
+		url: 'korisnik/preuzmi/' + session,
+		success: function(korisnik) {
+			if (korisnik.uloga != 'MEDICINSKA_SESTRA') {
+				alert('Nemate prava pristupa ovoj stranici!\nSistem Vas je logoutovao');
+				logout();
+			}
+		},
+		error: function() {
+			alert('Nema ulogovanog korisnika');
+		}
+	});
+});
+
+function logout() {
+	$.ajax({
+		url: 'auth/logout',
+		type: "GET",
+		success: function(){
+			sessionStorage.removeItem("id");
+			let session = sessionStorage.getItem("id");
+			if (session == null) {
+				window.location.href = "http://localhost:8080/index.html";
+			}
+		},
+		error: function() {
+			alert('Desila se greska kog logouta');
+		}
+	});
+	
 }
 
 

@@ -200,7 +200,7 @@ public class KlinikaController {
 				if(p.getStatus() == StatusPregleda.ZAVRSEN) {
 					Calendar pDate = p.getDatumIVremePregleda();
 					if(pDate.getTimeInMillis() > beginC.getTimeInMillis() && pDate.getTimeInMillis() < endC.getTimeInMillis()) {
-						totalEarnings += p.getCena();
+						//totalEarnings += p.getCena();
 						System.out.println(totalEarnings);
 					}
 				}

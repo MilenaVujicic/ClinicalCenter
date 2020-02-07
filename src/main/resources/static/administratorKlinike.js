@@ -147,11 +147,14 @@ function dodajZahtev(operacija, pacijent) {
 }
 
 function operationRequest() {
+	alert('#####');
 	$('#requestsTable').attr('hidden', false);
 	$('#freeRooms').attr('hidden', true);
 	$('#doctors').attr('hidden', true);
+	let session = sessionStorage.getItem("id");
+	alert(session);
 	$.ajax({
-		url: '/operacija/zahtevi',
+		url: '/operacija/zahtevi/' + session,
 		type: "GET",
 		success: function(operacije) {
 			$('#requestsTable tbody').html('');

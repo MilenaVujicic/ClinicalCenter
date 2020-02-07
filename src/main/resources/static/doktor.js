@@ -8,6 +8,24 @@ $(document).ready(()=>{
 	document.getElementById ("aPersonalData").addEventListener("click", showPersonalData, false);
 	document.getElementById ("aDayOff").addEventListener("click", newAbsence, false);
 	document.getElementById ("bRequestHoliday").addEventListener("click", requestHoliday, false);
+	let session = sessionStorage.getItem("id");
+	if (session == null) {
+		alert('Nemate prava pristupa ovoj stranici');
+		window.location.href = "http://localhost:8080/index.html";
+	}
+	$.ajax({
+		type: "GET",
+		url: 'korisnik/preuzmi/' + session,
+		success: function(korisnik) {
+			if (korisnik.uloga != 'LEKAR') {
+				alert('Nemate prava pristupa ovoj stranici');
+				window.location.href = "http://localhost:8080/doktor.html";
+			}
+		},
+		error: function() {
+			alert('Nema ulogovanog korisnika');
+		}
+	});
 })
 
 
@@ -289,6 +307,27 @@ function dijagnoze() {
  	});
 }
 
+function printType(tip) {
+	let option = $('<option>'+tip.naziv+'</option>');
+	$('#examinationType').append(option);
+} 
+
+function tipovi() {
+	$.ajax({
+		url: "/pregled/svi_tipovi",
+		type: "GET",
+		success: function(tipovi) {
+			$('#examinationType').html('');
+			for (let tip of tipovi) {
+				printType(tip);
+       		}
+		},
+		error: function() {
+			alert('Greskakod tipova pregleda');
+		}
+	});
+}
+
 function scheduledPatients() {
 	$('#schPatTable').attr('hidden', false);
 	$('#examinationForm').attr('hidden', true);
@@ -302,6 +341,7 @@ function scheduledPatients() {
 	$('#absenceForm').attr('hidden', true);
 	dijagnoze();
 	lekovi();
+	tipovi();
 	$.ajax({
         url:"/doktor/svi_pacijenti",
         type:"GET",
@@ -323,11 +363,9 @@ function saveExamination() {
 	let id_pac = $('#patientID').val();
 	let naziv = $('#examinationName').val();
 	let anamneza = $('#examinationAnamnesis').val();
-	let cena = $('#examinationPrice').val();
 	let tipPregleda = $('#examinationType').val();
 	let id = $('#examinationID').val();
-	let url = 'doktor/posalji_pregled/'+ id_pac;
-	
+	let url = 'doktor/posalji_pregled/' + id_pac + '~' + tipPregleda;
 	$.ajax({
         url:"/dijagnoza/sve_dijagnoze",
         type:"GET",
@@ -342,7 +380,7 @@ function saveExamination() {
    			$.ajax({
    		        url:url,
    		        type:"POST",
-   		        data: JSON.stringify({naziv, anamneza, cena, tipPregleda, id}),
+   		        data: JSON.stringify({naziv, anamneza, id}),
    		        contentType:'application/json',
    		       	success: function(pregled) {
    		       		alert('Pregled uspesno unesen');
@@ -387,13 +425,12 @@ function saveRecipe() {
 function editExaminations() {
 	let naziv = $('#editExaminationName').val();
 	let anamneza = $('#editExaminationAnamnesis').val();
-	let tipPregleda = $('#editExaminationType').val();
-	let cena = $('#editExaminationPrice').val();
 	let id = $('#editExaminationID').val();
+	let session = sessionStorage.getItem("id");
 	$.ajax({
 		url: 'pregled/izmeni',
 		type:"PUT",
-        data: JSON.stringify({id, naziv, anamneza, tipPregleda, cena}),
+        data: JSON.stringify({id, naziv, anamneza}),
         contentType:'application/json',
         success: function() {
         	pacijent_id = document.getElementById("aboutPatientID").innerHTML;
@@ -402,7 +439,8 @@ function editExaminations() {
         	$('#examinationDiagnosis').attr('hidden', true);
         },
         error: function() {
-        	alert('Desila se greska');
+        	alert('Pregled moze da izmeni samo lekar koji je taj pregled izvrsio');
+        	$('#editExamination').attr('hidden', true);
         }
 	});
 }
@@ -414,8 +452,6 @@ function editExamination(pregled) {
 		$('#calendar').attr('hidden', true);
 		$('#editExaminationName').val(pregled.naziv);
 		$('#editExaminationAnamnesis').val(pregled.anamneza);
-		$('#editExaminationType').val(pregled.tipPregleda);
-		$('#editExaminationPrice').val(pregled.cena);
 		$('#editExaminationID').val(pregled.id);
 	}
 }
@@ -430,7 +466,7 @@ function deleteExamination(id) {
 	        	examinations(pacijent_id);
 			},
 			error: function() {
-				alert('Desila se greska');
+				alert('Niste vi izvrsili pregled, te ne mozete ga ni obrisati');
 			}
 		});
 	}
@@ -469,7 +505,7 @@ function addDiag() {
        				$('#buttonAddNewDiag').attr('hidden', true);
        			},
        			error: function() {
-       				alert('Desila se greska ovde');
+       				alert('Ne mozete vi da izmenite dijagnoze, kad ih niste vi uneli');
        			}
        		});
        	},
@@ -566,9 +602,9 @@ function prikaziPregled(pregled) {
 	let tr = $('<tr></tr>');
 	let tdName = $('<td>'+pregled.naziv+'</td>');
 	let tdDate = $('<td>'+pregled.datumIVremePregleda.toString().substr(0, 10)+'</td>');
-	let tdType = $('<td>'+pregled.tipPregleda+'</td>');
+	let tdType = $('<td>'+pregled.tipPregleda.naziv+'</td>');
 	let tdAnamnesis = $('<td>'+pregled.anamneza+'</td>');
-	let tdPrice = $('<td>'+pregled.cena+'</td>');
+	let tdPrice = $('<td>'+pregled.tipPregleda.cena+'</td>');
 	let aDiagnosis = $('<td><a class="btn btn-primary">Diagnosis</a></td>');
 	aDiagnosis.click(allDiagnosis(pregled.id));
 	let aEditExamination = $('<td><a class="btn btn-success">Edit examination</a></td>');
@@ -611,7 +647,8 @@ function editOperation() {
         	operations(pacijent_id);
         },
         error: function() {
-        	alert('Desila se greska kod izmene');
+        	alert('Niste vi izvrsili operaciju, te ne mozete da izmenite');
+        	$('#editOperation').attr('hidden', true);
         }
 		
 	});
@@ -634,7 +671,7 @@ function deleteOperation(operacija) {
 				operations(operacija.pacijent.id);
 			},
 			error: function() {
-				alert('Desila se greska prilikom brisanja operacije');
+				alert('Niste vi izvrsili operaciju te ne mozete ni da ga obrisete');
 			}
 		});
 	}
@@ -1138,16 +1175,17 @@ function calendar() {
 	$('#examinationDiagnosis').attr('hidden', true);
 	$('#aboutPatient').attr('hidden', true);
 	$('#absenceForm').attr('hidden', true);
+	let session = sessionStorage.getItem("id");
 	$.ajax({
-		url:"/doktor/odsustva",
+		url:"/doktor/odsustva/" + session,
         type:"GET",
        	success: function(odsustva){
        		$.ajax({
-       			url:"/doktor/zakazani_pregledi",
+       			url:"/doktor/zakazani_pregledi/" + session,
        	        type:"GET",
        	       	success: function(pregledi){
        	       		$.ajax({
-       	       			url: "/doktor/zakazane_operacije",
+       	       			url: "/doktor/zakazane_operacije/" + session,
        	       			type: "GET",
        	       			success: function(operacije) {
 	       	       			$('#calendar').fullCalendar('removeEvents');

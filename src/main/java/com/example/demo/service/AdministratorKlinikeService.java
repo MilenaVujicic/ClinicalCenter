@@ -31,7 +31,16 @@ public class AdministratorKlinikeService {
 		return administratorKlinikeRespository.findById(id);
 	}
 	
+
 	public Optional<AdministratorKlinike> findByIdKorisnik(Long id){
 		return administratorKlinikeRespository.findByIdKorisnik(id);
 	}
+	
+	public AdministratorKlinike findByIdKorisnik(String id) {
+		return administratorKlinikeRespository.findByIdKorisnik(Long.parseLong(id)).get();
+	}
+
+
+
+
 }
