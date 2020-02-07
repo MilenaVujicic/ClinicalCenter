@@ -37,20 +37,25 @@
 
 		$(document).ready(()=>{
 			document.getElementById('btnSave').addEventListener('click', changeData, false);
-			
+			document.getElementById('btnPassword').addEventListener('click', editPassword, false);
 			$.ajax({
 				url:'korisnik/podaci/' + sessionStorage.getItem("id"),
 				type:'GET',
 				success: function(user){
-					$('#uName').val(user.ime);
-					$('#uSurname').val(user.prezime);
-					$('#uPassword').val(user.password);
-					$('#uCity').val(user.grad);
-					$('#uAddress').val(user.adresa);
-					$('#uCountry').val(user.drzava);
-					$('#uPhone').val(user.telefon);
-					$('#uEmail').val(user.email);
 					
+					if(user.brojPrijava === 0){
+						$('#divData').attr('hidden', true);
+						$('#passDiv').attr('hidden', false);
+					}else{
+						$('#uName').val(user.ime);
+						$('#uSurname').val(user.prezime);
+						$('#uPassword').val(user.password);
+						$('#uCity').val(user.grad);
+						$('#uAddress').val(user.adresa);
+						$('#uCountry').val(user.drzava);
+						$('#uPhone').val(user.telefon);
+						$('#uEmail').val(user.email);
+					}
 				},
 				error: function(){
 					alert('Something went wrong');
@@ -86,10 +91,39 @@
 				
 			});
 		}
+		
+		function editPassword(event){
+			event.preventDefault();
+			let password = $('#newPassword').val();
+			let confirm = $('#confirmPassword').val();
+			if(password !== confirm){
+				alert("Passwords must match");
+				return;
+			}
+			
+			$.ajax({
+				url: 'korisnik/promeni_lozinku/' + sessionStorage.getItem("id"),
+				type: 'POST',
+				data: JSON.stringify({password}),
+				contentType: 'application/json',
+				success: function(str){
+					if(str === 'Lozinke iste'){
+						alert('New password cannot be the same as the old one');
+						return;
+					}
+					alert("Password successfully changed");
+					window.location.href = './index.html';
+				},
+				error: function(){
+					alert('Something went wrong');
+				}
+			})
+		}
 	</script>
 <title>Change personal data</title>
 </head>
 <body>
+<div id = "divData">
 <h4>Personal data: </h4>
 <br/>
 <form id = "editDataForm">
@@ -147,6 +181,30 @@
 </div>
 </div>
 </form>
+</div>
+
+<div id = "passDiv" hidden = "true">
+<h4>Change password</h4>
+<form id = "passForm">
+<div class="form-row">
+<div class="form-group col-md-8">
+<label for="patientName">Password: </label>
+<input type="password" class="form-control" id="newPassword">
+</div>
+</div>
+<div class="form-row">
+<div class="form-group col-md-8">
+<label for="patientName">Confirm Password: </label>
+<input type="password" class="form-control" id="confirmPassword">
+</div>
+</div>
+<div class = "form-row">
+<div class="form-group col-md-8">
+<a class="btn btn-success" id = "btnPassword">Save</a>
+</div>
+</div>
+</form>
+</div>
 
 </body>
 </html>

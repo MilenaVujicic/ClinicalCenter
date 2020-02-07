@@ -13,7 +13,7 @@ $(document).ready(()=>{
 	document.getElementById('btnSaveNewRoom').addEventListener('click', newRoom, false);
 	document.getElementById('aShowRooms').addEventListener('click', showAllRooms, false);
 	document.getElementById('btnSaveRoom').addEventListener('click', editRoomData, false);
-	
+	document.getElementById('aLogout').addEventListener('click', logout, false);
 	session = sessionStorage.getItem("id");
 	if(session == null){
 		alert('You must be logged in to view this page!');
@@ -27,11 +27,15 @@ $(document).ready(()=>{
 				alert('You must be a clinic administrator to access this page');
 				window.location.href = "./index.html";
 			}
+			alert(korisnik.brojPrijava);
+			if(korisnik.brojPrijava === 0){
+				window.loaction.href = '.'
+			}
 		},
 		error: function(){
 			alert('Something went wrong')
 		}
-	})
+	});
 	
 })
 
@@ -895,3 +899,20 @@ function editRoomData(event){
 	event.preventDefault();
 }
 
+function logout(event){
+	event.preventDefault();
+	$.ajax({
+		url: 'auth/logout',
+		type: "GET",
+		success: function(){
+			sessionStorage.removeItem("id");
+			let session = sessionStorage.getItem("id");
+			if (session == null) {
+				window.location.href = "http://localhost:8080/index.html";
+			}
+		},
+		error: function() {
+			alert('Something went wrong');
+		}
+	});
+}

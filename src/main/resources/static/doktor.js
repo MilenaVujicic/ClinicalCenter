@@ -8,6 +8,7 @@ $(document).ready(()=>{
 	document.getElementById ("aPersonalData").addEventListener("click", showPersonalData, false);
 	document.getElementById ("aDayOff").addEventListener("click", newAbsence, false);
 	document.getElementById ("bRequestHoliday").addEventListener("click", requestHoliday, false);
+	document.getElementById ("aLogout").addEventListener("click", logout, false);
 	let session = sessionStorage.getItem("id");
 	if (session == null) {
 		alert('Nemate prava pristupa ovoj stranici');
@@ -1222,4 +1223,21 @@ function editData(){
 	window.location.href = './changePresonalData.html';
 }
 
+function logout(event){
+	event.preventDefault();
+	$.ajax({
+		url: 'auth/logout',
+		type: "GET",
+		success: function(){
+			sessionStorage.removeItem("id");
+			let session = sessionStorage.getItem("id");
+			if (session == null) {
+				window.location.href = "http://localhost:8080/index.html";
+			}
+		},
+		error: function() {
+			alert('Something went wrong');
+		}
+	});
+}
 

@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.mail.MailException;
@@ -14,12 +15,14 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.example.demo.dto.KorisnikDTO;
-import com.example.demo.dto.PacijentDTO;
 import com.example.demo.model.Korisnik;
-import com.example.demo.model.Pacijent;
 import com.example.demo.service.EmailService;
 import com.example.demo.service.KorisnikService;
 import com.example.demo.service.PacijentService;
+
+import net.minidev.json.JSONObject;
+import net.minidev.json.parser.JSONParser;
+import net.minidev.json.parser.ParseException;
 
 @RestController
 @RequestMapping(value = "korisnik")
@@ -127,6 +130,28 @@ public class KorisnikController {
 		KorisnikDTO k = new KorisnikDTO(korisnik);
 		
 		return new ResponseEntity<KorisnikDTO>(k, HttpStatus.OK);
+	}
+	
+	@RequestMapping(value = "promena_lozinke/{id}", method = RequestMethod.POST)
+	public ResponseEntity<String> promenaLozinke(@PathVariable("id") Long id, HttpEntity<String> json) throws ParseException{
+		String jString = json.getBody();
+		JSONParser parser = new JSONParser();
+		JSONObject jObj = (JSONObject)parser.parse(jString);
+		String password = (String) jObj.get("password");
+		
+		Optional<Korisnik> ok = korisnikService.findById(id);
+		Korisnik k = ok.get();
+		
+		if(k.getPassword().equals(password)) {
+			return new ResponseEntity<String>("Lozinke iste", HttpStatus.OK);
+		}
+		
+		k.setPassword(password);
+		k.setBrojPrijava(1);
+		
+		korisnikService.save(k);
+		
+		return new ResponseEntity<String>("Izmenjena lozinka", HttpStatus.OK);
 	}
 	
 	@RequestMapping(value = "promeni_lozinku/{id}/{op}/{np}/{cp}", method = RequestMethod.GET)
