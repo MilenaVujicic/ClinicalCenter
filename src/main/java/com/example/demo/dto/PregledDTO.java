@@ -15,6 +15,7 @@ import com.example.demo.model.Pacijent;
 import com.example.demo.model.Pregled;
 import com.example.demo.model.Sala;
 import com.example.demo.model.StatusPregleda;
+import com.example.demo.model.TipPregleda;
 
 
 public class PregledDTO {
@@ -24,11 +25,10 @@ public class PregledDTO {
 	private String anamneza;
 	private Pacijent pacijent;
 	private Calendar datumIVremePregleda;
-	private String tipPregleda;
+	private TipPregleda tipPregleda;
 	private int duzina;
 	private Sala sala;
 	private Doktor doktori;
-	private double cena;
 	private Set<Dijagnoza> dijagnoze = new HashSet<Dijagnoza>();
 	private Set<Lek> lekovi = new HashSet<Lek>();
 	private StatusPregleda status;
@@ -41,7 +41,7 @@ public class PregledDTO {
 	}
 
 	public PregledDTO(Long id, String naziv, String anamneza, Pacijent pacijent, Calendar datumIVremePregleda,
-			String tipPregleda, int duzina, Sala sala, Doktor doktori, double cena, Set<Dijagnoza> dijagnoze,
+			TipPregleda tipPregleda, int duzina, Sala sala, Doktor doktori, Set<Dijagnoza> dijagnoze,
 			Set<Lek> lekovi, StatusPregleda status) {
 		super();
 		this.id = id;
@@ -53,7 +53,6 @@ public class PregledDTO {
 		this.duzina = duzina;
 		this.sala = sala;
 		this.doktori = doktori;
-		this.cena = cena;
 		this.dijagnoze = dijagnoze;
 		this.lekovi = lekovi;
 		this.status = status;
@@ -68,7 +67,6 @@ public class PregledDTO {
 		this.tipPregleda = p.getTipPregleda();
 		this.sala = p.getSala();
 		this.doktori = p.getDoktor();
-		this.cena = p.getCena();
 		this.dijagnoze = p.getDijagnoze();
 		this.status = p.getStatus();
 	}
@@ -113,11 +111,11 @@ public class PregledDTO {
 		this.datumIVremePregleda = datumIVremePregleda;
 	}
 
-	public String getTipPregleda() {
+	public TipPregleda getTipPregleda() {
 		return tipPregleda;
 	}
 
-	public void setTipPregleda(String tipPregleda) {
+	public void setTipPregleda(TipPregleda tipPregleda) {
 		this.tipPregleda = tipPregleda;
 	}
 
@@ -143,14 +141,6 @@ public class PregledDTO {
 
 	public void setDoktori(Doktor doktori) {
 		this.doktori = doktori;
-	}
-
-	public double getCena() {
-		return cena;
-	}
-
-	public void setCena(double cena) {
-		this.cena = cena;
 	}
 
 	public Set<Dijagnoza> getDijagnoze() {
@@ -181,8 +171,8 @@ public class PregledDTO {
 	public String toString() {
 		return "PregledDTO [id=" + id + ", naziv=" + naziv + ", anamneza=" + anamneza + ", pacijent=" + pacijent
 				+ ", datumIVremePregleda=" + datumIVremePregleda + ", tipPregleda=" + tipPregleda + ", duzina=" + duzina
-				+ ", sala=" + sala + ", doktori=" + doktori + ", cena=" + cena + ", dijagnoze=" + dijagnoze
-				+ ", lekovi=" + lekovi + ", status=" + status + "]";
+				+ ", sala=" + sala + ", doktori=" + doktori + ", dijagnoze=" + dijagnoze + ", lekovi=" + lekovi
+				+ ", status=" + status + ", imeDoktora=" + imeDoktora + ", prezimeDoktora=" + prezimeDoktora + "]";
 	}
 
 	public String getImeDoktora() {

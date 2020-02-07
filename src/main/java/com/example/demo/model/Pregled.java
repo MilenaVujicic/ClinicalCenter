@@ -37,12 +37,6 @@ public class Pregled {
 	@Column(name = "datumIVremePregleda", nullable = true)
 	private Calendar datumIVremePregleda;
 	
-	@Column(name = "tipPregleda")
-	private String tipPregleda;
-	
-	@Column(name = "cena", nullable = false)
-	private double cena;
-	
 	@ManyToMany
 	@JoinTable(name = "pregledi_dijagnoze", joinColumns = @JoinColumn(name = "pregled_id", referencedColumnName = "id"), inverseJoinColumns = @JoinColumn(name = "dijagnoza_id", referencedColumnName = "id"))
 	private Set<Dijagnoza> dijagnoze = new HashSet<Dijagnoza>();
@@ -58,6 +52,9 @@ public class Pregled {
 	
 	@ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.REFRESH, CascadeType.DETACH}, fetch = FetchType.EAGER)
 	private Sala sala;
+	
+	@ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.REFRESH, CascadeType.DETACH}, fetch = FetchType.EAGER)
+	private TipPregleda tipPregleda;
 
 
 	public Pregled() {
@@ -97,20 +94,12 @@ public class Pregled {
 		this.datumIVremePregleda = datumIVremePregleda;
 	}
 
-	public String getTipPregleda() {
+	public TipPregleda getTipPregleda() {
 		return tipPregleda;
 	}
 
-	public void setTipPregleda(String tipPregleda) {
+	public void setTipPregleda(TipPregleda tipPregleda) {
 		this.tipPregleda = tipPregleda;
-	}
-
-	public double getCena() {
-		return cena;
-	}
-
-	public void setCena(double cena) {
-		this.cena = cena;
 	}
 
 
@@ -157,8 +146,8 @@ public class Pregled {
 	@Override
 	public String toString() {
 		return "Pregled [id=" + id + ", naziv=" + naziv + ", anamneza=" + anamneza + ", datumIVremePregleda="
-				+ datumIVremePregleda + ", tipPregleda=" + tipPregleda + ", cena=" + cena + ", dijagnoze=" + dijagnoze
-				+ ", status=" + status + ", pacijent=" + pacijent + ", doktor=" + doktor + ", sala=" + sala + "]";
+				+ datumIVremePregleda + ", dijagnoze=" + dijagnoze + ", status=" + status + ", pacijent=" + pacijent
+				+ ", doktor=" + doktor + ", sala=" + sala + ", tipPregleda=" + tipPregleda + "]";
 	}
 	
 	

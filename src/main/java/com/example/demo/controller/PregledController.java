@@ -23,6 +23,7 @@ import com.example.demo.model.Sala;
 import com.example.demo.model.StatusOperacije;
 import com.example.demo.model.StatusPregleda;
 import com.example.demo.model.Termin;
+import com.example.demo.model.TipPregleda;
 import com.example.demo.model.UlogaKorisnika;
 import com.example.demo.service.DoktorService;
 import com.example.demo.service.EmailService;
@@ -31,6 +32,7 @@ import com.example.demo.service.KorisnikService;
 import com.example.demo.service.PregledService;
 import com.example.demo.service.SalaService;
 import com.example.demo.service.TerminService;
+import com.example.demo.service.TipPregledaService;
 
 
 @RestController
@@ -58,6 +60,9 @@ public class PregledController {
 	@Autowired
 	private EmailService emailService;
 	
+	@Autowired
+	private TipPregledaService tipPregledaService;
+	
 	@RequestMapping(value = "/sviPregledi/{id}", method = RequestMethod.GET)
 	public ResponseEntity<List<Pregled>> sviPregledi(@PathVariable("id") Long identifikacija) {
 		List<Pregled> sviPregledi = pregledService.findAll();
@@ -82,8 +87,6 @@ public class PregledController {
 		}
 		pregled.setNaziv(pregledDTO.getNaziv());
 		pregled.setAnamneza(pregledDTO.getAnamneza());
-		pregled.setTipPregleda(pregledDTO.getTipPregleda());
-		pregled.setCena(pregledDTO.getCena());
 		Pregled p = pregledService.save(pregled);
 		return new ResponseEntity<PregledDTO>(new PregledDTO(p), HttpStatus.OK);
 	}
@@ -152,6 +155,12 @@ public class PregledController {
 	public ResponseEntity<List<Pregled>> zahtevi() {
 		List<Pregled> pregledi = pregledService.findByStatus(StatusPregleda.NERASPOREDJEN);
 		return new ResponseEntity<List<Pregled>>(pregledi, HttpStatus.OK);
+	}
+	
+	@RequestMapping(value = "/svi_tipovi", method=RequestMethod.GET)
+	public ResponseEntity<List<TipPregleda>> sviTipoviPregleda() {
+		List<TipPregleda> sviTipovi = tipPregledaService.findAll();
+		return new ResponseEntity<List<TipPregleda>>(sviTipovi, HttpStatus.OK);
 	}
 
 }

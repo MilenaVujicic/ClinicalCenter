@@ -64,7 +64,7 @@
 		let tdNaziv = $('<td>'+pregled.naziv+'</td>');
 		let tdDatumIVreme = $('<td>'+pregled.datumIVremePregleda+'</td>');
 		let tdAnamneza = $('<td>'+pregled.anamneza+'</td>');
-		let tdCena = $('<td>'+pregled.cena+'</td>');
+		let tdCena = $('<td>'+pregled.tipPregleda.cena+'</td>');
 		let tdImeIPrezimeDoktora = $('<td>'+pregled.imeDoktora+' '+pregled.prezimeDoktora+'</td>');
 		let tdOceniDoktora = $('<td>'+'<a id="'+pregled.id+'" onClick="prikaziModal(this.id)">Oceni</a>'+ '</td>');
 		tr.append(tdId).append(tdNaziv).append(tdDatumIVreme).append(tdAnamneza).append(tdCena).append(tdImeIPrezimeDoktora).append(tdOceniDoktora);
