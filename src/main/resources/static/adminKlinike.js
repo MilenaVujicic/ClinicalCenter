@@ -793,7 +793,7 @@ function newRoom(event){
 		return;
 	}
 	
-	$.post({
+	$.ajax({
 		url:'sala/nova_sala/' + sessionStorage.getItem("id"),
 		type:'POST',
 		data: JSON.stringify({name, desc}),

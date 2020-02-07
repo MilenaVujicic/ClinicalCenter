@@ -1,3 +1,7 @@
+$(document).ready(()=>{
+	document.getElementById('changeDataBtn').addEventListener('click', editNurseData, false);
+})
+
 function detaljanPrikazPacijenta(pacijent) {
 	return function() {
 		$.ajax({
@@ -224,9 +228,10 @@ function personalData() {
 	
 }
 
-function editData(){	
-	window.loaction = './changeUserData.html';
-	$('#personalData').attr('hidden', false);
+function editNurseData(event){
+	event.preventDefault();
+	window.location = './changePresonalData.html';
+	/*$('#personalData').attr('hidden', false);
 	let session = sessionStorage.getItem("id");
 	$.ajax({
 		type:"GET",
@@ -244,7 +249,7 @@ function editData(){
 		error: function() {
 			alert('Desila se greska');
 		}
-	});
+	});*/
 }
 
 function changeData() {
