@@ -314,7 +314,7 @@ function printType(tip) {
 
 function tipovi() {
 	$.ajax({
-		url: "/pregled/svi_tipovi",
+		url: 'pregled/svi_tipovi',
 		type: "GET",
 		success: function(tipovi) {
 			$('#examinationType').html('');
@@ -323,7 +323,7 @@ function tipovi() {
        		}
 		},
 		error: function() {
-			alert('Greskakod tipova pregleda');
+			alert('Greska kod tipova pregleda');
 		}
 	});
 }

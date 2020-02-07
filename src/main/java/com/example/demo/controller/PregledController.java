@@ -72,6 +72,7 @@ public class PregledController {
 	@Autowired
 	private AdministratorKlinikeService administratorService;
 
+	@Autowired
 	private TipPregledaService tipPregledaService;
 
 	
@@ -291,7 +292,9 @@ public class PregledController {
 
 	@RequestMapping(value = "/svi_tipovi", method=RequestMethod.GET)
 	public ResponseEntity<List<TipPregleda>> sviTipoviPregleda() {
+		System.out.println("#################### svi tipovi pregleda");
 		List<TipPregleda> sviTipovi = tipPregledaService.findAll();
+		System.out.println("#################### svi tipovi pregleda ####" + sviTipovi.size());
 		return new ResponseEntity<List<TipPregleda>>(sviTipovi, HttpStatus.OK);
 
 	}
