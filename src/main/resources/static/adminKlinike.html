@@ -37,6 +37,7 @@
 	        <ul class="dropdown-menu">
 	          <li><a href = "#" id = "aDefineApt">New Appointment</a></li>
 	          <li><a href = "#" id = "aNewDoctor">New Doctor</a></li>
+	          <li><a href = "#" id = "aNewRoom">New Room</a>
 	        </ul>
 	      </li>
 	      <li class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">Clinic<span class="caret"></span></a>
@@ -201,6 +202,59 @@
 	<h4 id = "hEarnings"></h4>
 	
 	</div>
+	
+<form id = "newRoomForm" hidden = "true">
+	<div class="form-row">
+	<div class="form-group col-md-8">
+		<label for="patientName">Room Name: </label>
+		<input type="text" class="form-control" id="uRoomName">
+	</div>
+	</div>
+	<div class="form-row">
+	<div class="form-group col-md-8">
+		<label for="patientName">Room Description: </label>
+		<input type="text" class="form-control" id="uRoomDesc">
+	</div>
+	</div>
+	<div class = "form-row">
+	<div class="form-group col-md-8">
+		<a class="btn btn-success" id = "btnSaveNewRoom">Save</a>
+	</div>
+	</div>
+</form>
+
+<form id = "editRoom" hidden = "true">
+	<div class="form-row">
+	<div class="form-group col-md-8">
+		<label for="patientName">Room Name: </label>
+		<input type="text" class="form-control" id="eRoomName">
+	</div>
+	</div>
+	<div class="form-row">
+	<div class="form-group col-md-8">
+		<label for="patientName">Room Description: </label>
+		<input type="text" class="form-control" id="eRoomDesc">
+	</div>
+	</div>
+	<div class = "form-row">
+	<div class="form-group col-md-8">
+		<a class="btn btn-success" id = "btnSaveRoom">Save</a>
+	</div>
+	</div>
+</form>
+
+<table class = "table" id = "showRoomsTable" hidden = "true">
+<thead>
+<tr>
+<th scope = "col">Name: </th>
+<th scope = "col">Description</th>
+<th scope = "col">Dates Free: </th>
+<th scope = "col">Actions:</th>
+</tr>
+</thead>
+<tbody>
+</tbody>
+</table>
 	
 </body>
 </html>

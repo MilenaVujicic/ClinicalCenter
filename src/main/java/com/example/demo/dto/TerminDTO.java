@@ -1,5 +1,6 @@
 package com.example.demo.dto;
 
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
 
 import com.example.demo.model.Doktor;
@@ -28,6 +29,8 @@ public class TerminDTO {
 	
 	private String imeIPrezimeDoktora;
 	
+	private String datumStr;
+	
 	public TerminDTO(Long id, Calendar datum, boolean slobodan, String tip, double trajanje, double cena, Sala sala, Doktor doktor) {
 		super();
 		this.id = id;
@@ -38,6 +41,7 @@ public class TerminDTO {
 		this.tip = tip;
 		this.cena = cena;
 		this.popust = "Nema popusta";
+		formatDate(datum);
 	}
 	
 	public TerminDTO(Termin t) {
@@ -124,9 +128,21 @@ public class TerminDTO {
 	public void setImeIPrezimeDoktora(String imeIPrezimeDoktora) {
 		this.imeIPrezimeDoktora = imeIPrezimeDoktora;
 	}
-	
-	
 
+	public String getDatumStr() {
+		return datumStr;
+	}
+
+	public void setDatumStr(String datumStr) {
+		
+		this.datumStr = datumStr;
+	}
+	
+	private void formatDate(Calendar c) {
+		SimpleDateFormat format = new SimpleDateFormat("dd-MM-yyy hh:mm");
+		this.datumStr = format.format(c.getTime());
+	}
+	
 
 	
 	

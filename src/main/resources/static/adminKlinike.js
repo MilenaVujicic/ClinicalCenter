@@ -6,9 +6,14 @@ $(document).ready(()=>{
 	document.getElementById('aEditClinic').addEventListener('click', editClinicData, false);
 	document.getElementById('aDefineApt').addEventListener('click', defineNewApt, false);
 	document.getElementById('aShowPrices').addEventListener('click', showPrices, false);
-	document.getElementById('aShowRooms').addEventListener('click', showRooms, false);
+	//document.getElementById('aShowRooms').addEventListener('click', showRooms, false);
 	document.getElementById('aStats').addEventListener('click', showStats, false);
 	document.getElementById('btnSubmit').addEventListener('click', submitDate, false);
+	document.getElementById('aNewRoom').addEventListener('click', showNewRoom, false);
+	document.getElementById('btnSaveNewRoom').addEventListener('click', newRoom, false);
+	document.getElementById('aShowRooms').addEventListener('click', showAllRooms, false);
+	document.getElementById('btnSaveRoom').addEventListener('click', editRoomData, false);
+	
 	session = sessionStorage.getItem("id");
 	if(session == null){
 		alert('You must be logged in to view this page!');
@@ -40,6 +45,9 @@ function home() {
 	$('#tAbsence').attr('hidden', true);
 	$('#pricingTable').attr('hidden', true);
 	$('#divStats').attr('hidden', true);
+	$('#newRoomForm').attr('hidden', true);
+	$('#showRoomsTable').attr('hidden', true);
+	$('#editRoom').attr('hidden', true);
 	
 }
 
@@ -762,3 +770,124 @@ function submitDate(event){
 		}
 	})
 }
+
+function showNewRoom(event){
+	event.preventDefault();
+	home();
+	$('#newRoomForm').attr('hidden', false);
+	
+	
+}
+
+function newRoom(event){
+	event.preventDefault();
+	let name = $('#uRoomName').val();
+	let desc = $('#uRoomDesc').val();
+	
+	if(name === '' || desc === ''){
+		alert('Fields must not be empty');
+		return;
+	}
+	
+	$.post({
+		url:'sala/nova_sala/' + sessionStorage.getItem("id"),
+		type:'POST',
+		data: JSON.stringify({name, desc}),
+		contentType:'application/json',
+		success: function(){
+			alert("The room has been added");
+			$('#uRoomName').val('');
+			$('#uRoomDesc').val('');
+			home();
+		},
+		error: function(){
+			alert('Something went wrong');
+		}
+	});
+}
+
+function showTableRoom(room){
+	
+	let tr = $('<tr></tr>');
+	let tdName = $('<td>' + room.ime + '</td>');
+	let tdDesc = $('<td>' + room.opis + '</td>');
+	let tdDates = $('<td></td>');
+	$.ajax({
+		url:'sala/sve_sale_klinika_termini/' + room.id,
+		type: 'GET',
+		success: function(termin){
+			for(let t of termin){
+				tdDates.append(t.datumStr);
+				tdDates.append('<br/>');
+			}
+		},
+		error: function(){
+			alert('Something went wrong');
+		}
+	});
+	
+	let tdActions = $('<td></td>');
+	
+	let aEdit = $('<a href = "#">Edit Room </a><br/>');
+	let aDelete = $('<a href = "#">Delete</a>');
+	
+	aEdit.on('click', function(event){
+		event.preventDefault();
+	});
+	
+	aDelete.on('click', function(event){
+		event.preventDefault();
+		$.ajax({
+			url:'sala/obrisi_salu/' + room.id,
+			type:'DELETE',
+			success: function(free){
+				if(free === 1){
+					alert('The room was removed');
+					home();
+				}else{
+					alert('The room is already reserved and cannot be deleted');
+				}
+			},
+			error: function(){
+				alert('Something went wrong');
+			}
+		})
+	});
+	
+	tdActions.append(aEdit).append(aDelete);
+	
+	tr.append(tdName).append(tdDesc).append(tdDates).append(tdActions);
+	
+	$('#showRoomsTable tbody').append(tr);
+}
+function showAllRooms(event){
+	event.preventDefault();
+	home();
+	$('#showRoomsTable tbody').empty();
+	$('#showRoomsTable').attr('hidden', false);
+	
+	$.ajax({
+		url:'sala/sve_sale_klinika/' + sessionStorage.getItem("id"),
+		type:'GET',
+		success: function(sale){
+			for(let s of sale){
+				showTableRoom(s);
+			}
+		},
+		error: function(){
+			alert('Something went wrong');
+		}
+	});
+}
+
+function editRoom(room){
+	home();
+	$('#editRoom').attr('hidden', false);
+	$('#eRoomName').val(room.ime);
+	$('#eRoomDesc').val(room.opis);
+}
+
+function editRoomData(event){
+	event.preventDefault();
+}
+
