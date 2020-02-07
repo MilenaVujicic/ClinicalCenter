@@ -251,9 +251,9 @@
 			let tr = $('<tr></tr>');
 			let tdName = $('<td>'+pregled.naziv+'</td>');
 			let tdDate = $('<td>'+pregled.datumIVremePregleda.toString().substr(0, 10)+'</td>');
-			let tdType = $('<td>'+pregled.tipPregleda+'</td>');
+			let tdType = $('<td>'+pregled.tipPregleda.naziv+'</td>');
 			let tdAnamnesis = $('<td>'+pregled.anamneza+'</td>');
-			let tdPrice = $('<td>'+pregled.cena+'</td>');
+			let tdPrice = $('<td>'+pregled.tipPregleda.cena+'</td>');
 			tr.append(tdName).append(tdDate).append(tdType).append(tdAnamnesis).append(tdPrice);
 			$('#allExaminations tbody').append(tr);
 		}

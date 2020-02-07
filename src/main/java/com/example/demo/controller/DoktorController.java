@@ -38,6 +38,7 @@ import com.example.demo.model.Sala;
 import com.example.demo.model.StatusOperacije;
 import com.example.demo.model.StatusPregleda;
 import com.example.demo.model.StatusRecepta;
+import com.example.demo.model.TipPregleda;
 import com.example.demo.model.UlogaKorisnika;
 import com.example.demo.model.VrstaOdsustva;
 import com.example.demo.model.Zahtev;
@@ -53,6 +54,7 @@ import com.example.demo.service.PacijentService;
 import com.example.demo.service.PregledService;
 import com.example.demo.service.ReceptService;
 import com.example.demo.service.SalaService;
+import com.example.demo.service.TipPregledaService;
 import com.example.demo.service.ZahtevService;
 
 import net.minidev.json.JSONObject;
@@ -102,6 +104,9 @@ public class DoktorController {
 	
 	@Autowired
 	OdsustvoService odsustvoService;
+	
+	@Autowired
+	private TipPregledaService tipPregledaService;
 
 	@RequestMapping(value = "/svi_pacijenti", method = RequestMethod.GET)
 	public ResponseEntity<List<Korisnik>> sviPacijenti() {
@@ -122,13 +127,16 @@ public class DoktorController {
 			pregled = pregledService.findOne(pregledDTO.getId());
 		}
 		
+		TipPregleda tipPregleda = tipPregledaService.findByNaziv(splitter[1]);
+		tipPregleda.setZauzet(true);
+		
+		
 		Doktor doktor = doktorService.findByIdKorisnik(LogedUser.getInstance().getUserId());
 		Sala sala = salaService.findOne((long) 1);
 		Pacijent pacijent = pacijentService.findByIdKorisnik(identifikacija);
 		pregled.setNaziv(pregledDTO.getNaziv());
 		pregled.setAnamneza(pregledDTO.getAnamneza());
-		pregled.setTipPregleda(pregledDTO.getTipPregleda());
-		pregled.setCena(pregledDTO.getCena());
+		pregled.setTipPregleda(tipPregleda);
 		Calendar c = Calendar.getInstance();
 		pregled.setDatumIVremePregleda(c);
 
@@ -136,12 +144,13 @@ public class DoktorController {
 		pregled.setStatus(StatusPregleda.ZAVRSEN);
 		pregled.setPacijent(pacijent);
 		pregled.setSala(sala);
-		for (int i = 1; i < splitter.length; i++) {
+		for (int i = 2; i < splitter.length; i++) {
 			Dijagnoza dijagnoza = dijagnozaService.findOne(Long.parseLong(splitter[i]));
 			pregled.getDijagnoze().add(dijagnoza);
 		}
 		
 		Pregled p = pregledService.save(pregled);
+		TipPregleda t = tipPregledaService.save(tipPregleda);
 		return new ResponseEntity<PregledDTO>(new PregledDTO(p), HttpStatus.OK);
 	}
 	
