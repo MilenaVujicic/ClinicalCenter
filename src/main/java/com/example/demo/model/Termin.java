@@ -44,7 +44,7 @@ public class Termin {
 	private Doktor doktor;
 
 	@Version
-	private Long version;
+	private int version = 0;
 	
 	public Termin() {
 		super();
@@ -147,7 +147,13 @@ public class Termin {
 		this.cena = cena;
 	}
 
-	
+	public int getVersion() {
+		return version;
+	}
+
+	public void setVersion(int version) {
+		this.version = version;
+	}
 	
 	
 	
