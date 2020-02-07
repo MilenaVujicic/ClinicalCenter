@@ -16,6 +16,7 @@ import javax.persistence.Id;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
+import javax.persistence.Version;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
@@ -55,6 +56,9 @@ public class Doktor {
 	@JsonIgnore
 	@OneToMany(mappedBy = "doktor", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 	private Set<Termin> termin = new HashSet<Termin>();
+	
+	@Version
+	private Long version;
 	
 	public Doktor() {
 		super();

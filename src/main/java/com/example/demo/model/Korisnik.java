@@ -15,6 +15,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
+import javax.persistence.Version;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
@@ -239,6 +240,7 @@ public class Korisnik {
 	public void setBrojPrijava(int brojPrijava) {
 		this.brojPrijava = brojPrijava;
 	}
+	
 
 	@Override
 	public String toString() {

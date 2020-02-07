@@ -518,28 +518,32 @@ function odbijanje(id) {
 	return function() {
   		$('#denyText').attr('hidden', false);
   		$('#denyButton').attr('hidden', false);
-  		$('#denyButton').click(odbij(id));
+  		$('#denyID').val(id);
 	}
 }
 
-function odbij(id) {
-	return function() {
-		let text = $('#denyText').val();
-		let url = "/admin_klinickog_centra/odbij/" + id + "~" + text;
-		$.ajax({
-            url: url,
-            type:"GET",
-            success: function() {
-            	$('#denyText').attr('hidden', true);
-		  		$('#denyButton').attr('hidden', true);
-		  		$('#denyText').val('');
-            	requests();
-            },
-            error: function() {
-            	alert('Desila se greska');
-            }
-     	});
-	}
+function odbij() {
+	let text = $('#denyText').val();
+	let id = $('#denyID').val();
+	let url = "/admin_klinickog_centra/odbij/" + id + "~" + text;
+	$.ajax({
+        url: url,
+        type:"GET",
+        success: function() {
+        	$('#denyText').attr('hidden', true);
+	  		$('#denyButton').attr('hidden', true);
+	  		$('#denyText').val('');
+        	requests();
+        },
+        error: function() {
+        	alert('Izgleda da se neko vec prihvatio/odbio registraciju pre vas');
+        	$('#denyText').attr('hidden', true);
+        	$('#denyButton').attr('hidden', true);
+        	$('#denyText').val('');
+        	requests();
+        }
+ 	});
+	
 }
 
 function prihvati(id) {
@@ -551,7 +555,8 @@ function prihvati(id) {
             	requests();
             },
             error: function() {
-            	alert('Desila se greska');
+            	alert('Izgleda da se neko vec prihvatio/odbio registraciju pre vas');
+            	requests();
             }
      	});
 	}

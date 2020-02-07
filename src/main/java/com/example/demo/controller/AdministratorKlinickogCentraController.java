@@ -226,7 +226,7 @@ public class AdministratorKlinickogCentraController {
 	}
 	
 	@RequestMapping(value = "/prihvati/{id}", method = RequestMethod.GET)
-	public ResponseEntity<KorisnikDTO> prihvati(@PathVariable("id") Long identifikacija) {
+	public ResponseEntity<KorisnikDTO> prihvati(@PathVariable("id") Long identifikacija)  {
 		List<Korisnik> korisnici = korisnikService.findAll();
 		Korisnik korisnik = new Korisnik();
 		for(Korisnik k : korisnici) {
@@ -234,17 +234,14 @@ public class AdministratorKlinickogCentraController {
 				korisnik = k;
 			}
 		}
-		korisnik.setAktivan(true);
-		Korisnik kor = korisnikService.save(korisnik);
+		Korisnik kor = null;
 		try {
-			emailService.sendNotificaitionAllow(kor);
-		} catch (MailException e) {
-			// TODO Auto-generated catch block
-			System.out.println("##################### Desila se greska1" + e.getMessage());
-		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
-			System.out.println("##################### Desila se greska2");
+			kor = korisnikService.prihvatiRegistraciju(korisnik);
 		}
+		catch (Exception e) {
+			System.out.println(e);
+		}
+		
 		return new ResponseEntity<KorisnikDTO>(new KorisnikDTO(kor), HttpStatus.OK);
 	}
 	
@@ -254,22 +251,26 @@ public class AdministratorKlinickogCentraController {
 		String[] splitter = text.split("~");
 		Long identifikacija = Long.parseLong(splitter[0]);
 		String razlog = splitter[1];
-		List<Korisnik> korisnici = korisnikService.findAll();
-		Korisnik korisnik = new Korisnik();
-		for(Korisnik k : korisnici) {
-			if(k.getId().equals(identifikacija)) {
-				korisnik = k;
+		Boolean odgovor = true;
+		Korisnik k = korisnikService.findOne(identifikacija);
+		if(k != null && !k.isAktivan()) {
+			odgovor = false;
+			korisnikService.delete(k);
+		}
+		
+		if (!odgovor) {
+			try {
+				emailService.sendNotificationDeny(k, razlog);
+			} catch (MailException e) {
+				// TODO Auto-generated catch block
+				System.out.println("##################### Desila se greska1" + e.getMessage());
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				System.out.println("##################### Desila se greska2");
 			}
 		}
-		korisnikService.delete(korisnik);
-		try {
-			emailService.sendNotificationDeny(korisnik, razlog);
-		} catch (MailException e) {
-			// TODO Auto-generated catch block
-			System.out.println("##################### Desila se greska1" + e.getMessage());
-		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
-			System.out.println("##################### Desila se greska2");
+		if(odgovor) {
+			return new ResponseEntity<String>(HttpStatus.BAD_REQUEST);
 		}
 		return new ResponseEntity<String>("", HttpStatus.OK);
 	}

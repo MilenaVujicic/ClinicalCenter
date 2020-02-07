@@ -19,6 +19,7 @@ import com.example.demo.model.Korisnik;
 import com.example.demo.model.Pacijent;
 import com.example.demo.service.EmailService;
 import com.example.demo.service.KorisnikService;
+import com.example.demo.service.PacijentService;
 
 @RestController
 @RequestMapping(value = "korisnik")
@@ -29,6 +30,9 @@ public class KorisnikController {
 	
 	@Autowired
 	EmailService emailService;
+	
+	@Autowired
+	PacijentService pacijentService;
 
 
 	@RequestMapping(value = "/korisnik/{id}", method=RequestMethod.GET)
@@ -54,6 +58,7 @@ public class KorisnikController {
 			// TODO Auto-generated catch block
 			System.out.println("################ Desila se greska 3");
 		}
+		
 		return new ResponseEntity<KorisnikDTO>(new KorisnikDTO(k), HttpStatus.OK);
 	}
 	
