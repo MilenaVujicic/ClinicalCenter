@@ -105,8 +105,8 @@ insert into operacija(pacijent_id, status, datumivreme_operacije, trajanje, vers
 
 insert into operacija(pacijent_id, status, datumivreme_operacije, trajanje, version) values(1, 0, '2020-02-01 17:00', 0, 0);
 
-insert into operacija(pacijent_id, status, datumivreme_operacije, trajanje, version) values(2, 0, '2020-02-01 17:00', 0, 0);
-insert into operacija(pacijent_id, status, datumivreme_operacije, trajanje, version) values(2, 0, '3-2-2020 21:00', 0, 0);
+insert into operacija(pacijent_id, status, datumivreme_operacije, trajanje, version) values(10, 0, '2020-02-01 17:00', 0, 0);
+insert into operacija(pacijent_id, status, datumivreme_operacije, trajanje, version) values(10, 0, '3-2-2020 21:00', 0, 0);
 insert into operacija(pacijent_id, status, datumivreme_operacije, trajanje, version) values(1, 0, '4-2-2020 20:00', 0, 0);
 insert into operacija(pacijent_id, status, datumivreme_operacije, trajanje, sala_id, version) values(1, 1, '5-1-2020 18:00', 0, 1, 0);
 insert into operacija(pacijent_id, status, datumivreme_operacije, trajanje, opis, sala_id, version) values(1, 2, '5-1-2020 18:00', 0, 'Pacijentu je izvadjen umnjak', 1, 0);
