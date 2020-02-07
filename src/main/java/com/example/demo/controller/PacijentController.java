@@ -330,7 +330,7 @@ public class PacijentController {
 		Calendar cal = termin.getDatum();
 		cal.add(Calendar.HOUR_OF_DAY, -1);
 		System.out.println(cal.getTime());
-		Termin t = terminService.findOne(1L);
+		Termin t = terminService.findOne(id_pregleda_l);
 		System.out.println("#############" + t.isSlobodan());
 		try {
 			emailService.sendNotificaitionTermin(user, admin, termin);

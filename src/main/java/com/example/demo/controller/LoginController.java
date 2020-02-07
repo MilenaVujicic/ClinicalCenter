@@ -53,7 +53,7 @@ public class LoginController {
 		}
 		
 		
-		if(!korisnik.isAktiviran()) {
+		if(korisnik.isAktiviran()) {
 			System.out.println(korisnik.getId().toString());
 			String response = korisnik.getId().toString();
 			korisnik.setBrojPrijava(korisnik.getBrojPrijava() + 1);
