@@ -221,6 +221,11 @@ function personalData() {
 	$('#restForm').attr('hidden', true);
 	$('#calendar').attr('hidden', true);
 	document.getElementById("title").innerHTML = "";
+	
+}
+
+function editData(){	
+	window.loaction = './changeUserData.html';
 	$('#personalData').attr('hidden', false);
 	let session = sessionStorage.getItem("id");
 	$.ajax({

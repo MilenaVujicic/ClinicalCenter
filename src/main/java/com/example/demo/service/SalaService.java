@@ -54,6 +54,9 @@ public class SalaService {
 		return salaRepository.findById(id).orElse(null);
 	}
 	
+	public void delete(Sala s) {
+		salaRepository.delete(s);
+	}
 
 }
 

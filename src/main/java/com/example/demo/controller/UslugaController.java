@@ -7,13 +7,18 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.example.demo.dto.UslugaDTO;
+import com.example.demo.model.AdministratorKlinike;
+import com.example.demo.model.Klinika;
 import com.example.demo.model.Usluga;
+import com.example.demo.service.AdministratorKlinikeService;
+import com.example.demo.service.KlinikaService;
 import com.example.demo.service.UslugaService;
 
 import net.minidev.json.parser.ParseException;
@@ -26,6 +31,12 @@ public class UslugaController {
 
 	@Autowired
 	private UslugaService uslugaService;
+	
+	@Autowired
+	private AdministratorKlinikeService administratorService;
+	
+	@Autowired
+	private KlinikaService klinikaService;
 	
 	@RequestMapping(value = "/nova_usluga", method = RequestMethod.POST)
 	public ResponseEntity<Object> noviPregled(@RequestBody String json) throws ParseException{
@@ -110,4 +121,25 @@ public class UslugaController {
 		
 		
 	}
+	
+	@RequestMapping(value = "/cenaUsluge/{id}", method = RequestMethod.GET)
+	public ResponseEntity<List<UslugaDTO>> cenaUsluge(@PathVariable("id") Long id){
+		Optional<AdministratorKlinike> oak = administratorService.findByIdKorisnik(id);
+		AdministratorKlinike ak = oak.get();
+		
+		Optional<Klinika> ok = klinikaService.findById(ak.getKlinika().getId());
+		Klinika k = ok.get();
+	
+		List<Usluga> usluge = new ArrayList<Usluga>();
+		for(Usluga u : k.getUsluge()) {
+			usluge.add(u);
+		}
+		
+		List<UslugaDTO> retVal = new ArrayList<UslugaDTO>();
+		for(Usluga u : usluge) {
+			retVal.add(new UslugaDTO(u));
+		}
+		return new ResponseEntity<List<UslugaDTO>>(retVal, HttpStatus.OK);
+	}
+	
 }

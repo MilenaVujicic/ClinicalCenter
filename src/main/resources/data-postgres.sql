@@ -99,7 +99,17 @@ insert into pregled (naziv, anamneza, datumivreme_pregleda, status, tip_pregleda
 insert into pregledi_dijagnoze(pregled_id, dijagnoza_id) values(1, 2);
 
 
+/*
+insert into pregled (naziv, anamneza, datumivreme_pregleda, status, tip_pregleda, cena, doktor_id, pacijent_id, sala_id) values ('', '', '2-1-20 16:00:00', 2, '', 150, 4, 1, 1);
+insert into pregled (naziv, anamneza, datumivreme_pregleda, status, tip_pregleda, cena, doktor_id, pacijent_id, sala_id) values ('', '', '2-3-20 14:00:00', 2, '', 250, 4, 1, 1);
+insert into pregled (naziv, anamneza, datumivreme_pregleda, status, tip_pregleda, cena, doktor_id, pacijent_id, sala_id) values ('', '', '2-3-20 15:00:00', 2, '', 200, 4, 1, 1);
+insert into pregled (naziv, anamneza, datumivreme_pregleda, status, tip_pregleda, cena, doktor_id, pacijent_id, sala_id) values ('', '', '2-3-20 14:00:00', 2, '', 200, 4, 1, 1);
+insert into pregled (naziv, anamneza, datumivreme_pregleda, status, tip_pregleda, cena, doktor_id, pacijent_id, sala_id) values ('', '', '2-5-20 13:00:00', 2, '', 200, 4, 1, 1);
+*/
+insert into operacija(pacijent_id, status, datumivreme_operacije, trajanje) values(1, 0, '1-1-2020 17:00', 0);
+
 insert into operacija(pacijent_id, status, datumivreme_operacije, trajanje) values(1, 0, '2-1-2020 17:00', 0);
+
 insert into operacija(pacijent_id, status, datumivreme_operacije, trajanje) values(2, 0, '2-1-2020 17:00', 0);
 insert into operacija(pacijent_id, status, datumivreme_operacije, trajanje) values(2, 0, '3-2-2020 21:00', 0);
 insert into operacija(pacijent_id, status, datumivreme_operacije, trajanje) values(1, 0, '4-2-2020 20:00', 0);
@@ -117,6 +127,11 @@ insert into odsustvo (korisnik_id, vrsta_odsustva, pocetak_odsustva, zavrsetak_o
 insert into odsustvo (korisnik_id, vrsta_odsustva, pocetak_odsustva, zavrsetak_odsustva, odobren) values (9, 1, '2020-02-25', '2020-02-28', FALSE);
 
 insert into usluga(naziv, opis, cena, klinika_id) values ('Pregled','Obican pregled','2000',1);
+insert into usluga(naziv, opis, cena, klinika_id) values ('Pregled','Obican pregled','2000',2);
+insert into usluga(naziv, opis, cena, klinika_id) values ('Pregled specijaliste','Specijalisticki','4000',2);
+insert into odsustvo (korisnik_id, vrsta_odsustva, pocetak_odsustva, zavrsetak_odsustva, odobren) values (5, 1, '2020-01-25', '2020-01-28', TRUE);
+insert into odsustvo (korisnik_id, vrsta_odsustva, pocetak_odsustva, zavrsetak_odsustva, odobren) values (5, 1, '2020-02-25', '2020-02-28', FALSE);
+
 
 insert into odsustvo (korisnik_id, vrsta_odsustva, pocetak_odsustva, zavrsetak_odsustva, odobren) values (7, 1, '2020-01-25', '2020-01-28', TRUE);
 insert into odsustvo (korisnik_id, vrsta_odsustva, pocetak_odsustva, zavrsetak_odsustva, odobren) values (8, 1, '2020-02-25', '2020-02-28', FALSE);

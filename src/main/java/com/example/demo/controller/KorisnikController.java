@@ -29,8 +29,8 @@ public class KorisnikController {
 	
 	@Autowired
 	EmailService emailService;
-	
-	
+
+
 	@RequestMapping(value = "/korisnik/{id}", method=RequestMethod.GET)
 	public Korisnik getKorisnik(@PathVariable Long id) {
 		Korisnik korisnik = korisnikService.findOne(id);
@@ -153,4 +153,5 @@ public class KorisnikController {
 		
 		return new ResponseEntity<String>("Uspesno promenjena lozinka", HttpStatus.OK);
 	}
+
 }

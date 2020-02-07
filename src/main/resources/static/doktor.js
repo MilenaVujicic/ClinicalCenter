@@ -48,6 +48,7 @@ function home() {
 
 function newAbsence(event){
 	event.preventDefault();
+	home();
 	$('#absenceForm').attr('hidden', false);
 	
 
@@ -337,6 +338,7 @@ function scheduledPatients() {
 	$('#aboutPatient').attr('hidden', true);
 	$('#tPersonalData').attr('hidden', true);
 	$('#tPersonalDataH').attr('hidden', true);
+	$('#absenceForm').attr('hidden', true);
 	dijagnoze();
 	lekovi();
 	tipovi();
@@ -575,18 +577,22 @@ function savePregled(){
 	let examTime = $('#timeExam').val();
 	let name = $('#patientName').val();
 	let surname = $('#patientSurname').val();
-	let patient = name + '_' + surname;
-	let id = 4;
+	//let patient = name + '_' + surname;
+	if(examDate === '' || examTime === ''){
+		alert('The fields must not be empty');
+		return;
+	}
+	let jmbg = $('#patientJMBG').val();
 	$.ajax({
-		url: 'doktor/pregled/' + patient + '/' + id,
+		url: 'doktor/pregled/' + sessionStorage.getItem("id"),
 		type: "POST",
-		data: JSON.stringify({examDate, examTime}),
+		data: JSON.stringify({examDate, examTime, jmbg}),
 		contentType: 'application/json',
-		succes: function(ret){
+		success: function(ret){
 			alert('The request has been sent');
 		},
 		error: function(){
-			alert('Desila se greska');
+			alert('Something went wrong');
 		}
 	})
 }
@@ -1055,14 +1061,19 @@ function saveOperation(){
 	let opTime = $('#timeOp').val();
 	let name = $('#patientName').val();
 	let surname = $('#patientSurname').val();
-	let patient = name + '_' + surname;
-	let id = 4;
+	//let patient = name + '_' + surname;
+	let jmbg = $('#patientJMBG').val();
+	
+	if(opDate === '' || opTime == ''){
+		alert('The fields must not be empty');
+		return;
+	}
 	$.ajax({
-		url: 'doktor/operacija/' + patient +'/' + id,
+		url: 'doktor/operacija/' + sessionStorage.getItem("id"),
 		type: "POST",
-		data: JSON.stringify({opDate, opTime}),
+		data: JSON.stringify({opDate, opTime, jmbg}),
 		contentType: 'application/json',
-		succes: function(ret){
+		success: function(ret){
 			alert('The request has been sent');
 		},
 		error: function(){
@@ -1202,6 +1213,10 @@ function cancelOperation(){
 	$('#operationForm').attr('hidden', true);
 	$('#dateOp').val('');
 	$('#timeOp').val('');
+}
+
+function editData(){
+	window.location.href = './changePresonalData.html';
 }
 
 

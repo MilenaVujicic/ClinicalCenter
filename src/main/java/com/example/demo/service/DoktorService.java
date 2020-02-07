@@ -2,6 +2,7 @@ package com.example.demo.service;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -33,6 +34,9 @@ public class DoktorService {
 		return doktorRespository.findAllByKlinika(k);
 	}
 
+	public Optional<Doktor> findById(Long id) {
+		return doktorRespository.findById(id);
+	}
 	public Doktor save(Doktor doktor) {
 
 		return doktorRespository.save(doktor);

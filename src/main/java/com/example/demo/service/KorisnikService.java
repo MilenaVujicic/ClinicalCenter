@@ -100,6 +100,10 @@ public class KorisnikService implements IUserService {
 		return korisnikRepository.findByEmail(email);
 	}
 	
+	public Optional<Korisnik> findByJmbg(Long jmbg){
+		return korisnikRepository.findByJmbg(jmbg);
+	}
+	
 
 
 }

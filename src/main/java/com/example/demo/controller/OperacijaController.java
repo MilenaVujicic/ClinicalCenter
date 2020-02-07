@@ -71,7 +71,7 @@ public class OperacijaController {
 		if (!LogedUser.getInstance().getUserRole().equals(UlogaKorisnika.ADMIN_KLINIKE)) {
 			return new ResponseEntity<List<Operacija>>(HttpStatus.BAD_REQUEST);
 		}
-		AdministratorKlinike admin = adminKlinikeService.findByIdKorisnika(LogedUser.getInstance().getUserId());
+		AdministratorKlinike admin = adminKlinikeService.findByIdKorisnik(LogedUser.getInstance().getUserId().toString());
 		List<Operacija> operacije = operacijaService.findByStatus(StatusOperacije.NERASPOREDJEN);
 		List<Operacija> operacijeKlinike = new ArrayList<Operacija>();
 		for (Operacija o : operacije) {

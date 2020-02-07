@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -23,13 +24,20 @@ import com.example.demo.model.Operacija;
 import com.example.demo.model.Pregled;
 import com.example.demo.model.Sala;
 import com.example.demo.model.Termin;
+
 import com.example.demo.model.UlogaKorisnika;
+
 import com.example.demo.service.AdministratorKlinikeService;
 import com.example.demo.service.KlinikaService;
 import com.example.demo.service.KorisnikService;
 import com.example.demo.service.OperacijaService;
 import com.example.demo.service.PregledService;
 import com.example.demo.service.SalaService;
+import com.example.demo.service.TerminService;
+
+import net.minidev.json.JSONObject;
+import net.minidev.json.parser.JSONParser;
+import net.minidev.json.parser.ParseException;
 
 @RestController
 @RequestMapping(value = "sala")
@@ -48,10 +56,16 @@ public class SalaController {
 	OperacijaService operacijaService;
 	
 	@Autowired
-	AdministratorKlinikeService adminKlinikeService;
+	AdministratorKlinikeService administratorService;
+	
+	@Autowired
+	TerminService terminService;
+
+
 	
 	@Autowired
 	KorisnikService korisnikService;
+
 
 	@RequestMapping(value = "/sveSale/{val}", method=RequestMethod.GET)
 	public ResponseEntity<List<SalaDTO>> getSveSale(@PathVariable String val){
@@ -173,6 +187,27 @@ public class SalaController {
 		return new ResponseEntity<Object>(null, HttpStatus.OK);
 	}
 	
+	@RequestMapping(value = "/nova_sala/{id}", method = RequestMethod.POST)
+	public ResponseEntity<String> novaSalaID(@PathVariable("id") Long id, HttpEntity<String> json) throws ParseException{
+		String jString = json.getBody();
+		JSONParser parser = new JSONParser();
+		JSONObject jObj = (JSONObject)parser.parse(jString);
+		
+		String name = (String) jObj.get("name");
+		String description = (String) jObj.get("desc");
+		
+		Optional<AdministratorKlinike> oak = administratorService.findByIdKorisnik(id);
+		AdministratorKlinike ak = oak.get();
+		
+		Sala s = new Sala();
+		s.setIme(name);
+		s.setOpis(description);
+		s.setKlinika(ak.getKlinika());
+		
+		salaService.save(s);
+		return new ResponseEntity<String>("Dodata sala", HttpStatus.OK);
+	}
+	
 	@RequestMapping(value = "/search/{val}", method = RequestMethod.GET)
 	public ResponseEntity<List<SalaDTO>> getSale(@PathVariable String val){
 		List<SalaDTO> sale = new ArrayList<SalaDTO>();
@@ -233,7 +268,7 @@ public class SalaController {
 			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 		}
 		Operacija operacija = operacijaService.findOne(identifikacija);
-		AdministratorKlinike admin = adminKlinikeService.findByIdKorisnika(LogedUser.getInstance().getUserId());
+		AdministratorKlinike admin = administratorService.findByIdKorisnik(LogedUser.getInstance().getUserId().toString());
 		Klinika klinika = klinikaService.findOne(admin.getKlinika().getId());
 		List<Sala> sveSale = salaService.findByKlinika(klinika);
 		System.out.println("##########sve_sale" + sveSale.size());
@@ -256,7 +291,7 @@ public class SalaController {
 		}
 		System.out.println("##############drugi slobodni termini");
 		Operacija operacija = operacijaService.findOne(identifikacija);
-		AdministratorKlinike admin = adminKlinikeService.findByIdKorisnika(LogedUser.getInstance().getUserId());
+		AdministratorKlinike admin = administratorService.findByIdKorisnik(LogedUser.getInstance().getUserId().toString());
 		Klinika klinika = klinikaService.findOne(admin.getKlinika().getId());
 		List<Sala> sveSale = salaService.findByKlinika(klinika);
 		Sala rezervisanaSala = sveSale.get(0);
@@ -371,4 +406,53 @@ public class SalaController {
 		return new ResponseEntity<Sala>(rezervisanaSala, HttpStatus.OK);
 	}
 	
+	@RequestMapping(value = "/sve_sale_klinika/{id}", method = RequestMethod.GET)
+	public ResponseEntity<List<SalaDTO>> sveSaleKlinika(@PathVariable("id") Long id){
+		List<SalaDTO> retVal = new ArrayList<SalaDTO>();
+		
+		Optional<AdministratorKlinike> oak = administratorService.findByIdKorisnik(id);
+		AdministratorKlinike ak = oak.get();
+		
+		Optional<Klinika> ok = klinikaService.findById(ak.getKlinika().getId());
+		Klinika k = ok.get();
+		
+		for(Sala s : k.getSale()) {
+			retVal.add(new SalaDTO(s));
+		}
+		
+		return new ResponseEntity<List<SalaDTO>>(retVal, HttpStatus.OK);
+	}
+	
+	@RequestMapping(value = "/sve_sale_klinika_termini/{id}", method = RequestMethod.GET)
+	public ResponseEntity<List<TerminDTO>> sviTerminiSala(@PathVariable("id") Long id){
+	
+		List<TerminDTO> retVal = new ArrayList<TerminDTO>();
+		
+		Sala s = salaService.findOne(id);
+		
+		for(Termin t : s.getSlobodniTermini()) {
+			if(t.isSlobodan()) {
+				retVal.add(new TerminDTO(t));
+			}
+		}
+		return new ResponseEntity<List<TerminDTO>>(retVal, HttpStatus.OK);
+	}
+	
+	@RequestMapping(value = "/obrisi_salu/{id}", method = RequestMethod.DELETE)
+	public ResponseEntity<Integer> obrisiSalu(@PathVariable("id") Long id){
+		Integer retVal = new Integer(0);
+		Sala s = salaService.findOne(id);
+		List<Termin> termini = terminService.findAll();
+		for(Termin t : termini) {
+			if(t.getSala().getId() == s.getId()) {
+				if(!t.isSlobodan()) {
+					return new ResponseEntity<Integer>(retVal, HttpStatus.OK);
+				}
+			}
+		}
+		salaService.delete(s);
+		//salaService.save(s);
+		retVal = new Integer(1);
+		return new ResponseEntity<Integer>(retVal, HttpStatus.OK);
+	}
 }

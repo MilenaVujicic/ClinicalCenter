@@ -33,10 +33,28 @@
 	    </div>
 	    <ul class="nav navbar-nav">
 	      <li><a onclick="return home();">Home</a></li>
+
+	      <li class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">Add <span class="caret"></span></a>
+	        <ul class="dropdown-menu">
+	          <li><a href = "#" id = "aDefineApt">New Appointment</a></li>
+	          <li><a href = "#" id = "aNewDoctor">New Doctor</a></li>
+	          <li><a href = "#" id = "aNewRoom">New Room</a>
+	        </ul>
+	      </li>
+	      <li class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">Clinic<span class="caret"></span></a>
+	         <ul class="dropdown-menu">
+	          <li><a href = "#" id = "aEditClinic">Edit clinic data</a></li>
+	          <li><a href = "#" id = "aShowRooms">Rooms</a></li>  
+	          <li><a href = "#" id = "aShowDoctors">Doctors</a></li>
+	          <li><a href = "#" id = "aShowPrices">Pricing</a></li>
+	        </ul>
+	      </li>
+	      <li><a href = "#" id = "aStats">Clinic stats</a>
+
 	      <li><a href = "#" id = "aVacation">Staff vacations</a>
 	      <li><a href = "#" id = "aApt">Appointmen requests</a>
 	      <li><a onclick="return operationRequest();">Operation requests</a></li>
-	      <li><a href="#">Personal data</a></li>
+	      <li><a href="#" id = "aPersonalData">Personal data</a></li>
 	    </ul>
 	    <ul class="nav navbar-nav navbar-right">
 	      <li><a href="#"><span class="glyphicon glyphicon-log-out"></span> Logout</a></li>
@@ -94,8 +112,7 @@
 		</tbody>
 </table>
 	
-	
-	
+
 	
 	<table class = "table" id = "tAbsence" hidden = "true">
 	<thead>
@@ -114,10 +131,132 @@
 	</tbody>
 	</table>
 	
+		<table class = "table" id = "personalDataTable" hidden = "true">
+		<thead>
+			<tr>
+			<th scope = "col">Name: </th>
+			<th scope = "col">Surname: </th>
+				<th scope = "col">JMBG: </th>
+				<th scope = "col">City: </th>
+				<th scope = "col">Country: </th>
+				<th scope = "col">Address: </th>
+				<th scope = "col">DOB: </th>
+				<th scope = "col">Phone: </th>
+				<th scope = "col">Email: </th>
+				<th scope = "col">Action: </th>
+			</tr>
+		</thead>
+		<tbody>
+		</tbody>
+	</table>
+	
 	<div class="form-row" id="doctors" hidden="true">
 
 	</div>
 
+	<table class = "table" id = "pricingTable" hidden = "true">
+	<thead>
+	<tr>
+	<th>Service name: </th>
+	<th>Price: </th>
+	</tr>
+	<tbody>
+	</tbody>
+	</table>
+	<!-- <table class = "table" id = "doctorsTable" hidden = "true">
+	<thead>
+	<tr>
+	<th scope = "col">Name: </th>
+	<th scope = "col">Surname: </th>
+	<th scope = "col">Specialization: </th>
+	<th scope = "col">Rating: </th>
+	<th scope = "col">Actions: </th>
+	</tr>
+	</thead>
+	<tbody>
+	</tbody>
+	</table> -->
+	
+	<div id = "divStats" hidden = "true">
+	<h4 id = "pClRating">Clinic Rating: </h4>
+	<br/>
+	<h4>Doctor Ratings: </h4>
+	<table class = "table" id ="doctorsRatingTable">
+	<thead>
+	<tr>
+	<th scope = "col">Name: </th>
+	<th scope = "col">Surname: </th>
+	<th scope = "col">Rating: </th>
+	</tr>
+	</thead>
+	<tbody>
+	</tbody>
+	</table>
+	<br/>
+	<h4>Number of examinations</h4>
+	<p id = "pTemp"></p>
+	<canvas id = "cGraph" width = "250"></canvas>
+	<br/>
+	<label>Enter date range</label>
+	<input type = "date" id = "dBegin">
+	<input type = "date" id = "dEnd">
+	<button id = "btnSubmit">Submit</button>
+	<h4 id = "hEarnings"></h4>
+	
+	</div>
+	
+<form id = "newRoomForm" hidden = "true">
+	<div class="form-row">
+	<div class="form-group col-md-8">
+		<label for="patientName">Room Name: </label>
+		<input type="text" class="form-control" id="uRoomName">
+	</div>
+	</div>
+	<div class="form-row">
+	<div class="form-group col-md-8">
+		<label for="patientName">Room Description: </label>
+		<input type="text" class="form-control" id="uRoomDesc">
+	</div>
+	</div>
+	<div class = "form-row">
+	<div class="form-group col-md-8">
+		<a class="btn btn-success" id = "btnSaveNewRoom">Save</a>
+	</div>
+	</div>
+</form>
+
+<form id = "editRoom" hidden = "true">
+	<div class="form-row">
+	<div class="form-group col-md-8">
+		<label for="patientName">Room Name: </label>
+		<input type="text" class="form-control" id="eRoomName">
+	</div>
+	</div>
+	<div class="form-row">
+	<div class="form-group col-md-8">
+		<label for="patientName">Room Description: </label>
+		<input type="text" class="form-control" id="eRoomDesc">
+	</div>
+	</div>
+	<div class = "form-row">
+	<div class="form-group col-md-8">
+		<a class="btn btn-success" id = "btnSaveRoom">Save</a>
+	</div>
+	</div>
+</form>
+
+<table class = "table" id = "showRoomsTable" hidden = "true">
+<thead>
+<tr>
+<th scope = "col">Name: </th>
+<th scope = "col">Description</th>
+<th scope = "col">Dates Free: </th>
+<th scope = "col">Actions:</th>
+</tr>
+</thead>
+<tbody>
+</tbody>
+</table>
 	
 </body>
 </html>

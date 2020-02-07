@@ -13,10 +13,15 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.example.demo.dto.KlinikaDTO;
 import com.example.demo.dto.KorisnikDTO;
+import com.example.demo.model.AdministratorKlinike;
+import com.example.demo.model.Klinika;
 import com.example.demo.model.Korisnik;
 import com.example.demo.model.Odsustvo;
+import com.example.demo.service.AdministratorKlinikeService;
 import com.example.demo.service.EmailService;
+import com.example.demo.service.KlinikaService;
 import com.example.demo.service.KorisnikService;
 import com.example.demo.service.OdsustvoService;
 
@@ -36,6 +41,12 @@ public class AdministratorController {
 	
 	@Autowired
 	EmailService emailService;
+	
+	@Autowired
+	KlinikaService klinikaService;
+	
+	@Autowired
+	AdministratorKlinikeService administratorService;
 	
 	@RequestMapping(value = "/trenutniAdmin/{id}", method = RequestMethod.GET)
 	public ResponseEntity<KorisnikDTO> trenutniAdmin(@PathVariable("id") Long adminID){
@@ -124,5 +135,19 @@ public class AdministratorController {
 		
 		odsustvoService.delete(o);
 		return new ResponseEntity<>(null, HttpStatus.OK);
+	}
+	
+	
+	@RequestMapping(value = "klinika_admin/{id}", method = RequestMethod.GET)
+	public ResponseEntity<KlinikaDTO> getAdminKlinika(@PathVariable("id") Long id){
+		Optional<AdministratorKlinike> ak = administratorService.findByIdKorisnik(id);
+		
+		Optional<Klinika> k = klinikaService.findById(ak.get().getKlinika().getId());
+		Klinika kl = k.get();
+		KlinikaDTO retVal = new KlinikaDTO(kl);
+		
+		return new ResponseEntity<KlinikaDTO>(retVal, HttpStatus.OK);
+		
+		
 	}
 }

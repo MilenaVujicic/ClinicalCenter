@@ -1,12 +1,54 @@
+let session = null;
 $(document).ready(()=>{
 	document.getElementById('aVacation').addEventListener('click', listAbsence, false);
 	document.getElementById('aApt').addEventListener('click', newApt, false);
+	document.getElementById('aPersonalData').addEventListener('click', seeData, false);
+	document.getElementById('aEditClinic').addEventListener('click', editClinicData, false);
+	document.getElementById('aDefineApt').addEventListener('click', defineNewApt, false);
+	document.getElementById('aShowPrices').addEventListener('click', showPrices, false);
+	//document.getElementById('aShowRooms').addEventListener('click', showRooms, false);
+	document.getElementById('aStats').addEventListener('click', showStats, false);
+	document.getElementById('btnSubmit').addEventListener('click', submitDate, false);
+	document.getElementById('aNewRoom').addEventListener('click', showNewRoom, false);
+	document.getElementById('btnSaveNewRoom').addEventListener('click', newRoom, false);
+	document.getElementById('aShowRooms').addEventListener('click', showAllRooms, false);
+	document.getElementById('btnSaveRoom').addEventListener('click', editRoomData, false);
+	
+	session = sessionStorage.getItem("id");
+	if(session == null){
+		alert('You must be logged in to view this page!');
+		window.location.href = "./index.html";
+	}
+	$.ajax({
+		type: "GET",
+		url: 'korisnik/preuzmi/' + session,
+		success: function(korisnik){
+			if(korisnik.uloga != 'ADMIN_KLINIKE'){
+				alert('You must be a clinic administrator to access this page');
+				window.location.href = "./index.html";
+			}
+		},
+		error: function(){
+			alert('Something went wrong')
+		}
+	})
+	
 })
 
 function home() {
 	$('#requestsTable').attr('hidden', true);
 	$('#freeRooms').attr('hidden', true);
 	$('#doctors').attr('hidden', true);
+	$('#aptTable').attr('hidden', true);
+	$('#freeRoomsApt').attr('hidden', true);
+	$('#personalDataTable').attr('hidden', true);
+	$('#tAbsence').attr('hidden', true);
+	$('#pricingTable').attr('hidden', true);
+	$('#divStats').attr('hidden', true);
+	$('#newRoomForm').attr('hidden', true);
+	$('#showRoomsTable').attr('hidden', true);
+	$('#editRoom').attr('hidden', true);
+	
 }
 
 function prikaziDoktora(doktor, specijalizacija) {
@@ -97,7 +139,9 @@ function slobodnaSala(sala, operacija) {
 	$('#freeRooms tbody').append(tr);
 }
 
+
 function slTer1(operacija) {
+	home();
 	$('#requestsTable').attr('hidden', true);
 	$('#freeRooms').attr('hidden', false);
 	let session = sessionStorage.getItem("id");
@@ -160,6 +204,7 @@ function dodajZahtev(operacija, pacijent) {
 }
 
 function operationRequest() {
+	home();
 	$('#requestsTable').attr('hidden', false);
 	$('#freeRooms').attr('hidden', true);
 	$('#doctors').attr('hidden', true);
@@ -192,7 +237,8 @@ function operationRequest() {
 
 function listAbsence(event){
 	event.preventDefault();
-	
+	home();
+	$('#tAbsence tbody').empty();
 	$('#tAbsence').attr('hidden', false);
 	
 	$.ajax({
@@ -300,6 +346,7 @@ function listAbsence(event){
 
 function newApt(event){
 	event.preventDefault();
+	home();
 	$('#aptTable').attr('hidden', false);
 	aptRequest();
 }
@@ -350,6 +397,7 @@ function slobodnaProstorija(sala, pregled) {
 }
 
 function aptRequest() {
+	home();
 	$('#aptTable').attr('hidden', false);
 	$('#freeRoomsApt').attr('hidden', true);
 	$('#doctors').attr('hidden', true);
@@ -394,6 +442,7 @@ function dodajZahtevApt(pregled, pacijent) {
 
 
 function slTer(pregled) {
+	home();
 	$('#aptTable').attr('hidden', true);
 	$('#freeRoomsApt').attr('hidden', false);
 	
@@ -437,6 +486,51 @@ function slTer(pregled) {
 	});
 }
 
+function seeData(event){
+	event.preventDefault();
+	home();
+	$('#personalDataTable').attr('hidden', false);
+	$('#personalDataTable tbody').empty();
+	$.ajax({
+		url: 'korisnik/preuzmi/' + session,
+		type: 'GET',
+		success: function(korisnik){
+			let tr = $('<tr></tr>');
+			let tdName = $('<td>' + korisnik.ime + '</td>');
+
+			let tdSurname = $('<td>' + korisnik.prezime + '</td>');
+			
+			let tdJmbg = $('<td>' + korisnik.jmbg + '</td>');
+			
+			let tdCity = $('<td>' + korisnik.grad + '</td>');
+		
+			let tdCountry = $('<td>' + korisnik.drzava + '</td>');
+			
+			let tdAddress = $('<td>' + korisnik.adresa + '</td>');
+
+			let tdDob = $('<td>' + korisnik.datumRodjenja.substring(0,10) + '</td>');
+			
+			let tdPhone = $('<td>' + korisnik.telefon + '</td>');
+			
+			let tdEmail = $('<td>' + korisnik.email + '</td>');
+			
+			let tdAction = $('<td><a href = "#" id = "aEditPersonalData" >Edit data </a></td>');
+			
+			tdAction.on('click', function(event){
+				event.preventDefault();
+				window.location.href = './changePresonalData.html';
+			});
+			tr.append(tdName).append(tdSurname).append(tdJmbg).append(tdCity).append(tdCountry)
+			.append(tdAddress).append(tdDob).append(tdPhone).append(tdEmail).append(tdAction);
+			
+			$('#personalDataTable tbody').append(tr);
+		},
+		error: function(){
+			alert('Something went wrong');
+		}
+	})
+}
+
 function slobodniTerminiApt(pregled) {
 	return function() {
 		slTer(pregled);
@@ -448,3 +542,356 @@ function rezervisiProstoriju(sala, pregled) {
 		rezSalaApt(sala, pregled);
 	}
 }
+
+function editClinicData(event){
+	event.preventDefault();
+	window.location = './clinicEdit.html';
+}
+
+function defineNewApt(event){
+	event.preventDefault();
+	window.location = './noviTermin.html'
+}
+
+function formatDoctor(doctor){
+	let tr = $('<tr></tr>');
+	let tdName = $('<td>' + doctor.ime + '</td>');
+	let tdSurname = $('<td>' + doctor.prezime + '</td>');
+	
+	
+	tr.append(tdName).append(tdSurname);
+	$.ajax({
+		url: '/doktor/korisnik_doktor/' + doctor.id,
+		type:'GET',
+		success: function(drData){
+			let tdSpecialization = $('<td>' + drData.specijalizacija + '</td>');
+			let tdRating = $('<td>' + drData.prosecnaOcena + '</td>');
+			let tdActions = $('<td></td>');
+
+			let aDelete = $('<a href = "#">Delete</a>');
+			aDelete.on('click', function(event){
+				event.preventDefault();
+				
+				$.ajax({
+					url: 'doktor/obrisiLekara/' + doctor.id,
+					type: 'DELETE',
+					success: function(dr){
+						if(dr == null){
+							alert("You cannot delete a doctor with appointments");
+						}else{
+							alert("The doctor has been deleted");
+							location.reload();
+						}
+					},
+					error: function(){
+						alert('Something went wrong');
+					}
+				});
+			});
+			tdActions.append(aDelete);
+			tr.append(tdSpecialization).append(tdRating).append(tdActions);
+		},
+		error: function(){
+			alert("Something went wrong");
+		}
+	});
+
+	$('#doctorsTable tbody').append(tr);
+}
+
+
+function showDoctors(event){
+	event.preventDefault();
+	home();
+	$('#doctorsTable').attr('hidden', false);
+	$('#doctorsTable tbody').empty();
+	
+	$.ajax({
+		url: 'doktor/svi_sa_klinike/' + sessionStorage.getItem("id"),
+		type: 'GET',
+		success: function(doktori){
+			for(var i = 0; i < doktori.length; i++)
+				formatDoctor(doktori[i]);
+		},
+		error: function(){
+			alert('Something went wrong');
+		}
+		
+	});
+	
+	
+}
+
+function showPrices(event){
+	event.preventDefault();
+	home();
+	$('#pricingTable').attr('hidden', false);
+	$('#pricingTable tbody').empty();
+	
+	$.ajax({
+		url:'usluga/cenaUsluge/' + sessionStorage.getItem("id"),
+		type:'GET',
+		success: function(examinations){
+			for(let ex of examinations){
+				let tr = $('<tr></tr>');
+				let tdName = $('<td>' + ex.naziv + '</td>');
+				let tdPrice = $('<td>' + ex.cena + '</td>');
+				tr.append(tdName).append(tdPrice);
+				$('#pricingTable tbody').append(tr);
+			}
+		},
+		error: function(){
+			alert('Something went wrong');
+		}
+	});
+	
+}	
+
+function showRooms(event){
+	event.preventDefault();
+	window.location = './sale.html';
+}
+
+function formatDoctor2(doctor){
+	let tr = $('<tr></tr>');
+	let tdName = $('<td>' + doctor.ime + '</td>');
+	let tdSurname = $('<td>' + doctor.prezime + '</td>');
+	
+	
+	tr.append(tdName).append(tdSurname);
+
+	$.ajax({
+		url: '/doktor/korisnik_doktor/' + doctor.id,
+		type:'GET',
+		success: function(drData){
+			let tdRating = $('<td>' + drData.prosecnaOcena + '</td>');
+			tr.append(tdRating);
+			
+			
+		},
+		error: function(){
+			alert("Something went wrong");
+		}
+	});
+	
+	$('#doctorsRatingTable tbody').append(tr);
+}
+
+function showStats(event){
+	event.preventDefault();
+	home();
+	$('#divStats').attr('hidden', false);
+	$('#pClRating').empty();
+
+	$.ajax({
+		url:'klinika/klinikaAdmin/' + sessionStorage.getItem("id"),
+		type: 'GET',
+		success: function(klinika){
+			$('#pClRating').append('Clinic Rating: ' + klinika.prosecnaOcena);
+		},
+		error: function(){
+			alert('Something went wrong');
+		}
+	});
+	
+	$.ajax({
+		url: 'pregled/pregledi_klinika/'+ sessionStorage.getItem("id"),
+		type: 'GET',
+		success: function(brojevi){
+			canvasReset();
+			var canvas = document.getElementById("cGraph");
+			var ctx = canvas.getContext("2d");
+			var X = 0;
+			var width = 50;
+			
+			var Y = 0;
+			var height = 100;
+			ctx.fillStyle = "#fff1c4";
+			
+			for(var i = 0; i < 3; i++){
+				var h = brojevi[i];
+				ctx.fillRect(X, canvas.height-h, width, h);
+				
+				X += width+50;
+				
+				if(i==0){
+					ctx.fillText("Day: " + brojevi[i],0,h+20);
+				}else if(i==1){
+					ctx.fillText("Week: " + brojevi[i],100,h+20);
+				}else if(i==2){
+					ctx.fillText("Month: " + brojevi[i],200,h+20);
+				}
+				
+			}
+			/*ctx.fillText("Day",0,h+20  );
+			ctx.fillText("Week",100,h+20 );
+			ctx.fillText("Month",200,h+20 );*/
+		},
+		error: function(){
+			alert('Something went wrong');
+		}
+	});
+	$('#doctorsRatingTable tbody').empty();
+	$.ajax({
+		url:'doktor/svi_sa_klinike/' + sessionStorage.getItem("id"),
+		type: 'GET',
+		success: function(doktori){
+			for(let doktor of doktori){
+				formatDoctor2(doktor);
+			}
+		},
+		error: function(){
+			alert('Something went wrong');
+		}
+	});
+}
+
+function canvasReset(){
+	var canvas = document.getElementById("cGraph");
+	var ctx = canvas.getContext("2d");
+	ctx.clearRect(0,0, canvas.width, canvas.height);
+}
+function submitDate(event){
+	event.preventDefault();
+	
+	let beginDate = $('#dBegin').val();
+	let endDate = $('#dEnd').val();
+	if(beginDate == '' || endDate == ''){
+		alert('Dates must not be empty');
+		return;
+	}
+	$('#hEarnings').empty();
+	$.ajax({
+		url: 'klinika/getZarada/' + sessionStorage.getItem("id"),
+		type: 'POST',
+		data: JSON.stringify({beginDate : beginDate, endDate : endDate}),
+		contentType: 'application/json',
+		success: function(zarada){
+			$('#hEarnings').append("Total earnings: " + zarada);
+		},
+		error: function(){
+			alert('Something went wrong');
+		}
+	})
+}
+
+function showNewRoom(event){
+	event.preventDefault();
+	home();
+	$('#newRoomForm').attr('hidden', false);
+	
+	
+}
+
+function newRoom(event){
+	event.preventDefault();
+	let name = $('#uRoomName').val();
+	let desc = $('#uRoomDesc').val();
+	
+	if(name === '' || desc === ''){
+		alert('Fields must not be empty');
+		return;
+	}
+	
+	$.post({
+		url:'sala/nova_sala/' + sessionStorage.getItem("id"),
+		type:'POST',
+		data: JSON.stringify({name, desc}),
+		contentType:'application/json',
+		success: function(){
+			alert("The room has been added");
+			$('#uRoomName').val('');
+			$('#uRoomDesc').val('');
+			home();
+		},
+		error: function(){
+			alert('Something went wrong');
+		}
+	});
+}
+
+function showTableRoom(room){
+	
+	let tr = $('<tr></tr>');
+	let tdName = $('<td>' + room.ime + '</td>');
+	let tdDesc = $('<td>' + room.opis + '</td>');
+	let tdDates = $('<td></td>');
+	$.ajax({
+		url:'sala/sve_sale_klinika_termini/' + room.id,
+		type: 'GET',
+		success: function(termin){
+			for(let t of termin){
+				tdDates.append(t.datumStr);
+				tdDates.append('<br/>');
+			}
+		},
+		error: function(){
+			alert('Something went wrong');
+		}
+	});
+	
+	let tdActions = $('<td></td>');
+	
+	let aEdit = $('<a href = "#">Edit Room </a><br/>');
+	let aDelete = $('<a href = "#">Delete</a>');
+	
+	aEdit.on('click', function(event){
+		event.preventDefault();
+	});
+	
+	aDelete.on('click', function(event){
+		event.preventDefault();
+		$.ajax({
+			url:'sala/obrisi_salu/' + room.id,
+			type:'DELETE',
+			success: function(free){
+				if(free === 1){
+					alert('The room was removed');
+					home();
+				}else{
+					alert('The room is already reserved and cannot be deleted');
+				}
+			},
+			error: function(){
+				alert('Something went wrong');
+			}
+		})
+	});
+	
+	tdActions.append(aEdit).append(aDelete);
+	
+	tr.append(tdName).append(tdDesc).append(tdDates).append(tdActions);
+	
+	$('#showRoomsTable tbody').append(tr);
+}
+function showAllRooms(event){
+	event.preventDefault();
+	home();
+	$('#showRoomsTable tbody').empty();
+	$('#showRoomsTable').attr('hidden', false);
+	
+	$.ajax({
+		url:'sala/sve_sale_klinika/' + sessionStorage.getItem("id"),
+		type:'GET',
+		success: function(sale){
+			for(let s of sale){
+				showTableRoom(s);
+			}
+		},
+		error: function(){
+			alert('Something went wrong');
+		}
+	});
+}
+
+function editRoom(room){
+	home();
+	$('#editRoom').attr('hidden', false);
+	$('#eRoomName').val(room.ime);
+	$('#eRoomDesc').val(room.opis);
+}
+
+function editRoomData(event){
+	event.preventDefault();
+}
+

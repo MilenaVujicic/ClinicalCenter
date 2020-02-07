@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+	<meta charset="utf-8">
+    <!-- This file has been downloaded from Bootsnipp.com. Enjoy! -->
+    <title>Doctor</title>
+    <link href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.0/css/bootstrap.min.css" rel="stylesheet">
+    <link href="css/bootstrap.min.css" rel="stylesheet">
+    <script src="http://code.jquery.com/jquery-1.11.1.min.js"></script>
+    <link href='https://fullcalendar.io/releases/fullcalendar/3.9.0/fullcalendar.min.css' rel='stylesheet' />
+	<link rel='stylesheet' href='https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css'>
+	<link href='https://fullcalendar.io/releases/fullcalendar/3.9.0/fullcalendar.print.min.css' rel='stylesheet' media='print' />
+	<script src='https://fullcalendar.io/releases/fullcalendar/3.9.0/lib/moment.min.js'></script>
+	<script src='https://fullcalendar.io/releases/fullcalendar/3.9.0/lib/jquery.min.js'></script>
+	<script src='https://fullcalendar.io/releases/fullcalendar/3.9.0/fullcalendar.min.js'></script>
+    <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.0/js/bootstrap.min.js"></script>
+   
+    
+    	<!-- Website CSS style -->
+	<link href="css/bootstrap.min.css" rel="stylesheet">
+	<link rel="stylesheet" href="doktor.css">
+	
+	<!-- Website Font style -->
+    <script src="https://kit.fontawesome.com/a065fea601.js" crossorigin="anonymous"></script>
+	<!-- Google Fonts -->
+	<link href='https://fonts.googleapis.com/css?family=Passion+One' rel='stylesheet' type='text/css'>
+	<link href='https://fonts.googleapis.com/css?family=Oxygen' rel='stylesheet' type='text/css'>
+
+<!-- Data Table -->
+	<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.20/css/jquery.dataTables.css">
+	<script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.10.20/js/jquery.dataTables.js"></script>
+		
+	
+	<script>
+
+		$(document).ready(()=>{
+			document.getElementById('btnSave').addEventListener('click', changeData, false);
+			
+			$.ajax({
+				url:'korisnik/podaci/' + sessionStorage.getItem("id"),
+				type:'GET',
+				success: function(user){
+					$('#uName').val(user.ime);
+					$('#uSurname').val(user.prezime);
+					$('#uPassword').val(user.password);
+					$('#uCity').val(user.grad);
+					$('#uAddress').val(user.adresa);
+					$('#uCountry').val(user.drzava);
+					$('#uPhone').val(user.telefon);
+					$('#uEmail').val(user.email);
+					
+				},
+				error: function(){
+					alert('Something went wrong');
+				}
+			});
+		});
+		
+		function changeData(event){
+			event.preventDefault();
+			
+			let name = 	$('#uName').val();
+			let surname = $('#uSurname').val();
+			let password = $('#uPassword').val();
+			let city = $('#uCity').val();
+			let address = $('#uAddress').val();
+			let country = $('#uCountry').val();
+			let phone = $('#uPhone').val();
+			let email = $('#uEmail').val();
+			
+			$.ajax({
+				url: 'korisnik/izmena_podataka/' + sessionStorage.getItem("id"),
+				type: 'PUT',
+				data: JSON.stringify({ime:name, prezime:surname, password:password, grad:city, adresa: address,
+					drzava: country, telefon:phone, email:email}),
+				contentType: 'application/json',
+				success: function(){
+					alert('Data has been changed');
+					location.reload();
+				},
+				error: function(){
+					alert('Something went wrong');
+				}
+				
+			});
+		}
+	</script>
+<title>Change personal data</title>
+</head>
+<body>
+<h4>Personal data: </h4>
+<br/>
+<form id = "editDataForm">
+<div class="form-row">
+<div class="form-group col-md-8">
+<label for="patientName">Name: </label>
+<input type="text" class="form-control" id="uName">
+</div>
+</div>
+<div class="form-row">
+<div class="form-group col-md-8">
+<label for="patientName">Surname: </label>
+<input type="text" class="form-control" id="uSurname">
+</div>
+</div>
+<div class="form-row">
+<div class="form-group col-md-8">
+<label for="patientName">Password: </label>
+<input type="password" class="form-control" id="uPassword">
+</div>
+</div>
+<div class="form-row">
+<div class="form-group col-md-8">
+<label for="patientName">Email: </label>
+<input type="text" class="form-control" id="uEmail">
+</div>
+</div>
+<div class="form-row">
+<div class="form-group col-md-8">
+<label for="patientName">City: </label>
+<input type="text" class="form-control" id="uCity">
+</div>
+</div>
+<div class="form-row">
+<div class="form-group col-md-8">
+<label for="patientName">Address: </label>
+<input type="text" class="form-control" id="uAddress">
+</div>
+</div>
+<div class="form-row">
+<div class="form-group col-md-8">
+<label for="patientName">Country: </label>
+<input type="text" class="form-control" id="uCountry">
+</div>
+</div>
+<div class="form-row">
+<div class="form-group col-md-8">
+<label for="patientName">Phone: </label>
+<input type="text" class="form-control" id="uPhone">
+</div>
+</div>
+<div class = "form-row">
+<div class="form-group col-md-8">
+<a class="btn btn-success" id = "btnSave">Save</a>
+</div>
+</div>
+</form>
+
+</body>
+</html>

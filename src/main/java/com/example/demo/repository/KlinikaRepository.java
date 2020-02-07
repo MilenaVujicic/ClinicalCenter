@@ -4,19 +4,29 @@ import java.time.LocalDate;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.data.jpa.repository.JpaRepository;
+
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
 import com.example.demo.model.Klinika;
+import com.example.demo.model.Termin;
 
 
 public interface KlinikaRepository extends JpaRepository<Klinika, Long> {
 
 	Klinika findByIme(String ime);
 	Klinika saveAndFlush(Klinika k);
+
+	List<Klinika> findAll();
+	//Klinika findOne(Long id);
+
+	Optional<Klinika> findById(Long id);
+	
+
 	Page<Klinika> findAll(Pageable pageable);
 	
 	@Query("Select distinct k\r\n" + 
@@ -25,4 +35,5 @@ public interface KlinikaRepository extends JpaRepository<Klinika, Long> {
 			"AND d.specijalizacija = ?2 "// 
 			) //?1
 	List<Klinika> findByDatumPregleda(LocalDate datum, String specijalizacija);
+
 }

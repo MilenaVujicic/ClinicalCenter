@@ -27,16 +27,15 @@ $(document).ready(()=>{
 	let oName = $('<option disabled selected value>Odabir klinike</option>');
 	$("#sKlinika").append(oName);
 
+	
 	$.ajax({
-        url:"/pacijent/sveKlinike",
+        url:"/administrator/klinika_admin/" + sessionStorage.getItem("id"),
         type:"GET",
        	success: function(clinics){
-       		for (i = 0; i < clinics.length; i++) {
-       			optionKlinika(clinics[i]);
+       		optionKlinika(clinics);
 
-       		} 
-       	
-           	},
+      
+       	},
        	error: function() {
        		alert('Desila se greska');
        	}
