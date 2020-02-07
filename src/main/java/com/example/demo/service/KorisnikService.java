@@ -3,7 +3,7 @@ package com.example.demo.service;
 import java.util.List;
 import java.util.Optional;
 
-import javax.transaction.Transactional;
+import org.springframework.transaction.annotation.Transactional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -77,7 +77,7 @@ public class KorisnikService implements IUserService {
 		user.setIme(accountDto.getIme());
 		user.setPrezime(accountDto.getPrezime());
 		user.setEmail(accountDto.getEmail());
-		//user.setPassword(passwordEncoder.encode(accountDto.getPassword())); //treba namestiti passwordEncoder
+		//user.setPassword(passwordEncoder.encode(accountDto.getPassword()));
 		user.setPassword(accountDto.getPassword());
 		user.setAdresa(accountDto.getAdresa());
 		user.setGrad(accountDto.getGrad());

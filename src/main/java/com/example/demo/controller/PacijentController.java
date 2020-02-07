@@ -12,6 +12,8 @@ import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
+import org.springframework.transaction.annotation.Transactional;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -307,6 +309,7 @@ public class PacijentController {
 		return new ResponseEntity<List<Klinika>>(klinike,HttpStatus.OK);
 	}
 	
+	@Transactional
 	@RequestMapping(value= "/zakaziUnapredDef", method = RequestMethod.PUT)
 	public ResponseEntity<String> zakaziUnapredDef(@RequestParam(value = "id_termina") int id_termina,
 												   @RequestParam(value= "id_korisnika") int id_korisnika) throws InterruptedException {
@@ -327,7 +330,7 @@ public class PacijentController {
 		Calendar cal = termin.getDatum();
 		cal.add(Calendar.HOUR_OF_DAY, -1);
 		System.out.println(cal.getTime());
-		Termin t = terminService.findOne(1L);
+		Termin t = terminService.findOne(id_pregleda_l);
 		System.out.println("#############" + t.isSlobodan());
 		try {
 			emailService.sendNotificaitionTermin(user, admin, termin);
