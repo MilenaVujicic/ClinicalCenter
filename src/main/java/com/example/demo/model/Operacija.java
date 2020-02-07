@@ -19,6 +19,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
+import javax.persistence.Version;
 
 
 @Entity
@@ -49,6 +50,9 @@ public class Operacija {
 	@ManyToMany
 	@JoinTable(name = "operacije_doktori", joinColumns = @JoinColumn(name = "operacija_id", referencedColumnName = "id"), inverseJoinColumns = @JoinColumn(name = "doktor_id", referencedColumnName = "id"))
 	private Set<Doktor> doktori = new HashSet<Doktor>();
+	
+	@Version
+	private Long version;
 	
 	public Operacija() {
 		super();

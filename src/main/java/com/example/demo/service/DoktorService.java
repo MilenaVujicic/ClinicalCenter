@@ -6,6 +6,7 @@ import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.example.demo.model.Doktor;
 import com.example.demo.model.Klinika;
@@ -13,6 +14,7 @@ import com.example.demo.repository.DoktorRespository;
 
 
 @Service
+@Transactional(readOnly = true)
 public class DoktorService {
 
 	@Autowired
@@ -37,8 +39,9 @@ public class DoktorService {
 	public Optional<Doktor> findById(Long id) {
 		return doktorRespository.findById(id);
 	}
+	
+	@Transactional(readOnly = false)
 	public Doktor save(Doktor doktor) {
-
 		return doktorRespository.save(doktor);
 	}
 	

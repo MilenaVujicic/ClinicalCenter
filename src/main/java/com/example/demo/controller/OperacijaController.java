@@ -93,16 +93,19 @@ public class OperacijaController {
 		List<Termin> termini = terminService.findAll();
 		Korisnik pacijent = korisnikService.findOne(operacija.getPacijent().getIdKorisnik());
 		Klinika klinika = klinikaService.findOne(operacija.getSala().getKlinika().getId());
-		
+		Boolean vecZauzet = true;
+		String odgovor = "Salu je vec neko rezervisao";
 		for (Termin termin : termini) {
-			if (termin.getSala().getId().equals(sala.getId()) && termin.getDatum().equals(operacija.getDatumIVremeOperacije())) {
+			if (termin.getSala().getId().equals(sala.getId()) && termin.getDatum().equals(operacija.getDatumIVremeOperacije()) && termin.isSlobodan()) {
+				System.out.println("Usao");
 				termin.setSlobodan(false);
+				vecZauzet = false;
 				terminService.save(termin);
 			}
 		}
 		
 		for (String s : splitter) {
-			if (!s.equals("")) {
+			if (!s.equals("") && !vecZauzet) {
 				Doktor doktor = doktorService.findByIdKorisnik(Long.parseLong(s));
 				System.out.println("###pre" + doktor.getOperacije().size());
 				doktor.getOperacije().add(operacija);
@@ -113,10 +116,13 @@ public class OperacijaController {
 				doktorService.save(doktor);
 			}
 		}
+		if (!vecZauzet) {
+			operacijaService.save(operacija);
+			emailService.sendSuccessfulReservationPatient(pacijent, operacija, klinika);
+			odgovor = "Uspesno rezervisana sala";
+		}
 		
-		operacijaService.save(operacija);
-		emailService.sendSuccessfulReservationPatient(pacijent, operacija, klinika);
-		return new ResponseEntity<String>("Uspesno rezervisana sala", HttpStatus.OK);
+		return new ResponseEntity<String>(odgovor, HttpStatus.OK);
 	}
 	
 	@RequestMapping(value = "/preuzmi/{id}", method = RequestMethod.GET)

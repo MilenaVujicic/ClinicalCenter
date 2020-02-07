@@ -4,6 +4,8 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.example.demo.model.Operacija;
 
@@ -13,6 +15,7 @@ import com.example.demo.model.StatusOperacije;
 import com.example.demo.repository.OperacijaRespository;
 
 @Service
+@Transactional(readOnly = true)
 public class OperacijaService {
 
 	@Autowired
@@ -26,6 +29,7 @@ public class OperacijaService {
 		return operacijaRespository.findById(id).orElse(null);
 	}
 	
+	@Transactional(readOnly = false)
 	public Operacija save(Operacija operacija) {
 		return operacijaRespository.save(operacija);
 	}
@@ -34,6 +38,7 @@ public class OperacijaService {
 		return operacijaRespository.findAll();
 	}
 	
+	@Transactional(readOnly = false, propagation = Propagation.REQUIRES_NEW)
 	public void delete(Operacija operacija) {
 		operacijaRespository.deleteById(operacija.getId());
 	}
