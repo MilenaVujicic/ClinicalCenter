@@ -22,6 +22,10 @@ $(document).ready(()=>{
 				alert('Nemate prava pristupa ovoj stranici');
 				window.location.href = "http://localhost:8080/doktor.html";
 			}
+			
+			if(korisnik.brojPrijava === 0){
+				window.location.href = './changePresonalData.html'
+			}
 		},
 		error: function() {
 			alert('Nema ulogovanog korisnika');

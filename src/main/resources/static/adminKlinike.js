@@ -68,6 +68,8 @@ function home() {
 	$('#editAptType').attr('hidden', true);
 	$('#doctorsTable').attr('hidden', true);
 	$('#divNewDoctor').attr('hidden', true);
+	$('#showRoomsTable').parents('div.dataTables_wrapper').first().hide();
+	$('#doctorsTable').parents('div.dataTables_wrapper').first().hide();
 }
 
 function prikaziDoktora(doktor, specijalizacija) {
@@ -451,7 +453,7 @@ function dodajZahtevApt(pregled, pacijent) {
 	let tdIme = $('<td>'+pacijent.ime+' '+pacijent.prezime+'</td>');
 	let datum = pregled.datumIVremePregleda;
 	datum = datum.replace("T", " ");
-	let tdDate = $('<td>'+datum+'</td>');
+	let tdDate = $('<td>'+datum.substring(0,10)+'</td>');
 	let aMore = $('<td><a>More</a></td>');
 	aMore.click(slobodniTerminiApt(pregled));
 	tr.append(tdIme).append(tdDate).append(aMore);
@@ -569,20 +571,54 @@ function editClinicData(event){
 
 
 
-function formatDoctor(doctor){
+
+function showDoctors(event){
+	event.preventDefault();
+	home();
+	$('#doctorsTable').attr('hidden', false);
+	//$('#doctorsTable tbody').empty();
+	$('#doctorsTable').parents('div.dataTables_wrapper').first().show();
+	$.ajax({
+		url: 'doktor/svi_sa_klinike/' + sessionStorage.getItem("id"),
+		type: 'GET',
+		success: function(doktori){
+			var table = $('#doctorsTable').DataTable();
+       		table.destroy();
+       	    $('#doctorsTable tbody').html('');
+			for(let i = 0; i < doktori.length; i++)
+				formatDoctor(doktori[i], i);
+			
+			$('#doctorsTable').DataTable({
+       	        "columnDefs": [ {
+       	          "targets": 'no-sort',
+       	          "orderable": false,
+       	        }]
+       		});
+		},
+		error: function(){
+			alert('Something went wrong');
+		}
+		
+	});
+	
+	
+}
+
+
+function formatDoctor(doctor, i){
 	let tr = $('<tr></tr>');
 	let tdName = $('<td>' + doctor.ime + '</td>');
 	let tdSurname = $('<td>' + doctor.prezime + '</td>');
-	
-	
-	tr.append(tdName).append(tdSurname);
+	let tdI = $('<td>' + i + '</td>');
+	let tdSpecialization = $('<td></td>')
+	let tdRating = $('<td></td>');
+	let tdActions = $('<td></td>')
 	$.ajax({
 		url: '/doktor/korisnik_doktor/' + doctor.id,
 		type:'GET',
 		success: function(drData){
-			let tdSpecialization = $('<td>' + drData.specijalizacija + '</td>');
-			let tdRating = $('<td>' + drData.prosecnaOcena + '</td>');
-			let tdActions = $('<td></td>');
+			tdSpecialization.append(drData.specijalizacija);
+			tdRating.append(drData.prosecnaOcena);
 
 			let aDelete = $('<a href = "#">Delete</a>');
 			aDelete.on('click', function(event){
@@ -605,38 +641,16 @@ function formatDoctor(doctor){
 				});
 			});
 			tdActions.append(aDelete);
-			tr.append(tdSpecialization).append(tdRating).append(tdActions);
+		
 		},
 		error: function(){
 			alert("Something went wrong");
 		}
 	});
-
+	tr.append(tdI).append(tdName).append(tdSurname).append(tdSpecialization).append(tdRating).append(tdActions);
 	$('#doctorsTable tbody').append(tr);
 }
 
-
-function showDoctors(event){
-	event.preventDefault();
-	home();
-	$('#doctorsTable').attr('hidden', false);
-	$('#doctorsTable tbody').empty();
-	
-	$.ajax({
-		url: 'doktor/svi_sa_klinike/' + sessionStorage.getItem("id"),
-		type: 'GET',
-		success: function(doktori){
-			for(var i = 0; i < doktori.length; i++)
-				formatDoctor(doktori[i]);
-		},
-		error: function(){
-			alert('Something went wrong');
-		}
-		
-	});
-	
-	
-}
 
 function showPrices(event){
 	event.preventDefault();
@@ -917,7 +931,7 @@ function showTableRoom(room, i){
 function showAllRooms(event){
 	event.preventDefault();
 	home();
-	$('#showRoomsTable tbody').empty();
+	//$('#showRoomsTable tbody').empty();
 	$('#showRoomsTable').attr('hidden', false);
 	$('#showRoomsTable').parents('div.dataTables_wrapper').first().show();
 	$.ajax({
@@ -932,7 +946,7 @@ function showAllRooms(event){
 				showTableRoom(s, i);
 				i = i + 1;
 			}
-			$('#allPatients').DataTable({
+			$('#showRoomsTable').DataTable({
        	        "columnDefs": [ {
        	          "targets": 'no-sort',
        	          "orderable": false,
@@ -1150,69 +1164,84 @@ function showApts(event){
 	event.preventDefault();
 	home();
 	$('#divApts').attr('hidden', false);
-	$('#aptsTable tbody').empty();
-	
+	//$('#aptsTable tbody').empty();
+	$('#aptsTable').parents('div.dataTables_wrapper').first().show();
 	$.ajax({
 		url: 'pregled/svi_tipovi',
 		type: 'GET',
 		success: function(pregledi){
+			var table = $('#aptsTable').DataTable();
+       		table.destroy();
+       	    $('#aptsTable tbody').html('');
+       		let i = 0;
 			for(let p of pregledi){
-				let tr = $('<tr></tr>');
-				let tdName = $('<td>' + p.naziv + '</td>');
-				let tdPrice = $('<td>' + p.cena + '</td>');
-				let tdActions = $('<td></td>');
+				showPregled(p, i);
+				i = i + 1;
 				
-				let aEdit = $('<a href = "#">Edit</a><br/>');
-				let aDelete = $('<a href = "#">Delete </a>');
-				
-				aEdit.on('click', function(event){
-					event.preventDefault();
-					
-					$.ajax({
-						url: 'pregled/nadji_tip/' + p.id,
-						success: function(pregled){
-							home();
-							$('#editAptType').attr('hidden', false);
-							$('#editAptName').val(pregled.naziv);
-							$('#editAptPrice').val(pregled.cena);
-							$('#lAptId').html(pregled.id);
-						},
-						error: function(){
-							alert('Something went wrong');
-						}
-					});
-					
-				});
-				
-				aDelete.on('click', function(event){
-					event.preventDefault();
-					
-					$.ajax({
-						url: 'pregled/obrisi_tip/' + p.id,
-						type: 'DELETE',
-						success: function(i){
-							if(i===0)
-								alert('Successfully deleted appointment');
-							else
-								alert("Cannot delete type");
-						},
-						error: function(){
-							alert('Something went wrong');
-						}
-					});
-				});
-				
-				tdActions.append(aEdit).append(aDelete);
-				
-				tr.append(tdName).append(tdPrice).append(tdActions);
-				$('#aptsTable tbody').append(tr);
 				
 			}
+			$('#aptsTable').DataTable({
+       	        "columnDefs": [ {
+       	          "targets": 'no-sort',
+       	          "orderable": false,
+       	        }]
+       		});
 		
 		}
 	});
 }
 
+function showPregled(p, i){
+	let tr = $('<tr></tr>');
+	let tdName = $('<td>' + p.naziv + '</td>');
+	let tdPrice = $('<td>' + p.cena + '</td>');
+	let tdActions = $('<td></td>');
+	
+	let aEdit = $('<a href = "#">Edit</a><br/>');
+	let aDelete = $('<a href = "#">Delete </a>');
+	
+	aEdit.on('click', function(event){
+		event.preventDefault();
+		
+		$.ajax({
+			url: 'pregled/nadji_tip/' + p.id,
+			success: function(pregled){
+				home();
+				$('#editAptType').attr('hidden', false);
+				$('#editAptName').val(pregled.naziv);
+				$('#editAptPrice').val(pregled.cena);
+				$('#lAptId').html(pregled.id);
+			},
+			error: function(){
+				alert('Something went wrong');
+			}
+		});
+		
+	});
+	
+	aDelete.on('click', function(event){
+		event.preventDefault();
+		
+		$.ajax({
+			url: 'pregled/obrisi_tip/' + p.id,
+			type: 'DELETE',
+			success: function(i){
+				if(i===0)
+					alert('Successfully deleted appointment');
+				else
+					alert("Cannot delete type");
+			},
+			error: function(){
+				alert('Something went wrong');
+			}
+		});
+	});
+	
+	tdActions.append(aEdit).append(aDelete);
+	
+	tr.append(tdName).append(tdPrice).append(tdActions);
+	$('#aptsTable tbody').append(tr);
+}
 function editApts(event){
 	event.preventDefault();
 	
