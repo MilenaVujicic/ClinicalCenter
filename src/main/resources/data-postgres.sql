@@ -56,21 +56,21 @@ insert into doktor (id_korisnik, specijalizacija, prosecna_ocena, broj_ocena, su
 insert into doktor (id_korisnik, specijalizacija, prosecna_ocena, broj_ocena, suma_ocena, klinika_id) values (17, 'Hirurg', 5,2,10,2);
 insert into doktor (id_korisnik, specijalizacija, prosecna_ocena, broj_ocena, suma_ocena, klinika_id) values (18, 'Lekar opste prakse',3,2,6,2);
 
-insert into termin(datum, slobodan, sala_id, trajanje, cena, doktor_id, tip, version) values ('2019-12-01 9:00:00', true, 1, 0, 200, 1, 'redovni',0);
-insert into termin(datum, slobodan, sala_id, trajanje, cena, doktor_id, tip, version) values ('2019-12-01 10:00:00', false, 1, 0, 200, 2, 'redovni',0);
-insert into termin(datum, slobodan, sala_id, trajanje, cena, doktor_id, tip, version) values ('2019-12-01 11:30:00', true, 1, 0, 200, 3, 'redovni',0);
-insert into termin(datum, slobodan, sala_id, trajanje, cena, doktor_id, tip, version) values ('2019-12-01 15:00:00', true, 2, 0, 200, 4, 'redovni',0);
-insert into termin(datum, slobodan, sala_id, trajanje, cena, doktor_id, tip, version) values ('2019-12-01 16:00:00', false, 2, 0, 200, 2, 'redovni',0);
-insert into termin(datum, slobodan, sala_id, trajanje, cena, doktor_id, tip, version) values ('2019-12-01 17:00:00', true, 2, 0, 200, 1, 'redovni',0);
-insert into termin(datum, slobodan, sala_id, trajanje, cena, doktor_id, tip, version) values ('2019-12-01 15:00:00', true, 3, 0, 200, 2, 'redovni',0);
-insert into termin(datum, slobodan, sala_id, trajanje, cena, doktor_id, tip, version) values ('2019-12-01 16:00:00', true, 3, 0, 200, 3, 'redovni',0);
-insert into termin(datum, slobodan, sala_id, trajanje, cena, doktor_id, tip, version) values ('2019-12-01 17:00:00', true, 3, 0, 200, 4, 'redovni',0);
-insert into termin(datum, slobodan, sala_id, trajanje, cena, doktor_id, tip, version) values ('1-1-20 17:00:00', true, 3, 0, 200, 2, 'redovni',0);
-insert into termin(datum, slobodan, sala_id, trajanje, cena, doktor_id, tip, version) values ('2-1-20 17:00:00', true, 5, 0, 200, 1, 'redovni',0);
-insert into termin(datum, slobodan, sala_id, trajanje, cena, doktor_id, tip, version) values ('3-1-20 17:00:00', true, 6, 0, 200, 2, 'redovni',0);
-insert into termin(datum, slobodan, sala_id, trajanje, cena, doktor_id, tip, version) values ('4-1-20 18:00:00', true, 3, 0, 200, 1, 'redovni',0);
-insert into termin(datum, slobodan, sala_id, trajanje, cena, doktor_id, tip, version) values ('5-2-20 21:00:00', true, 3, 0, 200, 1, 'redovni',0);
-insert into termin(datum, slobodan, sala_id, trajanje, cena, doktor_id, tip, version) values ('6-2-20 21:00:00', true, 6, 0, 200, 2, 'redovni',0);
+insert into termin(datum, slobodan, potvrdjen, sala_id, trajanje, cena, doktor_id, tip, version) values ('2019-12-01 9:00:00', true, false, 1, 0, 200, 1, 'redovni',0);
+insert into termin(datum, slobodan, potvrdjen, sala_id, trajanje, cena, doktor_id, tip, version) values ('2019-12-01 10:00:00', false, false, 1, 0, 200, 2, 'redovni',0);
+insert into termin(datum, slobodan, potvrdjen, sala_id, trajanje, cena, doktor_id, tip, version) values ('2019-12-01 11:30:00', true, false, 1, 0, 200, 3, 'redovni',0);
+insert into termin(datum, slobodan, potvrdjen, sala_id, trajanje, cena, doktor_id, tip, version) values ('2019-12-01 15:00:00', true, false, 2, 0, 200, 4, 'redovni',0);
+insert into termin(datum, slobodan, potvrdjen, sala_id, trajanje, cena, doktor_id, tip, version) values ('2019-12-01 16:00:00', false, false, 2, 0, 200, 2, 'redovni',0);
+insert into termin(datum, slobodan, potvrdjen, sala_id, trajanje, cena, doktor_id, tip, version) values ('2019-12-01 17:00:00', true, false, 2, 0, 200, 1, 'redovni',0);
+insert into termin(datum, slobodan, potvrdjen, sala_id, trajanje, cena, doktor_id, tip, version) values ('2019-12-01 15:00:00', true, false, 3, 0, 200, 2, 'redovni',0);
+insert into termin(datum, slobodan, potvrdjen, sala_id, trajanje, cena, doktor_id, tip, version) values ('2019-12-01 16:00:00', true, false, 3, 0, 200, 3, 'redovni',0);
+insert into termin(datum, slobodan, potvrdjen, sala_id, trajanje, cena, doktor_id, tip, version) values ('2019-12-01 17:00:00', true, false, 3, 0, 200, 4, 'redovni',0);
+insert into termin(datum, slobodan, potvrdjen, sala_id, trajanje, cena, doktor_id, tip, version) values ('1-1-20 17:00:00', true, false, 3, 0, 200, 2, 'redovni',0);
+insert into termin(datum, slobodan, potvrdjen, sala_id, trajanje, cena, doktor_id, tip, version) values ('2-1-20 17:00:00', true, false, 5, 0, 200, 1, 'redovni',0);
+insert into termin(datum, slobodan, potvrdjen, sala_id, trajanje, cena, doktor_id, tip, version) values ('3-1-20 17:00:00', true, false, 6, 0, 200, 2, 'redovni',0);
+insert into termin(datum, slobodan, potvrdjen, sala_id, trajanje, cena, doktor_id, tip, version) values ('4-1-20 18:00:00', true, false, 3, 0, 200, 1, 'redovni',0);
+insert into termin(datum, slobodan, potvrdjen, sala_id, trajanje, cena, doktor_id, tip, version) values ('5-2-20 21:00:00', true, false, 3, 0, 200, 1, 'redovni',0);
+insert into termin(datum, slobodan, potvrdjen, sala_id, trajanje, cena, doktor_id, tip, version) values ('6-2-20 21:00:00', true, false, 6, 0, 200, 2, 'redovni',0);
 
 
 insert into lek(sifra, ime, opis) values ('J01CA04', 'Amoksicilin', 'Lek na bazi penicilina');

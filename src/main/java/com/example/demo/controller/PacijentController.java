@@ -324,16 +324,18 @@ public class PacijentController {
 		
 		Korisnik user = korisnikService.findOne(id_korisnika_l);
 		Termin termin = terminService.findOne(id_pregleda_l);
+		termin.setCena(termin.getCena()+ 1);
 		termin.setSlobodan(false);
 		termin = terminService.save(termin);
 		
 		Calendar cal = termin.getDatum();
-		cal.add(Calendar.HOUR_OF_DAY, -1);
+		//cal.add(Calendar.HOUR_OF_DAY, -1);
 		System.out.println(cal.getTime());
 		Termin t = terminService.findOne(id_pregleda_l);
 		System.out.println("#############" + t.isSlobodan());
 		try {
 			emailService.sendNotificaitionTermin(user, admin, termin);
+			emailService.sendConfirmOrDenyAppointment(user, t);
 		} catch (MailException e) {
 			// TODO Auto-generated catch block
 			System.out.println("##################### Desila se greska1" + e.getMessage());
@@ -399,6 +401,24 @@ public class PacijentController {
 		}
 		
 		return new ResponseEntity<>(preglediDTO,HttpStatus.OK);
+	}
+	
+	@RequestMapping(value = "/potvrdi/{id}", method = RequestMethod.GET)
+	public ResponseEntity<String> potvrdi(@PathVariable("id") Long identifikacija) {
+		Termin t = terminService.findOne(identifikacija);
+		t.setSlobodan(false);
+		t.setPotvrdjen(true);
+		terminService.save(t);
+		return new ResponseEntity<String>("Pregled potvrdjen!", HttpStatus.OK);
+	}
+	
+	@RequestMapping(value = "/otkazi/{id}", method = RequestMethod.GET)
+	public ResponseEntity<String> otkazi(@PathVariable("id") Long identifikacija) {
+		Termin t = terminService.findOne(identifikacija);
+		t.setSlobodan(false);
+		t.setPotvrdjen(false);
+		terminService.save(t);
+		return new ResponseEntity<String>("Pregled otkazan!", HttpStatus.OK);
 	}
 	
 	
