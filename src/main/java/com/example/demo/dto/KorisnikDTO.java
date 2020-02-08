@@ -67,6 +67,9 @@ public class KorisnikDTO {
     @NotEmpty
 	private String telefon;
 	
+	@NotNull
+	@NotEmpty
+	private int brojPrijava;
 	
 	
 	public KorisnikDTO() {
@@ -75,7 +78,7 @@ public class KorisnikDTO {
 	}
 
 	public KorisnikDTO(String ime, String prezime, String email, String password, String matchingPassword, String grad, String drzava, Long jmbg,
-			String adresa, Date datumRodjenja, UlogaKorisnika uloga) {
+			String adresa, Date datumRodjenja, UlogaKorisnika uloga, int brojPrijava) {
 		super();
 		this.ime = ime;
 		this.prezime = prezime;
@@ -88,10 +91,11 @@ public class KorisnikDTO {
 		this.adresa = adresa;
 		this.datumRodjenja = datumRodjenja;
 		this.uloga = uloga;
+		this.brojPrijava = brojPrijava;
 	}
 	
 	public KorisnikDTO(Long id, String ime, String prezime, String email, String password, String matchingPassword, String grad, String drzava, Long jmbg,
-			String adresa, Date datumRodjenja, UlogaKorisnika ulogaKorisnika, String telefon) {
+			String adresa, Date datumRodjenja, UlogaKorisnika ulogaKorisnika, String telefon, int brojPrijava) {
 		super();
 		this.id = id;
 		this.ime = ime;
@@ -106,11 +110,12 @@ public class KorisnikDTO {
 		this.datumRodjenja = datumRodjenja;
 		this.uloga = ulogaKorisnika;
 		this.telefon = telefon;
+		this.brojPrijava = brojPrijava;
 	}
 	
 	public KorisnikDTO(Korisnik k) {
 		this(k.getId(), k.getIme(), k.getPrezime(),k.getEmail(), k.getPassword(), k.getPassword(), k.getGrad(),k.getDrzava(), k.getJmbg(),
-				k.getAdresa(), k.getDatumRodjenja(), k.getUloga(), k.getTelefon());
+				k.getAdresa(), k.getDatumRodjenja(), k.getUloga(), k.getTelefon(), k.getBrojPrijava());
 	}
 
 	public Long getId() {
@@ -217,6 +222,15 @@ public class KorisnikDTO {
 	public void setDatumRodjenja(Date datumRodjenja) {
 		this.datumRodjenja = datumRodjenja;
 	}
+
+	public int getBrojPrijava() {
+		return brojPrijava;
+	}
+
+	public void setBrojPrijava(int brojPrijava) {
+		this.brojPrijava = brojPrijava;
+	}
+	
 	
 	
 	

@@ -42,8 +42,7 @@
 				url:'korisnik/podaci/' + sessionStorage.getItem("id"),
 				type:'GET',
 				success: function(user){
-					
-					if(user.brojPrijava === 0){
+					if(user.brojPrijava === 2){
 						$('#divData').attr('hidden', true);
 						$('#passDiv').attr('hidden', false);
 					}else{
@@ -102,7 +101,7 @@
 			}
 			
 			$.ajax({
-				url: 'korisnik/promeni_lozinku/' + sessionStorage.getItem("id"),
+				url: 'korisnik/promena_lozinke/' + sessionStorage.getItem("id"),
 				type: 'POST',
 				data: JSON.stringify({password}),
 				contentType: 'application/json',

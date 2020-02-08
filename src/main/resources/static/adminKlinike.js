@@ -33,8 +33,8 @@ $(document).ready(()=>{
 				alert('You must be a clinic administrator to access this page');
 				window.location.href = "./index.html";
 			}
-			if(korisnik.brojPrijava === 0){
-				window.loaction.href = '.'
+			if(korisnik.brojPrijava === 2){
+				window.location.href = './changePresonalData.html'
 			}
 		},
 		error: function(){

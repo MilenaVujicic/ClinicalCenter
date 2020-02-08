@@ -151,7 +151,7 @@ public class KorisnikController {
 		}
 		
 		k.setPassword(password);
-		k.setBrojPrijava(1);
+		k.setBrojPrijava(2);
 		
 		korisnikService.save(k);
 		
