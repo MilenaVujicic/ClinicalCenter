@@ -19,4 +19,6 @@ public interface TipPregledaRepository extends JpaRepository<TipPregleda, Long>{
 	TipPregleda save(TipPregleda tipPregleda);
 	
 	Optional<TipPregleda> findById(Long id);
+	
+	void delete(TipPregleda t);
 }

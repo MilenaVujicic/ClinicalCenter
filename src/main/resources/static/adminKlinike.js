@@ -20,6 +20,8 @@ $(document).ready(()=>{
 	document.getElementById('aNewDoctor').addEventListener('click', addDoctor, false);
 	document.getElementById('btnSaveDoctor').addEventListener('click', saveDoctor, false);
 	document.getElementById('btnSaveRoomTime').addEventListener('click', saveRoomTime, false);
+	document.getElementById('aShowApts').addEventListener('click', showApts, false);
+	document.getElementById('btnSaveEditAptType').addEventListener('click', editApts, false);
 	session = sessionStorage.getItem("id");
 	if(session == null){
 		alert('You must be logged in to view this page!');
@@ -33,7 +35,7 @@ $(document).ready(()=>{
 				alert('You must be a clinic administrator to access this page');
 				window.location.href = "./index.html";
 			}
-			if(korisnik.brojPrijava === 2){
+			if(korisnik.brojPrijava === 0){
 				window.location.href = './changePresonalData.html'
 			}
 		},
@@ -61,7 +63,8 @@ function home() {
 	$('#divAptType').attr('hidden', true);
 	$('#editRoomForm').attr('hidden', true);
 	$('#addTimeRoom').attr('hidden', true);
-	
+	$('#divApts').attr('hidden', true);
+	$('#editAptType').attr('hidden', true);
 }
 
 function prikaziDoktora(doktor, specijalizacija) {
@@ -820,9 +823,10 @@ function newRoom(event){
 	});
 }
 
-function showTableRoom(room){
+function showTableRoom(room, i){
 	
 	let tr = $('<tr></tr>');
+	let tdNum = $('<td>' + i + '</td>');
 	let tdName = $('<td>' + room.ime + '</td>');
 	let tdDesc = $('<td>' + room.opis + '</td>');
 	let tdDates = $('<td></td>');
@@ -903,7 +907,7 @@ function showTableRoom(room){
 	
 	tdActions.append(aEdit).append(aNewDate).append(aDelete);
 	
-	tr.append(tdName).append(tdDesc).append(tdDates).append(tdActions);
+	tr.append(tdNum).append(tdName).append(tdDesc).append(tdDates).append(tdActions);
 	
 	$('#showRoomsTable tbody').append(tr);
 }
@@ -912,14 +916,25 @@ function showAllRooms(event){
 	home();
 	$('#showRoomsTable tbody').empty();
 	$('#showRoomsTable').attr('hidden', false);
-	
+	$('#showRoomsTable').parents('div.dataTables_wrapper').first().show();
 	$.ajax({
 		url:'sala/sve_sale_klinika/' + sessionStorage.getItem("id"),
 		type:'GET',
 		success: function(sale){
+			var table = $('#showRoomsTable').DataTable();
+			table.destroy();
+			 $('#showRoomsTable tbody').html('');
+			 let i = 0;
 			for(let s of sale){
-				showTableRoom(s);
+				showTableRoom(s, i);
+				i = i + 1;
 			}
+			$('#allPatients').DataTable({
+       	        "columnDefs": [ {
+       	          "targets": 'no-sort',
+       	          "orderable": false,
+       	        }]
+       		});
 		},
 		error: function(){
 			alert('Something went wrong');
@@ -1126,5 +1141,102 @@ function saveRoomTime(event){
 			home();
 		}
 	})
+}
+
+function showApts(event){
+	event.preventDefault();
+	home();
+	$('#divApts').attr('hidden', false);
+	$('#aptsTable tbody').empty();
+	
+	$.ajax({
+		url: 'pregled/svi_tipovi',
+		type: 'GET',
+		success: function(pregledi){
+			for(let p of pregledi){
+				let tr = $('<tr></tr>');
+				let tdName = $('<td>' + p.naziv + '</td>');
+				let tdPrice = $('<td>' + p.cena + '</td>');
+				let tdActions = $('<td></td>');
+				
+				let aEdit = $('<a href = "#">Edit</a><br/>');
+				let aDelete = $('<a href = "#">Delete </a>');
+				
+				aEdit.on('click', function(event){
+					event.preventDefault();
+					
+					$.ajax({
+						url: 'pregled/nadji_tip/' + p.id,
+						success: function(pregled){
+							home();
+							$('#editAptType').attr('hidden', false);
+							$('#editAptName').val(pregled.naziv);
+							$('#editAptPrice').val(pregled.cena);
+							$('#lAptId').html(pregled.id);
+						},
+						error: function(){
+							alert('Something went wrong');
+						}
+					});
+					
+				});
+				
+				aDelete.on('click', function(event){
+					event.preventDefault();
+					
+					$.ajax({
+						url: 'pregled/obrisi_tip/' + p.id,
+						type: 'DELETE',
+						success: function(i){
+							if(i===0)
+								alert('Successfully deleted appointment');
+							else
+								alert("Cannot delete type");
+						},
+						error: function(){
+							alert('Something went wrong');
+						}
+					});
+				});
+				
+				tdActions.append(aEdit).append(aDelete);
+				
+				tr.append(tdName).append(tdPrice).append(tdActions);
+				$('#aptsTable tbody').append(tr);
+				
+			}
+		
+		}
+	});
+}
+
+function editApts(event){
+	event.preventDefault();
+	
+	let id = $('#lAptId').html();
+	let name = $('#editAptName').val();
+	let price = $('#editAptPrice').val();
+	
+	if(name === '' || price === ''){
+		alert("Fields must not be empty");
+		return;
+	}
+		
+	$.ajax({
+		url: 'pregled/uredi_tip',
+		type: 'POST',
+		data: JSON.stringify({id, name, price}),
+		contentType: 'application/json',
+		success: function(){
+			alert("Successfully edited apointment type");
+			 $('#lAptId').html('');
+			 $('#editAptName').val('');
+			 $('#editAptPrice').val('');
+			 home();
+		},
+		error: function(){
+			alert('Something went wrong');
+		}
+	});
 }
 

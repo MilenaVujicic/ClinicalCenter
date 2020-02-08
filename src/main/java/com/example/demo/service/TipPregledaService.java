@@ -34,4 +34,8 @@ public class TipPregledaService {
 	public Optional<TipPregleda> findById(Long id){
 		return tipPregledaRepository.findById(id);
 	}
+	
+	public void delete(TipPregleda t) {
+		tipPregledaRepository.delete(t);
+	}
 }

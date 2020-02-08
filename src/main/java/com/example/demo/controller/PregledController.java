@@ -364,4 +364,49 @@ public class PregledController {
 		tipPregledaService.save(t);
 		return new ResponseEntity<String>("Dodat pregled", HttpStatus.OK);
 	}
+	
+	@RequestMapping(value = "/obrisi_tip/{id}", method = RequestMethod.DELETE)
+	public ResponseEntity<Integer> izbrisiTipPregled(@PathVariable("id") Long id){
+		Integer retVal = new Integer(0);
+		
+		Optional<TipPregleda> otp = tipPregledaService.findById(id);
+		TipPregleda tp = otp.get();
+		if(tp.getZauzet()) {
+			retVal = new Integer(1);
+		}else {
+			tipPregledaService.delete(tp);
+		}
+		
+		return new ResponseEntity<Integer>(retVal, HttpStatus.OK);
+	}
+	
+	@RequestMapping(value = "/nadji_tip/{id}", method = RequestMethod.GET)
+	public ResponseEntity<TipPregleda> nadjiTip(@PathVariable("id") Long id){
+		Optional<TipPregleda> otp = tipPregledaService.findById(id);
+		TipPregleda t = otp.get();
+		
+		return new ResponseEntity<TipPregleda>(t, HttpStatus.OK);
+	}
+	
+	@RequestMapping(value = "/uredi_tip", method = RequestMethod.POST)
+	public ResponseEntity<String> urediTip(HttpEntity<String> json) throws ParseException{
+		String jString = json.getBody();
+		JSONParser parser = new JSONParser();
+		JSONObject jObj = (JSONObject)parser.parse(jString);
+		String name = (String)jObj.get("name");
+		String priceStr = (String)jObj.get("price");
+		String idStr = (String)jObj.get("id");
+		
+		Double price = Double.parseDouble(priceStr);
+		Long id = Long.parseLong(idStr);
+		
+		Optional<TipPregleda> otp = tipPregledaService.findById(id);
+		TipPregleda tp = otp.get();
+		
+		tp.setNaziv(name);
+		tp.setCena(price);
+		
+		tipPregledaService.save(tp);
+		return new ResponseEntity<String>("Uspesno uredjen tip", HttpStatus.OK);
+	}
 }

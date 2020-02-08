@@ -6,8 +6,14 @@
     <!-- This file has been downloaded from Bootsnipp.com. Enjoy! -->
     <title>Clinic administrator</title>
     <link href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.0/css/bootstrap.min.css" rel="stylesheet">
-    
+    <link href="css/bootstrap.min.css" rel="stylesheet">
     <script src="http://code.jquery.com/jquery-1.11.1.min.js"></script>
+        <link href='https://fullcalendar.io/releases/fullcalendar/3.9.0/fullcalendar.min.css' rel='stylesheet' />
+	<link rel='stylesheet' href='https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css'>
+	<link href='https://fullcalendar.io/releases/fullcalendar/3.9.0/fullcalendar.print.min.css' rel='stylesheet' media='print' />
+	<script src='https://fullcalendar.io/releases/fullcalendar/3.9.0/lib/moment.min.js'></script>
+	<script src='https://fullcalendar.io/releases/fullcalendar/3.9.0/lib/jquery.min.js'></script>
+	<script src='https://fullcalendar.io/releases/fullcalendar/3.9.0/fullcalendar.min.js'></script>
     <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.0/js/bootstrap.min.js"></script>
     <script src = "/adminKlinike.js" type = 'text/javascript'></script>
 
@@ -15,15 +21,21 @@
 	<link href="css/bootstrap.min.css" rel="stylesheet">
 	<link rel="stylesheet" href="adminKlinike.css">
 	
-	<!-- Data Table -->
-	<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.20/css/jquery.dataTables.css">
-	<script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.10.20/js/jquery.dataTables.js"></script>
+	
 	
 	<!-- Website Font style -->
     <script src="https://kit.fontawesome.com/a065fea601.js" crossorigin="anonymous"></script>
 	<!-- Google Fonts -->
 	<link href='https://fonts.googleapis.com/css?family=Passion+One' rel='stylesheet' type='text/css'>
 	<link href='https://fonts.googleapis.com/css?family=Oxygen' rel='stylesheet' type='text/css'>
+	
+
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+    <script src="https://unpkg.com/gijgo@1.9.13/js/gijgo.min.js" type="text/javascript"></script>
+    <link href="https://unpkg.com/gijgo@1.9.13/css/gijgo.min.css" rel="stylesheet" type="text/css" />
+    <!-- Data Table -->
+	<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.20/css/jquery.dataTables.css">
+	<script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.10.20/js/jquery.dataTables.js"></script>
 </head>
 <body>
 	<nav class="navbar navbar-inverse">
@@ -45,6 +57,7 @@
 	      <li class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">Clinic<span class="caret"></span></a>
 	         <ul class="dropdown-menu">
 	          <li><a href = "#" id = "aEditClinic">Edit clinic data</a></li>
+	          <li><a href = "#" id = "aShowApts">Show appointment types</a>
 	          <li><a href = "#" id = "aShowRooms">Rooms</a></li>  
 	          <li><a href = "#" id = "aShowDoctors">Doctors</a></li>
 	          <li><a href = "#" id = "aShowPrices">Pricing</a></li>
@@ -270,10 +283,11 @@
 <table class = "table" id = "showRoomsTable" hidden = "true">
 <thead>
 <tr>
+<th scope = "col">#</th>
 <th scope = "col">Name: </th>
 <th scope = "col">Description</th>
-<th scope = "col">Dates Free: </th>
-<th scope = "col">Actions:</th>
+<th scope = "col" class = "no-sort">Dates Free: </th>
+<th scope = "col" class = "no-sort">Actions:</th>
 </tr>
 </thead>
 <tbody>
@@ -393,4 +407,43 @@
 		</div>
 </div>
 </form>
+
+<div id = "divApts" hidden = "true">
+<table class = "table" id ="aptsTable">
+<thead>
+<tr>
+<th>Name: </th>
+<th>Price: </th>
+<th>Actions: </th>
+</tr>
+</thead>
+<tbody></tbody>
+</table>
+</div>
+
+<div id="editAptType" hidden = "true">
+<h4>Edit Appointment Type</h4>
+<form id = "newAptTypeForm">
+<label id = "lAptId" hidden = "true"></label>
+<div class="form-row">
+		 <div class="form-group col-md-8">
+		    <label for="exTypeName">Name of appointment</label>
+		    <input type="text" class="form-control" id="editAptName">
+		 </div>
+</div>
+<div class="form-row">
+		 <div class="form-group col-md-8">
+		    <label for="exTypeName">Price</label>
+		    <input type="number" class="form-control" id="editAptPrice">
+		 </div>
+</div>
+<br/>
+<div class="form-row">
+		  <div class="form-group col-md-1">
+		  	<a class="btn btn-primary" id = "btnSaveEditAptType">Save appointment</a>
+		</div>
+</div>
+</form>
+</div>
+</body>
 </html>
