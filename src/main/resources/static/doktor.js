@@ -595,6 +595,7 @@ function savePregled(){
 		contentType: 'application/json',
 		success: function(ret){
 			alert('The request has been sent');
+			$('#examForm').attr('hidden', true);
 		},
 		error: function(){
 			alert('Something went wrong');
@@ -1083,6 +1084,7 @@ function saveOperation(){
 		contentType: 'application/json',
 		success: function(ret){
 			alert('The request has been sent');
+			$('#operationForm').attr('hidden', true);
 		},
 		error: function(){
 			alert('Desila se greska');
