@@ -415,7 +415,7 @@ public class PacijentController {
 	@RequestMapping(value = "/otkazi/{id}", method = RequestMethod.GET)
 	public ResponseEntity<String> otkazi(@PathVariable("id") Long identifikacija) {
 		Termin t = terminService.findOne(identifikacija);
-		t.setSlobodan(false);
+		t.setSlobodan(true);
 		t.setPotvrdjen(false);
 		terminService.save(t);
 		return new ResponseEntity<String>("Pregled otkazan!", HttpStatus.OK);
