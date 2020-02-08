@@ -34,6 +34,9 @@ import com.example.demo.service.KlinikaService;
 import com.example.demo.service.KorisnikService;
 import com.example.demo.service.PacijentService;
 
+import org.springframework.transaction.annotation.Isolation;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.stereotype.Controller;
 
 @RestController
@@ -55,6 +58,7 @@ public class RegistrationController {
 	@Autowired
 	private AdministratorKlinickogCentraService administratorKlinickogCentraService;
 	
+	@Transactional(readOnly =false, isolation = Isolation.SERIALIZABLE)
 	@RequestMapping(value = "/register", method = RequestMethod.PUT)
 	public ResponseEntity<String> registracijaPacijenta(@RequestParam(value="ime") String ime,
 														@RequestParam(value="prz") String prezime,
@@ -66,6 +70,7 @@ public class RegistrationController {
 														@RequestParam(value="id") String id,
 														@RequestParam(value="password") String password,
 														@RequestParam(value="confirm") String confirm) {
+		
 		
 		if(!password.equals(confirm)) {
 			System.out.println("Passwords don't match!");
@@ -80,6 +85,7 @@ public class RegistrationController {
 			return new ResponseEntity<String>("Pogresan format za JMBG", HttpStatus.CONFLICT);
 		}
 		
+		
 		KorisnikDTO korisnikDTO = new KorisnikDTO();
 		korisnikDTO.setIme(ime);
 		korisnikDTO.setPrezime(prezime);
@@ -92,12 +98,22 @@ public class RegistrationController {
 		korisnikDTO.setPassword(password);
 		korisnikDTO.setMatchingPassword(confirm);
 		
+		if (korisnikService.emailExists(korisnikDTO.getEmail())) {
+            throw new UserAlreadyExistException("There is an account with that email adress: " + korisnikDTO.getEmail());
+        }
+		try {
+			Thread.sleep(2000L);
+		} catch (InterruptedException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+		
 		Korisnik korisnik = korisnikService.registerNewUserAccount(korisnikDTO);
 		
 		List<AdministratorKlinickogCentra> admini = administratorKlinickogCentraService.findAll();
 		AdministratorKlinickogCentra admin = admini.get(0);
 		Korisnik admin_k = korisnikService.findOne(admin.getIdKorisnik());
-		//emailService.sendRegistrationRequest(korisnik, admin_k);
+		emailService.sendRegistrationRequest(korisnik, admin_k);
 		
 		Pacijent noviPacijent = new Pacijent();
 		noviPacijent.setIdKorisnik(korisnik.getId());

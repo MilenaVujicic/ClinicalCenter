@@ -27,6 +27,9 @@ public class Termin {
 	@Column(name = "slobodan")
 	private boolean slobodan;
 	
+	@Column(name = "potvrdjen")
+	private boolean potvrdjen = false;
+	
 	@Column(name = "tip")
 	private String tip;
 	
@@ -155,6 +158,13 @@ public class Termin {
 		this.version = version;
 	}
 	
+	public boolean isPotvrdjen() {
+		return potvrdjen;
+	}
+	
+	public void setPotvrdjen(boolean potvrdjen) {
+		this.potvrdjen = potvrdjen;
+	}
 	
 	
 }

@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.example.demo.model.Korisnik;
 import com.example.demo.model.LogedUser;
@@ -24,6 +25,7 @@ public class LoginController {
 	@Autowired
     PasswordEncoder passwordEncoder;
 	
+	//@Transactional(readOnly=true)
 	@RequestMapping(value = "/login", method = RequestMethod.GET)
 	public ResponseEntity<String> login(@RequestParam(value="user") String user,
 									  @RequestParam(value="pass") String pass) {

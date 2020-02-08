@@ -360,4 +360,22 @@ public class EmailService {
 		javaMailSender.send(mail);
 		System.out.println("Email poslat!");
 	}
+	
+	@Async
+	public void sendConfirmOrDenyAppointment(Korisnik user, Termin t) throws MailException, InterruptedException {
+		SimpleMailMessage mail = new SimpleMailMessage();
+		mail.setTo("filip.vozarevic@gmail.com");
+		mail.setFrom(env.getProperty("spring.mail.username"));
+		mail.setSubject("Potvrda za zakazan termin");
+		mail.setText("Poštovani/-a " + user.getIme() + " " + user.getPrezime() + ",\n\nvaš zahtev "
+				+ "za pregled je prihvaćen." 
+				+ "\nMolimo vas potvrdite vaš dolazak, klikom na link ispod:\n"
+				+ "http://localhost:8080/pacijent/potvrdi/" + t.getId()
+				+ "\n Ili otkazite pregled klikom na link ispod:\n"
+				+ "http://localhost:8080/pacijent/otkazi/"+ t.getId());
+		mail.setSentDate(new Date());
+		System.out.println(mail);
+		javaMailSender.send(mail);
+		System.out.println("Email poslat!");
+	}
 }
