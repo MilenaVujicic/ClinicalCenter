@@ -1,6 +1,7 @@
 package com.example.demo.controller;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 import java.util.Optional;
 
@@ -409,7 +410,7 @@ public class SalaController {
 	@RequestMapping(value = "/sve_sale_klinika/{id}", method = RequestMethod.GET)
 	public ResponseEntity<List<SalaDTO>> sveSaleKlinika(@PathVariable("id") Long id){
 		List<SalaDTO> retVal = new ArrayList<SalaDTO>();
-		
+		System.out.println(id);
 		Optional<AdministratorKlinike> oak = administratorService.findByIdKorisnik(id);
 		AdministratorKlinike ak = oak.get();
 		
@@ -450,9 +451,69 @@ public class SalaController {
 				}
 			}
 		}
-		salaService.delete(s);
-		//salaService.save(s);
+		s.setKlinika(null);
+		salaService.save(s);
 		retVal = new Integer(1);
 		return new ResponseEntity<Integer>(retVal, HttpStatus.OK);
+	}
+	
+	@RequestMapping(value = "/izmena_sale/{id}", method = RequestMethod.PUT)
+	public ResponseEntity<String> izmenaSale(@PathVariable("id") Long id, HttpEntity<String> json) throws ParseException{
+		
+		Optional<AdministratorKlinike> oak = administratorService.findByIdKorisnik(id);
+		AdministratorKlinike ak = oak.get();
+		
+		String jString = json.getBody();
+		JSONParser parser = new JSONParser();
+		JSONObject jObj = (JSONObject)parser.parse(jString);
+		String name = (String)jObj.get("name");
+		String desc = (String)jObj.get("desc");
+		String salaStr = ((Integer)jObj.get("id")).toString();
+		Optional<Klinika> ok = klinikaService.findById(ak.getKlinika().getId());
+		Klinika k = ok.get();
+		Optional<Sala> os = salaService.findById(Long.parseLong(salaStr));
+		Sala s = os.get();
+		s.setIme(name);
+		s.setOpis(desc);
+		salaService.save(s);
+		
+		return new ResponseEntity<String>("Izmenjena sala", HttpStatus.OK);
+	}
+
+	@RequestMapping(value = "/novi_termin/{id}", method = RequestMethod.POST)
+	public ResponseEntity<String> noviTermin(@PathVariable("id") Long id, HttpEntity<String> json) throws ParseException{
+		String jString = json.getBody();
+		JSONParser parser = new JSONParser();
+		JSONObject jObj = (JSONObject)parser.parse(jString);
+		String date = (String)jObj.get("date");
+		String time = (String)jObj.get("time");
+		
+		String[] dateParts = date.split("-");
+		int year = Integer.parseInt(dateParts[0]);
+		int month = Integer.parseInt(dateParts[1]);
+		int day = Integer.parseInt(dateParts[2]);
+		
+		String[] timeParts = time.split(":");
+		int hour = Integer.parseInt(timeParts[0]);
+		int minute = Integer.parseInt(timeParts[1]);
+		
+		Optional<Sala> os = salaService.findById(id);
+		Sala s = os.get();
+		
+		Termin t = new Termin();
+		t.setCena(0);
+		t.setDoktor(null);
+		t.setSala(s);
+		t.setSlobodan(true);
+		t.setTip("");
+		t.setTrajanje(1);
+		Calendar c = Calendar.getInstance();
+		c.set(year, month, day, hour, minute);
+		t.setDatum(c);
+		s.getSlobodniTermini().add(t);
+		terminService.save(t);
+		salaService.save(s);
+		
+		return new ResponseEntity<String>("Dodat termin", HttpStatus.OK);
 	}
 }

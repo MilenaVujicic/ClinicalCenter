@@ -226,6 +226,27 @@
 	</div>
 </form>
 
+
+<form id = "editRoomForm" hidden = "true">
+	<div class="form-row">
+	<div class="form-group col-md-8">
+		<label for="patientName">Room Name: </label>
+		<input type="text" class="form-control" id="euRoomName">
+	</div>
+	</div>
+	<div class="form-row">
+	<div class="form-group col-md-8">
+		<label for="patientName">Room Description: </label>
+		<input type="text" class="form-control" id="euRoomDesc">
+	</div>
+	</div>
+	<div class = "form-row">
+	<div class="form-group col-md-8">
+		<a class="btn btn-success" id = "btnSaveEditRoom">Save</a>
+	</div>
+	</div>
+</form>
+
 <form id = "editRoom" hidden = "true">
 	<div class="form-row">
 	<div class="form-group col-md-8">
@@ -350,4 +371,26 @@
 </div>
 </form>
 </div>
+
+<form id = "addTimeRoom" hidden = "true">
+<label id = "lId" hidden="true"></label>
+<div class="form-row">
+		 <div class="form-group col-md-8">
+		    <label for="doctor">Select Date</label>
+		   	<input type = "date" id = "roomFreeDate">
+		 </div>
+</div>
+<div class="form-row">
+		 <div class="form-group col-md-8">
+		    <label for="exTime">Enter time</label>
+		   <input type="text" class="form-control" id="roomFreeTime" placeholder = "hh:mm">
+		 </div>
+</div>
+<br/>
+<div class="form-row">
+		  <div class="form-group col-md-1">
+		  	<a class="btn btn-primary" id = "btnSaveRoomTime">Save</a>
+		</div>
+</div>
+</form>
 </html>

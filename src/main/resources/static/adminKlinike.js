@@ -19,6 +19,7 @@ $(document).ready(()=>{
 	document.getElementById('btnSaveAptType').addEventListener('click', saveAptType, false);
 	document.getElementById('aNewDoctor').addEventListener('click', addDoctor, false);
 	document.getElementById('btnSaveDoctor').addEventListener('click', saveDoctor, false);
+	document.getElementById('btnSaveRoomTime').addEventListener('click', saveRoomTime, false);
 	session = sessionStorage.getItem("id");
 	if(session == null){
 		alert('You must be logged in to view this page!');
@@ -58,6 +59,8 @@ function home() {
 	$('#editRoom').attr('hidden', true);
 	$('#divTermin').attr('hidden', true);
 	$('#divAptType').attr('hidden', true);
+	$('#editRoomForm').attr('hidden', true);
+	$('#addTimeRoom').attr('hidden', true);
 	
 }
 
@@ -636,7 +639,7 @@ function showPrices(event){
 	$('#pricingTable tbody').empty();
 	
 	$.ajax({
-		url:'usluga/cenaUsluge/' + sessionStorage.getItem("id"),
+		url:'pregled/svi_tipovi',
 		type:'GET',
 		success: function(examinations){
 			for(let ex of examinations){
@@ -840,10 +843,43 @@ function showTableRoom(room){
 	let tdActions = $('<td></td>');
 	
 	let aEdit = $('<a href = "#">Edit Room </a><br/>');
+	let aNewDate = $('<a href = "#">New Date</a><br/>');
 	let aDelete = $('<a href = "#">Delete</a>');
 	
 	aEdit.on('click', function(event){
 		event.preventDefault();
+		home();
+		$('#editRoomForm').attr('hidden', false);
+		$('#euRoomName').val(room.ime);
+		$('#euRoomDesc').val(room.opis);
+		$('#btnSaveEditRoom').on('click', function(event){
+			event.preventDefault();
+			let name = $('#euRoomName').val();
+			let desc = $('#euRoomDesc').val();
+			let id = room.id;
+			$.ajax({
+				url: 'sala/izmena_sale/' + sessionStorage.getItem("id"),
+				type: 'PUT',
+				data: JSON.stringify({name, desc, id}),
+				contentType: 'application/json',
+				success: function(str){
+					alert('The room data has been changed');
+					$('#euRoomName').val("");
+					$('#euRoomDesc').val("");
+					home();
+				},
+				error: function(){
+					alert('Something went wrong');
+				}
+			});
+		});
+	});
+	
+	aNewDate.on('click', function(event){
+		event.preventDefault();
+		home();
+		$('#addTimeRoom').attr('hidden', false);
+		$('#lId').append(room.id);
 	});
 	
 	aDelete.on('click', function(event){
@@ -865,7 +901,7 @@ function showTableRoom(room){
 		})
 	});
 	
-	tdActions.append(aEdit).append(aDelete);
+	tdActions.append(aEdit).append(aNewDate).append(aDelete);
 	
 	tr.append(tdName).append(tdDesc).append(tdDates).append(tdActions);
 	
@@ -1063,6 +1099,31 @@ function saveDoctor(event){
 		},
 		error: function(){
 			alert('Something went wrong');
+		}
+	})
+}
+
+function saveRoomTime(event){
+	event.preventDefault();
+	let date = $('#roomFreeDate').val();
+	let time = $('#roomFreeTime').val();
+	let id = $('#lId').html();
+	if(date === '' || time === ''){
+		alert("Time and date must not be empty");
+		return;
+	}
+	
+	$.ajax({
+		url: 'sala/novi_termin/' + id,
+		type: 'POST',
+		data: JSON.stringify({date, time}),
+		contentType: 'application/json',
+		success: function(str){
+			alert("Time has been added");
+			$('#roomFreeDate').val('');
+			$('#roomFreeTime').val('');
+			$('#lId').html('');
+			home();
 		}
 	})
 }
