@@ -740,10 +740,11 @@ function editAllergie() {
 	let naziv = $('#editAllergieName').val();
 	let opis = $('#editAllergieDesc').val();
 	let id = $('#editAllergieID').val();
+	let version = $('#editAllergieVersion').val();
 	$.ajax({
 		url: "alergija/izmeni/" + id,
 		type:"PUT",
-        data: JSON.stringify({id, naziv, opis}),
+        data: JSON.stringify({id, naziv, opis, version}),
         contentType:'application/json',
         success: function() {
         	$('#editAllergie').attr('hidden', true);
@@ -752,6 +753,7 @@ function editAllergie() {
         },
         error: function() {
         	alert('Desila se greska');
+        	$('#editAllergie').attr('hidden', true);
         }
 	});
 }
@@ -764,6 +766,7 @@ function editAlergy(alergija) {
 		$('#editAllergieName').val(alergija.naziv);
 		$('#editAllergieDesc').val(alergija.opis);
 		$('#editAllergieID').val(alergija.id);
+		$('#editAllergieVersion').val(alergija.version);
 	}
 }
 

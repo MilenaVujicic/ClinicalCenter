@@ -8,6 +8,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
+import javax.persistence.Version;
 
 @Entity
 public class Alergija {
@@ -24,6 +25,9 @@ public class Alergija {
 	
 	@ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.REFRESH, CascadeType.DETACH}, fetch = FetchType.EAGER)
 	private Pacijent pacijent;
+	
+	@Version
+	private Long version;
 
 	public Long getId() {
 		return id;
@@ -56,6 +60,16 @@ public class Alergija {
 	public void setPacijent(Pacijent pacijent) {
 		this.pacijent = pacijent;
 	}
+
+	public Long getVersion() {
+		return version;
+	}
+
+	public void setVersion(Long version) {
+		this.version = version;
+	}
+	
+	
 	
 	
 }

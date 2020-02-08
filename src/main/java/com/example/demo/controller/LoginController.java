@@ -32,6 +32,7 @@ public class LoginController {
 		
 		Korisnik korisnik = korisnikService.findByEmail(user);
 		if(korisnik == null) {
+			System.out.println("###0");
 			return new ResponseEntity<String>("Email i Sifra se ne poklapaju.", HttpStatus.CONFLICT);
 		}
 		
@@ -65,6 +66,7 @@ public class LoginController {
 			logedUser.setUserRole(korisnik.getUloga());
 			return new ResponseEntity<String>(response, HttpStatus.OK);
 		}else {
+			System.out.println("###3");
 			System.out.println(new ResponseEntity<String>("Nalog nije aktiviran.", HttpStatus.CONFLICT));
 			return new ResponseEntity<String>("Nalog nije aktiviran.", HttpStatus.CONFLICT);
 		}
