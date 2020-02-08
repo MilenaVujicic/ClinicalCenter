@@ -95,7 +95,7 @@ public class KorisnikService implements IUserService {
         return korisnikRepository.save(user);
 	}
 	
-	private boolean emailExists(String email) {
+	public boolean emailExists(String email) {
         Korisnik user = korisnikRepository.findByEmail(email);
         if (user != null) {
             return true;
