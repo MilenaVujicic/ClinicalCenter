@@ -73,7 +73,8 @@ insert into termin(datum, slobodan, potvrdjen, sala_id, trajanje, cena, doktor_i
 insert into termin(datum, slobodan, potvrdjen, sala_id, trajanje, cena, doktor_id, tip, version) values ('4-1-20 18:00:00', true, false, 3, 0, 200, 1, 'redovni',0);
 insert into termin(datum, slobodan, potvrdjen, sala_id, trajanje, cena, doktor_id, tip, version) values ('5-2-20 21:00:00', true, false, 3, 0, 200, 1, 'redovni',0);
 insert into termin(datum, slobodan, potvrdjen, sala_id, trajanje, cena, doktor_id, tip, version) values ('6-2-20 21:00:00', true, false, 6, 0, 200, 2, 'redovni',0);
-
+insert into termin(datum, slobodan, potvrdjen, sala_id, trajanje, cena, doktor_id, tip, version) values ('2020-02-01 17:00', true, false, 7, 0, 200, 1, 'redovni',0);
+insert into termin(datum, slobodan, potvrdjen, sala_id, trajanje, cena, doktor_id, tip, version) values ('2020-02-01 17:00', true, false, 2, 0, 200, 1, 'redovni',0);
 
 insert into lek(sifra, ime, opis) values ('J01CA04', 'Amoksicilin', 'Lek na bazi penicilina');
 insert into lek(sifra, ime, opis) values ('J01CR02', 'Panklav', 'Lek na bayi amoksicilina i klavulinske kiseline');
