@@ -131,3 +131,6 @@ insert into odsustvo (korisnik_id, vrsta_odsustva, pocetak_odsustva, zavrsetak_o
 insert into odsustvo (korisnik_id, vrsta_odsustva, pocetak_odsustva, zavrsetak_odsustva, odobren) values (7, 1, '2020-01-25', '2020-01-28', TRUE);
 insert into odsustvo (korisnik_id, vrsta_odsustva, pocetak_odsustva, zavrsetak_odsustva, odobren) values (8, 1, '2020-02-25', '2020-02-28', FALSE);
 
+
+insert into pregled (naziv, anamneza, datumivreme_pregleda, status, tip_pregleda_id, doktor_id, pacijent_id, sala_id) values ('', '', '2-2-20 18:00:00', 2, 1, 3, 3, 1);
+insert into pregled (naziv, anamneza, datumivreme_pregleda, status, tip_pregleda_id, doktor_id, pacijent_id, sala_id) values ('', '', '2-2-20 19:00:00', 2, 1, 3, 3, 1);

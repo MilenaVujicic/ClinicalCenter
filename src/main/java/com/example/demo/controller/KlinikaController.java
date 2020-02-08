@@ -196,11 +196,13 @@ public class KlinikaController {
 		
 		List<Doktor> doktori = doktorService.findAllByKlinika(k);
 		for(Doktor d : doktori) {
+			System.out.println(d.getId());
 			for(Pregled p : d.getPregledi()) {
 				if(p.getStatus() == StatusPregleda.ZAVRSEN) {
 					Calendar pDate = p.getDatumIVremePregleda();
 					if(pDate.getTimeInMillis() > beginC.getTimeInMillis() && pDate.getTimeInMillis() < endC.getTimeInMillis()) {
-						//totalEarnings += p.getCena();
+						System.out.println(p.getTipPregleda().getCena());
+						totalEarnings += p.getTipPregleda().getCena();
 						System.out.println(totalEarnings);
 					}
 				}
