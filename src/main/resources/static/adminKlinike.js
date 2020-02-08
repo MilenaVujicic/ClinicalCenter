@@ -22,6 +22,7 @@ $(document).ready(()=>{
 	document.getElementById('btnSaveRoomTime').addEventListener('click', saveRoomTime, false);
 	document.getElementById('aShowApts').addEventListener('click', showApts, false);
 	document.getElementById('btnSaveEditAptType').addEventListener('click', editApts, false);
+	document.getElementById('aShowDoctors').addEventListener('click', showDoctors, false);
 	session = sessionStorage.getItem("id");
 	if(session == null){
 		alert('You must be logged in to view this page!');
@@ -65,6 +66,8 @@ function home() {
 	$('#addTimeRoom').attr('hidden', true);
 	$('#divApts').attr('hidden', true);
 	$('#editAptType').attr('hidden', true);
+	$('#doctorsTable').attr('hidden', true);
+	$('#divNewDoctor').attr('hidden', true);
 }
 
 function prikaziDoktora(doktor, specijalizacija) {
@@ -1109,7 +1112,7 @@ function saveDoctor(event){
 		data: JSON.stringify({userId, spec}),
 		contentType: 'application/json',
 		success: function(str){
-			alert("Doktor added");
+			alert("Doctor added");
 			home();
 		},
 		error: function(){

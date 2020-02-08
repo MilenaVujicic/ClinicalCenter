@@ -554,6 +554,10 @@ public class DoktorController {
 		
 		for (Korisnik korisnik : lekari) {
 			for (Doktor doktor : doktori) {
+				System.out.println(doktor.getSpecijalizacija());
+				System.out.println(doktor.getKlinika().getId());
+				System.out.println(doktor.getIdKorisnik());
+				System.out.println(korisnik.getId());
 				if (doktor.getIdKorisnik().equals(korisnik.getId())) {
 					doktori_klinike.add(korisnik);
 				}
@@ -801,14 +805,18 @@ public class DoktorController {
 		Optional<Klinika> ok = klinikaService.findById(ak.getKlinika().getId());
 		Klinika k = ok.get();
 		
+		Optional<Korisnik> okr = korisnikService.findById(Long.parseLong(userId));
+		Korisnik kr = okr.get();
+		
 		Doktor d = new Doktor();
 		d.setIdKorisnik(Long.parseLong(userId));
 		d.setKlinika(k);
 		d.setSpecijalizacija(specialization);
-		
+		//k.getDoktori().add(d);
+		kr.setUloga(UlogaKorisnika.LEKAR);
+		//klinikaService.save(k);
 		doktorService.save(d);
-		
-		
+		korisnikService.save(kr);
 		return new ResponseEntity<String>("dodat doktor", HttpStatus.OK);
 	}
 }

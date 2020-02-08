@@ -26,7 +26,7 @@ insert into korisnik (ime, prezime, email,  password, grad, drzava, jmbg, adresa
 insert into korisnik (ime, prezime, email,  password, grad, drzava, jmbg, adresa, telefon, datum_rodjenja, uloga, aktivan, aktiviran, broj_prijava) values ('Petar', 'Markovic', 'petar.mi@gmail.com', 'miki', 'Beograd', 'Srbija', '6325440158741', 'Njegoseva 38', 113652985, '1973-4-9', 2, TRUE, TRUE, 1);
 insert into korisnik (ime, prezime, email,  password, grad, drzava, jmbg, adresa, telefon, datum_rodjenja, uloga, aktivan, aktiviran, broj_prijava) values ('Petar', 'Milosevic', 'petar.mil@gmail.com', 'mili', 'Beograd', 'Srbija', '6325440158741', 'Njegoseva 38', 113652985, '1973-4-9', 2, TRUE, TRUE, 1);
 insert into korisnik (ime, prezime, email,  password, grad, drzava, jmbg, adresa, telefon, datum_rodjenja, uloga, aktivan, aktiviran, broj_prijava) values ('Klinika', 'KLinikikic', 'klinika.kl@gmail.com', 'klinika', 'Beograd', 'Srbija', '6325440158741', 'Njegoseva 38', 113652985, '1973-4-9', 1, TRUE, TRUE, 1);
-
+insert into korisnik (ime, prezime, email,  password, grad, drzava, jmbg, adresa, telefon, datum_rodjenja, uloga, aktivan, aktiviran, broj_prijava) values ('Novi', 'Doktor', 'doca.kl@gmail.com', 'doca', 'Novi Sad', 'Srbija', '6325440145341', 'Njegoseva 38', 113652985, '1973-4-9', 1, TRUE, TRUE, 1);
 insert into pacijent (id_korisnik, visina, tezina, dioptrija, klinika_id, krvna_grupa) values (1, 168, 70, -4.0, 1, 0);
 insert into pacijent (id_korisnik, visina, tezina, dioptrija, klinika_id, krvna_grupa) values (2, 174, 88, 0.5, 1, 1);
 insert into pacijent (id_korisnik, visina, tezina, dioptrija, klinika_id, krvna_grupa) values (5, 174, 88, 0.5, 1, 1);
