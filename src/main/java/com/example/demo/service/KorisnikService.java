@@ -3,6 +3,8 @@ package com.example.demo.service;
 import java.util.List;
 import java.util.Optional;
 
+import org.springframework.transaction.annotation.Isolation;
+import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -67,12 +69,13 @@ public class KorisnikService implements IUserService {
 		return korisnikRepository.findById(id);
 	}
 	
-	@Transactional
+	
 	@Override
 	public Korisnik registerNewUserAccount(KorisnikDTO accountDto) throws UserAlreadyExistException {
 		if (emailExists(accountDto.getEmail())) {
             throw new UserAlreadyExistException("There is an account with that email adress: " + accountDto.getEmail());
         }
+		
 		final Korisnik user = new Korisnik();
 		user.setIme(accountDto.getIme());
 		user.setPrezime(accountDto.getPrezime());
@@ -88,7 +91,7 @@ public class KorisnikService implements IUserService {
         return korisnikRepository.save(user);
 	}
 	
-	private boolean emailExists(String email) {
+	public boolean emailExists(String email) {
         Korisnik user = korisnikRepository.findByEmail(email);
         if (user != null) {
             return true;
