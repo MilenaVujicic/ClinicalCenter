@@ -37,6 +37,7 @@
 	      <li class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">Add <span class="caret"></span></a>
 	        <ul class="dropdown-menu">
 	          <li><a href = "#" id = "aDefineApt">New Appointment</a></li>
+	          <li><a href = "#" id = "aNewAptType">New Appointment Type</a>
 	          <li><a href = "#" id = "aNewDoctor">New Doctor</a></li>
 	          <li><a href = "#" id = "aNewRoom">New Room</a>
 	        </ul>
@@ -257,6 +258,96 @@
 <tbody>
 </tbody>
 </table>
+
+<div id = "divTermin" hidden = "true">
+<h4>New Appointment</h4>
+<form id = "terminForma">
+<div class="form-row">
+	<div class="form-group col-md-8">
+		<label for="roomName">Room: </label>
+		<select id = "sRoomTermin"></select>
+	</div>
+</div>
+<div class="form-row">
+	<div class="form-group col-md-8">
+		<label for="exType">Type: </label>
+		<select id = "sExamType"></select>
+	</div>
+</div>
+<div class="form-row">
+	<div class="form-group col-md-8">
+		<label for="doctor">Doctor: </label>
+		<select id = "sDoctorTermin"></select>
+	</div>
+</div>
+<div class="form-row">
+		 <div class="form-group col-md-8">
+		    <label for="exDate">Date of examination</label>
+		    <input type="date" class="form-control" id="dateNewExam">
+		 </div>
+	  </div>
+<div class="form-row">
+	<div class="form-group col-md-8">
+		   <label for="exTime">Time of appointment</label>
+		   <input type="text" class="form-control" id="timeNewExam" placeholder = "hh:mm">
+	</div>
+</div>
+<br/>
+<div class="form-row">
+		  <div class="form-group col-md-1">
+		  	<a class="btn btn-primary" id = "btnSaveNewExam">Save appointment</a>
+		</div>
+</div>
+</form>
+</div>
 	
+<div id="divAptType" hidden = "true">
+<h4>New Appointment Type</h4>
+<form id = "newAptTypeForm">
+<div class="form-row">
+		 <div class="form-group col-md-8">
+		    <label for="exTypeName">Name of appointment</label>
+		    <input type="text" class="form-control" id="nameNewApt">
+		 </div>
+</div>
+<div class="form-row">
+		 <div class="form-group col-md-8">
+		    <label for="exTypeName">Price</label>
+		    <input type="number" class="form-control" id="priceNewApt">
+		 </div>
+</div>
+<br/>
+<div class="form-row">
+		  <div class="form-group col-md-1">
+		  	<a class="btn btn-primary" id = "btnSaveAptType">Save appointment</a>
+		</div>
+</div>
+</form>
+</div>
 </body>
+
+<div id = "divNewDoctor" hidden = "true">
+<h4>New Doctor</h4>
+<form id = "newDoctorForm">
+<div class="form-row">
+		 <div class="form-group col-md-8">
+		    <label for="doctor">Select User</label>
+		   	<select id = "selNewDoctor"></select>
+		 </div>
+</div>
+
+<div class="form-row">
+		 <div class="form-group col-md-8">
+		    <label for="spec">Doctor Specialization</label>
+		    <input type="text" class="form-control" id="selSpecialization">
+		 </div>
+</div>
+
+<div class="form-row">
+		  <div class="form-group col-md-1">
+		  	<a class="btn btn-primary" id = "btnSaveDoctor">Save doctor</a>
+		</div>
+</div>
+</form>
+</div>
 </html>

@@ -788,5 +788,28 @@ public class DoktorController {
 		doktorService.save(d);
 		return new ResponseEntity<DoktorDTO>(doktor, HttpStatus.OK);
 	}
+	
+	@RequestMapping(value = "/novi_doktor/{id}", method = RequestMethod.POST)
+	public ResponseEntity<String> noviDoktor(@PathVariable("id") Long id, HttpEntity<String> json) throws ParseException{
+		String jString = json.getBody();
+		JSONParser parser = new JSONParser();
+		JSONObject jObj = (JSONObject)parser.parse(jString);
+		String userId = (String)jObj.get("userId");
+		String specialization = (String) jObj.get("spec");
+		Optional<AdministratorKlinike> oak = administratorService.findByIdKorisnik(id);
+		AdministratorKlinike ak = oak.get();
+		Optional<Klinika> ok = klinikaService.findById(ak.getKlinika().getId());
+		Klinika k = ok.get();
+		
+		Doktor d = new Doktor();
+		d.setIdKorisnik(Long.parseLong(userId));
+		d.setKlinika(k);
+		d.setSpecijalizacija(specialization);
+		
+		doktorService.save(d);
+		
+		
+		return new ResponseEntity<String>("dodat doktor", HttpStatus.OK);
+	}
 }
 

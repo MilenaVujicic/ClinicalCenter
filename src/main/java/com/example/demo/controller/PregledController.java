@@ -7,6 +7,7 @@ import java.util.Optional;
 import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -20,20 +21,14 @@ import com.example.demo.model.AdministratorKlinike;
 import com.example.demo.model.Doktor;
 import com.example.demo.model.Klinika;
 import com.example.demo.model.Korisnik;
-
 import com.example.demo.model.LogedUser;
-import com.example.demo.model.Operacija;
-
 import com.example.demo.model.Pregled;
 import com.example.demo.model.Sala;
 import com.example.demo.model.StatusPregleda;
 import com.example.demo.model.Termin;
-
-import com.example.demo.service.AdministratorKlinikeService;
-
 import com.example.demo.model.TipPregleda;
 import com.example.demo.model.UlogaKorisnika;
-
+import com.example.demo.service.AdministratorKlinikeService;
 import com.example.demo.service.DoktorService;
 import com.example.demo.service.EmailService;
 import com.example.demo.service.KlinikaService;
@@ -42,6 +37,10 @@ import com.example.demo.service.PregledService;
 import com.example.demo.service.SalaService;
 import com.example.demo.service.TerminService;
 import com.example.demo.service.TipPregledaService;
+
+import net.minidev.json.JSONObject;
+import net.minidev.json.parser.JSONParser;
+import net.minidev.json.parser.ParseException;
 
 
 @RestController
@@ -299,4 +298,70 @@ public class PregledController {
 
 	}
 
+	@RequestMapping(value = "/novi_pregled_admin/{id}", method = RequestMethod.POST)
+	public ResponseEntity<String> noviPregledAdmin(@PathVariable("id") Long id, HttpEntity<String> json) throws ParseException{
+		String jString = json.getBody();
+		JSONParser parser = new JSONParser();
+		JSONObject jObj = (JSONObject)parser.parse(jString);
+		String salaIdStr = (String) jObj.get("salaId");
+		String tipIdStr = (String) jObj.get("tipId");
+		String doktorIdStr = (String) jObj.get("doktorId");
+		String datumStr = (String) jObj.get("datum");
+		String vremeStr = (String) jObj.get("vreme");
+		
+		Long salaId = Long.parseLong(salaIdStr);
+		Long tipId = Long.parseLong(tipIdStr);
+		Long doktorId = Long.parseLong(doktorIdStr);
+		
+		String[] datumParts = datumStr.split("-");
+		int year = Integer.parseInt(datumParts[0]);
+		int month = Integer.parseInt(datumParts[1]);
+		int date = Integer.parseInt(datumParts[2]);
+		String[] vremeParts = vremeStr.split(":");
+		int hour = Integer.parseInt(vremeParts[0]);
+		int minute = Integer.parseInt(vremeParts[1]);
+		
+		Optional<TipPregleda> otp = tipPregledaService.findById(tipId);
+		TipPregleda tp = otp.get();
+		
+		Optional<Sala> os = salaService.findById(salaId);
+		Sala s = os.get();
+		
+		Doktor d = doktorService.findByIdKorisnik(id);
+
+		
+		Calendar cVreme = Calendar.getInstance();
+		cVreme.set(year, month, date, hour, minute);
+		
+		Pregled p = new Pregled();
+		p.setAnamneza("");
+		p.setDatumIVremePregleda(cVreme);
+		p.setDoktor(d);
+		p.setNaziv(tp.getNaziv());
+		p.setPacijent(null);
+		p.setSala(s);
+		p.setStatus(StatusPregleda.NERASPOREDJEN);
+		p.setTipPregleda(tp);
+		pregledService.save(p);
+		return new ResponseEntity<String>("Dodat pregled", HttpStatus.OK);
+	}
+	
+	@RequestMapping(value = "/novi_tip_pregleda", method = RequestMethod.POST)
+	public ResponseEntity<String> noviTipPregleda(HttpEntity<String> json) throws ParseException{
+		String jString = json.getBody();
+		JSONParser parser = new JSONParser();
+		JSONObject jObj = (JSONObject)parser.parse(jString);
+		String name = (String) jObj.get("name");
+		String price = (String) jObj.get("price");
+		
+		double priceD = Double.parseDouble(price);
+		
+		TipPregleda t = new TipPregleda();
+		t.setCena(priceD);
+		t.setNaziv(name);
+		t.setZauzet(false);
+		
+		tipPregledaService.save(t);
+		return new ResponseEntity<String>("Dodat pregled", HttpStatus.OK);
+	}
 }

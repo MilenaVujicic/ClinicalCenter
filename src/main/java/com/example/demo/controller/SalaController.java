@@ -82,7 +82,7 @@ public class SalaController {
 	}
 	
 	@RequestMapping(value = "/sve_sale/{id}", method = RequestMethod.GET)
-	public ResponseEntity<List<SalaDTO>>getSaleKlinika(@PathVariable String id){
+	public ResponseEntity<List<SalaDTO>> getSaleKlinika(@PathVariable String id){
 		List<Sala> sale = salaService.findAll();
 		List<SalaDTO> retVal = new ArrayList<SalaDTO>();
 		String[] parts = id.split("\\.");

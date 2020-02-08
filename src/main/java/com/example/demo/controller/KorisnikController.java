@@ -1,5 +1,6 @@
 package com.example.demo.controller;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -16,6 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.example.demo.dto.KorisnikDTO;
 import com.example.demo.model.Korisnik;
+import com.example.demo.service.DoktorService;
 import com.example.demo.service.EmailService;
 import com.example.demo.service.KorisnikService;
 import com.example.demo.service.PacijentService;
@@ -37,7 +39,9 @@ public class KorisnikController {
 	@Autowired
 	PacijentService pacijentService;
 
-
+	@Autowired
+	DoktorService doktorService;
+	
 	@RequestMapping(value = "/korisnik/{id}", method=RequestMethod.GET)
 	public Korisnik getKorisnik(@PathVariable Long id) {
 		Korisnik korisnik = korisnikService.findOne(id);
@@ -182,6 +186,19 @@ public class KorisnikController {
 		Korisnik k = korisnikService.save(korisnik);
 		
 		return new ResponseEntity<String>("Uspesno promenjena lozinka", HttpStatus.OK);
+	}
+	
+	@RequestMapping(value = "user_not_doctor/{id}", method = RequestMethod.GET)
+	public ResponseEntity<List<KorisnikDTO>> getNotDoctor(@PathVariable("id") Long id, HttpEntity<String> json){
+		List<Korisnik> sviKorisnici = korisnikService.findAll();
+		List<KorisnikDTO> retVal = new ArrayList<KorisnikDTO>();
+		for(Korisnik k : sviKorisnici) {
+			if(doktorService.findByIdKorisnik(k.getId()) == null) {
+				retVal.add(new KorisnikDTO(k));
+			}
+		}
+		
+		return new ResponseEntity<List<KorisnikDTO>>(retVal, HttpStatus.OK);
 	}
 
 }
