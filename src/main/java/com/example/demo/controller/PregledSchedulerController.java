@@ -47,7 +47,7 @@ public class PregledSchedulerController {
 	
 	
 	@SuppressWarnings("static-access")
-	@Scheduled(cron = "${greeting2.cron}")
+	//@Scheduled(cron = "${greeting2.cron}")
 	public void autoDodelaPregleda() {
 		System.out.println("Pocetak dodele za pregled");
 		List<Pregled> nerasporedjeni_pregledi = pregledService.findByStatus(StatusPregleda.NERASPOREDJEN);

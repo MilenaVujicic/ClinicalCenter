@@ -554,6 +554,10 @@ public class DoktorController {
 		
 		for (Korisnik korisnik : lekari) {
 			for (Doktor doktor : doktori) {
+				System.out.println(doktor.getSpecijalizacija());
+				System.out.println(doktor.getKlinika().getId());
+				System.out.println(doktor.getIdKorisnik());
+				System.out.println(korisnik.getId());
 				if (doktor.getIdKorisnik().equals(korisnik.getId())) {
 					doktori_klinike.add(korisnik);
 				}
@@ -787,6 +791,33 @@ public class DoktorController {
 		klinikaService.save(k);
 		doktorService.save(d);
 		return new ResponseEntity<DoktorDTO>(doktor, HttpStatus.OK);
+	}
+	
+	@RequestMapping(value = "/novi_doktor/{id}", method = RequestMethod.POST)
+	public ResponseEntity<String> noviDoktor(@PathVariable("id") Long id, HttpEntity<String> json) throws ParseException{
+		String jString = json.getBody();
+		JSONParser parser = new JSONParser();
+		JSONObject jObj = (JSONObject)parser.parse(jString);
+		String userId = (String)jObj.get("userId");
+		String specialization = (String) jObj.get("spec");
+		Optional<AdministratorKlinike> oak = administratorService.findByIdKorisnik(id);
+		AdministratorKlinike ak = oak.get();
+		Optional<Klinika> ok = klinikaService.findById(ak.getKlinika().getId());
+		Klinika k = ok.get();
+		
+		Optional<Korisnik> okr = korisnikService.findById(Long.parseLong(userId));
+		Korisnik kr = okr.get();
+		
+		Doktor d = new Doktor();
+		d.setIdKorisnik(Long.parseLong(userId));
+		d.setKlinika(k);
+		d.setSpecijalizacija(specialization);
+		//k.getDoktori().add(d);
+		kr.setUloga(UlogaKorisnika.LEKAR);
+		//klinikaService.save(k);
+		doktorService.save(d);
+		korisnikService.save(kr);
+		return new ResponseEntity<String>("dodat doktor", HttpStatus.OK);
 	}
 }
 

@@ -8,6 +8,7 @@ $(document).ready(()=>{
 	document.getElementById ("aPersonalData").addEventListener("click", showPersonalData, false);
 	document.getElementById ("aDayOff").addEventListener("click", newAbsence, false);
 	document.getElementById ("bRequestHoliday").addEventListener("click", requestHoliday, false);
+	document.getElementById ("aLogout").addEventListener("click", logout, false);
 	let session = sessionStorage.getItem("id");
 	if (session == null) {
 		alert('Nemate prava pristupa ovoj stranici');
@@ -20,6 +21,10 @@ $(document).ready(()=>{
 			if (korisnik.uloga != 'LEKAR') {
 				alert('Nemate prava pristupa ovoj stranici');
 				window.location.href = "http://localhost:8080/doktor.html";
+			}
+			
+			if(korisnik.brojPrijava === 0){
+				window.location.href = './changePresonalData.html'
 			}
 		},
 		error: function() {
@@ -590,6 +595,7 @@ function savePregled(){
 		contentType: 'application/json',
 		success: function(ret){
 			alert('The request has been sent');
+			$('#examForm').attr('hidden', true);
 		},
 		error: function(){
 			alert('Something went wrong');
@@ -1078,6 +1084,7 @@ function saveOperation(){
 		contentType: 'application/json',
 		success: function(ret){
 			alert('The request has been sent');
+			$('#operationForm').attr('hidden', true);
 		},
 		error: function(){
 			alert('Desila se greska');
@@ -1222,4 +1229,21 @@ function editData(){
 	window.location.href = './changePresonalData.html';
 }
 
+function logout(event){
+	event.preventDefault();
+	$.ajax({
+		url: 'auth/logout',
+		type: "GET",
+		success: function(){
+			sessionStorage.removeItem("id");
+			let session = sessionStorage.getItem("id");
+			if (session == null) {
+				window.location.href = "http://localhost:8080/index.html";
+			}
+		},
+		error: function() {
+			alert('Something went wrong');
+		}
+	});
+}
 

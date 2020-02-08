@@ -7,7 +7,6 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 
 @SpringBootApplication
-@EnableTransactionManagement
 @EnableScheduling
 public class ClinicalCenterApplication {
 
