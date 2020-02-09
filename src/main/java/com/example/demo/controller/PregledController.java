@@ -342,8 +342,8 @@ public class PregledController {
 		Optional<Sala> os = salaService.findById(salaId);
 		Sala s = os.get();
 		
-		Doktor d = doktorService.findByIdKorisnik(id);
-
+		Doktor d = doktorService.findByIdKorisnik(doktorId);
+		
 		
 		Calendar cVreme = Calendar.getInstance();
 		cVreme.set(year, month, date, hour, minute);
@@ -357,6 +357,7 @@ public class PregledController {
 		p.setSala(s);
 		p.setStatus(StatusPregleda.NERASPOREDJEN);
 		p.setTipPregleda(tp);
+		
 		pregledService.save(p);
 		return new ResponseEntity<String>("Dodat pregled", HttpStatus.OK);
 	}
