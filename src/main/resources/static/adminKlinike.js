@@ -385,7 +385,7 @@ function rezSalaApt(sala, pregled) {
        				url += '~' + doktor.id;
        			}
        		}
-
+			
 			$.ajax({
 				url: url,
 				type: "GET",
