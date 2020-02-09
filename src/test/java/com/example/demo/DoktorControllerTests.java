@@ -84,7 +84,7 @@ public class DoktorControllerTests {
 			       .param("datum", ""))
 		     	   .andExpect(status().isOk())
 		           .andExpect(content().contentType("application/json"))
-		           .andExpect(jsonPath("$.*", hasSize(14)));
+		           .andExpect(jsonPath("$.*", hasSize(13)));
 		
 		mockMvc.perform(get("/pacijent/slobodniTermini")
 				   .param("doktor", "1")
