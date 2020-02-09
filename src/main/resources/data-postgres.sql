@@ -92,13 +92,13 @@ insert into tip_pregleda(naziv, cena, zauzet) values ('Opsti', 200.0, true);
 insert into tip_pregleda(naziv, cena, zauzet) values ('Specijalisticki', 5000.0, true);
 insert into tip_pregleda(naziv, cena, zauzet) values ('Kontrolni', 0.0, false);
 
-insert into pregled (naziv, anamneza, datumivreme_pregleda, status, tip_pregleda_id, doktor_id, pacijent_id, sala_id) values ('Prvi pregled', 'Pacijent je dosao sa povisenom temperaturom', '12-12-19', 2, 1, 1, 1, 1);
-insert into pregled (naziv, anamneza, datumivreme_pregleda, status, tip_pregleda_id, doktor_id, pacijent_id, sala_id) values ('', '', '2-2-20 14:00:00', 0, 1, 1, 1, 1);
-insert into pregled (naziv, anamneza, datumivreme_pregleda, status, tip_pregleda_id, doktor_id, pacijent_id, sala_id) values ('', '', '2-2-20 15:00:00', 0, 1, 1, 10, 1);
-insert into pregled (naziv, anamneza, datumivreme_pregleda, status, tip_pregleda_id, doktor_id, pacijent_id, sala_id) values ('', '', '2-2-20 16:00:00', 0, 1, 1, 10, 1);
-insert into pregled (naziv, anamneza, datumivreme_pregleda, status, tip_pregleda_id, doktor_id, pacijent_id, sala_id) values ('', '', '2-2-20 17:00:00', 0, 1, 1, 3, 1);
-insert into pregled (naziv, anamneza, datumivreme_pregleda, status, tip_pregleda_id, doktor_id, pacijent_id, sala_id) values ('', '', '2-2-20 18:00:00', 0, 1, 1, 3, 1);
-insert into pregled (naziv, anamneza, datumivreme_pregleda, status, tip_pregleda_id, doktor_id, pacijent_id, sala_id) values ('', '', '2-2-20 19:00:00', 0, 1, 1, 1, 1);
+insert into pregled (naziv, anamneza, datumivreme_pregleda, status, tip_pregleda_id, doktor_id, pacijent_id, sala_id, version) values ('Prvi pregled', 'Pacijent je dosao sa povisenom temperaturom', '12-12-19', 2, 1, 1, 1, 1,0);
+insert into pregled (naziv, anamneza, datumivreme_pregleda, status, tip_pregleda_id, doktor_id, pacijent_id, sala_id, version) values ('', '', '2-2-20 14:00:00', 0, 1, 1, 1, 1,0);
+insert into pregled (naziv, anamneza, datumivreme_pregleda, status, tip_pregleda_id, doktor_id, pacijent_id, sala_id, version) values ('', '', '2-2-20 15:00:00', 0, 1, 1, 10, 1,0);
+insert into pregled (naziv, anamneza, datumivreme_pregleda, status, tip_pregleda_id, doktor_id, pacijent_id, sala_id, version) values ('', '', '2-2-20 16:00:00', 0, 1, 1, 10, 1,0);
+insert into pregled (naziv, anamneza, datumivreme_pregleda, status, tip_pregleda_id, doktor_id, pacijent_id, sala_id, version) values ('', '', '2-2-20 17:00:00', 0, 1, 1, 3, 1,0);
+insert into pregled (naziv, anamneza, datumivreme_pregleda, status, tip_pregleda_id, doktor_id, pacijent_id, sala_id, version) values ('', '', '2-2-20 18:00:00', 0, 1, 1, 3, 1,0);
+insert into pregled (naziv, anamneza, datumivreme_pregleda, status, tip_pregleda_id, doktor_id, pacijent_id, sala_id, version) values ('', '', '2-2-20 19:00:00', 0, 1, 1, 1, 1,0);
 insert into pregledi_dijagnoze(pregled_id, dijagnoza_id) values(1, 2);
 
 insert into operacija(pacijent_id, status, datumivreme_operacije, trajanje, version) values(1, 0, '1-1-2020 17:00', 0, 0);

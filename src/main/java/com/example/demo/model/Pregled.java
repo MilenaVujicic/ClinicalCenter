@@ -4,7 +4,6 @@
 package com.example.demo.model;
 
 import java.util.Calendar;
-import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -19,6 +18,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
+import javax.persistence.Version;
 
 
 @Entity
@@ -56,6 +56,8 @@ public class Pregled {
 	@ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.REFRESH, CascadeType.DETACH}, fetch = FetchType.EAGER)
 	private TipPregleda tipPregleda;
 
+	@Version
+	private Long version;
 
 	public Pregled() {
 		super();
