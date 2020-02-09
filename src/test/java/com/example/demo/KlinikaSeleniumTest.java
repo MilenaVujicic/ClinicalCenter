@@ -1,6 +1,5 @@
 package com.example.demo;
 
-import static org.assertj.core.api.Assertions.setRemoveAssertJRelatedElementsFromStackTrace;
 import static org.junit.Assert.assertEquals;
 
 import java.util.concurrent.TimeUnit;
@@ -16,11 +15,12 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.context.SpringBootTest.WebEnvironment;
-import org.springframework.test.annotation.Rollback;
 import org.springframework.test.context.junit4.SpringRunner;
-import org.springframework.transaction.annotation.Transactional;
 
+import com.example.demo.model.Pregled;
+import com.example.demo.model.StatusPregleda;
 import com.example.demo.model.Termin;
+import com.example.demo.service.PregledService;
 import com.example.demo.service.TerminService;
 
 @RunWith(SpringRunner.class)
@@ -34,10 +34,13 @@ public class KlinikaSeleniumTest {
 	
 	private LocalStorage localStorage;
 	
+	@Autowired
+	private PregledService pregledService;
+	
 	@Test
 	public void test1() {
 		System.setProperty("webdriver.chrome.driver", "D:\\MyDocsAndi\\downloads\\chromedriver\\chromedriver.exe");
-		
+		//System.setProperty("webdriver.chrome.driver", "D:\\Computer\\Downloads\\chromedriver.exe");
 		// Initialize browser
 		driver=new ChromeDriver();
 		localStorage = new LocalStorage(driver);
@@ -113,7 +116,7 @@ public class KlinikaSeleniumTest {
 	@Test
 	public void test2() {
 		System.setProperty("webdriver.chrome.driver", "D:\\MyDocsAndi\\downloads\\chromedriver\\chromedriver.exe");
-		
+		//System.setProperty("webdriver.chrome.driver", "D:\\Computer\\Downloads\\chromedriver.exe");
 		// Initialize browser
 		driver=new ChromeDriver();
 		localStorage = new LocalStorage(driver);
@@ -188,5 +191,47 @@ public class KlinikaSeleniumTest {
 		
 		driver.close();
 	}
-
+	
+	@Test
+	public void test3() {
+		System.setProperty("webdriver.chrome.driver", "D:\\MyDocsAndi\\downloads\\chromedriver\\chromedriver.exe");
+		//System.setProperty("webdriver.chrome.driver", "D:\\Computer\\Downloads\\chromedriver.exe");
+		driver=new ChromeDriver();
+		localStorage = new LocalStorage(driver);
+		
+		driver.get("http://localhost:8080");
+		driver.manage().window().maximize();
+		
+		WebElement prijava_dugme = driver.findElement(By.id("prijava_dugme"));
+		prijava_dugme.click();
+		
+		driver.navigate().to("http://localhost:8080/login.html");
+		
+		WebElement email = driver.findElement(By.id("email"));
+		email.sendKeys("adam.adminic@gmail.com");
+		
+		WebElement password = driver.findElement(By.id("password"));
+		password.sendKeys("adam");
+		
+		WebElement button = driver.findElement(By.id("button"));
+		button.click();
+		
+		localStorage.setItemInLocalStorage("id", "4");
+		
+		WebElement aptBtn = driver.findElement(By.id("aApt"));
+		aptBtn.click();
+		
+		WebElement moreBtn = driver.findElement(By.id("more1"));
+		moreBtn.click();
+		
+		WebElement chkBox = driver.findElement(By.id("doktor8"));
+		chkBox.click();
+		
+		WebElement reserveBtn = driver.findElement(By.className("button"));
+		reserveBtn.click();
+		
+		Pregled p = pregledService.findOne(2L);
+		assertEquals(p.getStatus(),  StatusPregleda.ZAKAZAN);
+		driver.close();
+	}
 }

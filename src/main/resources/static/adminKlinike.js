@@ -1,4 +1,5 @@
 let session = null;
+let first = true;
 $(document).ready(()=>{
 	document.getElementById('aVacation').addEventListener('click', listAbsence, false);
 	document.getElementById('aApt').addEventListener('click', newApt, false);
@@ -36,7 +37,7 @@ $(document).ready(()=>{
 				alert('You must be a clinic administrator to access this page');
 				window.location.href = "./index.html";
 			}
-			if(korisnik.brojPrijava === 0){
+			if(korisnik.brojPrijava === 2){
 				window.location.href = './changePresonalData.html'
 			}
 		},
@@ -79,6 +80,7 @@ function prikaziDoktora(doktor, specijalizacija) {
 			'<label class="custom-control-label" for="doctors'+doktor.id+'">'+doktor.ime+' '+doktor.prezime+' ('+specijalizacija+')'+'</label></div></div>');
 	$('#doctors').append(tr);
 }
+
 
 function allDoctors(id) {
 	let session = sessionStorage.getItem("id");
@@ -380,6 +382,7 @@ function rezSalaApt(sala, pregled) {
 		success: function(doktori) {
 			for (let doktor of doktori) {
        			let str = 'doktor' + doktor.id;
+       			alert(str);
        			let x = document.getElementById(str).checked;
        			if (x == true) {
        				url += '~' + doktor.id;
@@ -423,7 +426,7 @@ function aptRequest() {
 	$('#freeRoomsApt').attr('hidden', true);
 	$('#doctors').attr('hidden', true);
 	$.ajax({
-		url: '/pregled/zahtevi',
+		url: '/pregled/zahtevi/' + sessionStorage.getItem("id"),
 		type: "GET",
 		success: function(pregledi) {
 			$('#aptTable tbody').html('');
@@ -454,7 +457,15 @@ function dodajZahtevApt(pregled, pacijent) {
 	let datum = pregled.datumIVremePregleda;
 	datum = datum.replace("T", " ");
 	let tdDate = $('<td>'+datum.substring(0,10)+'</td>');
-	let aMore = $('<td><a>More</a></td>');
+	let aMore;
+	if(first){
+		aMore= $('<td><a id = "more1">More</a></td>');
+		first = false;
+	}else{
+	 aMore = $('<td><a>More</a></td>');
+	}
+		
+	
 	aMore.click(slobodniTerminiApt(pregled));
 	tr.append(tdIme).append(tdDate).append(aMore);
 	$('#aptTable tbody').append(tr);

@@ -357,6 +357,28 @@ public class SalaController {
 		return new ResponseEntity<List<Sala>>(slobodneSale, HttpStatus.OK);
 	}
 	
+	@RequestMapping(value = "/termini_pregled/{id}/{admin}", method = RequestMethod.GET)
+	public ResponseEntity<List<Sala>> slobodniTerminiPregledId(@PathVariable("id") Long identifikacija, @PathVariable("id") Long admin){
+		Pregled pregled = pregledService.findOne(identifikacija);
+		System.out.println(admin);
+		Optional<AdministratorKlinike> oak = administratorService.findByIdKorisnik(admin);
+		AdministratorKlinike ak = oak.get();
+		Optional<Klinika> ok = klinikaService.findById(ak.getKlinika().getId());
+		Klinika klinika = ok.get();
+		List<Sala> sveSale = salaService.findByKlinika(klinika);
+		System.out.println("##########sve_sale" + sveSale.size());
+		List<Sala> slobodneSale = new ArrayList<Sala>();
+		for(Sala sala : sveSale) {
+			for(Termin termin : sala.getSlobodniTermini()) {
+				if(termin.isSlobodan() && termin.getDatum().equals(pregled.getDatumIVremePregleda())) {
+					slobodneSale.add(sala);
+				}
+			}
+		}
+		System.out.println("##########################" + slobodneSale.size());
+		return new ResponseEntity<List<Sala>>(slobodneSale, HttpStatus.OK);
+	}
+	
 	@RequestMapping(value = "/drugi_termini_pregled/{id}")
 	public ResponseEntity<Sala> prviSlobodanP(@PathVariable("id") Long identifikacija) {
 		System.out.println("##############drugi slobodni termini");
