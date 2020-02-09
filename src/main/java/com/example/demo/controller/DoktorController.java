@@ -112,8 +112,12 @@ public class DoktorController {
 	@RequestMapping(value = "/svi_pacijenti", method = RequestMethod.GET)
 	public ResponseEntity<List<Korisnik>> sviPacijenti() {
 		List<Korisnik> pacijenti = korisnikService.findByUloga(UlogaKorisnika.PACIJENT);
-		System.out.println("###############" + pacijenti.size());
-		return new ResponseEntity<List<Korisnik>>(pacijenti, HttpStatus.OK);
+		List<Korisnik> sviAktivni = new ArrayList<Korisnik>();
+		for(Korisnik k : pacijenti) {
+			if(k.isAktiviran())
+				sviAktivni.add(k);
+		}
+		return new ResponseEntity<List<Korisnik>>(sviAktivni, HttpStatus.OK);
 	}
 	
 	@RequestMapping(value = "/posalji_pregled/{text}", method = RequestMethod.POST)
