@@ -34,7 +34,7 @@ import com.example.demo.model.LogedUser;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest(webEnvironment = WebEnvironment.RANDOM_PORT)
-class RestKlinikaControllerTest {
+public class RestKlinikaControllerTest {
 	
 	@Autowired
 	private TestRestTemplate restTemplate;
