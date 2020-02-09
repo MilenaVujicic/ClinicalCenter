@@ -392,7 +392,7 @@ function saveExamination() {
    		       		$('#examinationName').val('');
    		       		$('#examinationAnamnesis').val('');
    		       		$('#examinationPrice').val('');
-   		       		$('#examinationType').val('');
+   		       		$('#examinationType').val('Opsti');
    		       	},
    		       	error: function() {
    		       		alert('Desila se greska');

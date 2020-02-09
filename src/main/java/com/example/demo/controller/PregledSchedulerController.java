@@ -2,6 +2,7 @@ package com.example.demo.controller;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
@@ -48,7 +49,7 @@ public class PregledSchedulerController {
 	
 	@SuppressWarnings("static-access")
 	//@Scheduled(cron = "${greeting2.cron}")
-	public void autoDodelaPregleda() {
+	public void autoDodelaPregleda() throws InterruptedException {
 		System.out.println("Pocetak dodele za pregled");
 		List<Pregled> nerasporedjeni_pregledi = pregledService.findByStatus(StatusPregleda.NERASPOREDJEN);
 		List<Termin> slobodni_termini  = terminService.findBySlobodan(true);
@@ -79,6 +80,7 @@ public class PregledSchedulerController {
 					}
 					emailService.sendSuccessfulReservationAptPatient(pacijent, pregled, klinika);
 					System.out.println("####" + termin.getDatum().getTime() + " " + pregled.getPacijent().getIdKorisnik() + " " + termin.getSala().getIme());
+					TimeUnit.SECONDS.sleep(20);
 				}
 			}
 		}
@@ -130,6 +132,7 @@ public class PregledSchedulerController {
 					Korisnik pacijent = korisnikService.findOne(pregled.getPacijent().getIdKorisnik());
 					emailService.sendUnsuccessfulReservationAptPatient(pacijent);
 				}
+				TimeUnit.SECONDS.sleep(20);
 			}
 		}
 		
