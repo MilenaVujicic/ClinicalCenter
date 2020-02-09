@@ -91,7 +91,7 @@ public class DoktorControllerTests {
 			       .param("datum", "12/01/2019"))
 		     	   .andExpect(status().isOk())
 		           .andExpect(content().contentType("application/json"))
-		           .andExpect(jsonPath("$.*", hasSize(2)));
+		           .andExpect(jsonPath("$.*", hasSize(1)));
 		
 	}
 	

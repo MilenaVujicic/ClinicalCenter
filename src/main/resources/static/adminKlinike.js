@@ -239,7 +239,7 @@ function operationRequest() {
 			$('#requestsTable tbody').html('');
 			for(let operacija of operacije) {
 				$.ajax({
-					url:'/korisnik/preuzmi/' + operacija.pacijent.id,
+					url:'/korisnik/preuzmi/' + operacija.pacijent.idKorisnik,
 					type:"GET",
 					success: function(pacijent) {
 						dodajZahtev(operacija, pacijent);
@@ -388,7 +388,7 @@ function rezSalaApt(sala, pregled) {
        				url += '~' + doktor.id;
        			}
        		}
-
+			
 			$.ajax({
 				url: url,
 				type: "GET",

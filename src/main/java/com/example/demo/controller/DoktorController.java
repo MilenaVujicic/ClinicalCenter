@@ -112,8 +112,12 @@ public class DoktorController {
 	@RequestMapping(value = "/svi_pacijenti", method = RequestMethod.GET)
 	public ResponseEntity<List<Korisnik>> sviPacijenti() {
 		List<Korisnik> pacijenti = korisnikService.findByUloga(UlogaKorisnika.PACIJENT);
-		System.out.println("###############" + pacijenti.size());
-		return new ResponseEntity<List<Korisnik>>(pacijenti, HttpStatus.OK);
+		List<Korisnik> sviAktivni = new ArrayList<Korisnik>();
+		for(Korisnik k : pacijenti) {
+			if(k.isAktiviran())
+				sviAktivni.add(k);
+		}
+		return new ResponseEntity<List<Korisnik>>(sviAktivni, HttpStatus.OK);
 	}
 	
 	@RequestMapping(value = "/posalji_pregled/{text}", method = RequestMethod.POST)
@@ -630,7 +634,12 @@ public class DoktorController {
 	
 	@RequestMapping(value="/svi_slobodni_sa_klinike_apt/{id}", method = RequestMethod.GET)
 	public ResponseEntity<List<Korisnik>> svi_sa_klinike_slobodni_apt(@PathVariable("id") Long identifikacija) {
-		Klinika k = klinikaService.findOne((long) 2);
+		Korisnik kori = korisnikService.findOne(LogedUser.getInstance().getUserId());
+		if (!kori.getUloga().equals(UlogaKorisnika.ADMIN_KLINIKE)) {
+			return new ResponseEntity<List<Korisnik>>(HttpStatus.BAD_REQUEST);
+		}
+		AdministratorKlinike admin = administratorService.findByIdKorisnik(LogedUser.getInstance().getUserId().toString());
+		Klinika k = klinikaService.findOne(admin.getKlinika().getId());
 		List<Doktor> doktori = doktorService.findAllByKlinika(k);
 		List<Korisnik> lekari = korisnikService.findByUloga(UlogaKorisnika.LEKAR);
 		List<Korisnik> doktori_klinike = new ArrayList<Korisnik>();
@@ -672,6 +681,7 @@ public class DoktorController {
 			for (Doktor doktor : slobodni_doktori) {
 				if (doktor.getIdKorisnik().equals(korisnik.getId())) {
 					doktori_klinike.add(korisnik);
+					System.out.println("#####" + korisnik.getId() + "##" + korisnik.getIme() + korisnik.getPrezime());
 				}
 			} 
 		}

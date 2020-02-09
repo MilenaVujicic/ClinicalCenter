@@ -63,7 +63,7 @@ public class MedicinskaSestraController {
 		
 		for (Korisnik p : patients) {
 			Pacijent pac = pacijentService.findByIdKorisnik(p.getId());
-			if (pac.getKlinika().getId().equals(sestra.getKlinika().getId()))
+			if (pac.getKlinika().getId().equals(sestra.getKlinika().getId()) && p.isAktiviran())
 				pacijentDTO.add(new KorisnikDTO(p));
 		}
 		return new ResponseEntity<>(pacijentDTO, HttpStatus.OK);
