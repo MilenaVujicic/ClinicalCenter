@@ -231,7 +231,7 @@ public class RestKlinikaControllerTest {
 		
 		List<TerminDTO> termini = response.getBody();
 		assertNotEquals(0, termini.size());
-		assertEquals(2, termini.size());
+		assertEquals(1, termini.size());
 	}
 	
 	@Test
