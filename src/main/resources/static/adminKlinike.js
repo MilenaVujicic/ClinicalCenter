@@ -1,4 +1,5 @@
 let session = null;
+let first = true;
 $(document).ready(()=>{
 	document.getElementById('aVacation').addEventListener('click', listAbsence, false);
 	document.getElementById('aApt').addEventListener('click', newApt, false);
@@ -117,7 +118,6 @@ function rezSala(sala, operacija) {
 		type: "GET",
 		success: function(doktori) {
 			for (let doktor of doktori) {
-				alert(dokotor.id);
        			let str = 'doktor' + doktor.id;
        			let x = document.getElementById(str).checked;
        			if (x == true) {
@@ -457,7 +457,15 @@ function dodajZahtevApt(pregled, pacijent) {
 	let datum = pregled.datumIVremePregleda;
 	datum = datum.replace("T", " ");
 	let tdDate = $('<td>'+datum.substring(0,10)+'</td>');
-	let aMore = $('<td><a class = "more">More</a></td>');
+	let aMore;
+	if(first){
+		aMore= $('<td><a id = "more1">More</a></td>');
+		first = false;
+	}else{
+	 aMore = $('<td><a>More</a></td>');
+	}
+		
+	
 	aMore.click(slobodniTerminiApt(pregled));
 	tr.append(tdIme).append(tdDate).append(aMore);
 	$('#aptTable tbody').append(tr);
