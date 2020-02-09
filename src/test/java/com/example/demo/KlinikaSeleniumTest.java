@@ -34,10 +34,11 @@ public class KlinikaSeleniumTest {
 	
 	private LocalStorage localStorage;
 	
+	
 	@Test
 	public void test1() {
-		System.setProperty("webdriver.chrome.driver", "D:\\MyDocsAndi\\downloads\\chromedriver\\chromedriver.exe");
-		
+		//System.setProperty("webdriver.chrome.driver", "D:\\MyDocsAndi\\downloads\\chromedriver\\chromedriver.exe");
+		System.setProperty("webdriver.chrome.driver", "D:\\Computer\\Downloads\\chromedriver.exe");
 		// Initialize browser
 		driver=new ChromeDriver();
 		localStorage = new LocalStorage(driver);
@@ -112,8 +113,8 @@ public class KlinikaSeleniumTest {
 	
 	@Test
 	public void test2() {
-		System.setProperty("webdriver.chrome.driver", "D:\\MyDocsAndi\\downloads\\chromedriver\\chromedriver.exe");
-		
+		//System.setProperty("webdriver.chrome.driver", "D:\\MyDocsAndi\\downloads\\chromedriver\\chromedriver.exe");
+		System.setProperty("webdriver.chrome.driver", "D:\\Computer\\Downloads\\chromedriver.exe");
 		// Initialize browser
 		driver=new ChromeDriver();
 		localStorage = new LocalStorage(driver);
@@ -188,5 +189,38 @@ public class KlinikaSeleniumTest {
 		
 		driver.close();
 	}
-
+	
+	@Test
+	public void test3() {
+		System.setProperty("webdriver.chrome.driver", "D:\\Computer\\Downloads\\chromedriver.exe");
+		driver=new ChromeDriver();
+		localStorage = new LocalStorage(driver);
+		
+		driver.get("http://localhost:8080");
+		driver.manage().window().maximize();
+		
+		WebElement prijava_dugme = driver.findElement(By.id("prijava_dugme"));
+		prijava_dugme.click();
+		
+		driver.navigate().to("http://localhost:8080/login.html");
+		
+		WebElement email = driver.findElement(By.id("email"));
+		email.sendKeys("adam.adminic@gmail.com");
+		
+		WebElement password = driver.findElement(By.id("password"));
+		password.sendKeys("adam");
+		
+		WebElement button = driver.findElement(By.id("button"));
+		button.click();
+		
+		localStorage.setItemInLocalStorage("id", "4");
+		
+		WebElement aptBtn = driver.findElement(By.id("aApt"));
+		aptBtn.click();
+		
+		WebElement moreBtn = driver.findElement(By.className("more"));
+		moreBtn.click();
+		
+		
+	}
 }

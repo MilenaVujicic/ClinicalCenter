@@ -194,6 +194,21 @@ public class PregledController {
 	}
 	
 
+	@RequestMapping(value = "/zahtevi/{id}", method=RequestMethod.GET) 
+	public ResponseEntity<List<Pregled>> zahteviId(@PathVariable("id") Long id) {
+		Optional<AdministratorKlinike> oak = administratorService.findByIdKorisnik(id);
+		AdministratorKlinike ak = oak.get();
+		
+		List<Pregled> pregledi = pregledService.findByStatus(StatusPregleda.NERASPOREDJEN);
+		List<Pregled> retVal = new ArrayList<Pregled>();
+		for(Pregled p : pregledi) {
+			if(p.getDoktor().getKlinika().getId() == ak.getKlinika().getId()) {
+				retVal.add(p);
+			}
+		}
+		return new ResponseEntity<List<Pregled>>(retVal, HttpStatus.OK);
+	}
+
 	@RequestMapping(value = "/pregledi_klinika/{id}", method = RequestMethod.GET)
 	public ResponseEntity<List<Integer>> preglediKlinika(@PathVariable("id") Long id){
 		List<Integer> retVal = new ArrayList<Integer>();

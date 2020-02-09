@@ -80,6 +80,7 @@ function prikaziDoktora(doktor, specijalizacija) {
 	$('#doctors').append(tr);
 }
 
+
 function allDoctors(id) {
 	let session = sessionStorage.getItem("id");
 	$.ajax({
@@ -423,7 +424,7 @@ function aptRequest() {
 	$('#freeRoomsApt').attr('hidden', true);
 	$('#doctors').attr('hidden', true);
 	$.ajax({
-		url: '/pregled/zahtevi',
+		url: '/pregled/zahtevi/' + sessionStorage.getItem("id"),
 		type: "GET",
 		success: function(pregledi) {
 			$('#aptTable tbody').html('');
@@ -454,7 +455,7 @@ function dodajZahtevApt(pregled, pacijent) {
 	let datum = pregled.datumIVremePregleda;
 	datum = datum.replace("T", " ");
 	let tdDate = $('<td>'+datum.substring(0,10)+'</td>');
-	let aMore = $('<td><a>More</a></td>');
+	let aMore = $('<td><a class = "more">More</a></td>');
 	aMore.click(slobodniTerminiApt(pregled));
 	tr.append(tdIme).append(tdDate).append(aMore);
 	$('#aptTable tbody').append(tr);
