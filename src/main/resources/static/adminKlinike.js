@@ -36,7 +36,7 @@ $(document).ready(()=>{
 				alert('You must be a clinic administrator to access this page');
 				window.location.href = "./index.html";
 			}
-			if(korisnik.brojPrijava === 0){
+			if(korisnik.brojPrijava === 2){
 				window.location.href = './changePresonalData.html'
 			}
 		},
@@ -117,6 +117,7 @@ function rezSala(sala, operacija) {
 		type: "GET",
 		success: function(doktori) {
 			for (let doktor of doktori) {
+				alert(dokotor.id);
        			let str = 'doktor' + doktor.id;
        			let x = document.getElementById(str).checked;
        			if (x == true) {
@@ -381,6 +382,7 @@ function rezSalaApt(sala, pregled) {
 		success: function(doktori) {
 			for (let doktor of doktori) {
        			let str = 'doktor' + doktor.id;
+       			alert(str);
        			let x = document.getElementById(str).checked;
        			if (x == true) {
        				url += '~' + doktor.id;

@@ -9,6 +9,10 @@ import static com.example.demo.constants.PregledConstants.PREGLED_STATUS;
 import static com.example.demo.constants.PregledConstants.PREGLED_NERASPOREDJEN_SIZE;
 import static com.example.demo.constants.PregledConstants.PREGLED_PACIJENT_ID;
 import static com.example.demo.constants.PregledConstants.PREGLED_PACIJENT_SIZE;
+import static com.example.demo.constants.PregledConstants.PREGLED_NOVI_NAZIV;
+import static com.example.demo.constants.PregledConstants.PREGLED_NOVI_ANAMNEZA;
+import static com.example.demo.constants.PregledConstants.PREGLED_NOVI_VREME;
+import static com.example.demo.constants.PregledConstants.PREGLED_NOVI_STATUS;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import java.util.List;
@@ -56,5 +60,27 @@ public class PregledServiceTest {
 		List<Pregled> p = pregledService.findByPatientId(PREGLED_PACIJENT_ID);
 		assertThat(p).hasSize(PREGLED_PACIJENT_SIZE);
 	}
+	
+	@Test
+	public void pregledAdd() {
+		Pregled p = new Pregled();
+		p.setNaziv(PREGLED_NOVI_NAZIV);
+		p.setAnamneza(PREGLED_NOVI_ANAMNEZA);
+		p.setDatumIVremePregleda(PREGLED_NOVI_VREME);
+		p.setStatus(PREGLED_NOVI_STATUS);
+		int pregledSize = pregledService.findAll().size();
+		Pregled pregled = pregledService.save(p);
+		assertThat(pregled).isNotNull();
+		List<Pregled> pregledi = pregledService.findAll();
+		assertThat(pregledi).hasSize(pregledSize+1);
+		assertThat(pregled.getNaziv()).isEqualTo(PREGLED_NOVI_NAZIV);
+		assertThat(pregled.getAnamneza()).isEqualTo(PREGLED_NOVI_ANAMNEZA);
+		assertThat(pregled.getDatumIVremePregleda()).isEqualTo(PREGLED_NOVI_VREME);
+		assertThat(pregled.getStatus()).isEqualTo(PREGLED_NOVI_STATUS);
+		
+		
+	}
+	
+	
 	
 }

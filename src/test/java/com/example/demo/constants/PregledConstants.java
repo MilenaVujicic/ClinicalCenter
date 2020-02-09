@@ -28,4 +28,9 @@ public class PregledConstants {
 	public static final int PREGLED_ZAHTEV_SIZE = 6;
 	
 	public static final Long PREGLED_ID_2 = 3L;
+
+	public static final String PREGLED_NOVI_NAZIV = "Novi pregled";
+	public static final String PREGLED_NOVI_ANAMNEZA = "Bol u glavi";
+	public static final Calendar PREGLED_NOVI_VREME = Calendar.getInstance();
+	public static final StatusPregleda PREGLED_NOVI_STATUS = StatusPregleda.NERASPOREDJEN;
 }

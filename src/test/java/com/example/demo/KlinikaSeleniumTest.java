@@ -34,7 +34,7 @@ public class KlinikaSeleniumTest {
 	
 	private LocalStorage localStorage;
 	
-	
+	/*
 	@Test
 	public void test1() {
 		//System.setProperty("webdriver.chrome.driver", "D:\\MyDocsAndi\\downloads\\chromedriver\\chromedriver.exe");
@@ -222,5 +222,5 @@ public class KlinikaSeleniumTest {
 		moreBtn.click();
 		
 		
-	}
+	}*/
 }

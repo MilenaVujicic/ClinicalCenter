@@ -18,6 +18,8 @@ import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
+
+import com.example.demo.model.StatusPregleda;
 @RunWith(SpringRunner.class)
 @SpringBootTest
 public class PregledControllerTest {
@@ -46,7 +48,7 @@ public class PregledControllerTest {
 	
 	@Test
 	public void korisnikPreuzmi() throws Exception{
-		mockMvc.perform(get("/korisnik/preuzmi/{id}", 1L))
+		mockMvc.perform(get("/korisnik/preuzmi/1"))
 		.andExpect(status().isOk())
 		.andExpect(content().contentType("application/json"))
 		.andExpect(jsonPath("$.*", hasSize(1)))
@@ -57,11 +59,12 @@ public class PregledControllerTest {
 	
 	@Test
 	public void salaTermin() throws Exception{
-		mockMvc.perform(get("/sala/termini_pregled/{id}", 2L))
+		mockMvc.perform(get("/sala/termini_pregled/2"))
 		.andExpect(status().isOk())
 		.andExpect(content().contentType("application/json"))
 		.andExpect(jsonPath("$.*", hasSize(1)))
-		.andExpect(jsonPath("$.[*].naziv").value(hasItem("")));
+		.andExpect(jsonPath("$.[*].naziv").value(hasItem("")))
+		.andExpect(jsonPath("$.[*].status").value(hasItem(StatusPregleda.NERASPOREDJEN)));
 		
 	}
 	
