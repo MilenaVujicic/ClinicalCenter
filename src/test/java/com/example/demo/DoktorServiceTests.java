@@ -1,17 +1,6 @@
 package com.example.demo;
 
-import static com.example.demo.constants.DoktorConstants.DOKTOR_BROC;
-import static com.example.demo.constants.DoktorConstants.DOKTOR_DATUM;
-import static com.example.demo.constants.DoktorConstants.DOKTOR_ID;
-import static com.example.demo.constants.DoktorConstants.DOKTOR_IDKLINIKE;
-import static com.example.demo.constants.DoktorConstants.DOKTOR_IDKOR;
-import static com.example.demo.constants.DoktorConstants.DOKTOR_PROSOC;
-import static com.example.demo.constants.DoktorConstants.DOKTOR_SIZE;
-import static com.example.demo.constants.DoktorConstants.DOKTOR_SIZEFINDBYDATUM;
-import static com.example.demo.constants.DoktorConstants.DOKTOR_SPEC;
-import static com.example.demo.constants.DoktorConstants.DOKTOR_SPEC2;
-import static com.example.demo.constants.DoktorConstants.DOKTOR_SUMAOC;
-import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.Assert.assertThat;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -26,16 +15,25 @@ import com.example.demo.model.Doktor;
 import com.example.demo.model.Klinika;
 import com.example.demo.service.DoktorService;
 import com.example.demo.service.KlinikaService;
+import static org.assertj.core.api.Assertions.assertThat;
 
-@RunWith(SpringRunner.class)
+import static com.example.demo.constants.DoktorConstants.*;
+
+
+
 @SpringBootTest
-public class DoktorServiceTests {
+class DoktorServiceTests {
 	
 	@Autowired
 	DoktorService doktorService;
 	
 	@Autowired
 	KlinikaService klinikaService;
+	
+	@Test
+	void testA() {
+		System.out.println("test A");
+	}
 	
 	@Test
 	void findOne() {
@@ -83,5 +81,5 @@ public class DoktorServiceTests {
 		List<Doktor> doktori2 = doktorService.findByDatumPregledaISpecIKlinika(date, DOKTOR_SPEC2, DOKTOR_IDKLINIKE);
 		assertThat(doktori2.size()).isEqualTo(DOKTOR_SIZEFINDBYDATUM);
 	}
-
+	
 }
